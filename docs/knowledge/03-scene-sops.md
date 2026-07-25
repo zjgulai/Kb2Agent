@@ -609,3 +609,23 @@ Step 4: 存档与关联
 - 架构决策 → ADR 格式文档
 
 ---
+**路线三：One-Shot 无限上下文流派 (2026 最前沿降维打击)**
+*   **工具**：**`baidu/Unlimited-OCR`**
+*   **核心原理 (第一性原理)**：摒弃传统“版面分析 → 裁剪 → 分块识别 → 重新拼接”的易错流水线。直接利用 32K 超长上下文 VLM，将多页 PDF 一次性吞入，端到端直接输出带有正确阅读顺序和排版的 Markdown。彻底消灭了**误差传递 (Error Propagation)**。
+*   **适用**：长篇研报、跨页超级大表、对上下文连贯性要求极高的核心文献。
+*   **环境准备**：需要支持 vLLM 或 SGLang 的高配 GPU 环境 (支持 CUDA 12.9/13.0)。
+*   **执行代码 (基于 SGLang)**：
+    ```python
+    # 核心优势：多页并发解析，直接输出
+    import fitz # PyMuPDF 转换图片
+    
+    # 1. 直接将 PDF 送入超长上下文引擎
+    generate(
+        prompt="Multi page parsing.", 
+        image_paths=pdf_to_images("your_doc.pdf", dpi=300), 
+        image_mode="base", 
+        ngram_window=1024 # 专为防重复生成的 Custom Logit Processor
+    )
+    ```
+
+

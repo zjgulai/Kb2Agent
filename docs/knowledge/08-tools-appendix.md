@@ -4,6 +4,23 @@
 
 ---
 
+#### Unlimited-OCR (Baidu)
+- **定位**：开创 One-shot Long-horizon Parsing 时代的端到端解析器（2026.06）。
+- **核心能力**：无需任何版面分析和图片裁剪，利用 32K 超长上下文 VLM，直接将多页 PDF/图片序列送入模型，一次性输出带精确阅读顺序和 LaTeX/HTML 格式的完整 Markdown。
+- **精度**：从物理架构上彻底消除了流水线中“画框错位 → 裁剪截断 → OCR乱码”的**误差传递（Error Propagation）**。
+- **推荐场景**：极其复杂的跨页表格、需要结合上下文推断阅读顺序的重度混排文档。
+- **安装与部署**：
+  ```bash
+  # 官方推荐使用 vLLM 镜像部署以获得极致并发
+  docker pull vllm/vllm-openai:unlimited-ocr
+  
+  # 或使用 SGLang
+  python -m sglang.launch_server --model baidu/Unlimited-OCR --context-length 32768
+  ```
+- **来源**：开源本地，GitHub baidu/Unlimited-OCR
+
+---
+
 #### MinerU 2.5-Pro
 - **定位**：精度最高的本地 PDF/文档解析器，2026年 OmniDocBench 榜首
 - **核心能力**：PDF解析、表格提取、公式识别、阅读顺序还原、OCR

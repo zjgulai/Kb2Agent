@@ -11,18 +11,22 @@
 1. **声明式外包（Declarative Grounding）**：模型不知道库里有什么，只能瞎问，库塞给他什么他就读什么（经典 Vector RAG）。
 2. **程序式导航（Procedural Navigation）**：模型获得了一张**全景地图**，它主动决定该下钻到哪一层，该读取哪些完整原件（Agentic RAG / Skill 目录树）。
 
-### 7.2 知识蒸馏的五个 Level 分层（Level of Distillation, LoD）
+### 7.2 知识蒸馏与 Agent 调用的 DIKW 深度阶梯 (Level of Distillation)
 
-根据各大开源仓库的差异，我们可以将蒸馏程度严格划分为 5 个等级。**切忌将低等级的输出喂给高等级的架构。**
+通过对工业界（Microsoft, HuggingFace）和开源极客社区（如 `zjgulai` 收藏的知识图谱生态）的深度解构，我们发现所谓的“蒸馏”不仅是格式转换，而是从**“数据(Data)”向“智慧(Wisdom)”**的跨越。
 
-| 蒸馏等级 | 形态 | 代表库/论文 | 核心方法论 | RAG/Agent 评估得分参考 |
-|---|---|---|---|---|
-| **Level 0 (Flat)** | 纯文本切块 (Chunks) | 传统 LangChain/LlamaIndex | 仅做滑动窗口切片，依赖 Embedding 余弦相似度。 | 单跳问答 60%，多跳问答 **<10%** |
-| **Level 1 (Enriched)** | 块 + 实体/元数据增强 | `UnWeaver` (arXiv:2603) | 不建图，仅用 LLM 从 Chunk 提取实体，并拼接进 Embedding 中。成本极低。 | 复杂问答 F1 提升，击败早期 GraphRAG |
-| **Level 2 (Hierarchical)** | 层次化目录树 | `Corpus2Skill` (HF, 2026) | 聚类并生成逐层摘要 (`INDEX.md` + `SKILL.md`)。Agent 像读文件系统一样**主动导航**，最后用 `get_document` 调取原文。 | WixQA 胜出：F1 46.0% (相比 Dense 高出 27%) |
-| **Level 3 (Relational)** | 实体图谱 + 社区摘要 | `GraphRAG` / `LightRAG` | 提取 (实体, 关系, 实体) 三元组，计算社区聚集。 | 全局综合聚合能力最强，但多跳推理时偶发幻觉 |
-| **Level 4 (Procedural)** | 可执行契约 (Skill Contract) | `Anything2Skill` | 从文本/日志提炼出含调用条件、工作流、禁忌、置信度的 `SKILL.md`，放入 SkillBank。 | qsv 成功率 **98.85%**，GitHub-CLI 成功率 **94.10%** |
-| **Level 5 (Temporal)** | 时态记忆网络 | `Graphiti` / `xMemory` | (双轨) 能力保留 + 记忆状态的双时态追踪；使用 L0->L3 分层衰减压缩。 | 长上下文对话问答大幅提升 |
+切忌将低阶产物硬塞给需要高阶推理的 Agent。以下是 2026 年最新基准的 **5 级蒸馏阶梯 (LoD)**：
+
+| 蒸馏阶梯 | DIKW 映射 | 核心动作 | 代表级开源仓库 | Agent 评估与应用实效 |
+| :--- | :--- | :--- | :--- | :--- |
+| **LoD 0 (Flat)** | 数据 (Data) | **切块 + 向量化** | `LangChain`, `LlamaIndex` | **单跳事实检索 60%，多跳 <10%**。<br/>Agent 像在垃圾堆里抽盲盒，极易“Lost in the Middle”。 |
+| **LoD 1 (Enriched)**| 信息 (Info) | **元数据 + 实体附着** | `UnWeaver` (arXiv:2603) | **零图谱成本，超越早期 GraphRAG**。<br/>用 LLM 抽实体绑在 Chunk 尾部，用轻量过滤代替昂贵的图遍历。 |
+| **LoD 2 (Hierarchical)**| 知识 (Knowledge)| **分层目录树构建** | `Corpus2Skill` (HF, 2026) | **WixQA F1: 46.0% (超 Dense 27%)**。<br/>让 Agent **放弃被动检索，主动 Navigate(导航)** `INDEX.md` 目录树。 |
+| **LoD 3 (Relational)** | 知识网络 | **图谱与社区摘要** | `GraphRAG`, `LightRAG` | **全库主题综合（Sensemaking）霸主**。<br/>解决“这些报告共同的主题是什么”等全局泛化问题，但单跳事实查询成本极高。 |
+| **LoD 4 (Procedural)** | 智慧 (Wisdom) | **方法论与行为契约** | `cangjie-skill`, `colleague-skill`, `ex-skill` | **qsv 成功率 98.85%**。<br/>最高阶蒸馏。将书籍、长视频、前任对话(`ex-skill`)甚至自己(`yourself-skill`) 提炼为带触发条件、禁忌和决策流的 `SKILL.md`。 |
+
+> **深度洞察：LoD 4 (Skill 蒸馏) 为什么是终局？**
+> 从 `colleague-skill` (同事经验) 到 `yourself-skill` (自我永生)，再到 `anti-distill` (防止被公司资本家吸干经验的防蒸馏工具)。开源社区的走向证明：**最高价值的知识不是“事实”，而是“判断启发式 (Heuristics)”与“SOP 肌肉记忆”**。这也是为什么提供 `SKILL.md` 能让 Agent 的执行成功率发生断层式领先。
 
 ### 7.3 技术路由选型指南 (Input → Routing → Selection → Techniques)
 
