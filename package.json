@@ -1,0 +1,15 @@
+{
+  "name": "mkd-guide",
+  "version": "1.0.0",
+  "description": "Multimodal Knowledge Distillation Guide",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.0.0",
+    "vue": "^3.4.0"
+  },
+  "type": "module"
+}

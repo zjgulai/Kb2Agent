@@ -1,0 +1,239 @@
+/* 极简风色板覆盖 (Minimalist Overrides) */
+:root {
+  /* 基础字体 */
+  --vp-font-family-base: 'Inter', "PingFang SC", "Microsoft YaHei", sans-serif;
+  
+  /* 极简亮色主题 */
+  --vp-c-brand: #1a1a1a;
+  --vp-c-brand-light: #404040;
+  --vp-c-brand-lighter: #666666;
+  --vp-c-brand-dark: #000000;
+  
+  /* 背景与文本 */
+  --vp-c-bg: #ffffff;
+  --vp-c-bg-alt: #f9f9f9;
+  --vp-c-text-1: #111111;
+  --vp-c-text-2: #555555;
+  --vp-c-text-3: #888888;
+  
+  /* 弱化边框 */
+  --vp-c-divider: #eaeaea;
+  --vp-c-gutter: #f0f0f0;
+  
+  /* 自定义侧边栏和主导航背景为全透明/纯白 */
+  --vp-nav-bg-color: #ffffff;
+  --vp-sidebar-bg-color: #ffffff;
+}
+
+/* 覆盖暗黑模式的强制控制，让用户感觉这本身就是一个纯粹的浅色极简站 */
+/* 如果你需要强行移除深色模式切换按钮，可以在 config 里面控制，这里保留默认深色映射但调整颜色 */
+.dark {
+  --vp-c-bg: #121212;
+  --vp-c-bg-alt: #1a1a1a;
+  --vp-c-text-1: #e5e5e5;
+  --vp-c-text-2: #a3a3a3;
+  --vp-c-brand: #ffffff;
+  --vp-c-brand-light: #e5e5e5;
+  --vp-c-divider: #2a2a2a;
+}
+
+/* ---------------- 排版强化 (Typography) ---------------- */
+
+.vp-doc h1 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+  border-bottom: none;
+}
+
+.vp-doc h2 {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin-top: 3.5rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+  padding-bottom: 0.5rem;
+}
+
+.vp-doc h3 {
+  font-weight: 500;
+  margin-top: 2.5rem;
+}
+
+.vp-doc p {
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  color: var(--vp-c-text-1);
+}
+
+/* 引用块设计感 */
+.vp-doc blockquote {
+  border-left: 2px solid var(--vp-c-text-1);
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  background-color: var(--vp-c-bg-alt);
+  border-radius: 0 4px 4px 0;
+  color: var(--vp-c-text-2);
+  font-style: normal; /* 极简风通常不用斜体 */
+}
+
+/* 表格极简处理 */
+.vp-doc table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2.5rem 0;
+}
+.vp-doc th, .vp-doc td {
+  border: none;
+  border-bottom: 1px solid var(--vp-c-divider);
+  padding: 1rem 0.5rem;
+}
+.vp-doc th {
+  background-color: transparent;
+  font-weight: 500;
+  color: var(--vp-c-text-3);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-align: left;
+}
+.vp-doc tr:nth-child(2n) {
+  background-color: transparent;
+}
+.vp-doc tr:hover {
+  background-color: var(--vp-c-bg-alt);
+}
+
+/* 标签徽章扁平化 */
+.scene-badge, .cost-badge {
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  font-size: 0.85em;
+  font-weight: 500;
+  border-radius: 3px;
+  background: var(--vp-c-bg-alt);
+  border: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-2);
+}
+
+/* 去除侧边栏选中的圆角背景，改为极简线条 */
+.VPSidebarItem.is-active > .item {
+  color: var(--vp-c-brand);
+  background-color: transparent;
+  font-weight: 600;
+}
+.VPSidebarItem.is-active > .item::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--vp-c-brand);
+}
+
+/* ---------------- 深度极简改造 ---------------- */
+/* 移除 header 底栏边框 */
+.VPNav {
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* 首页 Hero 极简 */
+.VPHero.has-image .container {
+  text-align: left;
+}
+.VPHero .name {
+  color: var(--vp-c-brand-dark) !important;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+.VPHero .text {
+  color: var(--vp-c-text-1) !important;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.VPHero .tagline {
+  color: var(--vp-c-text-2);
+  font-weight: 400;
+}
+
+/* 首页 Feature 卡片去除阴影和圆角，保留极简边框 */
+.VPFeature {
+  background: transparent !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  border-radius: 0 !important;
+  transition: border-color 0.2s;
+}
+.VPFeature:hover {
+  border-color: var(--vp-c-text-1) !important;
+}
+
+/* 按钮极简黑白 */
+.VPButton.brand {
+  background-color: var(--vp-c-brand-dark);
+  color: #fff;
+  border-radius: 0;
+  border: none;
+}
+.VPButton.brand:hover {
+  background-color: var(--vp-c-brand-lighter);
+}
+.VPButton.alt {
+  background-color: transparent;
+  color: var(--vp-c-text-1);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 0;
+}
+.VPButton.alt:hover {
+  border-color: var(--vp-c-text-1);
+}
+
+/* 移除页脚背景和边框 */
+.VPFooter {
+  border-top: 1px solid var(--vp-c-divider);
+  background: transparent;
+}
+
+/* 代码块：抛弃默认暗色，采用极简浅灰背景，强化黑白对比 */
+:root {
+  --vp-code-bg: #f5f5f5;
+  --vp-code-color: #24292e;
+}
+.dark {
+  --vp-code-bg: #1e1e1e;
+  --vp-code-color: #e1e4e8;
+}
+div[class*="language-"] {
+  background-color: var(--vp-code-bg) !important;
+  border-radius: 4px;
+}
+div[class*="language-"] code {
+  color: var(--vp-code-color) !important;
+}
+/* 强行去除了所有的彩虹渐变和高饱和度语法高亮，以单色或低饱和为主 */
+
+/* Markdown 行内代码 */
+.vp-doc code {
+  background-color: var(--vp-c-bg-alt);
+  color: var(--vp-c-text-1);
+  padding: 0.15em 0.4em;
+  border-radius: 2px;
+  font-size: 0.85em;
+  border: 1px solid var(--vp-c-divider);
+}
+
+/* 超链接极简下划线 */
+.vp-doc a {
+  color: var(--vp-c-text-1);
+  text-decoration: underline;
+  text-decoration-color: var(--vp-c-divider);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s;
+  font-weight: normal;
+}
+.vp-doc a:hover {
+  text-decoration-color: var(--vp-c-text-1);
+}
