@@ -1,81 +1,534 @@
 # 第四部分：全链路技术架构
 
-### 4.1 五阶段标准管道
+> 这不是流程图，是每个阶段的详细工程说明——每阶段"输入是什么、干什么、输出什么、用什么工具、怎么配置、常见错误"全部到位。
+
+---
+
+## 总览：五阶段流水线
 
 ```mermaid
 flowchart TD
-    subgraph Stage1 [Stage 1: 内容接入与规范化]
+    subgraph S1 [Stage 1：内容接入与解析]
         direction LR
-        S1[PDF/图片/视频/代码] --> P1[VLM / ASR / Docling] --> O1[统一输出: Markdown/JSON]
+        IN[原始多模态内容] --> ROUTE{格式路由}
+        ROUTE --> |PDF/文档| DOC[MinerU / Docling / Unlimited-OCR]
+        ROUTE --> |视频/音频| AV[yt-dlp + SenseVoice]
+        ROUTE --> |图像| IMG[ColPali + GPT-4o VLM]
+        ROUTE --> |网页| WEB[Jina Reader / Playwright]
+        DOC & AV & IMG & WEB --> OUT1[统一 Markdown / JSON]
     end
 
-    subgraph Stage2 [Stage 2: 知识蒸馏与仲裁]
-        direction TB
-        E1[四层金字塔提取]
-        E2[Skill 可执行化契约]
-        E3[CDC 冲突仲裁机制<br/>有时态则覆盖 / 无时态挂载冲突标]
-    end
-
-    subgraph Stage3 [Stage 3: 质量验证层]
+    subgraph S2 [Stage 2：知识蒸馏]
         direction LR
-        V1[对抗一致性重问] --> V2[置信度评分 >0.8] --> V3[Acceptance Predicate]
+        OUT1 --> TYPE{知识类型}
+        TYPE --> |方法论/流程| SKILL[cangjie-skill RIA-TV++ 六阶段]
+        TYPE --> |事实/概念| PYRAMID[四层金字塔 L1→L4]
+        TYPE --> |规则/决策| RULE[bdistill IF-THEN 提取]
+        TYPE --> |人物经验| PERSONA[nuwa-skill 双轨提炼]
     end
 
-    subgraph Stage4 [Stage 4: 入库路由分流]
+    subgraph S3 [Stage 3：质量验证]
         direction LR
-        R1[(Wiki文档库<br/>Markdown)]
-        R2[(向量数据库<br/>Embedding)]
-        R3[(Skill库<br/>.agents/)]
+        DRAFT[蒸馏草稿] --> V1[三重验证<br/>佐证+预测力+非常识]
+        V1 --> V2[置信度评分<br/>0.4以下丢弃/0.8以上验证]
+        V2 --> V3[Acceptance Predicate<br/>结构完整+可溯源+代码可执行]
+        V3 --> CLEAN[通过验证的净知识]
     end
 
-    subgraph Stage5 [Stage 5: 检索与消费终端]
+    subgraph S4 [Stage 4：入库路由]
         direction LR
-        C1[精确事实 → 向量检索]
-        C2[主题综合 → 图谱聚合]
-        C3[流程执行 → Skill加载]
+        CLEAN --> ROUTER{知识类型路由}
+        ROUTER --> |声明性知识| VDB[(向量数据库<br/>Qdrant/pgvector)]
+        ROUTER --> |关系网络| GDB[(知识图谱<br/>LightRAG/Neo4j)]
+        ROUTER --> |可执行流程| SKB[(Skill库<br/>~/.agents/skills/)]
+        ROUTER --> |时态记忆| MEM[(记忆层<br/>Graphiti)]
     end
 
-    Stage1 --> Stage2
-    Stage2 --> Stage3
-    Stage3 --> Stage4
-    Stage4 --> Stage5
-    
-    classDef plain fill:#fff,stroke:#334155,stroke-width:1px,color:#111;
-    class Stage1,Stage2,Stage3,Stage4,Stage5,S1,P1,O1,E1,E2,E3,V1,V2,V3,R1,R2,R3,C1,C2,C3 plain;
+    subgraph S5 [Stage 5：检索与消费]
+        direction LR
+        QUERY[用户/Agent Query] --> INTENT{意图分类}
+        INTENT --> |事实查找| RAG[向量检索 Top-K]
+        INTENT --> |多跳推理| GRAPH[图谱遍历]
+        INTENT --> |执行任务| SKILL2[Skill加载执行]
+        INTENT --> |持续对话| MEM2[记忆检索]
+    end
+
+    S1 --> S2 --> S3 --> S4 --> S5
+
+    classDef plain fill:#fafafa,stroke:#334155,stroke-width:1px;
 ```
 
 ---
 
-### 4.2 多模态 RAG 三种范式对比
+## Stage 1：内容接入与解析
+
+### 职责
+将任意格式的原始内容，转化为 LLM 可以处理的统一 Markdown/JSON。
+
+### 解析路由决策
+
+```python
+from enum import Enum
+from pathlib import Path
+
+class ParseRoute(Enum):
+    DOCLING = "docling"           # CPU，MIT协议，金融表格最强
+    MINERU = "mineru"             # GPU，精度最高，公式/CJK最强
+    UNLIMITED_OCR = "unlimited"   # 高配GPU，跨页超复杂文档
+    MARKER = "marker"             # GPU，批量高吞吐
+    SENSEVOICE = "sensevoice"     # 音频，中文最强
+    FASTER_WHISPER = "whisper"    # 音频，英文/多语言
+    COLPALI = "colpali"           # 图像，无需OCR直接嵌入
+    JINA_READER = "jina"          # 网页，零配置
+
+def route_parser(file_path: str, has_gpu: bool = False) -> ParseRoute:
+    suffix = Path(file_path).suffix.lower()
+
+    if suffix in ['.pdf', '.docx', '.pptx', '.xlsx']:
+        # 判断是否为扫描件/复杂混排
+        if has_gpu:
+            # 检查文件复杂度（页数>100或含大量图片）
+            return ParseRoute.UNLIMITED_OCR if is_complex(file_path) \
+                   else ParseRoute.MINERU
+        return ParseRoute.DOCLING
+
+    elif suffix in ['.mp4', '.mov', '.avi', '.mkv']:
+        return ParseRoute.SENSEVOICE  # 先提取音频
+
+    elif suffix in ['.mp3', '.wav', '.m4a']:
+        return ParseRoute.SENSEVOICE  # 中文首选
+
+    elif suffix in ['.png', '.jpg', '.jpeg', '.webp']:
+        return ParseRoute.COLPALI    # 原生视觉嵌入
+
+    elif file_path.startswith('http'):
+        return ParseRoute.JINA_READER
+
+    return ParseRoute.DOCLING  # 兜底
+```
+
+### 核心配置
+
+```python
+# Stage 1 完整配置
+STAGE1_CONFIG = {
+    "docling": {
+        "output_format": "markdown",
+        "table_mode": "accurate",   # 金融表格用 accurate 模式
+    },
+    "mineru": {
+        "effort": "high",           # medium/high，high 开启图片分析
+        "output_dir": "./output/",
+    },
+    "sensevoice": {
+        "model": "iic/SenseVoiceSmall",
+        "vad_model": "fsmn-vad",
+        "use_itn": True,            # 数字规范化
+        "language": "auto",
+    },
+    "chunking": {
+        "strategy": "structural",   # 必须用结构化切块，不是 token 切块
+        "overlap_tokens": 128,
+        "min_chunk_tokens": 100,
+        "max_chunk_tokens": 1000,
+    }
+}
+```
+
+### 关键约束
+- **绝对不能用 token 数切块**：必须按文档结构边界（标题/段落/表格）切
+- **图片内文字必须二次处理**：MinerU 裁出图片后，图片内的文字要再送 VLM
+- **Unlimited-OCR 的 ngram_window**：单页用 128，多页必须用 1024
+
+---
+
+## Stage 2：知识蒸馏
+
+### 职责
+将统一的文本，按照知识类型，提炼为不同深度的结构化知识。
+
+### 蒸馏类型路由
+
+```python
+def route_distill(content: str, content_type: str) -> str:
+    """
+    根据内容类型选择蒸馏策略
+    Returns: "skill" | "pyramid" | "rule" | "persona"
+    """
+    METHODOLOGY_KEYWORDS = ["步骤", "方法", "流程", "如何", "怎么", "SOP", "操作"]
+    FACT_KEYWORDS = ["是什么", "定义", "概念", "原理", "理论"]
+    RULE_KEYWORDS = ["如果", "IF", "条件", "阈值", "规则", "策略"]
+    PERSON_KEYWORDS = ["观点", "认为", "建议", "经验", "思维"]
+
+    if any(kw in content for kw in METHODOLOGY_KEYWORDS):
+        return "skill"      # → cangjie-skill RIA-TV++ 流水线
+    elif any(kw in content for kw in RULE_KEYWORDS):
+        return "rule"       # → bdistill IF-THEN 提取
+    elif any(kw in content for kw in PERSON_KEYWORDS):
+        return "persona"    # → nuwa-skill 双轨提炼
+    else:
+        return "pyramid"    # → 四层金字塔默认路由
+```
+
+### 四层金字塔提取 Prompt 工程
+
+```python
+# Level 1：Atomic Insights 提取
+ATOMIC_PROMPT = """
+从以下文本中提取所有原子事实。
+规则：
+1. 每条事实必须是独立完整的命题，格式：[主体] [动作/关系] [客体/结论]
+2. 不要改写原文意思，不要合并两个不同的事实
+3. 去掉修饰语，保留核心主张
+4. 每条事实用 JSON 格式输出：
+   {"fact": "...", "source_sentence": "...", "confidence": 0.0-1.0}
+
+文本：{text}
+
+输出 JSON 数组：
+"""
+
+# Level 2：Concepts 聚合
+CONCEPT_PROMPT = """
+以下是关于同一文档的一组原子事实：
+{atomic_facts}
+
+请将相关的原子事实聚合为概念群：
+1. 每个概念群应该有一个清晰的主题名称
+2. 包含 3-7 个支撑该概念的原子事实
+3. 每个概念输出格式：
+   {"concept": "...", "summary": "...", "supporting_facts": [...]}
+"""
+
+# Level 4：Cross-Document 冲突检测
+CONFLICT_PROMPT = """
+以下是来自不同文档的关于同一主题的声明：
+文档A：{claim_a}（来源：{source_a}）
+文档B：{claim_b}（来源：{source_b}）
+
+判断：
+1. 这两个声明是否矛盾？（是/否）
+2. 如果矛盾，是什么类型：数值冲突/时态冲突/观点分歧
+3. 置信度更高的是哪个？理由是什么？
+输出格式：{"conflict": bool, "type": "...", "preferred": "A/B/both", "reason": "..."}
+"""
+```
+
+### RIA-TV++ 六阶段（cangjie-skill 核心）
+
+```
+Phase 0: 整书理解（Adler 分析阅读法）
+  → 四步拆解：结构 / 解释 / 批判 / 应用
+  → 产物：BOOK_OVERVIEW.md
+
+Phase 1: 5路并行提取器
+  → 框架提取器 | 原则提取器 | 案例提取器 | 反例提取器 | 术语对齐器
+
+Phase 1.5: 三重验证（淘汰率 50-75%）
+  → 规则1：≥2 处独立佐证（必须跨章节）
+  → 规则2：具备预测力（能回答文中未明说的问题）
+  → 规则3：非常识（不是人尽皆知的废话）
+
+Phase 2: RIA++ 结构化
+  → R（原文引用）+ I（自己重写）+ A1（书中案例）
+  + A2（未来触发场景）+ E（执行步骤）+ B（边界与盲点）
+
+Phase 3: Zettelkasten 链接
+  → 识别 Skill 之间的依赖/对比/组合关系
+  → 生成 INDEX.md 和引用图
+
+Phase 4: 压力测试
+  → 每个 Skill 设计包含诱饵题的测试用例
+  → 未通过 → 回炉 Phase 2
+```
+
+---
+
+## Stage 3：质量验证
+
+### 职责
+过滤低质量知识，阻止幻觉和错误进入知识库。
+
+### 三重验证实现
+
+```python
+class KnowledgeValidator:
+    def __init__(self, llm_client):
+        self.llm = llm_client
+
+    def validate(self, claim: dict) -> dict:
+        """
+        对单条知识进行三重验证
+        Returns: {"passed": bool, "score": float, "reasons": [...]}
+        """
+        results = []
+
+        # 验证1：独立佐证（至少2处，跨章节）
+        evidence_count = self._count_independent_evidence(claim)
+        results.append({
+            "check": "evidence",
+            "passed": evidence_count >= 2,
+            "score": min(evidence_count / 2, 1.0)
+        })
+
+        # 验证2：预测力（能回答原文未明说的问题）
+        predictive = self._test_predictive_power(claim)
+        results.append({
+            "check": "predictive",
+            "passed": predictive["score"] > 0.6,
+            "score": predictive["score"]
+        })
+
+        # 验证3：独特性（不是常识）
+        uniqueness = self._test_uniqueness(claim)
+        results.append({
+            "check": "uniqueness",
+            "passed": uniqueness["score"] > 0.5,
+            "score": uniqueness["score"]
+        })
+
+        overall_score = sum(r["score"] for r in results) / 3
+        passed = all(r["passed"] for r in results)
+
+        return {
+            "passed": passed,
+            "score": overall_score,
+            "checks": results,
+            "action": "keep" if overall_score > 0.8
+                      else "review" if overall_score > 0.4
+                      else "discard"
+        }
+
+    def adversarial_consistency_test(self, claim: str, n_variants: int = 5) -> float:
+        """
+        对抗一致性检测：用 5 种不同措辞问同一个问题
+        返回：一致性得分（0-1），低于 0.6 标记为幻觉
+        """
+        variants = self._generate_question_variants(claim, n=n_variants)
+        answers = [self.llm.answer(v) for v in variants]
+        consistency = self._measure_semantic_consistency(answers)
+        return consistency
+```
+
+### Acceptance Predicate（Resource2Skill 标准）
+
+任何进入知识库的知识单元，必须同时满足：
+
+```python
+def acceptance_predicate(entry: dict) -> bool:
+    checks = [
+        # 1. 结构完整性：所有必填字段已填写
+        all(f in entry for f in ["name", "trigger", "steps", "boundary"]),
+
+        # 2. 溯源可追：source_path 指向真实可访问的来源
+        Path(entry.get("source_path", "")).exists() or
+        entry.get("source_url", "").startswith("http"),
+
+        # 3. 去重：与现有条目无语义重复
+        not has_duplicate(entry, similarity_threshold=0.85),
+
+        # 4. 代码可执行性（有 code_field 时）
+        entry.get("code_field") is None or
+        is_executable(entry["code_field"]),
+
+        # 5. 模态一致性：声明的模态字段有实际内容
+        entry.get("visual_examples") is None or
+        all(Path(p).exists() for p in entry["visual_examples"]),
+    ]
+    return all(checks)
+```
+
+---
+
+## Stage 4：入库路由
+
+### 职责
+将通过验证的知识，按类型路由到对应的存储后端。
+
+### 路由规则
+
+```python
+def route_to_storage(knowledge: dict) -> str:
+    """
+    Returns: "vector" | "graph" | "skill" | "memory"
+    """
+    ktype = knowledge.get("type")
+    usage = knowledge.get("usage_pattern")
+
+    # 可执行流程/方法论 → Skill 库
+    if ktype in ["methodology", "procedure", "workflow"]:
+        return "skill"
+
+    # 时态/随时间变化的事实 → 记忆层（Graphiti）
+    if ktype == "temporal" or knowledge.get("expires"):
+        return "memory"
+
+    # 实体关系/需要多跳推理 → 知识图谱
+    if ktype in ["entity_relation", "causal", "comparative"]:
+        return "graph"
+
+    # 其余声明性知识 → 向量库
+    return "vector"
+```
+
+### 生产级存储后端配置
+
+```python
+# LightRAG 生产配置（知识图谱 + 向量库双存）
+LIGHTRAG_PROD_CONFIG = {
+    "kv_storage": "PostgreSQL",       # LLM 响应缓存
+    "vector_storage": "Qdrant",       # 高性能向量存储
+    "graph_storage": "Neo4j",         # 知识图谱
+    "doc_status_storage": "PostgreSQL",
+
+    # ⚠️ Embedding 模型一旦选定不能更换
+    "embedding_model": "BAAI/bge-m3", # 多语言，低维快速
+    "embedding_dim": 1024,
+
+    # Rerank 模型（可以随时更换）
+    "rerank_model": "BAAI/bge-reranker-v2-m3",
+}
+
+# Qdrant + Neo4j 混合桥接
+# 使用 QdrantNeo4jRetriever：Qdrant 的点 ID == Neo4j 的节点 ID
+HYBRID_RETRIEVAL_CONFIG = {
+    "qdrant_collection": "knowledge_base",
+    "neo4j_uri": "bolt://localhost:7687",
+    "id_sync_strategy": "hash_based",  # 保证两侧 ID 一致
+}
+```
+
+### 三态一致性与级联删除（防知识腐败）
+
+```python
+class KnowledgeLifecycleManager:
+    """
+    当源文件更新/删除时，触发级联清理，防止孤儿知识积累
+    """
+    def on_source_deleted(self, source_hash: str):
+        # 1. 软删除向量库中的关联 Chunks（Tombstone 标记）
+        self.qdrant.delete(
+            collection_name="knowledge_base",
+            points_selector={"filter": {"source_hash": source_hash}},
+            wait=True
+        )
+
+        # 2. 删除 Neo4j 中的关联节点和边
+        self.neo4j.run(
+            "MATCH (n {source_hash: $hash}) DETACH DELETE n",
+            hash=source_hash
+        )
+
+        # 3. 将相关 SKILL.md 标记为过期
+        for skill_path in self._find_skills_by_source(source_hash):
+            self._mark_skill_outdated(skill_path)
+            # 写入 SKILL.md 头部：status: outdated, updated_at: ...
+
+    def _mark_skill_outdated(self, skill_path: str):
+        with open(skill_path, 'r') as f:
+            content = f.read()
+        content = content.replace(
+            "status: active",
+            f"status: outdated\noutdated_at: {datetime.now().isoformat()}"
+        )
+        with open(skill_path, 'w') as f:
+            f.write(content)
+```
+
+---
+
+## Stage 5：检索与消费
+
+### 职责
+根据用户/Agent 的查询意图，路由到最合适的检索策略，返回高质量的上下文。
+
+### 意图分类器（路由核心）
+
+```python
+from enum import Enum
+
+class QueryIntent(Enum):
+    FACTUAL = "factual"       # 单跳事实 → 向量检索
+    ANALYTICAL = "analytical" # 多跳推理 → 图谱遍历
+    PROCEDURAL = "procedural" # 执行任务 → Skill 加载
+    CONVERSATIONAL = "conv"   # 持续对话 → 记忆检索
+
+def classify_intent(query: str, context: dict = None) -> QueryIntent:
+    # 简单规则（生产环境用小模型分类器替代）
+    ANALYTICAL_SIGNALS = ["哪些", "对比", "影响", "关系", "导致", "趋势"]
+    PROCEDURAL_SIGNALS = ["如何", "怎么做", "步骤", "流程", "帮我"]
+
+    if any(s in query for s in PROCEDURAL_SIGNALS):
+        return QueryIntent.PROCEDURAL
+    elif any(s in query for s in ANALYTICAL_SIGNALS):
+        return QueryIntent.ANALYTICAL
+    elif context and context.get("conversation_turns", 0) > 2:
+        return QueryIntent.CONVERSATIONAL
+    return QueryIntent.FACTUAL
+```
+
+### 混合检索实现
+
+```python
+async def hybrid_retrieve(
+    query: str,
+    intent: QueryIntent,
+    rag: LightRAG,
+    skill_bank: SkillBank
+) -> dict:
+
+    if intent == QueryIntent.PROCEDURAL:
+        # 直接从 Skill 库加载
+        skills = skill_bank.search(query, top_k=3)
+        return {"type": "skill", "results": skills}
+
+    elif intent == QueryIntent.ANALYTICAL:
+        # 图谱遍历（mix 模式）
+        result = await rag.aquery(query, param=QueryParam(mode="mix"))
+        return {"type": "graph", "results": result}
+
+    elif intent == QueryIntent.FACTUAL:
+        # 向量检索（local 模式，精确匹配）
+        result = await rag.aquery(query, param=QueryParam(mode="local"))
+        return {"type": "vector", "results": result}
+
+    else:  # CONVERSATIONAL
+        # 记忆检索 + 向量检索
+        memories = memory_store.retrieve(query, top_k=5)
+        vector_result = await rag.aquery(query, param=QueryParam(mode="local"))
+        return {"type": "hybrid", "memories": memories, "knowledge": vector_result}
+```
+
+---
+
+## 多模态 RAG 三种范式对比
 
 | 范式 | 原理 | 优势 | 劣势 | 推荐场景 |
 |------|------|------|------|----------|
-| **文本化 RAG** | 图片/表格→VLM描述→存入向量库 | 简单，兼容所有文本工具链 | 信息损失（布局/颜色/空间）| 文本为主、视觉为辅的文档 |
-| **原生视觉 RAG (VisRAG/ColPali)** | 文档页→直接嵌入为图像向量→VLM生成回答 | VisRAG 比传统高25-39% | 推理成本高 | 视觉信息密集（图表/设计/扫描件）|
-| **多智能体分层检索 (ViDoRAG)** | Seeker粗检索→Inspector精审→Answer一致性 | 视频文档最优 | 架构复杂 | 视频+文档混合知识库 |
+| **文本化 RAG** | 图片/表格→VLM描述→向量库 | 简单，兼容所有工具链 | 信息损失（布局/颜色/空间）| 文本为主的文档 |
+| **原生视觉 RAG (ColPali)** | 文档页→直接图像向量→VLM回答 | 比文本化高 25-39% | 推理成本高，需GPU | 视觉信息密集的文档 |
+| **多智能体分层检索 (ViDoRAG)** | Seeker粗检索→Inspector精审→回答 | 视频文档最优 | 架构复杂 | 视频+文档混合知识库 |
 
 ---
 
-### 4.3 质量评估指标
+## 质量评估指标体系
 
 **知识库蒸馏质量**：
 
-| 维度 | 指标 | 测量方式 |
-|------|------|----------|
-| 准确性 | LLM-as-Judge 正确率 | 与 ground truth 对比 |
-| 完整性 | Completeness Score (0-1) | 问题各方面是否覆盖 |
-| 忠实性 | Faithfulness Score | 是否有不在原文中的内容（幻觉）|
-| 相关性 | Context Relevance | 检索内容与查询的相关度 |
-| 一致性 | 对抗重问稳定性 | 同一claim多角度重问的稳定率 |
-| 粒度覆盖 | 多层次命中率 | 从原子到摘要各层的检索命中 |
+| 维度 | 指标 | 测量方式 | 及格线 |
+|------|------|----------|--------|
+| 准确性 | LLM-as-Judge 正确率 | 与 ground truth 对比 | >85% |
+| 完整性 | Completeness Score | 问题各方面是否覆盖 | >0.8 |
+| 忠实性 | Faithfulness Score | 是否有幻觉（不在原文中的内容）| >0.9 |
+| 相关性 | Context Relevance | 检索内容与查询的相关度 | >0.75 |
+| 一致性 | 对抗重问稳定性 | 5种措辞重问的稳定率 | >0.8 |
+| 粒度覆盖 | 多层次命中率 | L1-L4 各层的检索命中 | 均>60% |
 
-**多模态解析质量**（OmniDocBench 标准）：
+**多模态解析质量（OmniDocBench 标准）**：
 
-| 指标 | 含义 |
-|------|------|
-| CCT（Correct Content Transfer）| 文本内容准确率 |
-| TEDS（Tree-Edit Distance Score）| 表格结构准确率 |
-| Element Alignment | 元素类型识别准确率 |
-| Reading Order | 阅读顺序编辑距离 |
-
----
+| 指标 | 含义 | MinerU 2.5-Pro 得分 |
+|------|------|---------------------|
+| CCT | 文本内容准确率 | 0.019 编辑距离（Full 榜首）|
+| TEDS | 表格结构准确率 | 93.42% |
+| Formula CDM | 公式识别准确率 | 97.29% |
+| Reading Order | 阅读顺序 | 0.120 编辑距离 |

@@ -25,17 +25,45 @@ export default withMermaid(defineConfig({
     sidebar: {
       '/knowledge/': [
         {
-          text: '多模态知识蒸馏',
+          text: '🧭 认知基础',
+          collapsed: false,
           items: [
-            { text: '一、认知框架', link: '/knowledge/01-framework' },
-            { text: '二、决策矩阵', link: '/knowledge/02-decision-matrix' },
-            { text: '三、九种场景SOP', link: '/knowledge/03-scene-sops' },
-            { text: '四、全链路架构', link: '/knowledge/04-architecture' },
-            { text: '五、GraphRAG构建', link: '/knowledge/05-graphrag' },
-            { text: '六、Agent调用', link: '/knowledge/06-agent-call' },
-            { text: '七、进阶分层理论', link: '/knowledge/07-advanced-theory' },
-            { text: '附录：工具与生态', link: '/knowledge/08-tools-appendix' },
-            { text: '八、Skill蒸馏深度解构', link: '/knowledge/09-skill-distillation-deep-dive' }
+            { text: '一、认知框架与全局地图', link: '/knowledge/01-framework' },
+            { text: '二、输入×输出决策矩阵', link: '/knowledge/02-decision-matrix' },
+          ]
+        },
+        {
+          text: '⚙️ 工程实践',
+          collapsed: false,
+          items: [
+            { text: '三、10种输入场景完整SOP', link: '/knowledge/03-scene-sops' },
+            { text: '四、全链路技术架构', link: '/knowledge/04-architecture' },
+            { text: '五、GraphRAG知识库构建', link: '/knowledge/05-graphrag' },
+            { text: '六、Agent知识库调用', link: '/knowledge/06-agent-call' },
+          ]
+        },
+        {
+          text: '🚀 端到端Pipeline',
+          collapsed: false,
+          items: [
+            { text: '十、完整可运行Pipeline', link: '/knowledge/10-e2e-pipeline' },
+            { text: '十一、知识库进化与闭环', link: '/knowledge/11-kb-evolution' },
+            { text: '十二、Agent调用质量评估', link: '/knowledge/12-evaluation' },
+          ]
+        },
+        {
+          text: '🔬 深度理论',
+          collapsed: false,
+          items: [
+            { text: '七、Agentic检索分层理论', link: '/knowledge/07-advanced-theory' },
+            { text: '八、Skill蒸馏9大仓库解构', link: '/knowledge/09-skill-distillation-deep-dive' },
+          ]
+        },
+        {
+          text: '📦 工具手册',
+          collapsed: true,
+          items: [
+            { text: '工具选型与完整安装指引', link: '/knowledge/08-tools-appendix' },
           ]
         }
       ]
