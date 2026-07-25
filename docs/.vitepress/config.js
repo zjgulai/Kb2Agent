@@ -34,7 +34,8 @@ export default withMermaid(defineConfig({
             { text: '五、GraphRAG构建', link: '/knowledge/05-graphrag' },
             { text: '六、Agent调用', link: '/knowledge/06-agent-call' },
             { text: '七、进阶分层理论', link: '/knowledge/07-advanced-theory' },
-            { text: '附录：工具与生态', link: '/knowledge/08-tools-appendix' }
+            { text: '附录：工具与生态', link: '/knowledge/08-tools-appendix' },
+            { text: '八、Skill蒸馏深度解构', link: '/knowledge/09-skill-distillation-deep-dive' }
           ]
         }
       ]
