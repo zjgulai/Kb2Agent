@@ -83,15 +83,24 @@ export default withMermaid(defineConfig({
   mermaid: {
     theme: 'base',
     themeVariables: {
-      primaryColor: '#eff6ff',
-      primaryBorderColor: '#2563eb',
-      primaryTextColor: '#1e3a8a',
-      lineColor: '#64748b',
-      secondaryColor: '#f0fdf4',
-      tertiaryColor: '#fefce8',
-      noteBkgColor: '#fefce8',
-      noteTextColor: '#92400e',
-      edgeLabelBackground: '#ffffff',
+      background:        '#FDF8F6',
+      primaryColor:      '#F9D0D6',
+      primaryBorderColor:'#C44A5E',
+      primaryTextColor:  '#35141A',
+      secondaryColor:    '#F5EDD4',
+      secondaryBorderColor:'#D8BE78',
+      secondaryTextColor:'#6b5a2a',
+      tertiaryColor:     '#DFF0DF',
+      tertiaryBorderColor:'#6E966E',
+      tertiaryTextColor: '#2d5c2d',
+      lineColor:         '#9B9795',
+      textColor:         '#59585E',
+      edgeLabelBackground:'#FDF8F6',
+      noteBkgColor:      '#F5EDD4',
+      noteTextColor:     '#6b5a2a',
+      clusterBkg:        '#FCF5F2',
+      clusterBorder:     '#D75C70',
+      titleColor:        '#35141A',
     }
   }
 }))

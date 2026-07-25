@@ -1,350 +1,315 @@
 /* ============================================================
-   MKD Guide — 专业亮色主题
-   主色：#2563eb（蓝）强调：#d97706（琥珀）/ #16a34a（绿）
-   背景：纯白 #ffffff + 浅灰 #f8fafc
+   MKD Guide — 整合设计主题
+   色板来源：lute-tlz-dddd.top（暖白纸底 + 深棕红 + 金/绿点缀）
+   卡片风格：ppiconsulting.dev（极轻阴影 + 圆角 + 网格）
+   文章渲染：MorandiGarden（低饱和分层标题 + 圆角引用 + 竖线列表）
    ============================================================ */
 
+/* ---------- 1. 色板与 Token ---------- */
 :root {
-  --vp-c-brand-1:        #2563eb;
-  --vp-c-brand-2:        #1d4ed8;
-  --vp-c-brand-3:        #3b82f6;
-  --vp-c-brand-soft:     rgba(37,99,235,0.08);
+  /* ── lute 色板 ── */
+  --paper:          #FDF8F6;
+  --paper-2:        #FCF5F2;
+  --ink:            #35141A;
+  --body:           #59585E;
+  --muted:          #9B9795;
+  --red:            #D75C70;
+  --red-deep:       #C44A5E;
+  --red-soft:       #F9D0D6;
+  --gold:           #D8BE78;
+  --gold-soft:      #F5EDD4;
+  --jade:           #6E966E;
+  --jade-soft:      #DFF0DF;
+  --line:           rgba(53,20,26,0.10);
+  --line-strong:    rgba(215,92,112,0.24);
 
-  --vp-c-bg:             #ffffff;
-  --vp-c-bg-alt:         #f8fafc;
-  --vp-c-bg-elv:         #ffffff;
-  --vp-c-bg-soft:        #f1f5f9;
+  /* ── VitePress 覆盖 ── */
+  --vp-c-brand-1:        var(--red-deep);
+  --vp-c-brand-2:        var(--red);
+  --vp-c-brand-3:        #e07080;
+  --vp-c-brand-soft:     rgba(196,74,94,0.10);
 
-  --vp-c-text-1:         #0f172a;
-  --vp-c-text-2:         #475569;
-  --vp-c-text-3:         #94a3b8;
-  --vp-c-divider:        #e2e8f0;
-  --vp-c-gutter:         #f1f5f9;
+  --vp-c-bg:             var(--paper);
+  --vp-c-bg-alt:         var(--paper-2);
+  --vp-c-bg-elv:         #fff;
+  --vp-c-bg-soft:        #f5eeec;
 
-  --color-blue:          #2563eb;
-  --color-blue-bg:       #eff6ff;
-  --color-blue-border:   #bfdbfe;
-  --color-amber:         #d97706;
-  --color-amber-bg:      #fffbeb;
-  --color-amber-border:  #fde68a;
-  --color-green:         #16a34a;
-  --color-green-bg:      #f0fdf4;
-  --color-green-border:  #bbf7d0;
-  --color-red:           #dc2626;
-  --color-red-bg:        #fef2f2;
-  --color-red-border:    #fecaca;
+  --vp-c-text-1:         var(--ink);
+  --vp-c-text-2:         var(--body);
+  --vp-c-text-3:         var(--muted);
+  --vp-c-divider:        var(--line);
+  --vp-c-gutter:         var(--paper-2);
 
-  --vp-font-family-base: 'Inter','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',sans-serif;
-  --vp-font-family-mono: 'JetBrains Mono','Fira Code',Consolas,monospace;
+  /* ── 字体 ── */
+  --vp-font-family-base: 'Alibaba PuHuiTi', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 
-  --vp-nav-bg-color:     #ffffff;
-  --vp-sidebar-bg-color: #ffffff;
+  /* ── 导航/侧边栏 ── */
+  --vp-nav-bg-color:     var(--paper);
+  --vp-sidebar-bg-color: var(--paper);
 
-  --vp-button-brand-bg:         #2563eb;
-  --vp-button-brand-hover-bg:   #1d4ed8;
+  /* ── 按钮 ── */
+  --vp-button-brand-bg:         var(--red-deep);
+  --vp-button-brand-hover-bg:   var(--ink);
   --vp-button-brand-border:     transparent;
-  --vp-button-brand-text:       #ffffff;
-  --vp-button-brand-hover-text: #ffffff;
-  --vp-button-alt-bg:           #f8fafc;
-  --vp-button-alt-hover-bg:     #f1f5f9;
-  --vp-button-alt-border:       #e2e8f0;
-  --vp-button-alt-text:         #0f172a;
-  --vp-button-alt-hover-text:   #0f172a;
+  --vp-button-brand-text:       #fff;
+  --vp-button-brand-hover-text: #fff;
+  --vp-button-alt-bg:           transparent;
+  --vp-button-alt-hover-bg:     var(--paper-2);
+  --vp-button-alt-border:       var(--line-strong);
+  --vp-button-alt-text:         var(--ink);
+  --vp-button-alt-hover-text:   var(--red-deep);
 
-  --vp-code-bg:                 #f8fafc;
-  --vp-code-color:              #1e293b;
-  --vp-code-block-bg:           #f8fafc;
-  --vp-code-block-divider-color:#e2e8f0;
+  /* ── 代码块 ── */
+  --vp-code-bg:                 #f5eeec;
+  --vp-code-color:              var(--ink);
+  --vp-code-block-bg:           #f5eeec;
+  --vp-code-block-divider-color:var(--line);
+  --vp-code-line-highlight-color: rgba(196,74,94,0.07);
 }
 
-/* 强制亮色，不跟随系统深色 */
+/* 强制亮色 */
 html { color-scheme: light !important; }
-.dark {
-  --vp-c-bg:      #ffffff !important;
-  --vp-c-bg-alt:  #f8fafc !important;
-  --vp-c-text-1:  #0f172a !important;
-  --vp-c-text-2:  #475569 !important;
-  --vp-c-divider: #e2e8f0 !important;
-}
+.dark { --vp-c-bg: var(--paper) !important; --vp-c-bg-alt: var(--paper-2) !important; --vp-c-text-1: var(--ink) !important; --vp-c-text-2: var(--body) !important; --vp-c-divider: var(--line) !important; }
 
+/* ---------- 2. 全局基础 ---------- */
 body {
   font-size: 15px;
-  line-height: 1.75;
+  line-height: 1.8;
   -webkit-font-smoothing: antialiased;
+  background: var(--paper);
 }
 
-/* --- 导航栏 --- */
+/* ---------- 3. 导航栏 ---------- */
 .VPNav {
-  border-bottom: 1px solid var(--vp-c-divider) !important;
-  background: rgba(255,255,255,0.94) !important;
-  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line) !important;
+  background: rgba(253,248,246,0.92) !important;
+  backdrop-filter: blur(12px);
 }
 .VPNavBar .title {
   font-weight: 700;
   font-size: 0.95rem;
-  color: var(--vp-c-text-1) !important;
-  letter-spacing: -0.01em;
+  color: var(--ink) !important;
+  letter-spacing: 0.02em;
 }
 .VPNavBarMenu .VPNavBarMenuLink {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--vp-c-text-2);
+  color: var(--body);
+  transition: color .15s;
 }
 .VPNavBarMenu .VPNavBarMenuLink:hover,
-.VPNavBarMenu .VPNavBarMenuLink.active {
-  color: var(--color-blue);
-}
+.VPNavBarMenu .VPNavBarMenuLink.active { color: var(--red-deep); }
 
-/* --- 侧边栏 --- */
+/* ---------- 4. 侧边栏 ---------- */
 .VPSidebar {
-  border-right: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg) !important;
+  border-right: 1px solid var(--line);
+  background: var(--paper) !important;
 }
 .VPSidebarItem.level-0 > .item > .text {
   font-size: 0.68rem !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.09em !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.12em !important;
   text-transform: uppercase !important;
-  color: var(--vp-c-text-3) !important;
+  color: var(--muted) !important;
   padding-top: 1.5rem !important;
 }
 .VPSidebarItem.level-1 .item .link .text {
   font-size: 0.875rem;
-  color: var(--vp-c-text-2);
+  color: var(--body);
   line-height: 1.5;
+  transition: color .15s;
 }
-.VPSidebarItem.level-1 .item .link:hover .text {
-  color: var(--vp-c-text-1);
-}
+.VPSidebarItem.level-1 .item .link:hover .text { color: var(--ink); }
 .VPSidebarItem.level-1.is-active > .item {
-  background: var(--color-blue-bg) !important;
+  background: var(--red-soft) !important;
   border-radius: 6px;
 }
 .VPSidebarItem.level-1.is-active > .item .link .text {
-  color: var(--color-blue) !important;
+  color: var(--red-deep) !important;
   font-weight: 600 !important;
 }
 
-/* --- 正文排版 --- */
+/* ---------- 5. 正文排版（MorandiGarden 风格）---------- */
 .vp-doc { max-width: 860px; }
 
+/* h1 */
 .vp-doc h1 {
   font-size: 2rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.2;
-  color: var(--vp-c-text-1);
+  color: var(--ink);
   margin-top: 0;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   border-bottom: none;
+  padding-bottom: 0;
 }
 
+/* h2 — 深棕红左侧竖线，Morandi 风格 */
 .vp-doc h2 {
   font-size: 1.35rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--vp-c-text-1);
+  color: var(--ink);
   margin-top: 3rem;
   margin-bottom: 1rem;
-  padding-left: 0.875rem;
-  border-left: 3px solid var(--color-blue);
+  padding: 0.5rem 0 0.5rem 0.875rem;
+  border-left: 3px solid var(--red-deep);
   border-bottom: none;
+  background: linear-gradient(90deg, rgba(196,74,94,0.05) 0%, transparent 80%);
+  border-radius: 0 4px 4px 0;
 }
 
+/* h3 — 金色点 */
 .vp-doc h3 {
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--vp-c-text-1);
+  color: var(--ink);
   margin-top: 2rem;
   margin-bottom: 0.75rem;
 }
 .vp-doc h3::before {
   content: '';
   display: inline-block;
-  width: 6px;
-  height: 6px;
-  background: var(--color-blue);
-  border-radius: 50%;
+  width: 7px;
+  height: 7px;
+  background: var(--gold);
+  border-radius: 2px;
   margin-right: 0.5rem;
   margin-bottom: 1px;
   vertical-align: middle;
 }
 
+/* h4 — 玉绿 */
+.vp-doc h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--jade);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 段落 */
 .vp-doc p {
-  line-height: 1.8;
-  color: var(--vp-c-text-1);
+  line-height: 1.85;
+  color: var(--body);
   margin-bottom: 1.25rem;
 }
-.vp-doc strong {
-  font-weight: 700;
-  color: var(--vp-c-text-1);
-}
+.vp-doc strong { font-weight: 700; color: var(--ink); }
 
+/* 链接 — 深棕红，ppiconsulting 虚线下划线 */
 .vp-doc a {
-  color: var(--color-blue);
+  color: var(--red-deep);
   font-weight: 500;
   text-decoration: none;
-  border-bottom: 1px solid var(--color-blue-border);
-  transition: border-color .15s;
+  border-bottom: 1px dashed var(--red-soft);
+  transition: border-color .15s, color .15s;
 }
-.vp-doc a:hover { border-bottom-color: var(--color-blue); }
+.vp-doc a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--red-deep);
+}
 
-/* --- 引用块（蓝色） --- */
+/* ---------- 6. 引用块（MorandiGarden 圆角）---------- */
 .vp-doc blockquote {
-  border-left: 3px solid var(--color-blue);
-  margin: 1.75rem 0;
-  padding: 0.875rem 1.25rem;
-  background: var(--color-blue-bg);
+  border-left: 3px solid var(--gold);
+  margin: 2rem 0;
+  padding: 1rem 1.25rem;
+  background: var(--gold-soft);
   border-radius: 0 8px 8px 0;
   font-style: normal;
 }
 .vp-doc blockquote p {
-  color: #1e3a8a;
+  color: #6b5a2a;
   margin-bottom: 0;
   font-size: 0.9rem;
+  line-height: 1.75;
 }
+.vp-doc blockquote strong { color: #5a4a1a; }
 
-/* --- 表格 --- */
+/* ---------- 7. 列表（MorandiGarden 左竖线）---------- */
+.vp-doc ul { padding-left: 1.25rem; }
+.vp-doc ul > li {
+  margin: 0.4rem 0;
+  line-height: 1.8;
+  color: var(--body);
+  position: relative;
+}
+.vp-doc ul > li::marker { color: var(--red); }
+.vp-doc ol > li::marker { color: var(--red-deep); font-weight: 600; }
+
+/* ---------- 8. 表格（ppiconsulting 卡片感）---------- */
 .vp-doc table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   margin: 2rem 0;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid var(--vp-c-divider);
+  border: 1px solid var(--line);
   font-size: 0.875rem;
+  box-shadow: 0 1px 3px rgba(53,20,26,0.06);
 }
 .vp-doc th {
-  background: #f8fafc;
-  color: var(--vp-c-text-2);
-  font-weight: 600;
+  background: var(--paper-2);
+  color: var(--muted);
+  font-weight: 700;
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.07em;
   padding: 0.75rem 1rem;
   text-align: left;
-  border-bottom: 1px solid var(--vp-c-divider);
+  border-bottom: 1px solid var(--line-strong);
 }
 .vp-doc td {
   padding: 0.875rem 1rem;
-  border-bottom: 1px solid var(--vp-c-divider);
-  color: var(--vp-c-text-1);
+  border-bottom: 1px solid var(--line);
+  color: var(--body);
   vertical-align: top;
   line-height: 1.6;
 }
 .vp-doc tr:last-child td { border-bottom: none; }
-.vp-doc tr:hover td { background: #f8fafc; }
+.vp-doc tr:hover td { background: rgba(215,92,112,0.04); }
+.vp-doc td strong { color: var(--ink); }
 
-/* --- 代码块 --- */
+/* ---------- 9. 代码块（MorandiGarden 米白背景）---------- */
 div[class*='language-'] {
-  background: #f8fafc !important;
-  border: 1px solid var(--vp-c-divider) !important;
+  background: #f5eeec !important;
+  border: 1px solid var(--line) !important;
   border-radius: 8px !important;
   margin: 1.5rem 0 !important;
+  box-shadow: 0 1px 3px rgba(53,20,26,0.06);
 }
 div[class*='language-'] pre { padding: 1.25rem 1.5rem !important; }
 div[class*='language-'] code {
   font-family: var(--vp-font-family-mono) !important;
-  font-size: 0.82rem !important;
-  line-height: 1.7 !important;
-  color: #1e293b !important;
+  font-size: 0.825rem !important;
+  line-height: 1.75 !important;
+  color: var(--ink) !important;
 }
 div[class*='language-']::before {
   font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--vp-c-text-3);
+  letter-spacing: 0.07em;
+  color: var(--muted);
 }
 
 /* 行内代码 */
 .vp-doc :not(pre) > code {
-  background: #f1f5f9;
-  color: #1e293b;
+  background: #f5eeec;
+  color: var(--red-deep);
   padding: 0.15em 0.45em;
   border-radius: 4px;
   font-size: 0.82em;
   font-family: var(--vp-font-family-mono);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--line);
   font-weight: 500;
 }
 
-/* --- 列表 --- */
-.vp-doc ul { padding-left: 1.25rem; }
-.vp-doc li {
-  margin: 0.35rem 0;
-  line-height: 1.75;
-  color: var(--vp-c-text-1);
-}
-.vp-doc li::marker { color: var(--color-blue); }
-
-/* --- 分隔线 --- */
-.vp-doc hr {
-  border: none;
-  border-top: 1px solid var(--vp-c-divider);
-  margin: 2.5rem 0;
-}
-
-/* --- 首页 Hero --- */
-.VPHero { padding-top: 5rem !important; padding-bottom: 4rem !important; }
-.VPHero .name {
-  font-size: 3.25rem !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.04em !important;
-  color: var(--vp-c-text-1) !important;
-  background: none !important;
-  -webkit-text-fill-color: initial !important;
-}
-.VPHero .text {
-  font-size: 1.4rem !important;
-  font-weight: 500 !important;
-  color: var(--vp-c-text-2) !important;
-}
-.VPHero .tagline {
-  font-size: 0.975rem !important;
-  color: var(--vp-c-text-2) !important;
-  max-width: 580px !important;
-}
-.VPHero .VPButton.brand {
-  background: var(--color-blue) !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 6px !important;
-  font-weight: 600 !important;
-}
-.VPHero .VPButton.brand:hover { background: #1d4ed8 !important; }
-.VPHero .VPButton.alt {
-  background: transparent !important;
-  color: var(--vp-c-text-1) !important;
-  border: 1px solid var(--vp-c-divider) !important;
-  border-radius: 6px !important;
-}
-.VPHero .VPButton.alt:hover { background: var(--vp-c-bg-alt) !important; }
-
-/* Feature 卡片 */
-.VPFeature {
-  background: var(--vp-c-bg) !important;
-  border: 1px solid var(--vp-c-divider) !important;
-  border-radius: 10px !important;
-  padding: 1.5rem !important;
-  transition: border-color .2s, box-shadow .2s !important;
-}
-.VPFeature:hover {
-  border-color: var(--color-blue) !important;
-  box-shadow: 0 0 0 3px var(--color-blue-bg) !important;
-}
-.VPFeature .title {
-  font-weight: 700 !important;
-  color: var(--vp-c-text-1) !important;
-  font-size: 0.9rem !important;
-}
-.VPFeature .details {
-  color: var(--vp-c-text-2) !important;
-  font-size: 0.85rem !important;
-  line-height: 1.65 !important;
-}
-
-/* --- Custom Blocks (NOTE / TIP / WARN / DANGER) --- */
+/* ---------- 10. Custom Blocks（三色体系匹配 lute）---------- */
 .vp-doc .custom-block {
   border-radius: 8px;
   padding: 1rem 1.25rem;
@@ -355,192 +320,165 @@ div[class*='language-']::before {
   border-left-style: solid;
 }
 .vp-doc .custom-block .custom-block-title {
-  font-weight: 700;
-  font-size: 0.78rem;
+  font-weight: 800;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 0.3rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
 }
 .vp-doc .custom-block p { margin-bottom: 0; }
-
+/* info — 玉绿 */
 .vp-doc .custom-block.info {
-  background: var(--color-blue-bg);
-  border-left-color: var(--color-blue);
+  background: var(--jade-soft);
+  border-left-color: var(--jade);
 }
-.vp-doc .custom-block.info .custom-block-title { color: var(--color-blue); }
-.vp-doc .custom-block.info p { color: #1e3a8a; }
-
+.vp-doc .custom-block.info .custom-block-title { color: #3d6b3d; }
+.vp-doc .custom-block.info p { color: #2d5c2d; }
+/* tip — 金色 */
 .vp-doc .custom-block.tip {
-  background: var(--color-green-bg);
-  border-left-color: var(--color-green);
+  background: var(--gold-soft);
+  border-left-color: var(--gold);
 }
-.vp-doc .custom-block.tip .custom-block-title { color: var(--color-green); }
-.vp-doc .custom-block.tip p { color: #14532d; }
-
+.vp-doc .custom-block.tip .custom-block-title { color: #8a6a10; }
+.vp-doc .custom-block.tip p { color: #6b5010; }
+/* warning — 深红 */
 .vp-doc .custom-block.warning {
-  background: var(--color-amber-bg);
-  border-left-color: var(--color-amber);
+  background: var(--red-soft);
+  border-left-color: var(--red-deep);
 }
-.vp-doc .custom-block.warning .custom-block-title { color: var(--color-amber); }
-.vp-doc .custom-block.warning p { color: #92400e; }
-
+.vp-doc .custom-block.warning .custom-block-title { color: var(--red-deep); }
+.vp-doc .custom-block.warning p { color: #8a2a38; }
+/* danger */
 .vp-doc .custom-block.danger {
-  background: var(--color-red-bg);
-  border-left-color: var(--color-red);
+  background: #f5d0d6;
+  border-left-color: #b03050;
 }
-.vp-doc .custom-block.danger .custom-block-title { color: var(--color-red); }
-.vp-doc .custom-block.danger p { color: #991b1b; }
+.vp-doc .custom-block.danger .custom-block-title { color: #8a1030; }
+.vp-doc .custom-block.danger p { color: #6a0a20; }
 
-/* --- 目录 Outline --- */
-.VPDocOutlineItem a { font-size: 0.8rem; color: var(--vp-c-text-2); }
-.VPDocOutlineItem.active a { color: var(--color-blue); font-weight: 600; }
+/* ---------- 11. 分隔线 ---------- */
+.vp-doc hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 3rem 0;
+}
 
-/* --- Mermaid 容器 --- */
+/* ---------- 12. 首页 Hero ---------- */
+.VPHero { padding-top: 5rem !important; padding-bottom: 4rem !important; }
+.VPHero .name {
+  font-size: 3.25rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.04em !important;
+  color: var(--ink) !important;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+}
+.VPHero .text {
+  font-size: 1.4rem !important;
+  font-weight: 500 !important;
+  color: var(--body) !important;
+}
+.VPHero .tagline {
+  font-size: 0.975rem !important;
+  color: var(--muted) !important;
+  max-width: 580px !important;
+}
+
+/* 按钮 */
+.VPHero .VPButton.brand {
+  background: var(--red-deep) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 8px 28px rgba(196,74,94,0.28) !important;
+  transition: background .18s, transform .18s, box-shadow .18s !important;
+}
+.VPHero .VPButton.brand:hover {
+  background: var(--ink) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 32px rgba(53,20,26,0.22) !important;
+}
+.VPHero .VPButton.alt {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line-strong) !important;
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+}
+.VPHero .VPButton.alt:hover {
+  background: var(--paper-2) !important;
+  border-color: var(--red) !important;
+  color: var(--red-deep) !important;
+}
+
+/* ---------- 13. 首页 Feature 卡片（ppiconsulting 风格）---------- */
+.VPFeature {
+  background: #fff !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  padding: 1.5rem !important;
+  box-shadow: 0 1px 3px rgba(53,20,26,0.06) !important;
+  transition: border-color .2s, box-shadow .2s, transform .2s !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+.VPFeature:hover {
+  border-color: var(--red) !important;
+  box-shadow: 0 4px 16px rgba(215,92,112,0.14) !important;
+  transform: translateY(-2px) !important;
+}
+.VPFeature .title {
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+  font-size: 0.9rem !important;
+  margin-bottom: 0.5rem !important;
+}
+.VPFeature .details {
+  color: var(--body) !important;
+  font-size: 0.85rem !important;
+  line-height: 1.7 !important;
+  flex: 1 !important;
+}
+
+/* ---------- 14. 目录 Outline ---------- */
+.VPDocOutlineItem a { font-size: 0.8rem; color: var(--muted); }
+.VPDocOutlineItem.active a { color: var(--red-deep); font-weight: 600; }
+
+/* ---------- 15. Mermaid 图表 ---------- */
 .vp-doc .mermaid {
-  background: var(--vp-c-bg);
-  border: 1px solid var(--vp-c-divider);
+  background: #fff;
+  border: 1px solid var(--line);
   border-radius: 10px;
   padding: 1.5rem;
   margin: 1.75rem 0;
   text-align: center;
+  box-shadow: 0 1px 3px rgba(53,20,26,0.06);
 }
+.vp-doc .mermaid svg { max-width: 100%; height: auto; }
 
-/* --- 页脚 --- */
+/* ---------- 16. 页脚 ---------- */
 .VPFooter {
-  border-top: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-alt) !important;
+  border-top: 1px solid var(--line);
+  background: var(--paper-2) !important;
 }
 .VPFooter .message, .VPFooter .copyright {
   font-size: 0.78rem;
-  color: var(--vp-c-text-3);
+  color: var(--muted);
 }
 
-/* --- 移动端 --- */
+/* ---------- 17. 侧边栏锚点高亮修复 ---------- */
+.vp-doc h2 .header-anchor,
+.vp-doc h3 .header-anchor {
+  opacity: 0; transition: opacity .15s; color: var(--red);
+}
+.vp-doc h2:hover .header-anchor,
+.vp-doc h3:hover .header-anchor { opacity: 1; }
+
+/* ---------- 18. 移动端 ---------- */
 @media (max-width: 768px) {
   .vp-doc h1 { font-size: 1.625rem; }
   .vp-doc h2 { font-size: 1.2rem; }
   .VPHero .name { font-size: 2.25rem !important; }
   .VPHero .text { font-size: 1.125rem !important; }
-}
-
-/* ============================================================
-   精修补丁
-   ============================================================ */
-
-/* 表格横向滚动（移动端不溢出）*/
-.vp-doc table {
-  display: block;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* 无语言标注的代码块（txt / 纯文本）可读性 */
-div[class*='language-txt'] code,
-div[class*='language-'] .shiki code,
-.vp-doc pre code {
-  font-size: 0.82rem !important;
-  line-height: 1.75 !important;
-}
-div[class*='language-txt'] {
-  background: #fafafa !important;
-  border-color: #e2e8f0 !important;
-}
-
-/* 移除 h2 前的旧数字序号样式冲突（VitePress 默认会给 h2 加锚链接）*/
-.vp-doc h2 .header-anchor,
-.vp-doc h3 .header-anchor {
-  opacity: 0;
-  transition: opacity .15s;
-  font-weight: 400;
-  color: var(--color-blue);
-}
-.vp-doc h2:hover .header-anchor,
-.vp-doc h3:hover .header-anchor {
-  opacity: 1;
-}
-
-/* h3 前圆点与文字基线对齐精修 */
-.vp-doc h3::before {
-  margin-bottom: 2px;
-}
-
-/* 段落与 h3 之间的间距紧凑一些 */
-.vp-doc h3 + p {
-  margin-top: 0.5rem;
-}
-
-/* blockquote 内的 strong 颜色调深，增强对比度 */
-.vp-doc blockquote strong {
-  color: #1e3a8a;
-  font-weight: 700;
-}
-
-/* Custom block 内的 code */
-.vp-doc .custom-block code {
-  background: rgba(255,255,255,0.6);
-  border-color: rgba(0,0,0,0.08);
-}
-
-/* Feature 卡片标题间距 */
-.VPFeature .title {
-  margin-bottom: 0.5rem !important;
-}
-
-/* 侧边栏分组之间加多一点间距 */
-.VPSidebarItem.level-0 {
-  margin-bottom: 0.25rem;
-}
-
-/* 正文内 hr 两侧留白加大 */
-.vp-doc hr {
-  margin: 3rem 0;
-}
-
-/* 首页 features 网格卡片高度一致 */
-.VPFeatures .items .item {
-  display: flex;
-}
-.VPFeature {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.VPFeature .body {
-  flex: 1;
-}
-
-/* 代码块语言标签可见性 */
-div[class*='language-']::before {
-  background: #f1f5f9;
-  border-radius: 0 0 4px 4px;
-  padding: 0 8px 3px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: #94a3b8;
-}
-
-/* Mermaid 容器圆角和背景统一 */
-.vp-doc .mermaid svg {
-  max-width: 100%;
-  height: auto;
-}
-
-/* 行内 strong 在表格里的颜色 */
-.vp-doc td strong {
-  color: var(--vp-c-text-1);
-}
-
-/* 使 last-update 时间戳更低调 */
-.VPDocFooter .edit-info {
-  font-size: 0.78rem;
-  color: var(--vp-c-text-3);
-}
-
-/* 正文最大宽度约束（确保不超过阅读舒适宽度）*/
-.VPDoc .container {
-  max-width: 1200px;
-}
-.vp-doc {
-  padding-right: 2rem;
 }
