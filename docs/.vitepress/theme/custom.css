@@ -1,239 +1,424 @@
-/* 极简风色板覆盖 (Minimalist Overrides) */
+/* ============================================================
+   MKD Guide — 专业亮色主题
+   主色：#2563eb（蓝）强调：#d97706（琥珀）/ #16a34a（绿）
+   背景：纯白 #ffffff + 浅灰 #f8fafc
+   ============================================================ */
+
 :root {
-  /* 基础字体 */
-  --vp-font-family-base: 'Inter', "PingFang SC", "Microsoft YaHei", sans-serif;
-  
-  /* 极简亮色主题 */
-  --vp-c-brand: #1a1a1a;
-  --vp-c-brand-light: #404040;
-  --vp-c-brand-lighter: #666666;
-  --vp-c-brand-dark: #000000;
-  
-  /* 背景与文本 */
-  --vp-c-bg: #ffffff;
-  --vp-c-bg-alt: #f9f9f9;
-  --vp-c-text-1: #111111;
-  --vp-c-text-2: #555555;
-  --vp-c-text-3: #888888;
-  
-  /* 弱化边框 */
-  --vp-c-divider: #eaeaea;
-  --vp-c-gutter: #f0f0f0;
-  
-  /* 自定义侧边栏和主导航背景为全透明/纯白 */
-  --vp-nav-bg-color: #ffffff;
+  --vp-c-brand-1:        #2563eb;
+  --vp-c-brand-2:        #1d4ed8;
+  --vp-c-brand-3:        #3b82f6;
+  --vp-c-brand-soft:     rgba(37,99,235,0.08);
+
+  --vp-c-bg:             #ffffff;
+  --vp-c-bg-alt:         #f8fafc;
+  --vp-c-bg-elv:         #ffffff;
+  --vp-c-bg-soft:        #f1f5f9;
+
+  --vp-c-text-1:         #0f172a;
+  --vp-c-text-2:         #475569;
+  --vp-c-text-3:         #94a3b8;
+  --vp-c-divider:        #e2e8f0;
+  --vp-c-gutter:         #f1f5f9;
+
+  --color-blue:          #2563eb;
+  --color-blue-bg:       #eff6ff;
+  --color-blue-border:   #bfdbfe;
+  --color-amber:         #d97706;
+  --color-amber-bg:      #fffbeb;
+  --color-amber-border:  #fde68a;
+  --color-green:         #16a34a;
+  --color-green-bg:      #f0fdf4;
+  --color-green-border:  #bbf7d0;
+  --color-red:           #dc2626;
+  --color-red-bg:        #fef2f2;
+  --color-red-border:    #fecaca;
+
+  --vp-font-family-base: 'Inter','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono','Fira Code',Consolas,monospace;
+
+  --vp-nav-bg-color:     #ffffff;
   --vp-sidebar-bg-color: #ffffff;
+
+  --vp-button-brand-bg:         #2563eb;
+  --vp-button-brand-hover-bg:   #1d4ed8;
+  --vp-button-brand-border:     transparent;
+  --vp-button-brand-text:       #ffffff;
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-alt-bg:           #f8fafc;
+  --vp-button-alt-hover-bg:     #f1f5f9;
+  --vp-button-alt-border:       #e2e8f0;
+  --vp-button-alt-text:         #0f172a;
+  --vp-button-alt-hover-text:   #0f172a;
+
+  --vp-code-bg:                 #f8fafc;
+  --vp-code-color:              #1e293b;
+  --vp-code-block-bg:           #f8fafc;
+  --vp-code-block-divider-color:#e2e8f0;
 }
 
-/* 覆盖暗黑模式的强制控制，让用户感觉这本身就是一个纯粹的浅色极简站 */
-/* 如果你需要强行移除深色模式切换按钮，可以在 config 里面控制，这里保留默认深色映射但调整颜色 */
+/* 强制亮色，不跟随系统深色 */
+html { color-scheme: light !important; }
 .dark {
-  --vp-c-bg: #121212;
-  --vp-c-bg-alt: #1a1a1a;
-  --vp-c-text-1: #e5e5e5;
-  --vp-c-text-2: #a3a3a3;
-  --vp-c-brand: #ffffff;
-  --vp-c-brand-light: #e5e5e5;
-  --vp-c-divider: #2a2a2a;
+  --vp-c-bg:      #ffffff !important;
+  --vp-c-bg-alt:  #f8fafc !important;
+  --vp-c-text-1:  #0f172a !important;
+  --vp-c-text-2:  #475569 !important;
+  --vp-c-divider: #e2e8f0 !important;
 }
 
-/* ---------------- 排版强化 (Typography) ---------------- */
+body {
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- 导航栏 --- */
+.VPNav {
+  border-bottom: 1px solid var(--vp-c-divider) !important;
+  background: rgba(255,255,255,0.94) !important;
+  backdrop-filter: blur(10px);
+}
+.VPNavBar .title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--vp-c-text-1) !important;
+  letter-spacing: -0.01em;
+}
+.VPNavBarMenu .VPNavBarMenuLink {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+}
+.VPNavBarMenu .VPNavBarMenuLink:hover,
+.VPNavBarMenu .VPNavBarMenuLink.active {
+  color: var(--color-blue);
+}
+
+/* --- 侧边栏 --- */
+.VPSidebar {
+  border-right: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg) !important;
+}
+.VPSidebarItem.level-0 > .item > .text {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  color: var(--vp-c-text-3) !important;
+  padding-top: 1.5rem !important;
+}
+.VPSidebarItem.level-1 .item .link .text {
+  font-size: 0.875rem;
+  color: var(--vp-c-text-2);
+  line-height: 1.5;
+}
+.VPSidebarItem.level-1 .item .link:hover .text {
+  color: var(--vp-c-text-1);
+}
+.VPSidebarItem.level-1.is-active > .item {
+  background: var(--color-blue-bg) !important;
+  border-radius: 6px;
+}
+.VPSidebarItem.level-1.is-active > .item .link .text {
+  color: var(--color-blue) !important;
+  font-weight: 600 !important;
+}
+
+/* --- 正文排版 --- */
+.vp-doc { max-width: 860px; }
 
 .vp-doc h1 {
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--vp-c-text-1);
+  margin-top: 0;
+  margin-bottom: 1.25rem;
   border-bottom: none;
 }
 
 .vp-doc h2 {
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  margin-top: 3.5rem;
-  border-bottom: 1px solid var(--vp-c-divider);
-  padding-bottom: 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--vp-c-text-1);
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-left: 0.875rem;
+  border-left: 3px solid var(--color-blue);
+  border-bottom: none;
 }
 
 .vp-doc h3 {
-  font-weight: 500;
-  margin-top: 2.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.vp-doc h3::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--color-blue);
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  margin-bottom: 1px;
+  vertical-align: middle;
 }
 
 .vp-doc p {
   line-height: 1.8;
-  margin-bottom: 1.5rem;
+  color: var(--vp-c-text-1);
+  margin-bottom: 1.25rem;
+}
+.vp-doc strong {
+  font-weight: 700;
   color: var(--vp-c-text-1);
 }
 
-/* 引用块设计感 */
+.vp-doc a {
+  color: var(--color-blue);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-blue-border);
+  transition: border-color .15s;
+}
+.vp-doc a:hover { border-bottom-color: var(--color-blue); }
+
+/* --- 引用块（蓝色） --- */
 .vp-doc blockquote {
-  border-left: 2px solid var(--vp-c-text-1);
-  margin: 2rem 0;
-  padding: 1rem 1.5rem;
-  background-color: var(--vp-c-bg-alt);
-  border-radius: 0 4px 4px 0;
-  color: var(--vp-c-text-2);
-  font-style: normal; /* 极简风通常不用斜体 */
+  border-left: 3px solid var(--color-blue);
+  margin: 1.75rem 0;
+  padding: 0.875rem 1.25rem;
+  background: var(--color-blue-bg);
+  border-radius: 0 8px 8px 0;
+  font-style: normal;
+}
+.vp-doc blockquote p {
+  color: #1e3a8a;
+  margin-bottom: 0;
+  font-size: 0.9rem;
 }
 
-/* 表格极简处理 */
+/* --- 表格 --- */
 .vp-doc table {
-  display: table;
   width: 100%;
-  border-collapse: collapse;
-  margin: 2.5rem 0;
-}
-.vp-doc th, .vp-doc td {
-  border: none;
-  border-bottom: 1px solid var(--vp-c-divider);
-  padding: 1rem 0.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 2rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+  font-size: 0.875rem;
 }
 .vp-doc th {
-  background-color: transparent;
-  font-weight: 500;
-  color: var(--vp-c-text-3);
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-  text-align: left;
-}
-.vp-doc tr:nth-child(2n) {
-  background-color: transparent;
-}
-.vp-doc tr:hover {
-  background-color: var(--vp-c-bg-alt);
-}
-
-/* 标签徽章扁平化 */
-.scene-badge, .cost-badge {
-  display: inline-block;
-  padding: 0.1em 0.5em;
-  font-size: 0.85em;
-  font-weight: 500;
-  border-radius: 3px;
-  background: var(--vp-c-bg-alt);
-  border: 1px solid var(--vp-c-divider);
+  background: #f8fafc;
   color: var(--vp-c-text-2);
-}
-
-/* 去除侧边栏选中的圆角背景，改为极简线条 */
-.VPSidebarItem.is-active > .item {
-  color: var(--vp-c-brand);
-  background-color: transparent;
   font-weight: 600;
-}
-.VPSidebarItem.is-active > .item::before {
-  content: "";
-  position: absolute;
-  left: -16px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background-color: var(--vp-c-brand);
-}
-
-/* ---------------- 深度极简改造 ---------------- */
-/* 移除 header 底栏边框 */
-.VPNav {
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
-/* 首页 Hero 极简 */
-.VPHero.has-image .container {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 0.75rem 1rem;
   text-align: left;
+  border-bottom: 1px solid var(--vp-c-divider);
 }
+.vp-doc td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-1);
+  vertical-align: top;
+  line-height: 1.6;
+}
+.vp-doc tr:last-child td { border-bottom: none; }
+.vp-doc tr:hover td { background: #f8fafc; }
+
+/* --- 代码块 --- */
+div[class*='language-'] {
+  background: #f8fafc !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  border-radius: 8px !important;
+  margin: 1.5rem 0 !important;
+}
+div[class*='language-'] pre { padding: 1.25rem 1.5rem !important; }
+div[class*='language-'] code {
+  font-family: var(--vp-font-family-mono) !important;
+  font-size: 0.82rem !important;
+  line-height: 1.7 !important;
+  color: #1e293b !important;
+}
+div[class*='language-']::before {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--vp-c-text-3);
+}
+
+/* 行内代码 */
+.vp-doc :not(pre) > code {
+  background: #f1f5f9;
+  color: #1e293b;
+  padding: 0.15em 0.45em;
+  border-radius: 4px;
+  font-size: 0.82em;
+  font-family: var(--vp-font-family-mono);
+  border: 1px solid #e2e8f0;
+  font-weight: 500;
+}
+
+/* --- 列表 --- */
+.vp-doc ul { padding-left: 1.25rem; }
+.vp-doc li {
+  margin: 0.35rem 0;
+  line-height: 1.75;
+  color: var(--vp-c-text-1);
+}
+.vp-doc li::marker { color: var(--color-blue); }
+
+/* --- 分隔线 --- */
+.vp-doc hr {
+  border: none;
+  border-top: 1px solid var(--vp-c-divider);
+  margin: 2.5rem 0;
+}
+
+/* --- 首页 Hero --- */
+.VPHero { padding-top: 5rem !important; padding-bottom: 4rem !important; }
 .VPHero .name {
-  color: var(--vp-c-brand-dark) !important;
+  font-size: 3.25rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.04em !important;
+  color: var(--vp-c-text-1) !important;
   background: none !important;
   -webkit-text-fill-color: initial !important;
-  font-weight: 700;
-  letter-spacing: -0.04em;
 }
 .VPHero .text {
-  color: var(--vp-c-text-1) !important;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-size: 1.4rem !important;
+  font-weight: 500 !important;
+  color: var(--vp-c-text-2) !important;
 }
 .VPHero .tagline {
-  color: var(--vp-c-text-2);
-  font-weight: 400;
+  font-size: 0.975rem !important;
+  color: var(--vp-c-text-2) !important;
+  max-width: 580px !important;
 }
-
-/* 首页 Feature 卡片去除阴影和圆角，保留极简边框 */
-.VPFeature {
+.VPHero .VPButton.brand {
+  background: var(--color-blue) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+}
+.VPHero .VPButton.brand:hover { background: #1d4ed8 !important; }
+.VPHero .VPButton.alt {
   background: transparent !important;
+  color: var(--vp-c-text-1) !important;
   border: 1px solid var(--vp-c-divider) !important;
-  border-radius: 0 !important;
-  transition: border-color 0.2s;
+  border-radius: 6px !important;
+}
+.VPHero .VPButton.alt:hover { background: var(--vp-c-bg-alt) !important; }
+
+/* Feature 卡片 */
+.VPFeature {
+  background: var(--vp-c-bg) !important;
+  border: 1px solid var(--vp-c-divider) !important;
+  border-radius: 10px !important;
+  padding: 1.5rem !important;
+  transition: border-color .2s, box-shadow .2s !important;
 }
 .VPFeature:hover {
-  border-color: var(--vp-c-text-1) !important;
+  border-color: var(--color-blue) !important;
+  box-shadow: 0 0 0 3px var(--color-blue-bg) !important;
+}
+.VPFeature .title {
+  font-weight: 700 !important;
+  color: var(--vp-c-text-1) !important;
+  font-size: 0.9rem !important;
+}
+.VPFeature .details {
+  color: var(--vp-c-text-2) !important;
+  font-size: 0.85rem !important;
+  line-height: 1.65 !important;
 }
 
-/* 按钮极简黑白 */
-.VPButton.brand {
-  background-color: var(--vp-c-brand-dark);
-  color: #fff;
-  border-radius: 0;
-  border: none;
+/* --- Custom Blocks (NOTE / TIP / WARN / DANGER) --- */
+.vp-doc .custom-block {
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1.75rem 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  border-left-width: 3px;
+  border-left-style: solid;
 }
-.VPButton.brand:hover {
-  background-color: var(--vp-c-brand-lighter);
+.vp-doc .custom-block .custom-block-title {
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.3rem;
 }
-.VPButton.alt {
-  background-color: transparent;
-  color: var(--vp-c-text-1);
+.vp-doc .custom-block p { margin-bottom: 0; }
+
+.vp-doc .custom-block.info {
+  background: var(--color-blue-bg);
+  border-left-color: var(--color-blue);
+}
+.vp-doc .custom-block.info .custom-block-title { color: var(--color-blue); }
+.vp-doc .custom-block.info p { color: #1e3a8a; }
+
+.vp-doc .custom-block.tip {
+  background: var(--color-green-bg);
+  border-left-color: var(--color-green);
+}
+.vp-doc .custom-block.tip .custom-block-title { color: var(--color-green); }
+.vp-doc .custom-block.tip p { color: #14532d; }
+
+.vp-doc .custom-block.warning {
+  background: var(--color-amber-bg);
+  border-left-color: var(--color-amber);
+}
+.vp-doc .custom-block.warning .custom-block-title { color: var(--color-amber); }
+.vp-doc .custom-block.warning p { color: #92400e; }
+
+.vp-doc .custom-block.danger {
+  background: var(--color-red-bg);
+  border-left-color: var(--color-red);
+}
+.vp-doc .custom-block.danger .custom-block-title { color: var(--color-red); }
+.vp-doc .custom-block.danger p { color: #991b1b; }
+
+/* --- 目录 Outline --- */
+.VPDocOutlineItem a { font-size: 0.8rem; color: var(--vp-c-text-2); }
+.VPDocOutlineItem.active a { color: var(--color-blue); font-weight: 600; }
+
+/* --- Mermaid 容器 --- */
+.vp-doc .mermaid {
+  background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 0;
-}
-.VPButton.alt:hover {
-  border-color: var(--vp-c-text-1);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: 1.75rem 0;
+  text-align: center;
 }
 
-/* 移除页脚背景和边框 */
+/* --- 页脚 --- */
 .VPFooter {
   border-top: 1px solid var(--vp-c-divider);
-  background: transparent;
+  background: var(--vp-c-bg-alt) !important;
+}
+.VPFooter .message, .VPFooter .copyright {
+  font-size: 0.78rem;
+  color: var(--vp-c-text-3);
 }
 
-/* 代码块：抛弃默认暗色，采用极简浅灰背景，强化黑白对比 */
-:root {
-  --vp-code-bg: #f5f5f5;
-  --vp-code-color: #24292e;
-}
-.dark {
-  --vp-code-bg: #1e1e1e;
-  --vp-code-color: #e1e4e8;
-}
-div[class*="language-"] {
-  background-color: var(--vp-code-bg) !important;
-  border-radius: 4px;
-}
-div[class*="language-"] code {
-  color: var(--vp-code-color) !important;
-}
-/* 强行去除了所有的彩虹渐变和高饱和度语法高亮，以单色或低饱和为主 */
-
-/* Markdown 行内代码 */
-.vp-doc code {
-  background-color: var(--vp-c-bg-alt);
-  color: var(--vp-c-text-1);
-  padding: 0.15em 0.4em;
-  border-radius: 2px;
-  font-size: 0.85em;
-  border: 1px solid var(--vp-c-divider);
-}
-
-/* 超链接极简下划线 */
-.vp-doc a {
-  color: var(--vp-c-text-1);
-  text-decoration: underline;
-  text-decoration-color: var(--vp-c-divider);
-  text-underline-offset: 4px;
-  transition: text-decoration-color 0.2s;
-  font-weight: normal;
-}
-.vp-doc a:hover {
-  text-decoration-color: var(--vp-c-text-1);
+/* --- 移动端 --- */
+@media (max-width: 768px) {
+  .vp-doc h1 { font-size: 1.625rem; }
+  .vp-doc h2 { font-size: 1.2rem; }
+  .VPHero .name { font-size: 2.25rem !important; }
+  .VPHero .text { font-size: 1.125rem !important; }
 }
