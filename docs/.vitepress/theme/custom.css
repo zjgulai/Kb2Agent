@@ -422,3 +422,125 @@ div[class*='language-']::before {
   .VPHero .name { font-size: 2.25rem !important; }
   .VPHero .text { font-size: 1.125rem !important; }
 }
+
+/* ============================================================
+   精修补丁
+   ============================================================ */
+
+/* 表格横向滚动（移动端不溢出）*/
+.vp-doc table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 无语言标注的代码块（txt / 纯文本）可读性 */
+div[class*='language-txt'] code,
+div[class*='language-'] .shiki code,
+.vp-doc pre code {
+  font-size: 0.82rem !important;
+  line-height: 1.75 !important;
+}
+div[class*='language-txt'] {
+  background: #fafafa !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* 移除 h2 前的旧数字序号样式冲突（VitePress 默认会给 h2 加锚链接）*/
+.vp-doc h2 .header-anchor,
+.vp-doc h3 .header-anchor {
+  opacity: 0;
+  transition: opacity .15s;
+  font-weight: 400;
+  color: var(--color-blue);
+}
+.vp-doc h2:hover .header-anchor,
+.vp-doc h3:hover .header-anchor {
+  opacity: 1;
+}
+
+/* h3 前圆点与文字基线对齐精修 */
+.vp-doc h3::before {
+  margin-bottom: 2px;
+}
+
+/* 段落与 h3 之间的间距紧凑一些 */
+.vp-doc h3 + p {
+  margin-top: 0.5rem;
+}
+
+/* blockquote 内的 strong 颜色调深，增强对比度 */
+.vp-doc blockquote strong {
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+/* Custom block 内的 code */
+.vp-doc .custom-block code {
+  background: rgba(255,255,255,0.6);
+  border-color: rgba(0,0,0,0.08);
+}
+
+/* Feature 卡片标题间距 */
+.VPFeature .title {
+  margin-bottom: 0.5rem !important;
+}
+
+/* 侧边栏分组之间加多一点间距 */
+.VPSidebarItem.level-0 {
+  margin-bottom: 0.25rem;
+}
+
+/* 正文内 hr 两侧留白加大 */
+.vp-doc hr {
+  margin: 3rem 0;
+}
+
+/* 首页 features 网格卡片高度一致 */
+.VPFeatures .items .item {
+  display: flex;
+}
+.VPFeature {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.VPFeature .body {
+  flex: 1;
+}
+
+/* 代码块语言标签可见性 */
+div[class*='language-']::before {
+  background: #f1f5f9;
+  border-radius: 0 0 4px 4px;
+  padding: 0 8px 3px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+}
+
+/* Mermaid 容器圆角和背景统一 */
+.vp-doc .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 行内 strong 在表格里的颜色 */
+.vp-doc td strong {
+  color: var(--vp-c-text-1);
+}
+
+/* 使 last-update 时间戳更低调 */
+.VPDocFooter .edit-info {
+  font-size: 0.78rem;
+  color: var(--vp-c-text-3);
+}
+
+/* 正文最大宽度约束（确保不超过阅读舒适宽度）*/
+.VPDoc .container {
+  max-width: 1200px;
+}
+.vp-doc {
+  padding-right: 2rem;
+}
