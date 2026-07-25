@@ -47,6 +47,9 @@ export default withMermaid(defineConfig({
             { text: '四、全链路技术架构', link: '/knowledge/04-architecture' },
             { text: '五、GraphRAG 知识库构建', link: '/knowledge/05-graphrag' },
             { text: '六、Agent 知识库调用', link: '/knowledge/06-agent-call' },
+            { text: '七、Agentic 检索分层理论', link: '/knowledge/07-advanced-theory' },
+            { text: '八、工具完整手册与选型决策树', link: '/knowledge/08-tools-appendix' },
+            { text: '九、Skill 蒸馏 9 大仓库解构', link: '/knowledge/09-skill-distillation-deep-dive' },
           ]
         },
         {
@@ -58,21 +61,6 @@ export default withMermaid(defineConfig({
             { text: '十二、Agent 调用质量评估', link: '/knowledge/12-evaluation' },
           ]
         },
-        {
-          text: '深度理论',
-          collapsed: false,
-          items: [
-            { text: '七、Agentic 检索分层理论', link: '/knowledge/07-advanced-theory' },
-            { text: '九、Skill 蒸馏 9 大仓库解构', link: '/knowledge/09-skill-distillation-deep-dive' },
-          ]
-        },
-        {
-          text: '工具手册',
-          collapsed: true,
-          items: [
-            { text: '附录：工具选型与安装指引', link: '/knowledge/08-tools-appendix' },
-          ]
-        }
       ]
     },
 
