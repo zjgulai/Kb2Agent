@@ -483,46 +483,70 @@ div[class*='language-']::before {
   .VPHero .text { font-size: 1.125rem !important; }
 }
 
-/* ── 布局精修 ─────────────────────────────────────────
-   1. 左侧边栏：更窄 + 贴近浏览器左边缘
-   2. 正文：更宽，缝隙紧凑
-   3. 右侧目录：更窄
-   4. Mermaid 图点击放大预览
+/* ── 布局精修（经 Playwright 实测调优）─────────────────
+   真实 DOM 结构：
+   .VPSidebar(fixed) → .VPContent(padding-left=sidebar宽) →
+   .content(padding) → .content-container(max-width限制正文) →
+   .vp-doc
    ─────────────────────────────────────────────────── */
 
-/* 侧边栏宽度 200px，去掉默认的左内边距偏移 */
 :root {
-  --vp-sidebar-width: 200px;
+  --vp-sidebar-width: 290px;
   --vp-layout-max-width: 1600px;
 }
 
 .VPSidebar {
-  padding-left: 12px !important;
+  width: 290px !important;
+  padding-left: 16px !important;
   padding-right: 12px !important;
 }
 
-/* 右侧 Outline 目录收窄到 160px */
-.VPDocAside {
-  width: 160px !important;
-  min-width: 160px !important;
-  padding-left: 8px !important;
-}
-.VPDocAsideOutline {
-  width: 160px !important;
+.VPContent {
+  padding-left: 290px !important;
 }
 
-/* 正文无宽度限制，内边距收紧 */
-.vp-doc {
+.content {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+.content-container {
   max-width: none !important;
-  padding-right: 1.5rem !important;
-  padding-left: 1.5rem !important;
 }
-.VPDoc .container {
-  max-width: 100% !important;
-  padding: 0 !important;
-}
+
 .VPDocFooter {
   max-width: none !important;
+}
+
+.vp-doc {
+  max-width: none !important;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+}
+
+.VPDocAside {
+  width: 220px !important;
+  min-width: 220px !important;
+  padding-left: 12px !important;
+}
+.VPDocAsideOutline {
+  width: 220px !important;
+}
+
+.VPSidebarItem.level-1 .item .link .text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.VPDocOutlineItem a {
+  font-size: 0.72rem !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  line-height: 1.45 !important;
+  display: block;
+  word-break: break-all;
 }
 
 /* ── Mermaid 图放大预览 ──────────────────────────────
