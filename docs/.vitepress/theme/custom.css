@@ -483,35 +483,111 @@ div[class*='language-']::before {
   .VPHero .text { font-size: 1.125rem !important; }
 }
 
-/* ── 布局宽度调整 ──────────────────────────────────────
-   正文更宽 / 左侧边栏更窄 / 右侧目录更窄
+/* ── 布局精修 ─────────────────────────────────────────
+   1. 左侧边栏：更窄 + 贴近浏览器左边缘
+   2. 正文：更宽，缝隙紧凑
+   3. 右侧目录：更窄
+   4. Mermaid 图点击放大预览
    ─────────────────────────────────────────────────── */
 
-/* 左侧边栏收窄：默认 272px → 220px */
+/* 侧边栏宽度 200px，去掉默认的左内边距偏移 */
 :root {
-  --vp-sidebar-width: 220px;
+  --vp-sidebar-width: 200px;
+  --vp-layout-max-width: 1600px;
 }
 
-/* 右侧 Outline 目录收窄：默认 ~256px → 180px */
+.VPSidebar {
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+/* 右侧 Outline 目录收窄到 160px */
 .VPDocAside {
-  width: 180px !important;
-  min-width: 180px !important;
+  width: 160px !important;
+  min-width: 160px !important;
+  padding-left: 8px !important;
 }
 .VPDocAsideOutline {
-  width: 180px !important;
+  width: 160px !important;
 }
 
-/* 正文内容区拉宽：取消 860px 限制，让它充满剩余空间 */
+/* 正文无宽度限制，内边距收紧 */
 .vp-doc {
   max-width: none !important;
+  padding-right: 1.5rem !important;
+  padding-left: 1.5rem !important;
 }
-
-/* 整体内容容器也放开限制 */
 .VPDoc .container {
   max-width: 100% !important;
   padding: 0 !important;
 }
-
 .VPDocFooter {
   max-width: none !important;
+}
+
+/* ── Mermaid 图放大预览 ──────────────────────────────
+   点击图表打开 lightbox 全屏预览
+   ─────────────────────────────────────────────────── */
+
+/* 图表本身加上可点击光标 */
+.vp-doc .mermaid {
+  cursor: zoom-in;
+  transition: box-shadow 0.2s;
+}
+.vp-doc .mermaid:hover {
+  box-shadow: 0 4px 20px rgba(215,92,112,0.18) !important;
+}
+
+/* Lightbox 遮罩 */
+.mermaid-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(53, 20, 26, 0.75);
+  backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  padding: 2rem;
+}
+.mermaid-lightbox.active {
+  display: flex;
+}
+.mermaid-lightbox-inner {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 90vw;
+  max-height: 88vh;
+  overflow: auto;
+  box-shadow: 0 32px 80px rgba(53,20,26,0.3);
+  position: relative;
+}
+.mermaid-lightbox-inner svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.mermaid-lightbox-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+}
+.mermaid-lightbox-close:hover {
+  background: var(--red-soft);
+  color: var(--red-deep);
 }
