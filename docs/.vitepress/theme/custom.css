@@ -482,3 +482,36 @@ div[class*='language-']::before {
   .VPHero .name { font-size: 2.25rem !important; }
   .VPHero .text { font-size: 1.125rem !important; }
 }
+
+/* ── 布局宽度调整 ──────────────────────────────────────
+   正文更宽 / 左侧边栏更窄 / 右侧目录更窄
+   ─────────────────────────────────────────────────── */
+
+/* 左侧边栏收窄：默认 272px → 220px */
+:root {
+  --vp-sidebar-width: 220px;
+}
+
+/* 右侧 Outline 目录收窄：默认 ~256px → 180px */
+.VPDocAside {
+  width: 180px !important;
+  min-width: 180px !important;
+}
+.VPDocAsideOutline {
+  width: 180px !important;
+}
+
+/* 正文内容区拉宽：取消 860px 限制，让它充满剩余空间 */
+.vp-doc {
+  max-width: none !important;
+}
+
+/* 整体内容容器也放开限制 */
+.VPDoc .container {
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+.VPDocFooter {
+  max-width: none !important;
+}
