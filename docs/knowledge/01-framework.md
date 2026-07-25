@@ -32,23 +32,19 @@
 
 ### 1.3 两条路径，必须都走
 
-```
-多模态原始内容
-        │
-        ▼
-┌───────────────────────────────────────────┐
-│              蒸馏结果（分层）               │
-│                                           │
-│  基础层：Wiki 文档（Markdown 页面体系）    │
-│  ├── 完整性保障，供检索和人类阅读          │
-│  ├── 四层金字塔（原子→概念→摘要→跨文档）  │
-│  └── 使用 Karpathy LLM-Wiki 模式持续维护  │
-│                                           │
-│  上层：Agent Skill（SKILL.md）            │
-│  ├── 高频执行知识的可执行封装              │
-│  ├── Agent 直接加载调用，无需重新推理      │
-│  └── 从 Wiki 文档二次蒸馏出来             │
-└───────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    Raw[多模态原始内容] --> Layered
+    
+    subgraph Layered [蒸馏结果分层架构]
+        direction TB
+        Base[基础层: Wiki 文档库<br/>完整性保障 / 供人阅读检索]
+        Skill[上层: Agent Skill库<br/>高频可执行封装 / Agent直接调用]
+        Base -->|二次蒸馏| Skill
+    end
+    
+    classDef plain fill:#fff,stroke:#334155,stroke-width:1px,color:#111;
+    class Raw,Base,Skill plain;
 ```
 
 **不是二选一，是先后关系**：先建 Wiki 文档库（完整性），再从中蒸馏 Skill（效率）。
@@ -59,15 +55,13 @@
 
 来源：Kudra.ai 2026，目前最成熟的生产级蒸馏架构。
 
-```
-Level 4: Cross-Document Recollections（跨文档元知识）
-         ↑ 多文档涌现的模式、对比、矛盾标注
-Level 3: Document Abstracts（文档摘要）
-         ↑ 单文档的目的、范围、主题概览
-Level 2: Concepts（概念层）
-         ↑ 多个 Atomic Insight 聚合的主题群
-Level 1: Atomic Insights（原子洞察）
-         ↑ 最小粒度事实，SVO 格式（主谓宾）
+```mermaid
+flowchart BT
+    L1[Level 1: Atomic Insights<br/>最小粒度事实 SVO 格式] --> L2[Level 2: Concepts<br/>多个 Atomic Insight 聚合的主题群]
+    L2 --> L3[Level 3: Document Abstracts<br/>单文档的目的、范围、主题概览]
+    L3 --> L4[Level 4: Cross-Document Recollections<br/>多文档涌现的模式、对比、矛盾标注]
+    
+    classDef default fill:#fafafa,stroke:#334155,stroke-width:1px;
 ```
 
 **压缩比**：每页约 13 个 Atomic Insight 压缩为约 1 个 Concept（13:1），消除冗余保留语义。

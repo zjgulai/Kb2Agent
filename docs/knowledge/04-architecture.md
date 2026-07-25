@@ -2,76 +2,46 @@
 
 ### 4.1 五阶段标准管道
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│                    Stage 1: 内容接入                          │
-│                                                              │
-│  PDF/DOCX/PPTX → 解析工具路由（见3.1解析工具对比）           │
-│  图片/设计稿   → VLM 语义描述（GPT-4V / Qwen2-VL）           │
-│  视频/教程     → ASR转写 + 关键帧提取                         │
-│  音频/播客     → ASR转写（faster-whisper）+ 说话人分离        │
-│  网页/RSS      → Jina Reader / Defuddle                      │
-│  代码仓库      → Repomix / Context7 / Ananta                 │
-│                                                              │
-│  ↓ 统一输出：Markdown / JSON                                 │
-└──────────────────────────────────────────────────────────────┘
-                         ↓
-┌──────────────────────────────────────────────────────────────┐
-│                    Stage 2: 知识蒸馏                          │
-│                                                              │
-│  四层金字塔提取（文档类）：                                   │
-│    Atomic Insights → Concepts → Abstract → Cross-Doc         │
-│                                                              │
-│  Skill 化（流程类）：                                        │
-│    cangjie-skill / Resource2Skill / COLLEAGUE.SKILL          │
-│                                                              │
-│  知识冲突仲裁层（Cross-Document Contradiction Checker）：        │
-│  · 提取新知识时，KNN 检索对比高相似度旧知识                       │
-│  · 若发生语义冲突（如重试次数 3 vs 5）：                         │
-│    - 有时态：自动打上覆盖标记 `supersedes: [node_id]`             │
-│    - 无时态：生成 CONFLICT.md 双向挂载，标记 [需人工仲裁]          │
-└──────────────────────────────────────────────────────────────┘
-                         ↓
-┌──────────────────────────────────────────────────────────────┐
-│                    Stage 3: 质量验证                          │
-│                                                              │
-│  · 对抗一致性检测：同一 claim 5种措辞重问                    │
-│    稳定 → 通过；不稳定 → 标记幻觉，人工审核                  │
-│                                                              │
-│  · 置信度评分：0-1                                           │
-│    < 0.4 → 丢弃                                              │
-│    0.4-0.8 → 保留，标记待验证                                │
-│    > 0.8 → 标记已验证                                        │
-│                                                              │
-│  · acceptance_predicate（Resource2Skill 标准）：             │
-│    完整性 + 溯源 + 去重 + 模态一致性 + 代码可执行            │
-└──────────────────────────────────────────────────────────────┘
-                         ↓
-┌──────────────────────────────────────────────────────────────┐
-│                    Stage 4: 入库路由                          │
-│                                                              │
-│  ┌─────────────┬──────────────┬──────────────┐              │
-│  │  Wiki 文档库 │  向量数据库   │  Skill 库    │              │
-│  │ (LLM-Wiki)  │  (RAG检索)   │ (Agent调用)  │              │
-│  │  Markdown   │  Embedding   │  SKILL.md    │              │
-│  │  Obsidian   │  向量库      │  ~/.agents/  │              │
-│  └─────────────┴──────────────┴──────────────┘              │
-│                                                              │
-│  路由规则：                                                   │
-│  · 声明性知识（是什么/为什么）→ Wiki + 向量库                │
-│  · 程序性知识（怎么做/何时做）→ Skill 库                     │
-│  · 决策规则（IF-THEN）→ Rules JSONL                         │
-└──────────────────────────────────────────────────────────────┘
-                         ↓
-┌──────────────────────────────────────────────────────────────┐
-│                    Stage 5: 检索与消费                        │
-│                                                              │
-│  · 精确查询 → 检索 Atomic Insights（向量库）                 │
-│  · 探索查询 → 检索 Concepts/Abstracts（Wiki）                │
-│  · Agent 任务执行 → 加载 Skill                               │
-│  · 问答 → RAG pipeline（VisRAG / 标准 RAG）                  │
-│  · 视觉文档 → VisRAG 或 ColPali（原生视觉检索）              │
-└──────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph Stage1 [Stage 1: 内容接入与规范化]
+        direction LR
+        S1[PDF/图片/视频/代码] --> P1[VLM / ASR / Docling] --> O1[统一输出: Markdown/JSON]
+    end
+
+    subgraph Stage2 [Stage 2: 知识蒸馏与仲裁]
+        direction TB
+        E1[四层金字塔提取]
+        E2[Skill 可执行化契约]
+        E3[CDC 冲突仲裁机制<br/>有时态则覆盖 / 无时态挂载冲突标]
+    end
+
+    subgraph Stage3 [Stage 3: 质量验证层]
+        direction LR
+        V1[对抗一致性重问] --> V2[置信度评分 >0.8] --> V3[Acceptance Predicate]
+    end
+
+    subgraph Stage4 [Stage 4: 入库路由分流]
+        direction LR
+        R1[(Wiki文档库<br/>Markdown)]
+        R2[(向量数据库<br/>Embedding)]
+        R3[(Skill库<br/>.agents/)]
+    end
+
+    subgraph Stage5 [Stage 5: 检索与消费终端]
+        direction LR
+        C1[精确事实 → 向量检索]
+        C2[主题综合 → 图谱聚合]
+        C3[流程执行 → Skill加载]
+    end
+
+    Stage1 --> Stage2
+    Stage2 --> Stage3
+    Stage3 --> Stage4
+    Stage4 --> Stage5
+    
+    classDef plain fill:#fff,stroke:#334155,stroke-width:1px,color:#111;
+    class Stage1,Stage2,Stage3,Stage4,Stage5,S1,P1,O1,E1,E2,E3,V1,V2,V3,R1,R2,R3,C1,C2,C3 plain;
 ```
 
 ---

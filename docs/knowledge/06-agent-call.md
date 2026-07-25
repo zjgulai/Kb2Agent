@@ -150,26 +150,30 @@ from corpus2skill import serve
 
 Agent 不再是 RAG 的被动消费者，而是主动控制检索过程：
 
-```
-ReAct 循环（直到 stop 条件满足）：
-  ┌─────────────────────────────────────────────────────┐
-  │  Reason：当前有没有足够证据回答问题？                  │
-  │  → 不够 → 分析缺口，决定下一步检索策略               │
-  │                                                     │
-  │  Act（选择工具之一）：                               │
-  │  · search(query)       ← 跨库语义搜索               │
-  │  · find(doc_id, kw)   ← 文档内精确定位              │
-  │  · open(doc_id, line) ← 读取文档指定片段             │
-  │  · summarize()         ← 压缩上下文，释放 token 空间  │
-  │                                                     │
-  │  Observe：获取工具结果，更新已知信息                  │
-  └─────────────────────────────────────────────────────┘
-  
-Stop 条件（必须显式设置，否则无限循环）：
-  · 迭代上限：3-7 轮（大多数收敛在前3轮）
-  · Token 预算：20-40k total
-  · 置信度阈值：Agent 判断证据已足够
-  · 超时：30-60 秒（交互式场景）
+```mermaid
+flowchart TD
+    Start[Agentic Query] --> Reason{证据充足?}
+    Reason -->|Yes| End[生成终局回答]
+    Reason -->|No: 分析缺口| Act
+    
+    subgraph Action_Space [Act 工具箱]
+        direction LR
+        A1[search: 跨库搜索]
+        A2[find: 文档内精确定位]
+        A3[open: 读指定片段]
+        A4[summarize: 降维释放Token]
+    end
+    
+    Act --> Action_Space
+    Action_Space --> Observe[Observe: 更新已知信息]
+    Observe --> Check{Stop 条件触发?}
+    
+    Check -->|迭代达上限/超时| End
+    Check -->|继续| Reason
+    
+    classDef default fill:#fafafa,stroke:#334155,stroke-width:1px;
+    classDef decision fill:#fef08a,stroke:#ca8a04,stroke-width:1px;
+    class Reason,Check decision;
 ```
 
 **五种 Agentic RAG 模式（按复杂度排序）**：

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   base: '/Kb2Agent/',
   title: "MKD",
   description: "Multimodal Knowledge Distillation",
@@ -17,12 +18,10 @@ export default defineConfig({
     logo: null,
     siteTitle: 'MKD.Guide',
     
-    // 极简导航
     nav: [
       { text: '指南', link: '/knowledge/01-framework', activeMatch: '/knowledge/' },
     ],
 
-    // 自动侧边栏
     sidebar: {
       '/knowledge/': [
         {
@@ -56,5 +55,18 @@ export default defineConfig({
       level: [2, 3],
       label: '本页目录'
     }
+  },
+  
+  // Mermaid 自定义配置，使其适配极简极客风
+  mermaid: {
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#ffffff',
+      primaryBorderColor: '#334155',
+      primaryTextColor: '#111111',
+      lineColor: '#64748b',
+      secondaryColor: '#f8fafc',
+      tertiaryColor: '#f1f5f9'
+    }
   }
-})
+}))
