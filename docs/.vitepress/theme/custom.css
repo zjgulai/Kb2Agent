@@ -1,93 +1,131 @@
 /* ============================================================
-   MKD Guide — Design System v3
-   Colors: lute.top warm palette
-   Cards:  ppiconsulting.dev card grammar
-   Type:   MorandiGarden article rendering
+   MKD Guide — Design System v4
+   字体：中文楷体 / 英文 -apple-system
+   颜色：lute.top warm palette
+   卡片：ppiconsulting.dev card grammar
+   排版：MorandiGarden + 精雕细琢
    ============================================================ */
 
 /* ─── 1. Tokens ─────────────────────────────────────────── */
 :root {
-  --paper:        #FDF8F6;
-  --paper-2:      #FCF5F2;
-  --ink:          #35141A;
-  --body:         #3d2c30;
-  --muted:        #9B9795;
+  --paper:        #FDF8F4;
+  --paper-2:      #FAF3EE;
+  --paper-3:      #F5EDE5;
+  --ink:          #2C1018;
+  --body:         #3A2428;
+  --muted:        #9B8F8C;
   --red:          #D75C70;
   --red-deep:     #C44A5E;
   --red-soft:     #F9D0D6;
-  --gold:         #D8BE78;
+  --gold:         #C9A84C;
   --gold-soft:    #F5EDD4;
-  --jade:         #6E966E;
-  --jade-soft:    #DFF0DF;
-  --line:         rgba(53,20,26,0.10);
-  --line-strong:  rgba(215,92,112,0.26);
+  --jade:         #5E8B5E;
+  --jade-soft:    #DCF0DC;
+  --line:         rgba(44,16,24,0.09);
+  --line-strong:  rgba(196,74,94,0.28);
 
+  /* VitePress overrides */
   --vp-c-brand-1:      #C44A5E;
   --vp-c-brand-2:      #D75C70;
   --vp-c-brand-3:      #e07080;
   --vp-c-brand-soft:   rgba(196,74,94,0.10);
-  --vp-c-bg:           #FDF8F6;
-  --vp-c-bg-alt:       #FCF5F2;
+  --vp-c-bg:           #FDF8F4;
+  --vp-c-bg-alt:       #FAF3EE;
   --vp-c-bg-elv:       #fff;
-  --vp-c-bg-soft:      #f5eeec;
-  --vp-c-text-1:       #35141A;
-  --vp-c-text-2:       #3d2c30;
-  --vp-c-text-3:       #9B9795;
-  --vp-c-divider:      rgba(53,20,26,0.10);
+  --vp-c-bg-soft:      #F5EDE5;
+  --vp-c-text-1:       #2C1018;
+  --vp-c-text-2:       #3A2428;
+  --vp-c-text-3:       #9B8F8C;
+  --vp-c-divider:      rgba(44,16,24,0.09);
 
-  --vp-font-family-base: 'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;
-  --vp-font-family-mono: 'JetBrains Mono','Fira Code',Consolas,monospace;
-  --vp-nav-bg-color:   #FDF8F6;
-  --vp-sidebar-bg-color: #FDF8F6;
+  /* ── 字体栈：英文用 Apple/系统 SF，中文用楷体 ── */
+  --font-en:  -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  --font-zh:  'STKaiti', 'KaiTi', 'AR PL UKai CN', 'Kaiti SC', '楷体', serif;
+  --font-mono:'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
 
+  /* VitePress font vars */
+  --vp-font-family-base: var(--font-en);
+  --vp-font-family-mono: var(--font-mono);
+  --vp-nav-bg-color:   #FDF8F4;
+  --vp-sidebar-bg-color: #FDF8F4;
+
+  /* Buttons */
   --vp-button-brand-bg:         #C44A5E;
-  --vp-button-brand-hover-bg:   #35141A;
+  --vp-button-brand-hover-bg:   #2C1018;
   --vp-button-brand-border:     transparent;
   --vp-button-brand-text:       #fff;
   --vp-button-brand-hover-text: #fff;
   --vp-button-alt-bg:           transparent;
-  --vp-button-alt-hover-bg:     #FCF5F2;
-  --vp-button-alt-border:       rgba(215,92,112,0.26);
-  --vp-button-alt-text:         #35141A;
+  --vp-button-alt-hover-bg:     #FAF3EE;
+  --vp-button-alt-border:       rgba(196,74,94,0.28);
+  --vp-button-alt-text:         #2C1018;
   --vp-button-alt-hover-text:   #C44A5E;
 
-  --vp-code-bg:           #f5eeec;
-  --vp-code-color:        #35141A;
-  --vp-code-block-bg:     #f5eeec;
+  --vp-code-bg:           #F5EDE5;
+  --vp-code-color:        #2C1018;
+  --vp-code-block-bg:     #F5EDE5;
   --vp-sidebar-width:     290px;
   --vp-layout-max-width:  1600px;
 }
 
 html { color-scheme: light !important; }
 .dark {
-  --vp-c-bg:     #FDF8F6 !important;
-  --vp-c-bg-alt: #FCF5F2 !important;
-  --vp-c-text-1: #35141A !important;
-  --vp-c-text-2: #3d2c30 !important;
-  --vp-c-divider:rgba(53,20,26,0.10) !important;
+  --vp-c-bg:     #FDF8F4 !important;
+  --vp-c-bg-alt: #FAF3EE !important;
+  --vp-c-text-1: #2C1018 !important;
+  --vp-c-text-2: #3A2428 !important;
+  --vp-c-divider:rgba(44,16,24,0.09) !important;
 }
 
 /* ─── 2. Base ────────────────────────────────────────────── */
 body {
+  font-family: var(--font-en);
   font-size: 15px;
   line-height: 1.8;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background: var(--paper);
+  color: var(--body);
+}
+
+/* 文章正文区统一用楷体，让中文有书卷气 */
+.vp-doc {
+  font-family: var(--font-zh);
+}
+
+/* 代码、导航、侧边栏、大标题、数字等恢复英文字体 */
+.vp-doc code,
+.vp-doc pre,
+.vp-doc .custom-block-title,
+.VPNav,
+.VPSidebar,
+.VPNavBar .title,
+.VPHero .name,
+.VPHero .text,
+.VPHero .tagline,
+.VPFeature .title,
+.VPFeature .details,
+.VPDocOutlineItem a,
+nav, header {
+  font-family: var(--font-en);
 }
 
 /* ─── 3. Nav ─────────────────────────────────────────────── */
 .VPNav {
   border-bottom: 1px solid var(--line) !important;
-  background: rgba(253,248,246,0.94) !important;
-  backdrop-filter: blur(12px);
+  background: rgba(253,248,244,0.95) !important;
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
 }
 .VPNavBar .title {
+  font-family: var(--font-en);
   font-weight: 800;
   font-size: 1rem;
   color: var(--ink) !important;
   letter-spacing: -0.01em;
 }
 .VPNavBarMenu .VPNavBarMenuLink {
+  font-family: var(--font-en);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--body);
@@ -103,6 +141,7 @@ body {
   width: 290px !important;
   padding-left: 16px !important;
   padding-right: 12px !important;
+  font-family: var(--font-en);
 }
 .VPSidebarItem.level-0 > .item > .text {
   font-size: 0.65rem !important;
@@ -111,8 +150,10 @@ body {
   text-transform: uppercase !important;
   color: var(--muted) !important;
   padding-top: 1.75rem !important;
+  font-family: var(--font-en) !important;
 }
 .VPSidebarItem.level-1 .item .link .text {
+  font-family: var(--font-en);
   font-size: 0.875rem;
   color: var(--body);
   line-height: 1.5;
@@ -131,15 +172,15 @@ body {
   font-weight: 700 !important;
 }
 
-/* ─── 5. Layout (Playwright-measured) ───────────────────── */
+/* ─── 5. Layout ──────────────────────────────────────────── */
 .VPContent { padding-left: 290px !important; }
 .content { padding-left: 16px !important; padding-right: 16px !important; }
 .content-container { max-width: none !important; }
 .VPDocFooter { max-width: none !important; }
 .vp-doc {
   max-width: none !important;
-  padding-left: 1.5rem !important;
-  padding-right: 1.5rem !important;
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
 }
 .VPDocAside {
   width: 220px !important;
@@ -148,77 +189,131 @@ body {
 }
 .VPDocAsideOutline { width: 220px !important; }
 
-/* P0 fix: mobile must reset padding-left to 0 */
+/* P0 fix: mobile reset */
 @media (max-width: 959px) {
   .VPContent { padding-left: 0 !important; }
   .VPSidebar { width: 100% !important; }
 }
 
-/* ─── 6. Article Typography ──────────────────────────────── */
+/* ─── 6. 文章区纹理背景 ──────────────────────────────────── */
+/*
+  细腻噪点纸张感：用 SVG noise filter + 极淡 grain overlay
+  让文章背景有轻微纸张质感，不过度
+*/
+.VPDoc .container {
+  position: relative;
+}
+.VPDoc .container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  /* 极淡纸张颗粒纹理，通过重复细线格实现 */
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(44,16,24,0.012) 3px,
+      rgba(44,16,24,0.012) 4px
+    );
+  mix-blend-mode: multiply;
+}
+
+/* ─── 7. Article Typography ──────────────────────────────── */
+/* 字体音阶 (Major Third × 1.25): 正文15px → h4 16px → h3 19px → h2 22px → h1 32px */
+
 .vp-doc h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
+  font-family: var(--font-zh);
+  font-size: 2rem;          /* 32px */
+  font-weight: 700;
+  letter-spacing: 0.02em;  /* 楷体字距略宽更好看 */
+  line-height: 1.35;
   color: var(--ink);
   margin-top: 0;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
   border-bottom: none;
   padding-bottom: 0;
+  /* 标题下方淡分割 */
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .vp-doc h2 {
-  font-size: 1.35rem;
+  font-family: var(--font-zh);
+  font-size: 1.375rem;      /* 22px */
   font-weight: 700;
+  letter-spacing: 0.03em;
   color: var(--ink);
-  margin-top: 3rem;
-  margin-bottom: 1rem;
-  padding: 0.55rem 0 0.55rem 0.875rem;
-  border-left: 3px solid var(--red-deep);
+  margin-top: 3.5rem;
+  margin-bottom: 1.25rem;
+  padding: 0.6rem 1rem 0.6rem 1rem;
+  border-left: 3.5px solid var(--red-deep);
   border-bottom: none;
-  background: linear-gradient(90deg,rgba(196,74,94,0.06) 0%,transparent 70%);
-  border-radius: 0 6px 6px 0;
+  /* 更鲜明的渐变背景 */
+  background: linear-gradient(90deg, rgba(196,74,94,0.08) 0%, rgba(196,74,94,0.02) 60%, transparent 100%);
+  border-radius: 0 8px 8px 0;
 }
 
 .vp-doc h3 {
-  font-size: 1.05rem;
+  font-family: var(--font-zh);
+  font-size: 1.125rem;      /* ~18px */
   font-weight: 700;
+  letter-spacing: 0.02em;
   color: var(--ink);
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
+  margin-top: 2.25rem;
+  margin-bottom: 0.875rem;
 }
 .vp-doc h3::before {
   content: '';
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   background: var(--gold);
   border-radius: 2px;
-  margin-right: 0.55rem;
-  margin-bottom: 1px;
+  margin-right: 0.5rem;
+  margin-bottom: 2px;
   vertical-align: middle;
 }
 
 .vp-doc h4 {
-  font-size: 0.95rem;
+  font-family: var(--font-zh);
+  font-size: 1rem;           /* 16px */
   font-weight: 700;
+  letter-spacing: 0.02em;
   color: var(--jade);
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.625rem;
 }
 
+/* 正文 — 楷体，行距舒展，颜色足够深 */
 .vp-doc p {
-  line-height: 1.85;
+  font-family: var(--font-zh);
+  font-size: 1rem;           /* 16px，楷体在小字号下清晰度更好 */
+  line-height: 2;            /* 楷体行距宽一点更雅 */
   color: var(--body);
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.35rem;
+  text-align: justify;       /* 楷体两端对齐，古典风格 */
+  word-break: break-word;
 }
-.vp-doc strong { font-weight: 700; color: var(--ink); }
+
+.vp-doc strong {
+  font-weight: 700;
+  color: var(--ink);
+  font-family: var(--font-zh);
+}
+
+.vp-doc em {
+  font-style: italic;
+  color: var(--red-deep);
+}
 
 .vp-doc a {
   color: var(--red-deep);
   font-weight: 500;
   text-decoration: none;
-  border-bottom: 1px dashed var(--red-soft);
+  border-bottom: 1px dashed rgba(196,74,94,0.45);
   transition: border-color .15s, color .15s;
 }
 .vp-doc a:hover { color: var(--ink); border-bottom-color: var(--red-deep); }
@@ -228,25 +323,76 @@ body {
 .vp-doc h2:hover .header-anchor,
 .vp-doc h3:hover .header-anchor { opacity: 1; }
 
-/* ─── 7. Blockquote ──────────────────────────────────────── */
+/* ─── 8. 图片居中 + 图注 ─────────────────────────────────── */
+.vp-doc img {
+  display: block !important;
+  margin: 2rem auto !important;
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  box-shadow: 0 2px 12px rgba(44,16,24,0.09), 0 1px 3px rgba(44,16,24,0.06);
+}
+
+/* 图注：img 后跟 em 时视为图注 */
+.vp-doc img + em,
+.vp-doc p > img + br + em {
+  display: block;
+  text-align: center;
+  font-family: var(--font-en);
+  font-size: 0.8rem;
+  font-style: normal;
+  color: var(--muted);
+  margin-top: -1rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+/* p 包裹的图片：让 p 变成 block 居中容器 */
+.vp-doc p:has(img) {
+  text-align: center;
+  margin: 0;
+}
+
+/* ─── 9. Blockquote ──────────────────────────────────────── */
 .vp-doc blockquote {
   border-left: 3px solid var(--gold);
-  margin: 2rem 0;
-  padding: 1rem 1.25rem;
+  margin: 2.25rem 0;
+  padding: 1.1rem 1.5rem;
   background: var(--gold-soft);
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 10px 10px 0;
   font-style: normal;
+  /* 引用区轻微纹理 */
+  background-image: linear-gradient(var(--gold-soft), var(--gold-soft)),
+    repeating-linear-gradient(45deg, transparent 0, transparent 4px, rgba(201,168,76,0.06) 4px, rgba(201,168,76,0.06) 5px);
+  background-blend-mode: normal;
 }
-.vp-doc blockquote p { color: #6b5a2a; margin-bottom: 0; font-size: 0.9rem; line-height: 1.75; }
-.vp-doc blockquote strong { color: #5a4a1a; }
+.vp-doc blockquote p {
+  font-family: var(--font-zh);
+  color: #6b5020;
+  margin-bottom: 0;
+  font-size: 0.975rem;
+  line-height: 1.85;
+}
+.vp-doc blockquote strong { color: #4e3a10; }
 
-/* ─── 8. Lists ───────────────────────────────────────────── */
-.vp-doc ul { padding-left: 1.25rem; }
-.vp-doc ul > li { margin: 0.4rem 0; line-height: 1.8; color: var(--body); }
+/* ─── 10. Lists ──────────────────────────────────────────── */
+.vp-doc ul { padding-left: 1.375rem; }
+.vp-doc ul > li {
+  font-family: var(--font-zh);
+  margin: 0.45rem 0;
+  line-height: 1.9;
+  color: var(--body);
+}
 .vp-doc ul > li::marker { color: var(--red); }
+.vp-doc ol > li {
+  font-family: var(--font-zh);
+  line-height: 1.9;
+  color: var(--body);
+}
 .vp-doc ol > li::marker { color: var(--red-deep); font-weight: 700; }
 
-/* ─── 9. Tables ──────────────────────────────────────────── */
+/* ─── 11. Tables ──────────────────────────────────────────── */
 .vp-doc table {
   display: block;
   overflow-x: auto;
@@ -254,111 +400,139 @@ body {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  margin: 2rem 0;
-  border-radius: 8px;
+  margin: 2.25rem auto;
+  border-radius: 10px;
   overflow: hidden;
   border: 1px solid var(--line);
-  font-size: 0.9rem;
-  box-shadow: 0 1px 4px rgba(53,20,26,0.07);
+  font-family: var(--font-en);     /* 表格用英文字体，数据更工整 */
+  font-size: 0.875rem;
+  box-shadow: 0 2px 8px rgba(44,16,24,0.08), 0 1px 2px rgba(44,16,24,0.05);
 }
 .vp-doc th {
   background: var(--paper-2);
-  color: var(--body);
+  color: var(--ink);
+  font-family: var(--font-en);
   font-weight: 700;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 0.8rem 1rem;
+  letter-spacing: 0.07em;
+  padding: 0.875rem 1.125rem;
   text-align: left;
   border-bottom: 2px solid var(--line-strong);
 }
 .vp-doc td {
-  padding: 0.875rem 1rem;
+  font-family: var(--font-zh);     /* 单元格内容用楷体 */
+  padding: 0.875rem 1.125rem;
   border-bottom: 1px solid var(--line);
   color: var(--body);
   vertical-align: top;
-  line-height: 1.65;
+  line-height: 1.75;
 }
 .vp-doc tr:last-child td { border-bottom: none; }
-.vp-doc tr:nth-child(even) td { background: rgba(253,248,246,0.6); }
-.vp-doc tr:hover td { background: rgba(215,92,112,0.05); }
-.vp-doc td strong { color: var(--ink); }
+.vp-doc tr:nth-child(even) td { background: rgba(250,243,238,0.6); }
+.vp-doc tr:hover td { background: rgba(215,92,112,0.05); transition: background .12s; }
+.vp-doc td strong { color: var(--ink); font-family: var(--font-zh); }
 
-/* ─── 10. Code ───────────────────────────────────────────── */
+/* ─── 12. Code ───────────────────────────────────────────── */
 div[class*='language-'] {
-  background: #f5eeec !important;
-  border: 1px solid var(--line) !important;
-  border-radius: 8px !important;
-  margin: 1.5rem 0 !important;
-  box-shadow: 0 1px 3px rgba(53,20,26,0.06);
+  background: #F5EDE5 !important;
+  border: 1px solid rgba(44,16,24,0.10) !important;
+  border-radius: 10px !important;
+  margin: 1.75rem 0 !important;
+  box-shadow: 0 2px 6px rgba(44,16,24,0.07) !important;
 }
-div[class*='language-'] pre { padding: 1.25rem 1.5rem !important; }
+div[class*='language-'] pre { padding: 1.375rem 1.5rem !important; }
 div[class*='language-'] code {
-  font-family: var(--vp-font-family-mono) !important;
-  font-size: 0.825rem !important;
-  line-height: 1.75 !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.82rem !important;
+  line-height: 1.8 !important;
   color: var(--ink) !important;
 }
 div[class*='language-']::before {
+  font-family: var(--font-en) !important;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.07em;
   color: var(--muted);
 }
 .vp-doc :not(pre) > code {
-  background: #f5eeec;
+  font-family: var(--font-mono);
+  background: #F5EDE5;
   color: var(--red-deep);
-  padding: 0.15em 0.45em;
+  padding: 0.18em 0.45em;
   border-radius: 4px;
   font-size: 0.82em;
-  font-family: var(--vp-font-family-mono);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(44,16,24,0.09);
   font-weight: 600;
 }
 
-/* ─── 11. Custom Blocks ──────────────────────────────────── */
+/* ─── 13. Custom Blocks ──────────────────────────────────── */
 .vp-doc .custom-block {
-  border-radius: 8px;
-  padding: 1rem 1.25rem;
-  margin: 1.75rem 0;
-  font-size: 0.875rem;
-  line-height: 1.7;
+  border-radius: 10px;
+  padding: 1.1rem 1.375rem;
+  margin: 2rem 0;
+  font-size: 0.9rem;
+  line-height: 1.8;
   border-left-width: 3px;
   border-left-style: solid;
 }
 .vp-doc .custom-block .custom-block-title {
+  font-family: var(--font-en);
   font-weight: 800;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.35rem;
+  letter-spacing: 0.09em;
+  margin-bottom: 0.4rem;
 }
-.vp-doc .custom-block p { margin-bottom: 0; }
+.vp-doc .custom-block p {
+  font-family: var(--font-zh);
+  margin-bottom: 0;
+  font-size: 0.925rem;
+  text-align: left;
+}
 
 .vp-doc .custom-block.info   { background: var(--jade-soft); border-left-color: var(--jade); }
-.vp-doc .custom-block.info   .custom-block-title { color: #3d6b3d; }
-.vp-doc .custom-block.info   p { color: #2d5c2d; }
+.vp-doc .custom-block.info   .custom-block-title { color: #2d6b2d; }
+.vp-doc .custom-block.info   p { color: #224d22; }
 
 .vp-doc .custom-block.tip    { background: var(--gold-soft); border-left-color: var(--gold); }
-.vp-doc .custom-block.tip    .custom-block-title { color: #8a6a10; }
-.vp-doc .custom-block.tip    p { color: #6b5010; }
+.vp-doc .custom-block.tip    .custom-block-title { color: #7a5c08; }
+.vp-doc .custom-block.tip    p { color: #5c4206; }
 
 .vp-doc .custom-block.warning{ background: var(--red-soft);  border-left-color: var(--red-deep); }
 .vp-doc .custom-block.warning .custom-block-title { color: var(--red-deep); }
-.vp-doc .custom-block.warning p { color: #7a2030; }
+.vp-doc .custom-block.warning p { color: #701828; }
 
-.vp-doc .custom-block.danger { background: #f5d0d6; border-left-color: #b03050; }
-.vp-doc .custom-block.danger .custom-block-title { color: #8a1030; }
-.vp-doc .custom-block.danger p { color: #6a0a20; }
+.vp-doc .custom-block.danger { background: #f5d0d6; border-left-color: #a02840; }
+.vp-doc .custom-block.danger .custom-block-title { color: #7a0c28; }
+.vp-doc .custom-block.danger p { color: #5a0818; }
 
-/* ─── 12. HR ─────────────────────────────────────────────── */
-.vp-doc hr { border: none; border-top: 1px solid var(--line); margin: 3rem 0; }
+/* ─── 14. HR ─────────────────────────────────────────────── */
+.vp-doc hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 3.5rem 0;
+  position: relative;
+}
+.vp-doc hr::after {
+  content: '◆';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--paper);
+  padding: 0 0.75rem;
+  color: var(--line-strong);
+  font-size: 0.6rem;
+  line-height: 1;
+}
 
-/* ─── 13. Hero ───────────────────────────────────────────── */
+/* ─── 15. Hero ───────────────────────────────────────────── */
 .VPHome { padding-bottom: 0 !important; }
-.VPHero { padding-top: 5rem !important; padding-bottom: 3.5rem !important; }
+.VPHero { padding-top: 5.5rem !important; padding-bottom: 4rem !important; }
 .VPHero .name {
-  font-size: 3.5rem !important;
+  font-family: var(--font-en) !important;
+  font-size: 3.25rem !important;
   font-weight: 800 !important;
   letter-spacing: -0.04em !important;
   color: var(--ink) !important;
@@ -367,44 +541,51 @@ div[class*='language-']::before {
   line-height: 1.1 !important;
 }
 .VPHero .text {
-  font-size: 1.35rem !important;
+  font-family: var(--font-zh) !important;
+  font-size: 1.25rem !important;
   font-weight: 600 !important;
   color: var(--body) !important;
   margin-top: 0.5rem !important;
+  letter-spacing: 0.02em !important;
 }
 .VPHero .tagline {
+  font-family: var(--font-zh) !important;
   font-size: 1rem !important;
   color: var(--muted) !important;
-  max-width: 540px !important;
-  line-height: 1.7 !important;
-  margin-top: 0.75rem !important;
+  max-width: 560px !important;
+  line-height: 1.8 !important;
+  margin-top: 0.875rem !important;
+  letter-spacing: 0.02em !important;
 }
-.VPHero .actions { margin-top: 2rem !important; gap: 0.75rem !important; }
+.VPHero .actions { margin-top: 2.25rem !important; gap: 0.875rem !important; }
 
 .VPHero .VPButton.brand {
+  font-family: var(--font-en) !important;
   background: var(--red-deep) !important;
   color: #fff !important;
   border: none !important;
   border-radius: 8px !important;
   font-weight: 700 !important;
   font-size: 0.9rem !important;
-  padding: 0.65rem 1.5rem !important;
-  box-shadow: 0 4px 16px rgba(196,74,94,0.30) !important;
+  padding: 0.65rem 1.625rem !important;
+  box-shadow: 0 4px 18px rgba(196,74,94,0.32) !important;
   transition: background .18s, transform .15s, box-shadow .18s !important;
+  letter-spacing: 0.01em !important;
 }
 .VPHero .VPButton.brand:hover {
   background: var(--ink) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 8px 24px rgba(53,20,26,0.2) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 28px rgba(44,16,24,0.22) !important;
 }
 .VPHero .VPButton.alt {
+  font-family: var(--font-en) !important;
   background: transparent !important;
   color: var(--ink) !important;
   border: 1.5px solid var(--line-strong) !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
   font-size: 0.9rem !important;
-  padding: 0.65rem 1.5rem !important;
+  padding: 0.65rem 1.625rem !important;
   transition: border-color .15s, color .15s !important;
 }
 .VPHero .VPButton.alt:hover {
@@ -412,18 +593,18 @@ div[class*='language-']::before {
   color: var(--red-deep) !important;
 }
 
-/* ─── 14. Feature Cards ──────────────────────────────────── */
-.VPFeatures { padding-top: 0 !important; padding-bottom: 3rem !important; }
+/* ─── 16. Feature Cards ──────────────────────────────────── */
+.VPFeatures { padding-top: 0 !important; padding-bottom: 3.5rem !important; }
 .VPFeatures .container > .title,
 .VPFeatures .container > .details { display: none; }
 
 .VPFeature {
   background: #fff !important;
   border: 1px solid var(--line) !important;
-  border-radius: 10px !important;
-  padding: 1.5rem 1.5rem 1.75rem !important;
-  box-shadow: 0 1px 4px rgba(53,20,26,0.06) !important;
-  transition: border-color .2s, box-shadow .2s, transform .2s !important;
+  border-radius: 12px !important;
+  padding: 1.625rem 1.625rem 2rem !important;
+  box-shadow: 0 1px 4px rgba(44,16,24,0.06), 0 0 0 0.5px rgba(44,16,24,0.04) !important;
+  transition: border-color .2s, box-shadow .22s, transform .2s !important;
   display: flex !important;
   flex-direction: column !important;
   position: relative;
@@ -436,12 +617,12 @@ div[class*='language-']::before {
   height: 3px;
   background: linear-gradient(90deg, var(--red-deep), var(--gold));
   opacity: 0;
-  transition: opacity .2s;
+  transition: opacity .22s;
 }
 .VPFeature:hover {
-  border-color: var(--red) !important;
-  box-shadow: 0 6px 24px rgba(215,92,112,0.14) !important;
-  transform: translateY(-3px) !important;
+  border-color: rgba(196,74,94,0.4) !important;
+  box-shadow: 0 8px 28px rgba(215,92,112,0.16), 0 2px 6px rgba(44,16,24,0.08) !important;
+  transform: translateY(-4px) !important;
 }
 .VPFeature:hover::before { opacity: 1; }
 
@@ -449,37 +630,41 @@ div[class*='language-']::before {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 40px !important;
-  height: 40px !important;
+  width: 42px !important;
+  height: 42px !important;
   border-radius: 10px !important;
   background: var(--paper-2) !important;
   border: 1px solid var(--line) !important;
-  margin-bottom: 1rem !important;
+  margin-bottom: 1.125rem !important;
   font-size: 1.25rem !important;
 }
 
 .VPFeature .title {
+  font-family: var(--font-en) !important;
   font-weight: 700 !important;
   color: var(--ink) !important;
-  font-size: 0.95rem !important;
-  margin-bottom: 0.5rem !important;
-  line-height: 1.35 !important;
+  font-size: 0.975rem !important;
+  margin-bottom: 0.625rem !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.01em !important;
 }
 .VPFeature .details {
+  font-family: var(--font-zh) !important;
   color: var(--body) !important;
-  font-size: 0.85rem !important;
-  line-height: 1.75 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.85 !important;
   flex: 1 !important;
   margin-top: 0 !important;
 }
 
-/* ─── 15. Outline ────────────────────────────────────────── */
+/* ─── 17. Outline ────────────────────────────────────────── */
 .VPDocOutlineItem a {
-  font-size: 0.72rem !important;
+  font-family: var(--font-en) !important;
+  font-size: 0.73rem !important;
   white-space: normal !important;
   overflow: visible !important;
   text-overflow: unset !important;
-  line-height: 1.45 !important;
+  line-height: 1.5 !important;
   display: block;
   word-break: break-all;
   color: var(--muted);
@@ -488,37 +673,42 @@ div[class*='language-']::before {
 .VPDocOutlineItem a:hover { color: var(--body) !important; }
 .VPDocOutlineItem.active a { color: var(--red-deep) !important; font-weight: 700 !important; }
 
-/* ─── 16. Mermaid ────────────────────────────────────────── */
+/* ─── 18. Mermaid ────────────────────────────────────────── */
 .vp-doc .mermaid {
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 1.5rem;
-  margin: 1.75rem 0;
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+  margin: 2.25rem auto;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(53,20,26,0.06);
+  box-shadow: 0 2px 8px rgba(44,16,24,0.07), 0 1px 2px rgba(44,16,24,0.04);
   cursor: zoom-in;
-  transition: box-shadow .2s;
+  transition: box-shadow .2s, transform .2s;
+  max-width: 100%;
 }
-.vp-doc .mermaid:hover { box-shadow: 0 4px 20px rgba(215,92,112,0.18) !important; }
-.vp-doc .mermaid svg { max-width: 100%; height: auto; }
+.vp-doc .mermaid:hover {
+  box-shadow: 0 6px 24px rgba(215,92,112,0.18), 0 2px 6px rgba(44,16,24,0.08) !important;
+  transform: translateY(-1px);
+}
+.vp-doc .mermaid svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
 
 /* Lightbox */
 .mermaid-lightbox {
   display: none; position: fixed; inset: 0; z-index: 9999;
-  background: rgba(53,20,26,0.75); backdrop-filter: blur(6px);
+  background: rgba(44,16,24,0.78); backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   align-items: center; justify-content: center; cursor: zoom-out; padding: 2rem;
 }
 .mermaid-lightbox.active { display: flex; }
 .mermaid-lightbox-inner {
-  background: #fff; border-radius: 12px; padding: 2rem;
-  max-width: 90vw; max-height: 88vh; overflow: auto;
-  box-shadow: 0 32px 80px rgba(53,20,26,0.3); position: relative;
+  background: #fff; border-radius: 14px; padding: 2.25rem;
+  max-width: 92vw; max-height: 90vh; overflow: auto;
+  box-shadow: 0 40px 100px rgba(44,16,24,0.35); position: relative;
 }
 .mermaid-lightbox-inner svg { max-width: 100%; height: auto; display: block; }
 .mermaid-lightbox-close {
-  position: absolute; top: .75rem; right: .75rem;
-  width: 28px; height: 28px; border-radius: 50%;
+  position: absolute; top: .875rem; right: .875rem;
+  width: 30px; height: 30px; border-radius: 50%;
   background: var(--paper-2); border: 1px solid var(--line);
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   font-size: 16px; color: var(--muted); line-height: 1;
@@ -526,19 +716,34 @@ div[class*='language-']::before {
 }
 .mermaid-lightbox-close:hover { background: var(--red-soft); color: var(--red-deep); }
 
-/* ─── 17. Footer ─────────────────────────────────────────── */
+/* ─── 19. Footer ─────────────────────────────────────────── */
 .VPFooter {
   border-top: 1px solid var(--line);
   background: var(--paper-2) !important;
 }
-.VPFooter .message, .VPFooter .copyright { font-size: 0.78rem; color: var(--muted); }
+.VPFooter .message, .VPFooter .copyright {
+  font-family: var(--font-en);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
 
-/* ─── 18. Mobile ─────────────────────────────────────────── */
+/* ─── 20. 滚动条精修 ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(196,74,94,0.25); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(196,74,94,0.45); }
+
+/* ─── 21. 选中高亮 ───────────────────────────────────────── */
+::selection { background: rgba(196,74,94,0.15); color: var(--ink); }
+
+/* ─── 22. Mobile ─────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .vp-doc h1 { font-size: 1.625rem; }
-  .vp-doc h2 { font-size: 1.2rem; margin-top: 2rem; }
-  .vp-doc h3 { font-size: 1rem; }
+  .vp-doc h1 { font-size: 1.625rem; letter-spacing: 0.01em; }
+  .vp-doc h2 { font-size: 1.2rem; margin-top: 2.25rem; }
+  .vp-doc h3 { font-size: 1.05rem; }
+  .vp-doc p  { font-size: 0.975rem; line-height: 1.9; }
   .VPHero .name { font-size: 2.25rem !important; }
   .VPHero .text { font-size: 1.125rem !important; }
   .VPHero .tagline { font-size: 0.9rem !important; }
+  .vp-doc { padding-left: 1rem !important; padding-right: 1rem !important; }
 }
