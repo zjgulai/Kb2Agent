@@ -384,5 +384,68 @@ DAG 规划器（Dependency-Aware Planner）
 
 ---
 
+## 6.9 2026 新范式：MCP 协议（Model Context Protocol）
 
+:::tip 核心认知
+MCP 不是"插件"，是 2026 年 Agent 与知识库连接的**标准协议**。封装一次 MCP Server，Claude Desktop、Cursor、Codex App 都可以直接调用，无需写任何适配代码。
+:::
+
+### 传统调用 vs MCP 调用
+
+| 维度 | 传统 FastAPI 封装 | MCP Server 封装 |
+|------|-----------------|----------------|
+| 每个 Agent 都需要 | 写适配代码调用 REST API | ✅ 无需，MCP 统一 |
+| 新增知识库 | 每个 Agent 改代码 | ✅ 只需注册新 Server |
+| Claude Desktop 直接用 | ❌ 不支持 | ✅ 原生支持 |
+| Cursor 直接用 | ❌ 需要 Extension | ✅ 原生支持 |
+| 工程量 | 每端各写一套 | 一次封装，多端复用 |
+
+### MCP 协议三类能力
+
+```
+Tools（工具）   — Agent 可以调用的函数，如 search_products()
+Resources（资源）— Agent 可以读取的静态数据，如知识库 schema
+Prompts（提示词）— 预置的对话模板，引导用户更好地描述需求
+```
+
+### 完整 MCP Server 示例
+
+参考 [第 4 章 Stage 6](04-architecture.md) 的 `mcp_server.py` 最小实现，以及 [第 15 章 Prompt 05](15-codex-prompts.md) 的完整生产版封装（含 `get_market_overview` + 错误处理）。
+
+### LangGraph Agent 通过 MCP 调用知识库
+
+```python
+# langgraph_mcp_agent.py
+# 展示 LangGraph Agent 如何通过 MCP 工具调用知识库
+from langchain_mcp_adapters.tools import load_mcp_tools
+from langgraph.prebuilt import create_react_agent
+from langchain_anthropic import ChatAnthropic
+import asyncio
+
+async def run_agent():
+    # 加载 MCP Server 上的工具（自动发现 search_products 等）
+    tools = await load_mcp_tools(server_url="http://localhost:8000/mcp")
+
+    model = ChatAnthropic(model="claude-3-5-sonnet-20241022")
+    agent = create_react_agent(model, tools)
+
+    result = await agent.ainvoke({
+        "messages": [{"role": "user",
+                      "content": "美国市场性价比最高的便携充电器有哪些？"}]
+    })
+    print(result["messages"][-1].content)
+
+asyncio.run(run_agent())
+```
+
+### 知识库调用工具全景（2026 更新版）
+
+| 工具/框架 | 类型 | 用途 | 推荐场景 |
+|-----------|------|------|----------|
+| **MCP Python SDK** | **MCP 封装** | **知识库→通用工具** | **2026 首选，跨 Client 复用** |
+| LightRAG Query API | GraphRAG 检索 | 5种模式图谱查询 | 多跳/综合查询 |
+| Corpus2Skill serve | Skill 导航 | Agent 浏览层次技能树 | 单域文档问答 |
+| Anything2Skill SkillBank | Skill 检索 | RAG + Skill 双轨 | 程序性知识调用 |
+| A-RAG | Agentic 检索 | 三层次工具自主检索 | 复杂多步推理 |
+| Graphiti（Zep）| 时态记忆 | Agent 时态知识图谱 | 知识随时间变化 |
 ---

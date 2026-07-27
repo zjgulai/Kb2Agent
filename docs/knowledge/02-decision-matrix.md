@@ -1,4 +1,67 @@
-# 第二部分：输入类型 × 输出形式决策矩阵
+# 第二章：输入类型 × 输出形式决策矩阵
+
+> 从信息源到知识的路由决策。2026 年新增第 5 种产品形态：MCP 工具形态。
+
+## 2.0 产品形态决策（先于一切技术选型）
+
+知识库的技术架构应由**产品形态**决定，而非反过来。2026 年有五种形态：
+
+| 形态 | 描述 | 用户 | 技术接入 | 新鲜度要求 |
+|------|------|------|----------|-----------|
+| A Chatbot | 对话式问答助手 | 终端用户 | WebSocket/HTTP | 日级更新 |
+| B 自动化 Agent | 无人值守自动执行 | 系统/定时任务 | SDK/API | 小时级更新 |
+| C Dashboard | 数据可视化看板 | 管理者 | REST API + 前端 | 日级更新 |
+| D 嵌入式 API | 被其他系统调用 | 开发者 | REST/GraphQL | 按需更新 |
+| **E MCP 工具** | **知识库作为通用 MCP Server** | **Claude/Cursor/Codex App** | **MCP 协议** | **实时同步** |
+
+:::tip 2026 年新范式：MCP 工具形态
+**传统方式**：为每个 Agent/应用写适配代码 → FastAPI 封装 → Agent 调用
+
+**MCP 方式**：封装一次 MCP Server → Claude Desktop、Cursor、Codex App、任意 MCP Client 直接连接，无需适配代码
+
+```python
+# 最小 MCP Server（用 FastMCP）
+from mcp.server.fastmcp import FastMCP
+mcp = FastMCP("product_kb")
+
+@mcp.tool()
+def search_products(query: str, top_k: int = 5) -> str:
+    """在选品知识库中搜索产品。"""
+    # 本地 ChromaDB 查询，数据不出境
+    return chroma_search(query, top_k)
+
+if __name__ == "__main__":
+    mcp.run()
+```
+
+MCP 协议将知识库从"被调用的服务"升级为"通用工具基础设施"。
+:::
+
+```mermaid
+flowchart LR
+    subgraph Clients ["MCP Client 生态（无需改代码）"]
+        A[Claude Desktop]
+        B[Cursor]
+        C[Codex App]
+        D[自定义 Agent]
+    end
+    
+    E["MCP 协议层\nTools / Resources / Prompts"]
+    
+    subgraph Servers ["MCP Server 层（知识库）"]
+        F[选品知识库\nproduct_kb]
+        G[Firecrawl\n采集服务]
+        H[ChromaDB\n向量库]
+        I[内部数据\n本地隔离]
+    end
+    
+    Clients --> E --> Servers
+    
+    classDef protocol fill:#fff3e0,stroke:#ff9800,stroke-width:2px
+    class E protocol
+```
+
+---
 
 ### 2.1 输入类型 MECE 分类（9种，完全覆盖）
 

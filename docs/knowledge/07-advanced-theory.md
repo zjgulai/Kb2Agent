@@ -1,4 +1,102 @@
-# 第七部分：Agentic 检索与蒸馏的进阶分层理论 (2026 基准)
+# 第八章：架构选型深度指南与进阶分层理论
+
+> 本章回答两个核心问题：**何时不该用 RAG？** 以及 **选了 RAG，该选哪种架构？**
+
+---
+
+## 8.0 四维架构选型决策矩阵
+
+在深入技术细节之前，先用四个维度定位你的场景：
+
+| 维度 | 轻量 → 重量 | 决定因素 |
+|------|-----------|---------|
+| **数据量** | <1万 → <100万 → >1000万条 | 向量库规模选型 |
+| **查询复杂度** | 简单问答 → 精确过滤 → 关系推理 → 多跳分析 | RAG vs GraphRAG vs Agentic |
+| **实时性要求** | 月更 → 日更 → 小时更 → 实时 | 批处理 vs 流处理架构 |
+| **预算约束** | <¥5万/年 → <¥50万/年 → >¥50万/年 | 全本地 vs 混合 vs 商业方案 |
+
+**快速选型路径**：
+
+```
+数据量 < 1万 + 查询简单 + 无实时要求  →  ChromaDB + 本地 Qwen  (轻量方案)
+精确字段过滤需求强                     →  深度结构化提取 + Qdrant
+关系推理（"连带品类"/"上下游"）       →  轻量图谱（Kùzu/NetworkX）
+全库主题综合（"这批报告共同主题是？"）→  GraphRAG / LightRAG
+复杂多步自主决策                       →  Agentic RAG (LangGraph)
+```
+
+---
+
+## 8.1 何时**不**该用 RAG
+
+:::warning 关键决策：先问"需不需要 RAG"，再问"用什么 RAG"
+:::
+
+**不该用 RAG 的五种场景**：
+
+### 场景 1：规则稳定 → 规则引擎或 Fine-tuning 更好
+
+```python
+# ❌ 错误做法：把评分规则塞进 RAG
+# 每次查询都"重新理解"规则，引入不确定性
+results = kb.search("选品评分标准是什么")
+
+# ✅ 正确做法：规则引擎直接计算
+def opportunity_score(demand: float, competition: float,
+                      profit: float, operation: float) -> float:
+    return demand * 0.40 + competition * 0.30 + profit * 0.25 + operation * 0.05
+```
+
+### 场景 2：实时数据 → 直接 API 调用，不入库
+
+| 数据类型 | 更新频率 | 正确做法 | 错误做法 |
+|---------|---------|---------|---------|
+| 竞品价格 | 分钟级 | 查询时调 Keepa/Amazon API | 入知识库 → 入库即腐烂 |
+| BSR 排名 | 小时级 | 实时 API | 入库 → 过时 |
+| 汇率 | 实时 | 金融 API | 任何形式的入库 |
+
+### 场景 3：精确计算 → NL2SQL 直连数据库
+
+```sql
+-- 用户问："本月太阳能充电器销售额是多少？"
+-- ❌ RAG 会"猜"出 $245K（可能错）
+-- ✅ NL2SQL 返回精确值
+SELECT SUM(revenue) FROM sales_orders
+WHERE category='solar_charger' AND month='2026-07'
+```
+
+### 场景 4：单文档短文本 + 低频查询 → 长上下文直接加载
+
+```python
+# ❌ 过度工程化：给一份10页的报告建 RAG
+chunks = split_document(report)          # 切块
+embeddings = embed(chunks)               # 向量化
+kb.add(chunks, embeddings)               # 入库
+result = kb.search(query)               # 检索
+
+# ✅ 直接加载（Gemini 1.5 Pro 支持 2M tokens）
+response = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=4096,
+    messages=[{"role": "user", "content": f"报告全文：{report}\n\n问题：{query}"}]
+)
+```
+
+**判断准则**：文档 < 100 页 且 查询频率 < 50 次/月 → 优先试长上下文基线
+
+### 场景 5：纯数值计算 → Python 函数直接处理
+
+```python
+# ❌ 不要用 LLM 计算统计量
+result = llm.ask("计算这些销售数据的中位数和标准差")  # 可能出错
+
+# ✅ pandas 直接计算
+stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
+```
+
+---
+
+## 8.2 五层知识蒸馏阶梯 (LoD)
 
 > 本章基于对 2025-2026 年顶会论文（ACL、NeurIPS、ICLR）及 GitHub 高星项目（A-RAG, Corpus2Skill, Anything2Skill, xMemory 等）的深度解构，围绕**第一性原理**，为你提供从理论到落地的极致压榨指南。
 

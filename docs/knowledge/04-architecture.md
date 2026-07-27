@@ -1,10 +1,14 @@
-# 第四部分：全链路技术架构
+# 第四章：全链路技术架构（+MCP封装层）
 
-> 这不是流程图，是每个阶段的详细工程说明——每阶段"输入是什么、干什么、输出什么、用什么工具、怎么配置、常见错误"全部到位。
+> 六阶段流水线：内容接入 → 结构化提取 → 质量验证 → 入库路由 → 检索消费 → **MCP 封装（2026新增）**
+
+:::tip 术语说明
+本章中的"知识蒸馏"统一使用**「结构化提取」**（Structured Extraction）表述，指通过 LLM 将非结构化文本转化为结构化知识单元，与 ML 领域的模型压缩技术无关。
+:::
 
 ---
 
-## 总览：五阶段流水线
+## 总览：六阶段流水线
 
 ```mermaid
 flowchart TD
@@ -142,7 +146,7 @@ STAGE1_CONFIG = {
 
 ---
 
-## Stage 2：知识蒸馏
+## Stage 2：结构化提取（原"知识蒸馏"）
 
 ### 职责
 将统一的文本，按照知识类型，提炼为不同深度的结构化知识。
@@ -532,3 +536,97 @@ async def hybrid_retrieve(
 | TEDS | 表格结构准确率 | 93.42% |
 | Formula CDM | 公式识别准确率 | 97.29% |
 | Reading Order | 阅读顺序 | 0.120 编辑距离 |
+
+---
+
+## Stage 6：MCP 封装层（2026 新增）
+
+将知识库封装为 MCP Server，让 Claude Desktop、Cursor、Codex App 等任意 MCP Client 直接调用，无需为每个客户端写适配代码。
+
+```mermaid
+flowchart LR
+    subgraph Clients["MCP Client（无需改代码）"]
+        C1[Claude Desktop]
+        C2[Cursor]
+        C3[Codex App]
+        C4[自定义 Agent]
+    end
+
+    subgraph Protocol["MCP 协议层"]
+        P1["Tools / Resources / Prompts"]
+    end
+
+    subgraph Servers["知识库 MCP Server"]
+        S1["product_kb\n选品知识库"]
+        S2["internal_data\n内部数据（本地隔离）"]
+    end
+
+    Clients --> Protocol --> Servers
+
+    classDef protocol fill:#fff3e0,stroke:#ff9800,stroke-width:2px;
+    class P1 protocol;
+```
+
+**最小可运行 MCP Server**：
+
+```python
+# mcp_server.py — 用 FastMCP 封装 ChromaDB
+# 安装：pip install mcp sentence-transformers chromadb
+from mcp.server.fastmcp import FastMCP
+import chromadb
+from sentence_transformers import SentenceTransformer
+
+mcp = FastMCP("product_kb")
+client = chromadb.PersistentClient(path="./chroma_db")
+collection = client.get_or_create_collection("product_kb_v2")
+model = SentenceTransformer("BAAI/bge-m3")
+
+@mcp.tool()
+def search_products(query: str, top_k: int = 5, market: str = None) -> str:
+    """在选品知识库中搜索产品。支持中英文查询。"""
+    q_vec = model.encode(query).tolist()
+    where = {"market": market} if market else None
+    results = collection.query(query_embeddings=[q_vec], n_results=top_k, where=where)
+
+    lines = []
+    for i, (doc, meta, dist) in enumerate(zip(
+        results["documents"][0], results["metadatas"][0], results["distances"][0]
+    )):
+        lines.append(
+            f"{i+1}. {meta.get('product_name','—')} | {meta.get('brand','—')} "
+            f"| ${meta.get('price','—')} | 相似度:{1-dist:.3f}"
+        )
+    return "\n".join(lines) if lines else "未找到相关产品"
+
+@mcp.tool()
+def get_market_overview(market: str) -> str:
+    """返回指定市场（US/UK/JP/DE）的品类和价格带分布。"""
+    from collections import Counter
+    all_meta = collection.get()["metadatas"]
+    items = [m for m in all_meta if m.get("market") == market]
+    if not items:
+        return f"暂无 {market} 市场数据"
+    cats = Counter(m.get("category", "未知") for m in items)
+    bands = Counter(m.get("price_band", "未知") for m in items)
+    return (f"{market} 市场：{len(items)} 条产品\n"
+            f"品类：{dict(cats)}\n价格带：{dict(bands)}")
+
+if __name__ == "__main__":
+    mcp.run()
+```
+
+**Claude Desktop 配置**（`~/Library/Application Support/Claude/claude_desktop_config.json`）：
+
+```json
+{
+  "mcpServers": {
+    "product_kb": {
+      "command": "python",
+      "args": ["/path/to/mcp_server.py"]
+    }
+  }
+}
+```
+
+配置完成后，在 Claude Desktop 中直接说"帮我搜索美国市场性价比高的便携充电产品"，即可自动调用 `search_products`。
+

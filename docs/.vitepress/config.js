@@ -4,10 +4,10 @@ import { withMermaid } from 'vitepress-plugin-mermaid'
 export default withMermaid(defineConfig({
   base: '/Kb2Agent/',
   title: "MKD Guide",
-  description: "多模态知识蒸馏完整指南",
+  description: "多模态知识蒸馏到智能体调用完整指南",
   cleanUrls: true,
   lastUpdated: true,
-  appearance: false, // 强制关闭深色模式切换
+  appearance: false,
 
   head: [
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
@@ -27,42 +27,71 @@ export default withMermaid(defineConfig({
     siteTitle: 'MKD Guide',
 
     nav: [
-      { text: '认知框架', link: '/knowledge/01-framework' },
-      { text: '工程实践', link: '/knowledge/03-scene-sops' },
-      { text: '完整 Pipeline', link: '/knowledge/10-e2e-pipeline' },
-      { text: '工具手册', link: '/knowledge/08-tools-appendix' },
+      {
+        text: '基础篇',
+        items: [
+          { text: '00. 导论：2026全景与反直觉洞察', link: '/knowledge/00-introduction' },
+          { text: '01. 认知框架：信息→知识→智慧', link: '/knowledge/01-framework' },
+          { text: '02. 产品形态决策矩阵', link: '/knowledge/02-decision-matrix' },
+        ]
+      },
+      {
+        text: '工程篇',
+        items: [
+          { text: '03. 10种输入场景完整SOP', link: '/knowledge/03-scene-sops' },
+          { text: '04. 全链路五阶段架构', link: '/knowledge/04-architecture' },
+          { text: '05. 数据安全与合规架构', link: '/knowledge/05-security-compliance' },
+          { text: '06. GraphRAG知识图谱构建', link: '/knowledge/05-graphrag' },
+          { text: '07. Agent调用 + MCP协议', link: '/knowledge/06-agent-call' },
+        ]
+      },
+      {
+        text: '进阶篇',
+        items: [
+          { text: '08. 架构选型深度指南', link: '/knowledge/07-advanced-theory' },
+          { text: '09. 推理模型时代的知识库', link: '/knowledge/09-reasoning-models' },
+          { text: '10. 成本模型与预算管理', link: '/knowledge/10-cost-model' },
+          { text: '15. Codex Prompts速查', link: '/knowledge/15-codex-prompts' },
+          { text: '16. VOC实战案例', link: '/knowledge/16-voc-case-study' },
+        ]
+      },
     ],
 
     sidebar: {
       '/knowledge/': [
         {
-          text: '认知基础',
+          text: '📖 基础篇 · 认知重建',
           collapsed: false,
           items: [
-            { text: '一、认知框架与全局地图', link: '/knowledge/01-framework' },
-            { text: '二、输入 × 输出决策矩阵', link: '/knowledge/02-decision-matrix' },
+            { text: '00. 导论：2026全景与10个反直觉洞察', link: '/knowledge/00-introduction' },
+            { text: '01. 认知框架：信息→知识→智慧的本质', link: '/knowledge/01-framework' },
+            { text: '02. 产品形态决策矩阵（含MCP第5形态）', link: '/knowledge/02-decision-matrix' },
           ]
         },
         {
-          text: '工程实践',
+          text: '⚙️ 工程篇 · 从数据到知识库',
           collapsed: false,
           items: [
-            { text: '三、10 种输入场景完整 SOP', link: '/knowledge/03-scene-sops' },
-            { text: '四、全链路技术架构', link: '/knowledge/04-architecture' },
-            { text: '五、GraphRAG 知识库构建', link: '/knowledge/05-graphrag' },
-            { text: '六、Agent 知识库调用', link: '/knowledge/06-agent-call' },
-            { text: '七、Agentic 检索分层理论', link: '/knowledge/07-advanced-theory' },
-            { text: '八、工具完整手册与选型决策树', link: '/knowledge/08-tools-appendix' },
-            { text: '九、Skill 蒸馏 9 大仓库解构', link: '/knowledge/09-skill-distillation-deep-dive' },
+            { text: '03. 10种输入场景完整SOP', link: '/knowledge/03-scene-sops' },
+            { text: '04. 全链路五阶段架构（+MCP封装）', link: '/knowledge/04-architecture' },
+            { text: '05. 数据安全与合规架构 🔴必读', link: '/knowledge/05-security-compliance' },
+            { text: '06. GraphRAG知识图谱构建', link: '/knowledge/05-graphrag' },
+            { text: '07. Agent调用 + MCP协议', link: '/knowledge/06-agent-call' },
           ]
         },
         {
-          text: '端到端 Pipeline',
+          text: '🚀 进阶篇 · 架构、成本与进化',
           collapsed: false,
           items: [
-            { text: '十、完整可运行 Pipeline', link: '/knowledge/10-e2e-pipeline' },
-            { text: '十一、知识库进化与闭环', link: '/knowledge/11-kb-evolution' },
-            { text: '十二、Agent 调用质量评估', link: '/knowledge/12-evaluation' },
+            { text: '08. 架构选型深度指南', link: '/knowledge/07-advanced-theory' },
+            { text: '09. 推理模型时代的知识库重构', link: '/knowledge/09-reasoning-models' },
+            { text: '10. 成本模型与预算管理', link: '/knowledge/10-cost-model' },
+            { text: '11. Skill蒸馏九大仓库解构', link: '/knowledge/09-skill-distillation-deep-dive' },
+            { text: '12. 完整可运行Pipeline', link: '/knowledge/10-e2e-pipeline' },
+            { text: '13. 知识库进化与自进化闭环', link: '/knowledge/11-kb-evolution' },
+            { text: '14. 评估质量体系', link: '/knowledge/12-evaluation' },
+            { text: '15. Codex Prompts与工具速查', link: '/knowledge/15-codex-prompts' },
+            { text: '16. VOC实战案例：Momcozy', link: '/knowledge/16-voc-case-study' },
           ]
         },
       ]
@@ -87,24 +116,24 @@ export default withMermaid(defineConfig({
   mermaid: {
     theme: 'base',
     themeVariables: {
-      background:        '#FDF8F6',
+      background:        '#FDF8F4',
       primaryColor:      '#F9D0D6',
       primaryBorderColor:'#C44A5E',
-      primaryTextColor:  '#35141A',
+      primaryTextColor:  '#2C1018',
       secondaryColor:    '#F5EDD4',
-      secondaryBorderColor:'#D8BE78',
-      secondaryTextColor:'#6b5a2a',
-      tertiaryColor:     '#DFF0DF',
-      tertiaryBorderColor:'#6E966E',
-      tertiaryTextColor: '#2d5c2d',
-      lineColor:         '#9B9795',
-      textColor:         '#59585E',
-      edgeLabelBackground:'#FDF8F6',
+      secondaryBorderColor:'#C9A84C',
+      secondaryTextColor:'#6b5020',
+      tertiaryColor:     '#DCF0DC',
+      tertiaryBorderColor:'#5E8B5E',
+      tertiaryTextColor: '#224d22',
+      lineColor:         '#9B8F8C',
+      textColor:         '#3A2428',
+      edgeLabelBackground:'#FDF8F4',
       noteBkgColor:      '#F5EDD4',
-      noteTextColor:     '#6b5a2a',
-      clusterBkg:        '#FCF5F2',
+      noteTextColor:     '#6b5020',
+      clusterBkg:        '#FAF3EE',
       clusterBorder:     '#D75C70',
-      titleColor:        '#35141A',
+      titleColor:        '#2C1018',
     }
   }
 }))
