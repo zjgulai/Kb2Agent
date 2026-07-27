@@ -529,7 +529,7 @@ npx repomix \
 | 公众人物（公开资料丰富）| `alchaincyf/nuwa-skill` | 思维框架 + 决策启发式 |
 | 同事/内部专家 | `titanwings/colleague-skill` | 工作方法 + 安全边界 |
 | 个人自我蒸馏 | `notdog1998/yourself-skill` | 自我意识模型 |
-| 情感陪伴（非生产）| `therealXiaomanChu/ex-skill` | ⚠️ 仅情绪价值，幻觉风险高 |
+| 情感陪伴（非生产）| `therealXiaomanChu/ex-skill` | [!] 仅情绪价值，幻觉风险高 |
 
 ### 完整 SOP：双轨提炼（铁律，不可合并）
 

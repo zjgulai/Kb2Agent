@@ -201,7 +201,7 @@ class KnowledgeHealthChecker:
 
     def _print_report(self, report: dict):
         """打印可读性强的健康度报告"""
-        status_emoji = {"healthy": "✅", "warning": "⚠️", "critical": "🔴"}
+        status_emoji = {"healthy": "(OK)", "warning": "[!]", "critical": "[P0]"}
 
         print(f"\n{'='*60}")
         print(f"知识库健康度报告 {report['timestamp'][:10]}")
@@ -211,17 +211,17 @@ class KnowledgeHealthChecker:
         print()
 
         dims = report["dimensions"]
-        print(f"📅 新鲜度: {dims['freshness']['score']:.0f}分 "
+        print(f"[日期] 新鲜度: {dims['freshness']['score']:.0f}分 "
               f"({dims['freshness']['stale']} 条过期/{dims['freshness']['total']} 条总计)")
-        print(f"🛠️  Skill质量: {dims['skills']['score']:.0f}分 "
+        print(f"[工具]  Skill质量: {dims['skills']['score']:.0f}分 "
               f"({dims['skills']['healthy']} 健康/"
               f"{dims['skills']['outdated']} 过期/"
               f"{dims['skills']['needs_review']} 待审)")
-        print(f"🕸️  孤岛率: {dims['orphans']['orphan_rate']:.1%} "
+        print(f"(web)  孤岛率: {dims['orphans']['orphan_rate']:.1%} "
               f"({dims['orphans']['orphan_count']}/{dims['orphans']['total_pages']} 页面孤立)")
 
         if report['status'] != 'healthy':
-            print(f"\n⚠️ 建议行动:")
+            print(f"\n[!] 建议行动:")
             if dims['freshness']['stale'] > 0:
                 print(f"  → 更新 {dims['freshness']['stale']} 条过期知识")
             if dims['skills']['outdated'] > 0:
@@ -275,7 +275,7 @@ class SkillEvaluator:
 
     def __init__(self):
         from openai import OpenAI
-        # ⚠️ 重要：评估模型必须和蒸馏模型不同（防止自评偏差）
+        # [!] 重要：评估模型必须和蒸馏模型不同（防止自评偏差）
         # LLM 自评准确率仅 46.4%（SkillLens 实证）
         self.llm = OpenAI()
         self.eval_model = "gpt-4o"  # 不能是 gpt-4o-mini
@@ -367,7 +367,7 @@ class SkillEvolver:
         logger.info(f"基线评分: {old_score:.1f} | 优化维度: {dimension}")
 
         # CHECKPOINT：打印基线，等待人工确认（darwin 的 human-in-the-loop）
-        logger.warning(f"🔴 CHECKPOINT: 基线评分 {old_score:.1f}，准备优化 [{dimension}]")
+        logger.warning(f"[P0] CHECKPOINT: 基线评分 {old_score:.1f}，准备优化 [{dimension}]")
         confirm = input("是否继续优化？(y/n): ").strip().lower()
         if confirm != 'y':
             return {"improved": False, "reason": "用户取消"}
@@ -405,12 +405,12 @@ class SkillEvolver:
             subprocess.run(["git", "add", str(skill_path)])
             subprocess.run(["git", "commit", "-m",
                 f"skill: improve [{dimension}] {old_score:.1f}→{new_score:.1f}"])
-            logger.success(f"✅ 改进保留: {old_score:.1f} → {new_score:.1f}")
+            logger.success(f"(OK) 改进保留: {old_score:.1f} → {new_score:.1f}")
             return {"improved": True, "old_score": old_score, "new_score": new_score}
         else:
             # git revert（不用 reset --hard！）
             skill_path.write_text(original_content)
-            logger.warning(f"❌ 改进未达标，回滚: {new_score:.1f} <= {old_score:.1f}")
+            logger.warning(f"(X) 改进未达标，回滚: {new_score:.1f} <= {old_score:.1f}")
             return {"improved": False, "old_score": old_score, "new_score": new_score}
 ```
 
@@ -511,7 +511,7 @@ class ConflictDetector:
             with open(conflict_file, 'w') as f:
                 json.dump(conflict_doc, f, ensure_ascii=False, indent=2)
 
-            logger.warning(f"🔴 发现知识冲突，已记录: {conflict_file}")
+            logger.warning(f"[P0] 发现知识冲突，已记录: {conflict_file}")
             new_entry["has_conflict"] = True
             new_entry["conflict_file"] = str(conflict_file)
 ```
@@ -591,14 +591,14 @@ def post_ingest_check(ingest_result: dict):
     检查新增知识是否引入了冲突
     """
     if ingest_result["stats"]["validated_count"] == 0:
-        logger.warning("⚠️ 本次 Ingest 没有任何知识通过验证，请检查源文件质量")
+        logger.warning("[!] 本次 Ingest 没有任何知识通过验证，请检查源文件质量")
         return
 
     acceptance_rate = ingest_result["stats"]["acceptance_rate"]
     if acceptance_rate < 0.3:
-        logger.warning(f"⚠️ 知识通过率偏低: {acceptance_rate:.1%}，建议检查三重验证参数")
+        logger.warning(f"[!] 知识通过率偏低: {acceptance_rate:.1%}，建议检查三重验证参数")
 
-    logger.success(f"✅ Ingest 健康: 通过率 {acceptance_rate:.1%}")
+    logger.success(f"(OK) Ingest 健康: 通过率 {acceptance_rate:.1%}")
 ```
 
 ---
@@ -643,7 +643,7 @@ flowchart TD
         F2 --> F3["触发重新采集\n自动更新"]
     end
     subgraph L2["第二层：质量进化"]
-        Q1["用户反馈\n👍👎信号"] --> Q2["低质量标记\n置信度下调"]
+        Q1["用户反馈\n+1-1信号"] --> Q2["低质量标记\n置信度下调"]
         Q2 --> Q3["对抗验证\n矛盾检测"]
     end
     subgraph L3["第三层：覆盖进化"]
@@ -732,7 +732,7 @@ if __name__ == "__main__":
     r = check_freshness(col)
 
     print(f"知识库新鲜度报告 {datetime.now().strftime('%Y-%m-%d')}")
-    print(f"总计: {r.total} | 🟢新鲜: {r.green} | 🟡临期: {r.yellow} | 🔴过期: {r.expired}")
+    print(f"总计: {r.total} | [OK]新鲜: {r.green} | [P1]临期: {r.yellow} | [P0]过期: {r.expired}")
     if r.expired_items:
         print(f"\n过期知识（前5条）：")
         for item in r.expired_items[:5]:
@@ -801,7 +801,7 @@ def record_prediction(category: str, market: str, score: int, assumptions: list[
     }
     with open(PREDICTIONS_FILE, "a") as f:
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
-    print(f"✅ 预测已记录: {category}/{market} 机会分{score}")
+    print(f"(OK) 预测已记录: {category}/{market} 机会分{score}")
 
 def validate_prediction(category: str, market: str,
                         actual_revenue: float, predicted_revenue: float):

@@ -39,7 +39,7 @@ MCP 协议将知识库从"被调用的服务"升级为"通用工具基础设施"
 
 ```mermaid
 flowchart LR
-    subgraph Clients ["MCP Client 生态（无需改代码）"]
+    subgraph Clients ["MCP Client - No Adapter Needed"]
         A[Claude Desktop]
         B[Cursor]
         C[Codex App]
@@ -48,7 +48,7 @@ flowchart LR
     
     E["MCP 协议层\nTools / Resources / Prompts"]
     
-    subgraph Servers ["MCP Server 层（知识库）"]
+    subgraph Servers ["MCP Server Layer"]
         F[选品知识库\nproduct_kb]
         G[Firecrawl\n采集服务]
         H[ChromaDB\n向量库]

@@ -133,7 +133,7 @@ from corpus2skill import serve
 **Corpus2Skill 的核心优势**：Agent 知道"还有多少没看"，可以回溯，可以跨分支综合——这是向量检索永远无法提供的结构性可见性。
 
 **Agent Skill 原子性约束与降级协议（防执行崩溃）**：
-> ⚠️ **The 3-7-1 Rule**：一个合格的 SKILL.md 必须满足：最多 3 层逻辑嵌套、最多 7 个主要执行步骤、单一的输入输出结构。
+> [!] **The 3-7-1 Rule**：一个合格的 SKILL.md 必须满足：最多 3 层逻辑嵌套、最多 7 个主要执行步骤、单一的输入输出结构。
 - **降级拆解**：若蒸馏出的长视频或复杂流程超过 7 步，必须拆分为一个 `MASTER_SKILL.md` 引用多个子 Skill。
 - **硬编码降级**：若 Skill 中包含大量复杂的 IF-THEN 判断，不要用自然语言让 LLM 去猜，必须将其提取为 Python 脚本并封装为 MCP 工具，SKILL 仅负责调用该工具。
 
@@ -394,10 +394,10 @@ MCP 不是"插件"，是 2026 年 Agent 与知识库连接的**标准协议**。
 
 | 维度 | 传统 FastAPI 封装 | MCP Server 封装 |
 |------|-----------------|----------------|
-| 每个 Agent 都需要 | 写适配代码调用 REST API | ✅ 无需，MCP 统一 |
-| 新增知识库 | 每个 Agent 改代码 | ✅ 只需注册新 Server |
-| Claude Desktop 直接用 | ❌ 不支持 | ✅ 原生支持 |
-| Cursor 直接用 | ❌ 需要 Extension | ✅ 原生支持 |
+| 每个 Agent 都需要 | 写适配代码调用 REST API | (OK) 无需，MCP 统一 |
+| 新增知识库 | 每个 Agent 改代码 | (OK) 只需注册新 Server |
+| Claude Desktop 直接用 | (X) 不支持 | (OK) 原生支持 |
+| Cursor 直接用 | (X) 需要 Extension | (OK) 原生支持 |
 | 工程量 | 每端各写一套 | 一次封装，多端复用 |
 
 ### MCP 协议三类能力

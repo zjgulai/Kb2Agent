@@ -37,11 +37,11 @@
 ### 场景 1：规则稳定 → 规则引擎或 Fine-tuning 更好
 
 ```python
-# ❌ 错误做法：把评分规则塞进 RAG
+# (X) 错误做法：把评分规则塞进 RAG
 # 每次查询都"重新理解"规则，引入不确定性
 results = kb.search("选品评分标准是什么")
 
-# ✅ 正确做法：规则引擎直接计算
+# (OK) 正确做法：规则引擎直接计算
 def opportunity_score(demand: float, competition: float,
                       profit: float, operation: float) -> float:
     return demand * 0.40 + competition * 0.30 + profit * 0.25 + operation * 0.05
@@ -59,8 +59,8 @@ def opportunity_score(demand: float, competition: float,
 
 ```sql
 -- 用户问："本月太阳能充电器销售额是多少？"
--- ❌ RAG 会"猜"出 $245K（可能错）
--- ✅ NL2SQL 返回精确值
+-- (X) RAG 会"猜"出 $245K（可能错）
+-- (OK) NL2SQL 返回精确值
 SELECT SUM(revenue) FROM sales_orders
 WHERE category='solar_charger' AND month='2026-07'
 ```
@@ -68,13 +68,13 @@ WHERE category='solar_charger' AND month='2026-07'
 ### 场景 4：单文档短文本 + 低频查询 → 长上下文直接加载
 
 ```python
-# ❌ 过度工程化：给一份10页的报告建 RAG
+# (X) 过度工程化：给一份10页的报告建 RAG
 chunks = split_document(report)          # 切块
 embeddings = embed(chunks)               # 向量化
 kb.add(chunks, embeddings)               # 入库
 result = kb.search(query)               # 检索
 
-# ✅ 直接加载（Gemini 1.5 Pro 支持 2M tokens）
+# (OK) 直接加载（Gemini 1.5 Pro 支持 2M tokens）
 response = client.messages.create(
     model="claude-3-5-sonnet-20241022",
     max_tokens=4096,
@@ -87,10 +87,10 @@ response = client.messages.create(
 ### 场景 5：纯数值计算 → Python 函数直接处理
 
 ```python
-# ❌ 不要用 LLM 计算统计量
+# (X) 不要用 LLM 计算统计量
 result = llm.ask("计算这些销售数据的中位数和标准差")  # 可能出错
 
-# ✅ pandas 直接计算
+# (OK) pandas 直接计算
 stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 ```
 
@@ -185,15 +185,15 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 如果你要在生产环境中落地这套体系，请务必带着批判性思维：
 
 1.  **去其糟粕（不要做的事）**：
-    *   **❌ 拒绝迷信大纲提取**：很多工具把书“蒸馏”成一个目录大纲，Agent 看了大纲依然不知道具体怎么执行。**知识卡片/大纲 是给人看的，不是给 Agent 用的。**
-    *   **❌ 拒绝纯语气模仿（Cosplay）**：像 `ex-skill`（克隆前任）本质是情绪价值的玩具，如果把 `nuwa-skill` 仅用于让 Agent 说话像乔布斯，毫无业务价值。
+    *   **(X) 拒绝迷信大纲提取**：很多工具把书“蒸馏”成一个目录大纲，Agent 看了大纲依然不知道具体怎么执行。**知识卡片/大纲 是给人看的，不是给 Agent 用的。**
+    *   **(X) 拒绝纯语气模仿（Cosplay）**：像 `ex-skill`（克隆前任）本质是情绪价值的玩具，如果把 `nuwa-skill` 仅用于让 Agent 说话像乔布斯，毫无业务价值。
 
 2.  **取其精华（必须做的事）**：
-    *   **✅ 强制双轨提炼 (Dual-Track Distillation)**：
+    *   **(OK) 强制双轨提炼 (Dual-Track Distillation)**：
         效仿 `nuwa-skill`，将业务专家经验蒸馏时，必须切分为 **“决策原则 (Capability)”** 与 **“安全边界 (Contraindications)”**。不要把他们混在一整段文字里。
-    *   **✅ 三重验证机制 (Triple Validation)**：
+    *   **(OK) 三重验证机制 (Triple Validation)**：
         效仿 `cangjie-skill`：所有从原始语料（无论是专家开会还是业务文档）提炼出的结论，必须满足“有2处独立佐证 + 具备预测力 + 非废话常识”，否则直接在蒸馏期淘汰（淘汰率可达 50%）。这极大降低了注入 Knowledge Base 的“有毒数据”。
-    *   **✅ 引入达尔文棘轮 (The Darwinian Ratchet)**：
+    *   **(OK) 引入达尔文棘轮 (The Darwinian Ratchet)**：
         把每个生成的 `SKILL.md` 当作一段 Python 代码来看待。每次更新 Skill，必须跑一次 `test-prompts.json` 回归测试。只有当 9 维度综合得分（`val_bpb`）提升时，才允许覆盖入库。
 
 #### 落地实践：认知克隆的终局工程链路

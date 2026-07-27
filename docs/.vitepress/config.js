@@ -64,7 +64,7 @@ export default withMermaid(defineConfig({
     sidebar: {
       '/knowledge/': [
         {
-          text: '📖 基础篇 · 认知重建',
+          text: '基础篇 · 认知重建',
           collapsed: false,
           items: [
             { text: '00. 导论：2026全景与10个反直觉洞察', link: '/knowledge/00-introduction' },
@@ -73,18 +73,18 @@ export default withMermaid(defineConfig({
           ]
         },
         {
-          text: '⚙️ 工程篇 · 从数据到知识库',
+          text: '工程篇 · 从数据到知识库',
           collapsed: false,
           items: [
             { text: '03. 10种输入场景完整SOP', link: '/knowledge/03-scene-sops' },
             { text: '04. 全链路五阶段架构（+MCP封装）', link: '/knowledge/04-architecture' },
-            { text: '05. 数据安全与合规架构 🔴必读', link: '/knowledge/05-security-compliance' },
+            { text: '05. 数据安全与合规架构（必读）', link: '/knowledge/05-security-compliance' },
             { text: '06. GraphRAG知识图谱构建', link: '/knowledge/05-graphrag' },
             { text: '07. Agent调用 + MCP协议', link: '/knowledge/06-agent-call' },
           ]
         },
         {
-          text: '🚀 进阶篇 · 架构、成本与进化',
+          text: '进阶篇 · 架构、成本与进化',
           collapsed: false,
           items: [
             { text: '08. 架构选型深度指南', link: '/knowledge/07-advanced-theory' },

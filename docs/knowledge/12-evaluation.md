@@ -59,11 +59,11 @@ flowchart TD
 
 | 类型 | 描述 | 危险级别 |
 | :--- | :--- | :--- |
-| **内在幻觉** | Agent 生成的内容与检索到的上下文矛盾 | 🔴 高 |
-| **外在幻觉** | 内容听起来合理但无法在任何来源中找到 | 🔴 高 |
-| **引用幻觉** | 引用了不存在的"来源"或"研究" | 🔴 极高 |
-| **数值幻觉** | 数字/日期/版本号不正确 | 🟡 中 |
-| **实体幻觉** | 人名/产品名/公司名不正确 | 🟡 中 |
+| **内在幻觉** | Agent 生成的内容与检索到的上下文矛盾 | [P0] 高 |
+| **外在幻觉** | 内容听起来合理但无法在任何来源中找到 | [P0] 高 |
+| **引用幻觉** | 引用了不存在的"来源"或"研究" | [P0] 极高 |
+| **数值幻觉** | 数字/日期/版本号不正确 | [P1] 中 |
+| **实体幻觉** | 人名/产品名/公司名不正确 | [P1] 中 |
 
 ### 幻觉检测实现
 
@@ -294,11 +294,11 @@ class EvaluationDashboard:
         """打印人类可读的报告"""
         report = self.report()
         if "error" in report:
-            print(f"⚠️ {report['error']}")
+            print(f"[!] {report['error']}")
             return
 
         metrics = report["metrics"]
-        status_icon = "✅" if report["status"] == "healthy" else "⚠️"
+        status_icon = "(OK)" if report["status"] == "healthy" else "[!]"
 
         print(f"\n{'='*50}")
         print(f"知识库评估报告 ({report['period']})")
@@ -306,11 +306,11 @@ class EvaluationDashboard:
         print(f"总评估次数: {report['total_evaluations']}")
         print(f"\n核心指标:")
         print(f"  忠实度 (Faithfulness):  {metrics['avg_faithfulness']:.1%} "
-              f"{'✅' if metrics['avg_faithfulness'] > 0.9 else '⚠️'}")
+              f"{'(OK)' if metrics['avg_faithfulness'] > 0.9 else '[!]'}")
         print(f"  任务完成率:              {metrics['task_success_rate']:.1%} "
-              f"{'✅' if metrics['task_success_rate'] > 0.8 else '⚠️'}")
+              f"{'(OK)' if metrics['task_success_rate'] > 0.8 else '[!]'}")
         print(f"  幻觉检出率:              {metrics['hallucination_rate']:.1%} "
-              f"{'✅' if metrics['hallucination_rate'] < 0.1 else '🔴'}")
+              f"{'(OK)' if metrics['hallucination_rate'] < 0.1 else '[P0]'}")
         print(f"\n系统状态: {status_icon} {report['status'].upper()}")
         print(f"{'='*50}\n")
 ```
@@ -324,11 +324,11 @@ class EvaluationDashboard:
 LLM 自评准确率仅 46.4%（SkillLens 论文实证）。用同一个 LLM 既生成回答、又评估回答，等于用同一张嘴既说谎又判断自己是否在说谎。
 
 ```python
-# ❌ 错误：用同一模型生成和评估
+# (X) 错误：用同一模型生成和评估
 answer = gpt4o.generate(question)
 score = gpt4o.evaluate(answer)  # 这个评分不可信
 
-# ✅ 正确：用不同模型评估
+# (OK) 正确：用不同模型评估
 answer = gpt4o_mini.generate(question)
 score = gpt4o.evaluate(answer)  # 不同能力级别，更可信
 ```
@@ -369,7 +369,7 @@ def skill_iteration_with_eval(skill_path: str):
             response=response
         )
         if hall_result["severity"] in ["high", "medium"]:
-            logger.warning(f"⚠️ 发现幻觉: {test['question'][:50]}...")
+            logger.warning(f"[!] 发现幻觉: {test['question'][:50]}...")
 
     # 3. 基线评估（9维度）
     baseline_score = evaluator.evaluate(skill_content)["total_score"]
@@ -379,9 +379,9 @@ def skill_iteration_with_eval(skill_path: str):
     for dim in SkillEvaluator.DIMENSIONS.keys():
         result = evolver.evolve_one_dimension(skill_path, dim)
         if result["improved"]:
-            logger.success(f"✅ [{dim}] 提升: {result['old_score']:.1f} → {result['new_score']:.1f}")
+            logger.success(f"(OK) [{dim}] 提升: {result['old_score']:.1f} → {result['new_score']:.1f}")
         else:
-            logger.info(f"⏭️ [{dim}] 未提升，跳过")
+            logger.info(f">> [{dim}] 未提升，跳过")
 
     logger.success(f"Skill 迭代完成: {skill_path}")
 
@@ -516,7 +516,7 @@ def run_ragas_eval(dataset: Dataset) -> dict:
     }
     print("ragas 评估结果:")
     for k, v in scores.items():
-        status = "✅" if v > 0.7 else ("⚠️" if v > 0.5 else "❌")
+        status = "(OK)" if v > 0.7 else ("[!]" if v > 0.5 else "(X)")
         print(f"  {status} {k}: {v}")
     return scores
 ```

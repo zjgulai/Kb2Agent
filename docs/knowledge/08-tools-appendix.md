@@ -3,32 +3,32 @@
 > **使用方式**：先看选型决策树确定你需要哪个工具，再查对应工具的完整安装和使用指引。每个工具都标注了 GPU 要求、操作系统兼容性和实际适用边界。
 
 :::tip 快速优先级说明
-- 🔥 **必装** — 当前场景首选，直接用
-- ⭐ **推荐** — 首选不满足时的备选
-- 📚 **了解** — 特殊场景或企业级需求
-- 🟢 2026年活跃维护 | 🟡 维护放缓 | 🔴 停止/过时 | 🆕 新兴热门
+- [首选] **必装** — 当前场景首选，直接用
+- [推荐] **推荐** — 首选不满足时的备选
+- [参考] **了解** — 特殊场景或企业级需求
+- [OK] 2026年活跃维护 | [P1] 维护放缓 | [P0] 停止/过时 | [新] 新兴热门
 :::
 
 ## 快速速查（按阶段，每阶段首选）
 
-| 阶段 | 🔥首选工具 | 状态 | 一句话用途 |
+| 阶段 | [首选]首选工具 | 状态 | 一句话用途 |
 |------|-----------|------|-----------|
-| 采集 | firecrawl | 🟢 | 网页→Markdown，MCP原生，RAG第一站 |
-| PDF提取 | MinerU | 🟢 | 工业级PDF，176语言，表格不失真 |
-| 格式转换 | markitdown（微软） | 🆕 | 10+格式→Markdown统一 |
-| 结构化提取 | Ollama+Qwen2.5（内部数据）| 🟢 | **内部数据必用**，本地不出境 |
-| 输出约束 | instructor | 🟢 | Pydantic约束LLM输出为严格JSON |
-| Embedding | BGE-M3 | 🟢 | 多语言稠密+稀疏，MIT协议 |
-| 向量库 | Qdrant | 🟢 | 生产首选，性能/运维平衡最优 |
-| 原型向量库 | ChromaDB | 🟢 | 3行代码，验证首选 |
-| 图谱 | Kùzu | 🟢 | 嵌入式，SQLite级易用 |
-| RAG框架 | LlamaIndex | 🟢 | 数据密集型，检索效率最优 |
-| Agent | LangGraph | 🟢 | 有状态多步Agent，检查点+回溯 |
-| **MCP协议** | **modelcontextprotocol/python-sdk** | 🟢 | **2026标准，知识库→通用工具** |
-| 本地LLM | Ollama | 🟢 | 一行命令，167k⭐ |
-| RAG评估 | ragas | 🟢 | 忠实度/相关性/精准度专用评估 |
-| LLM监控 | langfuse | 🟢 | 追踪+Prompt版本+评估一体 |
-| 安全/PII | presidio（微软） | 🟢 | PII检测脱敏，合规必备 |
+| 采集 | firecrawl | [OK] | 网页→Markdown，MCP原生，RAG第一站 |
+| PDF提取 | MinerU | [OK] | 工业级PDF，176语言，表格不失真 |
+| 格式转换 | markitdown（微软） | [新] | 10+格式→Markdown统一 |
+| 结构化提取 | Ollama+Qwen2.5（内部数据）| [OK] | **内部数据必用**，本地不出境 |
+| 输出约束 | instructor | [OK] | Pydantic约束LLM输出为严格JSON |
+| Embedding | BGE-M3 | [OK] | 多语言稠密+稀疏，MIT协议 |
+| 向量库 | Qdrant | [OK] | 生产首选，性能/运维平衡最优 |
+| 原型向量库 | ChromaDB | [OK] | 3行代码，验证首选 |
+| 图谱 | Kùzu | [OK] | 嵌入式，SQLite级易用 |
+| RAG框架 | LlamaIndex | [OK] | 数据密集型，检索效率最优 |
+| Agent | LangGraph | [OK] | 有状态多步Agent，检查点+回溯 |
+| **MCP协议** | **modelcontextprotocol/python-sdk** | [OK] | **2026标准，知识库→通用工具** |
+| 本地LLM | Ollama | [OK] | 一行命令，167k[推荐] |
+| RAG评估 | ragas | [OK] | 忠实度/相关性/精准度专用评估 |
+| LLM监控 | langfuse | [OK] | 追踪+Prompt版本+评估一体 |
+| 安全/PII | presidio（微软） | [OK] | PII检测脱敏，合规必备 |
 
 ---
 
@@ -539,7 +539,7 @@ with open("knowledge.md", "r") as f:
 result = rag.query("主要风险主题", param=QueryParam(mode="mix"))
 ```
 
-**⚠️ 关键约束**：Embedding 模型选定后**不能更换**（更换需重新 embed 全部内容）
+**[!] 关键约束**：Embedding 模型选定后**不能更换**（更换需重新 embed 全部内容）
 
 ---
 
@@ -631,7 +631,7 @@ pip install colpali-engine
 | `kangarooking/cangjie-skill` | 4.6K | Skill蒸馏 | 书/视频/播客 → 方法论 Skill |
 | `alchaincyf/nuwa-skill` | — | Skill蒸馏 | 公众人物 → 思维框架 Skill |
 | `alchaincyf/darwin-skill` | — | Skill优化 | Skill 自动进化，棘轮机制 |
-| `therealXiaomanChu/ex-skill` | 5.9K | 人格克隆 | ⚠️ 仅情绪价值 |
+| `therealXiaomanChu/ex-skill` | 5.9K | 人格克隆 | [!] 仅情绪价值 |
 | `notdog1998/yourself-skill` | 3.2K | 人格克隆 | 自我蒸馏，数字永生 |
 | `tmstack/awesome-persona-skills` | 3.4K | 导航目录 | Skill 生态聚合索引 |
 | `microsoft/Resource2Skill` | 278 | Skill蒸馏 | 工程操作 → 带代码的 Skill |

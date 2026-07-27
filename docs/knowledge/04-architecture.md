@@ -385,7 +385,7 @@ LIGHTRAG_PROD_CONFIG = {
     "graph_storage": "Neo4j",         # 知识图谱
     "doc_status_storage": "PostgreSQL",
 
-    # ⚠️ Embedding 模型一旦选定不能更换
+    # [!] Embedding 模型一旦选定不能更换
     "embedding_model": "BAAI/bge-m3", # 多语言，低维快速
     "embedding_dim": 1024,
 
@@ -545,7 +545,7 @@ async def hybrid_retrieve(
 
 ```mermaid
 flowchart LR
-    subgraph Clients["MCP Client（无需改代码）"]
+    subgraph Clients["MCP Client - Direct Connect"]
         C1[Claude Desktop]
         C2[Cursor]
         C3[Codex App]

@@ -29,7 +29,7 @@ flowchart LR
         Q3["混合查询\nmix模式"]
     end
 
-    subgraph MCP["MCP封装层（2026）"]
+    subgraph MCP["MCP Layer 2026"]
         M["GraphRAG MCP Server\ngraphrag_search(query, mode)"]
     end
 
@@ -67,8 +67,8 @@ flowchart LR
 |------|----------|----------|
 | 检索单元 | 文本块（chunk） | 实体 + 关系 + 社区摘要 |
 | 检索操作 | 余弦相似度 | 图遍历 + 社区聚合 |
-| 多跳推理 | ❌ 无法原生支持 | ✅ 原生支持（沿边遍历）|
-| 全局综合 | ❌ 无法跨全库综合 | ✅ 社区摘要支持 |
+| 多跳推理 | (X) 无法原生支持 | (OK) 原生支持（沿边遍历）|
+| 全局综合 | (X) 无法跨全库综合 | (OK) 社区摘要支持 |
 | 索引成本 | 低（仅向量化）| 高（LLM 抽取实体关系）|
 | 更新复杂度 | 低（增量更新）| 高（全量或增量重索引）|
 | 适合查询 | 事实查找、精确检索 | 主题综合、关系推理 |
@@ -89,8 +89,8 @@ flowchart LR
 | **索引成本（500页）** | $50-200，约45分钟 | ~$0.50，约3分钟 | 按交互量（实时更新）|
 | **全局查询质量** | 优秀（社区层级摘要）| 有限（无层级社区检测）| 不适合此场景 |
 | **多跳推理** | 强 | 中等 | 强（Agent上下文内）|
-| **时态感知** | ❌ 无 | ❌ 无 | ✅ 核心特性（双时态）|
-| **增量更新** | 复杂（需重索引）| ✅ 简单（增量更新）| ✅ 原生实时更新 |
+| **时态感知** | (X) 无 | (X) 无 | (OK) 核心特性（双时态）|
+| **增量更新** | 复杂（需重索引）| (OK) 简单（增量更新）| (OK) 原生实时更新 |
 | **GitHub Stars** | ~14K★ | ~22K★（增速最快）| — |
 | **生产推荐** | 静态语料 + 需要全局查询 | 动态语料 / 成本敏感 | 长运行 Agent + 知识需随时间演化 |
 
@@ -116,7 +116,7 @@ Stage 2: 实体与关系抽取（Entity & Relation Extraction）
     - 实体（Entity）：人/组织/产品/概念等
     - 关系（Relationship）：(entity_A, relation_type, entity_B)
     - 关键声明（Key Claims）
-  · ⚠️ 最耗费 Token 的阶段（占总索引成本 58%）
+  · [!] 最耗费 Token 的阶段（占总索引成本 58%）
   · LightRAG：同时提取高级关键词（主题标签）和低级关键词（具体实体）
 
 Stage 3: 社区检测（Community Detection）
@@ -131,7 +131,7 @@ Stage 4: 双存储写入（Dual Storage）
   │  存：实体+关系    │  存：chunk + 实体 + 关系的   │
   │  节点边属性       │  向量嵌入                    │
   └──────────────────┴────────────────────────────┘
-  ⚠️ 关键：两侧必须共享相同 ID（避免 ID 漂移导致孤儿节点）
+  [!] 关键：两侧必须共享相同 ID（避免 ID 漂移导致孤儿节点）
 
 Stage 5: 查询路由（Query Routing）
   · local 模式：精确实体邻居遍历（精确事实查找）
@@ -229,7 +229,7 @@ pip install graphrag
 # 初始化项目
 graphrag init --root ./graphrag_project
 
-# ⚠️ 每次小版本升级都要重新 init：
+# [!] 每次小版本升级都要重新 init：
 # graphrag init --root ./graphrag_project --force
 ```
 
@@ -258,7 +258,7 @@ entity_extraction:
 # 自动生成针对你的数据的定制提示词（强烈建议）
 graphrag prompt-tune --root ./graphrag_project --config settings.yaml
 
-# 索引（⚠️ 耗时耗钱，先用小样本测试）
+# 索引（[!] 耗时耗钱，先用小样本测试）
 graphrag index --root ./graphrag_project
 ```
 
@@ -388,7 +388,7 @@ LightRAG 需要四类存储，生产环境推荐：
 - 向量维度上限：Neo4j 原生向量索引最大 4096 维；超过则必须用独立向量库
 - Embedding 模型选定后不能随意更换（更换需完全重新嵌入）
 
-**⚠️ 架构生命周期生命线：三态存储的 ACID 一致性与级联删除 (Cascade Invalidation)**
+**[!] 架构生命周期生命线：三态存储的 ACID 一致性与级联删除 (Cascade Invalidation)**
 在 `向量库 + 图谱 + Skill文件` 并存的系统中，最致命的架构腐缩是**孤儿知识**。当源文档被更新或作废时：
 1. **统一知识寻址协议 (URT)**：所有入库的 Chunk(向量)、Edge(图谱)、Entry(Skill) 必须强绑定同一个 `source_document_hash`。
 2. **事件驱动垃圾回收 (GC)**：引入 Webhook 层。当监听到源文件变更，触发级联删除：
