@@ -215,3 +215,9 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 
 **落地方案结论（混合架构是唯一解）**：
 构建**意图分类器 (Intent Router)** 或引入 **UnWeaver (实体增强 Embedding)**（在不建图的情况下，用 LLM 抽取实体后强制附着在 Embedding 的尾部）。只有在聚合、归纳意图极为明显时，才使用 GraphRAG。
+
+---
+
+:::tip → 下一章
+架构选型完成后，了解推理模型如何重构知识库策略 → [09-reasoning-models](09-reasoning-models.md)
+:::

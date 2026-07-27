@@ -630,3 +630,9 @@ if __name__ == "__main__":
 
 配置完成后，在 Claude Desktop 中直接说"帮我搜索美国市场性价比高的便携充电产品"，即可自动调用 `search_products`。
 
+
+---
+
+:::tip → 下一章
+架构理解后，先看数据安全合规（P0必读） → [05-security-compliance](05-security-compliance.md)
+:::

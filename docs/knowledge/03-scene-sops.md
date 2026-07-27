@@ -1,4 +1,4 @@
-# 第三部分：10 种输入场景完整工程 SOP
+# 第三章：10 种输入场景完整工程 SOP
 
 > **阅读方式**：每个场景严格遵循同一结构——小白认知比喻 → 微观任务拆解 → GitHub 仓库选型表（分环境）→ 可运行 SOP → 天坑避免。所有仓库均经过一手验证。
 
@@ -828,3 +828,9 @@ TEMPLATE
 | 公众人物思维框架 | 任意 | nuwa-skill | `alchaincyf/nuwa-skill` |
 | BI 看板数据 | 任意 | Playwright CDP 拦截 | `microsoft/playwright` |
 | 架构图/流程图 | 有 | ColPali 嵌入 + VLM Mermaid | `illuin-tech/colpali` |
+
+---
+
+:::tip → 下一章
+场景SOP到手，深入理解全链路技术架构 → [04-architecture](04-architecture.md)
+:::

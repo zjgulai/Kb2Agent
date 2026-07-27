@@ -558,3 +558,9 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 5. **怎么验收**：测试脚本、样例请求、报表或评估指标。
 
 只要这五件事说完整，Codex App / Cursor / Claude 基本就能从“写几段代码”升级成“帮你搭完整知识库工程”。
+
+---
+
+:::tip → 下一章
+有了Prompt模板后，看真实选品场景的完整落地案例 → [16-voc-case-study](16-voc-case-study.md)
+:::

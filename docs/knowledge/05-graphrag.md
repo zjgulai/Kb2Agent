@@ -1,10 +1,57 @@
-# 第五部分：GraphRAG 知识库构建
+# 第六章：GraphRAG 知识图谱构建
 
-> **前四部分解决了「蒸馏」**，这一部分解决「如何构建可被复杂查询的知识库」——GraphRAG 是普通向量库的升级选项，不是替代。
+> **前四章解决了数据接入与结构化提取**，本章解决「如何构建可被复杂查询的知识库」——GraphRAG 是普通向量库的升级选项，不是替代。
+
+:::tip 本章学习路径
+1. 先理解 **为什么需要图谱**（6.1）
+2. 选择适合你场景的 **图谱工具**（6.2 对比表）
+3. 按需实现 **LightRAG**（轻量首选）或 **Graphiti**（时态场景）
+4. 最后封装为 **MCP Server**（6.7，让 Agent 直接调用）
+:::
+
+```mermaid
+flowchart LR
+    subgraph Input["知识来源"]
+        D1["文档/PDF"]
+        D2["网页数据"]
+        D3["内部数据库"]
+    end
+
+    subgraph Graph["图谱层"]
+        E["实体抽取\nLLM提取三元组"]
+        G["图数据库\nNeo4j / Kùzu"]
+        C["社区摘要\n主题聚合"]
+    end
+
+    subgraph Query["查询层"]
+        Q1["局部查询\n实体邻居检索"]
+        Q2["全局查询\n跨文档主题综合"]
+        Q3["混合查询\nmix模式"]
+    end
+
+    subgraph MCP["MCP封装层（2026）"]
+        M["GraphRAG MCP Server\ngraphrag_search(query, mode)"]
+    end
+
+    Input --> E --> G --> C
+    G --> Q1
+    C --> Q2
+    Q1 & Q2 --> Q3
+    Q3 --> M
+
+    classDef input fill:#e3f2fd,stroke:#1d4ed8,color:#1e3a8a;
+    classDef graph fill:#e0f2f1,stroke:#0f766e,color:#134e4a;
+    classDef query fill:#f3e5f5,stroke:#9333ea,color:#581c87;
+    classDef mcp fill:#fff3e0,stroke:#ea580c,color:#9a3412;
+    class D1,D2,D3 input;
+    class E,G,C graph;
+    class Q1,Q2,Q3 query;
+    class M mcp;
+```
 
 ---
 
-### 5.1 为什么需要 GraphRAG？向量库的根本局限
+## 6.1 为什么需要 GraphRAG？向量库的根本局限
 
 向量 RAG 是一台**查找机**：找到与查询语义相似的文本块。它能回答"退款政策是什么？"，但无法回答：
 
@@ -34,7 +81,7 @@
 
 ---
 
-### 5.2 三大 GraphRAG 框架横向对比
+## 6.2 三大 GraphRAG 框架横向对比
 
 | | Microsoft GraphRAG | LightRAG（HKUDS）| Graphiti（Zep）|
 |---|---|---|---|
@@ -54,7 +101,7 @@
 
 ---
 
-### 5.3 GraphRAG 索引流水线（五阶段）
+## 6.3 GraphRAG 索引流水线（五阶段）
 
 无论用哪个框架，GraphRAG 的核心索引逻辑相同：
 
@@ -95,7 +142,7 @@ Stage 5: 查询路由（Query Routing）
 
 ---
 
-### 5.4 LightRAG：推荐起点的完整 SOP
+## 6.4 LightRAG：推荐起点的完整 SOP
 
 **安装与初始化**：
 
@@ -172,7 +219,7 @@ result = rag.query("...", param=QueryParam(mode="naive"))
 
 ---
 
-### 5.5 Microsoft GraphRAG：全局综合场景 SOP
+## 6.5 Microsoft GraphRAG：全局综合场景 SOP
 
 **适用场景**：静态大型语料，需要"这整个语料库的主要主题/模式/风险是什么"类全局查询。
 
@@ -240,7 +287,7 @@ result = await drift_search(query="...", config=config)
 
 ---
 
-### 5.6 Neo4j Graphiti：Agent 时态记忆 SOP
+## 6.6 Neo4j Graphiti：Agent 时态记忆 SOP
 
 **适用场景**：Agent 需要记忆随时间变化的知识（"3号之前我们认为X，但现在知道是Y"）。
 
@@ -283,7 +330,7 @@ historical = await graphiti.search(
 
 ---
 
-### 5.7 知识库架构选型决策树
+## 6.7 知识库架构选型决策树
 
 ```
 你的知识库是什么类型？
@@ -319,7 +366,7 @@ historical = await graphiti.search(
 
 ---
 
-### 5.8 生产部署：存储后端选择
+## 6.8 生产部署：存储后端选择
 
 LightRAG 需要四类存储，生产环境推荐：
 
@@ -350,3 +397,52 @@ LightRAG 需要四类存储，生产环境推荐：
    - 强制将相关的 `SKILL.md` 标记为 `[Outdated - Needs Recompile]`，阻止 Agent 继续执行过期流程。
 
 ---
+
+## 6.7 MCP 封装：让任意 Agent 直接查询图谱
+
+将 GraphRAG 封装为 MCP Server 后，Claude Desktop、Cursor、Codex App 无需写适配代码即可调用。
+
+```python
+# graphrag_mcp_server.py
+from mcp.server.fastmcp import FastMCP
+from lightrag import LightRAG, QueryParam
+
+mcp = FastMCP("graphrag_kb")
+rag = LightRAG(working_dir="./lightrag_data")
+
+@mcp.tool()
+def graphrag_search(query: str, mode: str = "mix") -> str:
+    """
+    在知识图谱中搜索。
+    mode: local（实体邻居）| global（跨文档主题）| mix（推荐，综合最优）
+    """
+    return rag.query(query, param=QueryParam(mode=mode))
+
+@mcp.tool()
+def get_entity_relations(entity: str) -> str:
+    """获取指定实体的直接关系网络（一跳邻居）。"""
+    result = rag.query(
+        f"列出与'{entity}'直接相关的所有实体和它们之间的关系",
+        param=QueryParam(mode="local")
+    )
+    return result
+
+if __name__ == "__main__":
+    mcp.run()
+```
+
+**配置示例**（Claude Desktop）：
+```json
+{
+  "mcpServers": {
+    "graphrag_kb": {
+      "command": "python",
+      "args": ["/path/to/graphrag_mcp_server.py"]
+    }
+  }
+}
+```
+
+:::tip 向下一章
+图谱构建完成后，下一步是让 Agent 高效调用——包括 MCP 协议、RAG 模式选择、Skill 导航等，详见 [第七章：Agent 调用 + MCP 协议](06-agent-call.md)。
+:::

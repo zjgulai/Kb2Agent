@@ -135,3 +135,9 @@ JSONL      Markdown    Markdown      SKILL.md        JSONL        Neo4j
 ```
 
 ---
+
+---
+
+:::tip → 下一章
+选型明确后，按具体输入场景查找可运行的SOP → [03-scene-sops](03-scene-sops.md)
+:::

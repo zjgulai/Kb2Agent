@@ -51,8 +51,12 @@ export default withMermaid(defineConfig({
           { text: '08. 架构选型深度指南', link: '/knowledge/07-advanced-theory' },
           { text: '09. 推理模型时代的知识库', link: '/knowledge/09-reasoning-models' },
           { text: '10. 成本模型与预算管理', link: '/knowledge/10-cost-model' },
+          { text: '11. Skill蒸馏九大仓库', link: '/knowledge/09-skill-distillation-deep-dive' },
+          { text: '12. 完整可运行Pipeline', link: '/knowledge/10-e2e-pipeline' },
+          { text: '13. 知识库进化与自进化闭环', link: '/knowledge/11-kb-evolution' },
+          { text: '14. 评估质量体系', link: '/knowledge/12-evaluation' },
           { text: '15. Codex Prompts速查', link: '/knowledge/15-codex-prompts' },
-          { text: '16. VOC实战案例', link: '/knowledge/16-voc-case-study' },
+          { text: '16. VOC实战案例：Momcozy', link: '/knowledge/16-voc-case-study' },
         ]
       },
     ],

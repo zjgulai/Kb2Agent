@@ -263,3 +263,9 @@ knowledge-base/
 - 动态增长（持续更新）→ LightRAG 或 LLM-Wiki 增量方案
 - Agent 实时学习 → 必须接入 Graphiti 时态记忆
 :::
+
+---
+
+:::tip → 下一章
+认知到位后，根据输入类型和产品形态做技术选型 → [02-decision-matrix](02-decision-matrix.md)
+:::

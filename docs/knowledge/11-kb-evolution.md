@@ -1,4 +1,4 @@
-# 第十一部分：知识库进化——闭环的最后一公里
+# 第十三章：知识库进化与自进化闭环
 
 > **核心问题**：知识库不是一次性工程，而是一个有生命周期的活体系统。知识会老化、会产生矛盾、会随业务变化而失效。这一章解决"建完之后怎么维护"这个绝大多数指南都不提的问题。
 
@@ -629,3 +629,203 @@ flowchart TD
     class Action,Monitor yellow;
     class Discard red;
 ```
+
+---
+
+## 13.7 五层自进化飞轮（新增）
+
+> 知识库从"静态资产"到"会学习的系统"，需要五层机制依次建立。
+
+```mermaid
+flowchart TD
+    subgraph L1["第一层：新鲜度进化"]
+        F1["半衰期监控\n每天自动检查"] --> F2["过期标记\n降低检索权重"]
+        F2 --> F3["触发重新采集\n自动更新"]
+    end
+    subgraph L2["第二层：质量进化"]
+        Q1["用户反馈\n👍👎信号"] --> Q2["低质量标记\n置信度下调"]
+        Q2 --> Q3["对抗验证\n矛盾检测"]
+    end
+    subgraph L3["第三层：覆盖进化"]
+        C1["未命中分析\n查询日志挖掘"] --> C2["盲区发现\n自动生成报告"]
+        C2 --> C3["自动补采\n定向填补"]
+    end
+    subgraph L4["第四层：关系进化"]
+        R1["新实体入库\n触发图谱扩展"] --> R2["冲突关系检测\n自动标记"]
+    end
+    subgraph L5["第五层：结构进化"]
+        S1["Schema使用分析\n哪些字段从未被过滤"] --> S2["月度优化建议\n人工审核后执行"]
+    end
+
+    L1 --> L2 --> L3 --> L4 --> L5
+    L5 -->|优化效果回流| L1
+
+    style L1 fill:#e3f2fd,stroke:#1d4ed8
+    style L2 fill:#e8f5e9,stroke:#16a34a
+    style L3 fill:#fff3e0,stroke:#ea580c
+    style L4 fill:#f3e5f5,stroke:#9333ea
+    style L5 fill:#fce4ec,stroke:#dc2626
+```
+
+### 第一层实践：半衰期新鲜度检查（30分钟可上线）
+
+```python
+"""freshness_guard.py — 第一层自进化：新鲜度监控"""
+from datetime import datetime, timedelta
+from dataclasses import dataclass
+import chromadb
+
+HALF_LIFE = {
+    "competitor_price": 1,     # 竞品价格 1天
+    "platform_ranking": 7,     # BSR榜单 1周
+    "social_signal": 14,       # 社媒信号 2周
+    "industry_report": 90,     # 行业报告 3个月
+    "internal_sales": 30,      # 内部销售 月更
+    "compliance": 180,         # 合规法规 半年
+}
+
+@dataclass
+class FreshnessReport:
+    total: int
+    green: int    # age < half_life * 0.5
+    yellow: int   # half_life * 0.5 <= age < half_life
+    expired: int  # age >= half_life
+    expired_items: list[dict]
+
+def check_freshness(collection) -> FreshnessReport:
+    """检查所有知识的新鲜度，返回报告"""
+    all_data = collection.get(include=["metadatas"])
+    now = datetime.now()
+    report = FreshnessReport(total=0, green=0, yellow=0, expired=0, expired_items=[])
+
+    for i, meta in enumerate(all_data["metadatas"]):
+        report.total += 1
+        extracted = meta.get("extracted_at")
+        source_type = meta.get("source_type", "industry_report")
+        half_life = HALF_LIFE.get(source_type, 90)
+
+        if not extracted:
+            continue
+
+        age_days = (now - datetime.fromisoformat(extracted)).days
+
+        if age_days < half_life * 0.5:
+            report.green += 1
+        elif age_days < half_life:
+            report.yellow += 1
+        else:
+            report.expired += 1
+            report.expired_items.append({
+                "id": all_data["ids"][i],
+                "title": meta.get("product_name", meta.get("title", "未知")),
+                "age_days": age_days,
+                "half_life": half_life,
+                "source_url": meta.get("source_url", ""),
+                "action": "auto_refresh" if meta.get("source_url") else "manual_review"
+            })
+
+    return report
+
+if __name__ == "__main__":
+    client = chromadb.PersistentClient(path="./chroma_db")
+    col = client.get_collection("product_kb_v2")
+    r = check_freshness(col)
+
+    print(f"知识库新鲜度报告 {datetime.now().strftime('%Y-%m-%d')}")
+    print(f"总计: {r.total} | 🟢新鲜: {r.green} | 🟡临期: {r.yellow} | 🔴过期: {r.expired}")
+    if r.expired_items:
+        print(f"\n过期知识（前5条）：")
+        for item in r.expired_items[:5]:
+            print(f"  {item['title'][:40]} | 已过期{item['age_days']}天 | 建议: {item['action']}")
+```
+
+### 第三层实践：未命中分析（发现盲区）
+
+```python
+"""blind_spot_finder.py — 第三层自进化：覆盖分析"""
+import json
+from collections import Counter
+from pathlib import Path
+
+def analyze_query_log(log_path: str = "query_audit.jsonl") -> dict:
+    """分析查询日志，找出未命中和低分查询"""
+    if not Path(log_path).exists():
+        return {"error": "查询日志不存在，请先开启审计日志"}
+
+    no_hit = []      # 未命中（命中数为0）
+    low_score = []   # 低相似度（<0.5）
+
+    for line in Path(log_path).read_text().strip().split("\n"):
+        if not line: continue
+        r = json.loads(line)
+        if r.get("hits", 0) == 0:
+            no_hit.append(r["query"])
+        elif r.get("max_similarity", 1.0) < 0.5:
+            low_score.append(r["query"])
+
+    # 聚类找共同主题
+    all_missing = no_hit + low_score
+    words = Counter()
+    for q in all_missing:
+        for w in q.split():
+            if len(w) > 1:
+                words[w] += 1
+
+    print(f"盲区分析报告")
+    print(f"未命中查询: {len(no_hit)} 条 | 低质量命中: {len(low_score)} 条")
+    print(f"高频缺失关键词（Top10）: {words.most_common(10)}")
+    print(f"\n建议补采主题:")
+    for q in no_hit[:5]:
+        print(f"  → {q}")
+    return {"no_hit": no_hit, "low_score": low_score, "missing_keywords": words.most_common(10)}
+```
+
+### 预测验证闭环（选品场景专属第六层）
+
+```python
+"""prediction_loop.py — 预测→执行→验证→回写"""
+import json
+from datetime import datetime
+from pathlib import Path
+
+PREDICTIONS_FILE = "predictions.jsonl"
+
+def record_prediction(category: str, market: str, score: int, assumptions: list[str]):
+    """记录一次选品预测"""
+    entry = {
+        "timestamp": datetime.now().isoformat(),
+        "category": category, "market": market,
+        "opportunity_score": score,
+        "key_assumptions": assumptions,
+        "status": "pending"   # pending | executed | validated
+    }
+    with open(PREDICTIONS_FILE, "a") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    print(f"✅ 预测已记录: {category}/{market} 机会分{score}")
+
+def validate_prediction(category: str, market: str,
+                        actual_revenue: float, predicted_revenue: float):
+    """30天后验证预测准确性，回写置信度"""
+    accuracy = 1 - abs(predicted_revenue - actual_revenue) / max(actual_revenue, 1)
+    verdict = "准确" if accuracy > 0.8 else ("偏差" if accuracy > 0.5 else "严重偏差")
+    print(f"验证结果 {category}/{market}: 准确率={accuracy:.1%} [{verdict}]")
+
+    # 回写到知识库（调整置信度）
+    confidence_delta = 0.1 if accuracy > 0.8 else (-0.15 if accuracy < 0.5 else 0)
+    print(f"置信度调整: {confidence_delta:+.2f}")
+    return {"accuracy": accuracy, "verdict": verdict, "confidence_delta": confidence_delta}
+```
+
+---
+
+## 13.8 三阶段实施路线
+
+| 阶段 | 时间 | 目标 | 关键动作 |
+|------|------|------|---------|
+| **阶段一：基础监控** | 培训后第1-2周 | 知识不再"静默腐烂" | 半衰期标注 + 新鲜度权重 + 查询审计日志 |
+| **阶段二：质量与覆盖** | 第3-4周 | 知识库能发现"自己不知道什么" | 盲区报告 + 冲突检测 + 自动补采Pipeline |
+| **阶段三：验证闭环** | 第2个月起 | 知识库成为"会学习的决策系统" | 预测→执行→销售回灌→置信度更新 |
+
+:::tip 下一章
+知识库进化得好不好，需要量化评估——详见 [第十四章：评估质量体系](12-evaluation.md)。
+:::

@@ -1,4 +1,4 @@
-# 第十二部分：Agent 知识调用质量评估
+# 第十四章：Agent 知识调用质量评估
 
 > **核心问题**：你的知识库建完之后，怎么知道它真的有用？这一章给出可量化的评估方法、幻觉检测机制、以及基准测试设计原则。
 
@@ -384,3 +384,143 @@ def skill_iteration_with_eval(skill_path: str):
             logger.info(f"⏭️ [{dim}] 未提升，跳过")
 
     logger.success(f"Skill 迭代完成: {skill_path}")
+
+---
+
+## 14.8 A/B 测试框架（评估驱动迭代）
+
+:::tip 核心原则
+不靠感觉判断哪个 Prompt 或架构更好——用标准测试集 + 统计显著性检验。
+:::
+
+```python
+"""ab_test_framework.py — 知识库 A/B 测试"""
+import hashlib
+import json
+from dataclasses import dataclass, field
+from pathlib import Path
+from scipy import stats as scipy_stats
+
+GOLDEN_SET = [
+    {"query": "美国市场性价比高的便携充电器", "expected_category": "便携充电器", "market": "US"},
+    {"query": "日本宠物智能饮水机机会分析", "expected_category": "宠物用品", "market": "JP"},
+    {"query": "德国户外露营灯具市场空白", "expected_category": "户外照明", "market": "DE"},
+    # ... 扩展到20个覆盖各品类×市场的标准查询
+]
+
+@dataclass
+class ABResult:
+    variant: str
+    hits_at_5: list[bool] = field(default_factory=list)
+    latencies_ms: list[float] = field(default_factory=list)
+
+    @property
+    def hit_rate(self) -> float:
+        return sum(self.hits_at_5) / len(self.hits_at_5) if self.hits_at_5 else 0
+
+    @property
+    def avg_latency(self) -> float:
+        return sum(self.latencies_ms) / len(self.latencies_ms) if self.latencies_ms else 0
+
+def assign_variant(query: str, salt: str = "v1") -> str:
+    """按查询的哈希值稳定分流（同一查询始终走同一变体）"""
+    h = int(hashlib.md5(f"{query}{salt}".encode()).hexdigest(), 16)
+    return "B" if h % 2 == 0 else "A"
+
+def run_ab_test(search_fn_a, search_fn_b, test_set=None) -> dict:
+    """运行A/B测试，返回统计结果"""
+    test_set = test_set or GOLDEN_SET
+    result_a = ABResult("A")
+    result_b = ABResult("B")
+
+    import time
+    for item in test_set:
+        query, expected = item["query"], item["expected_category"]
+        variant = assign_variant(query)
+
+        t0 = time.time()
+        if variant == "A":
+            results = search_fn_a(query)
+            r = result_a
+        else:
+            results = search_fn_b(query)
+            r = result_b
+
+        latency = (time.time() - t0) * 1000
+        hit = any(expected in str(res) for res in results[:5])
+        r.hits_at_5.append(hit)
+        r.latencies_ms.append(latency)
+
+    # 卡方检验（命中率差异是否显著）
+    a_hits, b_hits = sum(result_a.hits_at_5), sum(result_b.hits_at_5)
+    a_total, b_total = len(result_a.hits_at_5), len(result_b.hits_at_5)
+    _, p_value = scipy_stats.chi2_contingency([
+        [a_hits, a_total - a_hits],
+        [b_hits, b_total - b_hits]
+    ])[:2]
+
+    report = {
+        "A命中率": f"{result_a.hit_rate:.1%}",
+        "B命中率": f"{result_b.hit_rate:.1%}",
+        "A平均延迟": f"{result_a.avg_latency:.0f}ms",
+        "B平均延迟": f"{result_b.avg_latency:.0f}ms",
+        "p值": round(p_value, 4),
+        "显著差异": p_value < 0.05,
+        "建议": "上线B（命中率提升显著）" if b_hits > a_hits and p_value < 0.05
+                else "保持A（差异不显著）"
+    }
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return report
+```
+
+## 14.9 ragas 集成：自动化 RAG 质量评估
+
+```python
+"""ragas_eval.py — 用 ragas 评估知识库检索质量"""
+# pip install ragas langchain-openai
+from ragas import evaluate
+from ragas.metrics import (
+    faithfulness,
+    answer_relevancy,
+    context_recall,
+    context_precision,
+)
+from datasets import Dataset
+
+def build_eval_dataset(questions: list[str], search_fn, answer_fn) -> Dataset:
+    """构建 ragas 所需的评估数据集"""
+    data = {"question": [], "answer": [], "contexts": [], "ground_truth": []}
+
+    for q in questions:
+        contexts = search_fn(q)          # 检索结果（文本列表）
+        answer = answer_fn(q, contexts)  # LLM生成回答
+
+        data["question"].append(q)
+        data["answer"].append(answer)
+        data["contexts"].append(contexts)
+        data["ground_truth"].append("")  # 可选：提供标准答案提升评估精度
+
+    return Dataset.from_dict(data)
+
+def run_ragas_eval(dataset: Dataset) -> dict:
+    """运行 ragas 评估，返回四维得分"""
+    result = evaluate(
+        dataset,
+        metrics=[faithfulness, answer_relevancy, context_recall, context_precision]
+    )
+    scores = {
+        "忠实度（无幻觉）": round(result["faithfulness"], 3),
+        "答案相关性": round(result["answer_relevancy"], 3),
+        "上下文召回率": round(result["context_recall"], 3),
+        "上下文精准度": round(result["context_precision"], 3),
+    }
+    print("ragas 评估结果:")
+    for k, v in scores.items():
+        status = "✅" if v > 0.7 else ("⚠️" if v > 0.5 else "❌")
+        print(f"  {status} {k}: {v}")
+    return scores
+```
+
+:::tip 下一章
+评估体系建立后，高频使用的 Prompt 模板和工具调用可以进一步固化——详见 [第十五章：Codex Prompts 速查](15-codex-prompts.md)。
+:::

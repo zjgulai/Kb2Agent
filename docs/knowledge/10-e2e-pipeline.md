@@ -1,4 +1,4 @@
-# 第十部分：端到端完整 Pipeline（可直接运行）
+# 第十二章：端到端完整 Pipeline（可直接运行）
 
 > **本章目标**：一个从零到能用的完整工程模板。复制这段代码，填入你的 API Key，就能跑起来。生产环境的所有关键配置都在这里。
 
@@ -827,3 +827,9 @@ python main.py query "精益创业的核心方法论是什么？"
 # 5. 健康度检查
 python main.py health
 ```
+
+---
+
+:::tip → 下一章
+Pipeline跑通后，建立知识库进化与自进化机制 → [11-kb-evolution](11-kb-evolution.md)
+:::
