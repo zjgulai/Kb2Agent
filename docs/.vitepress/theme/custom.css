@@ -40,7 +40,7 @@
 
   /* ── 字体栈：英文用 Apple/系统 SF，中文用楷体 ── */
   --font-en:  -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-  --font-zh:  'STKaiti', 'KaiTi', 'AR PL UKai CN', 'Kaiti SC', '楷体', serif;
+  --font-zh:  'LXGW WenKai', 'STKaiti', 'KaiTi', 'AR PL UKai CN', 'Kaiti SC', '楷体', Georgia, serif;
   --font-mono:'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
 
   /* VitePress font vars */
@@ -123,13 +123,30 @@ nav, header {
   font-size: 1rem;
   color: var(--ink) !important;
   letter-spacing: -0.01em;
+  white-space: nowrap;
 }
+
+/* 搜索框：强制使用英文字体，防止楷体加载时文字重叠 */
+.VPNavBarSearch,
+.VPNavBarSearch *,
+.DocSearch-Button,
+.DocSearch-Button *,
+.VPLocalSearchBox,
+.VPLocalSearchBox * {
+  font-family: var(--font-en) !important;
+}
+/* 搜索 modal 保证在最顶层 */
+.VPLocalSearchBox {
+  z-index: 10001 !important;
+}
+
 .VPNavBarMenu .VPNavBarMenuLink {
   font-family: var(--font-en);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--body);
   transition: color .15s;
+  white-space: nowrap;
 }
 .VPNavBarMenu .VPNavBarMenuLink:hover,
 .VPNavBarMenu .VPNavBarMenuLink.active { color: var(--red-deep); }
@@ -657,64 +674,230 @@ div[class*='language-']::before {
   margin-top: 0 !important;
 }
 
-/* ─── 17. Outline ────────────────────────────────────────── */
+/* ─── 17. Outline（右侧目录精修） ────────────────────────── */
+
+/* 整体 aside 容器 */
+.VPDocAside {
+  padding-top: 1rem;
+}
+
+/* "本页目录" 标题行 */
+.VPDocAsideOutline .title {
+  font-family: var(--font-en) !important;
+  font-size: 0.68rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.13em !important;
+  text-transform: uppercase !important;
+  color: var(--muted) !important;
+  margin-bottom: 0.875rem !important;
+  padding-bottom: 0.625rem !important;
+  border-bottom: 1px solid var(--line) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+/* 标题前的装饰符 */
+.VPDocAsideOutline .title::before {
+  content: '◈';
+  color: var(--red-deep);
+  font-size: 0.65rem;
+}
+
+/* outline item 链接 */
 .VPDocOutlineItem a {
   font-family: var(--font-en) !important;
-  font-size: 0.73rem !important;
+  font-size: 0.72rem !important;
   white-space: normal !important;
   overflow: visible !important;
   text-overflow: unset !important;
-  line-height: 1.5 !important;
+  line-height: 1.55 !important;
   display: block;
-  word-break: break-all;
+  padding: 0.22rem 0.5rem 0.22rem 0 !important;
+  border-radius: 4px;
+  word-break: break-word;
   color: var(--muted);
-  transition: color .15s;
+  transition: color .15s, background .15s, padding-left .15s;
+  position: relative;
 }
-.VPDocOutlineItem a:hover { color: var(--body) !important; }
-.VPDocOutlineItem.active a { color: var(--red-deep) !important; font-weight: 700 !important; }
+/* H3 缩进层级 */
+.VPDocOutlineItem.level-3 > a {
+  padding-left: 0.875rem !important;
+  font-size: 0.69rem !important;
+}
+/* hover 状态 */
+.VPDocOutlineItem a:hover {
+  color: var(--body) !important;
+  background: var(--paper-2) !important;
+  padding-left: 0.5rem !important;
+}
+.VPDocOutlineItem.level-3 > a:hover {
+  padding-left: 1.125rem !important;
+}
+
+/* active 状态：左侧红色指示条 */
+.VPDocOutlineItem.active > a {
+  color: var(--red-deep) !important;
+  font-weight: 700 !important;
+  background: rgba(196,74,94,0.06) !important;
+  padding-left: 0.875rem !important;
+}
+.VPDocOutlineItem.active > a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 70%;
+  background: var(--red-deep);
+  border-radius: 0 2px 2px 0;
+}
+.VPDocOutlineItem.level-3.active > a {
+  padding-left: 1.375rem !important;
+}
 
 /* ─── 18. Mermaid ────────────────────────────────────────── */
 .vp-doc .mermaid {
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: 1.75rem 2rem;
+  /* 超宽图允许横向滚动，避免文字被压缩 */
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 1.5rem 1.25rem 1rem;
   margin: 2.25rem auto;
   text-align: center;
   box-shadow: 0 2px 8px rgba(44,16,24,0.07), 0 1px 2px rgba(44,16,24,0.04);
   cursor: zoom-in;
   transition: box-shadow .2s, transform .2s;
   max-width: 100%;
+  position: relative;
 }
 .vp-doc .mermaid:hover {
-  box-shadow: 0 6px 24px rgba(215,92,112,0.18), 0 2px 6px rgba(44,16,24,0.08) !important;
+  box-shadow: 0 6px 24px rgba(215,92,112,0.16), 0 2px 6px rgba(44,16,24,0.08) !important;
   transform: translateY(-1px);
 }
-.vp-doc .mermaid svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
 
-/* Lightbox */
-.mermaid-lightbox {
-  display: none; position: fixed; inset: 0; z-index: 9999;
-  background: rgba(44,16,24,0.78); backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  align-items: center; justify-content: center; cursor: zoom-out; padding: 2rem;
+/* SVG 保持原始比例，不被 max-width 压缩文字 */
+.vp-doc .mermaid svg {
+  display: block;
+  margin: 0 auto;
+  height: auto;
+  /* 允许超宽图展示完整宽度，配合容器横向滚动 */
+  max-width: none;
+  min-width: min-content;
 }
-.mermaid-lightbox.active { display: flex; }
-.mermaid-lightbox-inner {
-  background: #fff; border-radius: 14px; padding: 2.25rem;
-  max-width: 92vw; max-height: 90vh; overflow: auto;
-  box-shadow: 0 40px 100px rgba(44,16,24,0.35); position: relative;
+
+/* 图高度受限时，确保 SVG 不被裁剪 */
+.vp-doc .mermaid svg[viewBox] {
+  /* 根据 viewBox 宽高比自动撑开容器 */
+  width: 100%;
+  height: auto;
 }
-.mermaid-lightbox-inner svg { max-width: 100%; height: auto; display: block; }
-.mermaid-lightbox-close {
-  position: absolute; top: .875rem; right: .875rem;
-  width: 30px; height: 30px; border-radius: 50%;
-  background: var(--paper-2); border: 1px solid var(--line);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  font-size: 16px; color: var(--muted); line-height: 1;
-  transition: background .15s, color .15s;
+
+/* "点击放大"提示角标 */
+.mkd-zoom-hint {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.75rem;
+  font-family: var(--font-en);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s;
+  user-select: none;
 }
-.mermaid-lightbox-close:hover { background: var(--red-soft); color: var(--red-deep); }
+.vp-doc .mermaid:hover .mkd-zoom-hint { opacity: 1; }
+
+/* ─── 19. Lightbox（mermaid + 图片通用） ────────────────── */
+.mkd-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(44,16,24,0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  padding: 2rem;
+  /* 进入动画 */
+  opacity: 0;
+  transition: opacity .2s;
+}
+.mkd-lightbox.active {
+  display: flex;
+  opacity: 1;
+}
+.mkd-lightbox-inner {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem 2rem 2rem;
+  max-width: 94vw;
+  max-height: 92vh;
+  overflow: auto;
+  box-shadow:
+    0 48px 120px rgba(44,16,24,0.40),
+    0 8px 32px rgba(44,16,24,0.20);
+  position: relative;
+  cursor: default;
+  /* 内部滚动时平滑 */
+  scroll-behavior: smooth;
+}
+.mkd-lightbox-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+  min-height: 100px;
+}
+.mkd-lightbox-content svg {
+  max-width: min(90vw, 1400px);
+  height: auto;
+  display: block;
+}
+.mkd-lightbox-close {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1;
+  transition: background .15s, color .15s, transform .15s;
+  z-index: 1;
+}
+.mkd-lightbox-close:hover {
+  background: var(--red-soft);
+  color: var(--red-deep);
+  transform: scale(1.1);
+}
+
+/* 图片 hover 状态 */
+.vp-doc img[data-lightbox-bound] {
+  cursor: zoom-in !important;
+  transition: box-shadow .2s, transform .2s !important;
+}
+.vp-doc img[data-lightbox-bound]:hover {
+  box-shadow: 0 6px 24px rgba(44,16,24,0.15) !important;
+  transform: scale(1.01) !important;
+}
 
 /* ─── 19. Footer ─────────────────────────────────────────── */
 .VPFooter {
