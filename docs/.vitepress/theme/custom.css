@@ -275,26 +275,49 @@ nav, header {
 }
 
 /* ─── 5. Layout ──────────────────────────────────────────── */
-.VPContent { padding-left: 290px !important; }
+/* VitePress 默认已处理 sidebar 偏移，不要用 padding-left 重复覆盖 */
 .content { padding-left: 16px !important; padding-right: 16px !important; }
-.content-container { max-width: none !important; }
 .VPDocFooter { max-width: none !important; }
 .vp-doc {
-  max-width: none !important;
   padding-left: 2.5rem !important;
   padding-right: 2.5rem !important;
 }
+
+/* 大纲宽度 */
 .VPDocAside {
-  width: 220px !important;
-  min-width: 220px !important;
+  width: 200px !important;
+  min-width: 200px !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
   margin-left: 0 !important;
 }
-.VPDocAsideOutline { width: 220px !important; }
+.VPDocAsideOutline { width: 200px !important; }
+
+/* 有大纲时限制正文宽，避免挤占大纲空间 */
+@media (min-width: 1280px) {
+  .VPDoc.has-aside .content-container {
+    max-width: 680px !important;
+  }
+  .VPDoc.has-aside .vp-doc {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .VPDoc.has-aside .content-container {
+    max-width: 720px !important;
+  }
+}
+
+/* 1279px 以下大纲消失，正文可自由延伸 */
+@media (max-width: 1279px) {
+  .VPDocAside { display: none !important; }
+  .content-container { max-width: none !important; }
+  .vp-doc { max-width: none !important; }
+}
 
 @media (max-width: 959px) {
-  .VPContent { padding-left: 0 !important; }
   .VPSidebar { width: 100% !important; }
 }
 
@@ -585,22 +608,22 @@ div[class*='language-']::before {
   line-height: 2;
 }
 
-/* info — 鼠尾草绿 */
-.vp-doc .custom-block.info   { background: var(--sage-soft); border-left-color: var(--sage-deep); }
-.vp-doc .custom-block.info   .custom-block-title { color: #4A6B56; }
-.vp-doc .custom-block.info   p { color: #3C5848; }
+/* info — 品牌蓝灰（与导航/激活色同源，视觉语义统一） */
+.vp-doc .custom-block.info   { background: rgba(126,150,168,0.10); border-left-color: var(--accent-deep); }
+.vp-doc .custom-block.info   .custom-block-title { color: var(--accent-deep); }
+.vp-doc .custom-block.info   p { color: var(--body); }
 
-/* tip — 暖棕 */
+/* tip — 暖棕（中性提示，接近背景色系） */
 .vp-doc .custom-block.tip    { background: var(--warm-soft); border-left-color: var(--warm-deep); }
 .vp-doc .custom-block.tip    .custom-block-title { color: #6B5438; }
 .vp-doc .custom-block.tip    p { color: #5A4430; }
 
-/* warning — 玫瑰灰 */
+/* warning — 玫瑰灰（警示） */
 .vp-doc .custom-block.warning{ background: var(--rose-soft); border-left-color: var(--rose-deep); }
 .vp-doc .custom-block.warning .custom-block-title { color: var(--rose-deep); }
 .vp-doc .custom-block.warning p { color: #6B4850; }
 
-/* danger — 深玫瑰灰 */
+/* danger — 深玫瑰灰（强警告） */
 .vp-doc .custom-block.danger { background: #D8C8CC; border-left-color: #7A5860; }
 .vp-doc .custom-block.danger .custom-block-title { color: #5A3840; }
 .vp-doc .custom-block.danger p { color: #4A2830; }
@@ -708,6 +731,8 @@ div[class*='language-']::before {
   flex-direction: column !important;
   position: relative;
   overflow: hidden;
+  cursor: pointer !important;
+  text-decoration: none !important;
 }
 .VPFeature::before {
   content: '';
@@ -720,8 +745,8 @@ div[class*='language-']::before {
 }
 .VPFeature:hover {
   border-color: rgba(126,150,168,0.45) !important;
-  box-shadow: 0 8px 28px rgba(126,150,168,0.14), 0 2px 6px rgba(58,54,48,0.07) !important;
-  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 32px rgba(126,150,168,0.16), 0 2px 6px rgba(58,54,48,0.08) !important;
+  transform: translateY(-5px) !important;
 }
 .VPFeature:hover::before { opacity: 1; }
 
@@ -1048,11 +1073,17 @@ div[class*='language-']::before {
   border: 1px solid var(--vp-c-divider);
   border-radius: 10px;
   padding: 1.5rem;
-  transition: border-color .2s, box-shadow .2s;
+  transition: border-color .2s, box-shadow .2s, transform .18s;
+  cursor: pointer;
+  text-decoration: none !important;
+  display: block;
+  color: inherit;
 }
 .role-card:hover {
   border-color: var(--accent);
-  box-shadow: 0 4px 16px rgba(126,150,168,0.14);
+  box-shadow: 0 6px 20px rgba(126,150,168,0.16);
+  transform: translateY(-3px);
+  text-decoration: none !important;
 }
 .role-icon-label {
   display: inline-flex;

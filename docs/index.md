@@ -46,25 +46,25 @@ features:
 ---
 
 <div class="role-guide">
-  <h2>找到你的入口</h2>
+  <h2>按你的第一个问题找入口</h2>
   <div class="role-cards">
-    <div class="role-card">
-      <div class="role-icon-label">工</div>
-      <div class="role-title">工程师 / 数据科学家</div>
-      <div class="role-desc">已有 Python 基础，想直接动手</div>
-      <div class="role-path">推荐路径：第03章 SOP → 第04章架构 → 第12章Pipeline → 第15章Prompts</div>
-    </div>
-    <div class="role-card">
-      <div class="role-icon-label">析</div>
-      <div class="role-title">分析师 / 产品经理</div>
-      <div class="role-desc">需要理解全局，再决定如何落地</div>
-      <div class="role-path">推荐路径：第00章导论 → 第01章认知 → 第16章VOC案例 → 第10章成本</div>
-    </div>
-    <div class="role-card">
-      <div class="role-icon-label">决</div>
-      <div class="role-title">CTO / 技术决策者</div>
-      <div class="role-desc">评估技术投资，关注安全和成本</div>
-      <div class="role-path">推荐路径：第05章安全合规 → 第10章成本模型 → 第08章架构选型 → 第16章案例ROI</div>
-    </div>
+    <a class="role-card" href="/Kb2Agent/knowledge/00-introduction">
+      <div class="role-icon-label">判</div>
+      <div class="role-title">值不值得做知识库？</div>
+      <div class="role-desc">先建立判断，再动手。五大反模式先看清楚。</div>
+      <div class="role-path">→ 导论 + 决策矩阵 + 失败案例</div>
+    </a>
+    <a class="role-card" href="/Kb2Agent/knowledge/05-security-compliance">
+      <div class="role-icon-label">安</div>
+      <div class="role-title">内部数据能不能用 AI？</div>
+      <div class="role-desc">合规红线先划清楚，再选工具。</div>
+      <div class="role-path">→ 安全合规 + 数据分级 + RBAC</div>
+    </a>
+    <a class="role-card" href="/Kb2Agent/knowledge/03-scene-sops">
+      <div class="role-icon-label">跑</div>
+      <div class="role-title">有数据，直接想跑起来</div>
+      <div class="role-desc">PDF / 视频 / 代码库 / 专家经验，每种都有可运行代码。</div>
+      <div class="role-path">→ 场景 SOP + Pipeline + Prompts</div>
+    </a>
   </div>
 </div>

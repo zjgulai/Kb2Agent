@@ -115,7 +115,29 @@ export default withMermaid(defineConfig({
     },
 
     search: {
-      provider: 'local'
+      provider: 'local',
+      options: {
+        locales: {
+          root: {
+            translations: {
+              button: {
+                buttonText: '搜索文档',
+                buttonAriaLabel: '搜索文档'
+              },
+              modal: {
+                noResultsText: '未找到相关内容',
+                resetButtonTitle: '清空搜索',
+                backButtonTitle: '关闭搜索',
+                footer: {
+                  selectText: '选择',
+                  navigateText: '导航',
+                  closeText: '关闭'
+                }
+              }
+            }
+          }
+        }
+      }
     },
 
     outline: {
