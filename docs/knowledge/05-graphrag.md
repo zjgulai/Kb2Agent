@@ -451,3 +451,76 @@ if __name__ == "__main__":
 :::tip 向下一章
 图谱构建完成后，下一步是让 Agent 高效调用——包括 MCP 协议、RAG 模式选择、Skill 导航等，详见 [第七章：Agent 调用 + MCP 协议](06-agent-call.md)。
 :::
+
+---
+
+## 6.8 GraphRAG 启用阈值矩阵与退化策略
+
+### 启用阈值矩阵
+
+不是所有场景都值得上 GraphRAG。用以下矩阵判断是否启用：
+
+| 问题类型 | 实体稳定性 | 时态需求 | 图谱维护能力 | 推荐 |
+|----------|-----------|----------|-------------|------|
+| 事实查找（单跳） | 任意 | 无 | 任意 | ❌ 用向量RAG |
+| 多跳推理 | 高（消歧完成） | 无/低 | 有团队 | ✅ LightRAG |
+| 全局主题综合 | 高 | 无 | 有团队 | ✅ Microsoft GraphRAG |
+| Agent 时态记忆 | 中 | 高（双时态） | 有团队 | ✅ Graphiti |
+| 多跳推理 | 低（大量同名实体） | 任意 | 任意 | ⚠️ 先解决消歧再评估 |
+| 任意 | 任意 | 任意 | 无专职维护 | ❌ 用向量RAG + UnWeaver |
+
+**核心判断规则**：
+1. 如果查询 70%+ 是单跳事实检索 → 不需要图
+2. 如果实体消歧没有完成 → 不启用图（会放大错误）
+3. 如果团队没有专职图谱维护能力 → 用 UnWeaver 实体增强向量检索代替
+
+### 健康度指标
+
+```python
+GRAPHRAG_HEALTH_METRICS = {
+    "entity_disambiguation_rate": 0.95,   # 95%+ 实体已完成消歧
+    "orphan_node_ratio": 0.05,            # 孤立节点 < 5%
+    "stale_edge_ratio": 0.10,             # 过期边 < 10%
+    "query_latency_p90_ms": 3000,         # P90 延迟 < 3s
+    "multi_hop_accuracy": 0.75,           # 多跳准确率 > 75%
+}
+
+def check_graphrag_health(graph_client) -> dict:
+    stats = graph_client.get_stats()
+    health = {}
+    for metric, threshold in GRAPHRAG_HEALTH_METRICS.items():
+        value = stats.get(metric, 0)
+        if metric in ["orphan_node_ratio", "stale_edge_ratio", "query_latency_p90_ms"]:
+            health[metric] = {"value": value, "ok": value <= threshold}
+        else:
+            health[metric] = {"value": value, "ok": value >= threshold}
+    health["overall"] = all(h["ok"] for h in health.values() if isinstance(h, dict))
+    return health
+```
+
+### 退化策略：何时自动退回向量检索
+
+当以下任一条件触发时，系统自动降级到向量检索，不再走图谱：
+
+```python
+DEGRADATION_TRIGGERS = {
+    "latency_spike": lambda stats: stats["p90_ms"] > 8000,
+    "accuracy_drop": lambda stats: stats["multi_hop_accuracy"] < 0.50,
+    "health_score_low": lambda health: not health["overall"],
+    "index_rebuilding": lambda status: status == "rebuilding",
+}
+
+def should_use_graph(query: str, graph_health: dict) -> bool:
+    if not graph_health["overall"]:
+        return False   # 图谱不健康，降级
+    if graph_health.get("query_latency_p90_ms", {}).get("value", 0) > 8000:
+        return False   # 延迟过高，降级
+    # 意图分类：只有多跳/综合查询才走图
+    intent = classify_intent(query)
+    return intent in ["multi_hop", "global_synthesis"]
+```
+
+:::tip 退化不是失败
+退化到向量检索是**设计行为**，不是故障。健康的系统应该在图谱状态不佳时自动切换，保证用户始终得到回答，即使质量略低。
+:::
+

@@ -838,3 +838,159 @@ python main.py health
 :::tip → 下一章
 Pipeline跑通后，建立知识库进化与自进化机制 → [11-kb-evolution](11-kb-evolution.md)
 :::
+
+---
+
+## 12.13 异常优先设计：生产系统的真实可信度来自异常路径
+
+**一个只测试 happy path 的 Pipeline，在生产环境里等于没有测试。** 真实业务里，数据源变更、字段改名、格式漂移、多源冲突、抽取失败是常态，不是例外。
+
+### 数据源变更处理
+
+```python
+class SourceChangeDetector:
+    """检测数据源的结构变化，防止静默接收脏数据"""
+
+    def __init__(self, schema_registry_path: str = "schemas/"):
+        self.registry_path = schema_registry_path
+
+    def detect_schema_drift(self, source_id: str, current_sample: dict) -> dict:
+        """
+        对比当前样本与历史 schema，检测字段漂移
+        """
+        import json
+        from pathlib import Path
+
+        schema_file = Path(self.registry_path) / f"{source_id}.json"
+        if not schema_file.exists():
+            # 首次见到这个数据源，保存 schema 基线
+            schema_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(schema_file, "w") as f:
+                json.dump({"fields": list(current_sample.keys()),
+                           "first_seen": "now"}, f)
+            return {"status": "new_source", "drift": False}
+
+        with open(schema_file) as f:
+            baseline = json.load(f)
+
+        baseline_fields = set(baseline["fields"])
+        current_fields = set(current_sample.keys())
+
+        added = current_fields - baseline_fields
+        removed = baseline_fields - current_fields
+
+        if removed:
+            return {
+                "status": "breaking_change",
+                "drift": True,
+                "removed_fields": list(removed),
+                "added_fields": list(added),
+                "action": "STOP_PIPELINE: 关键字段缺失，需要人工确认"
+            }
+        if added:
+            return {
+                "status": "additive_change",
+                "drift": True,
+                "added_fields": list(added),
+                "action": "CONTINUE_WITH_WARNING: 新字段出现，记录到变更日志"
+            }
+        return {"status": "stable", "drift": False}
+```
+
+### 多源冲突处理
+
+```python
+class MultiSourceConflictResolver:
+    """当同一知识点从多个来源得到不同答案时的裁决逻辑"""
+
+    RESOLUTION_STRATEGIES = {
+        "latest_wins":     lambda sources: max(sources, key=lambda s: s["updated_at"]),
+        "authority_wins":  lambda sources: max(sources, key=lambda s: s["trust_level"]),
+        "consensus":       lambda sources: sources if len(set(s["value"] for s in sources)) == 1 else None,
+        "human_escalate":  lambda sources: None  # 发到人工审核队列
+    }
+
+    def resolve(self, conflict_sources: list[dict], field: str) -> dict:
+        """
+        conflict_sources: [{"value": ..., "source": ..., "updated_at": ..., "trust_level": ...}]
+        """
+        values = set(s["value"] for s in conflict_sources)
+        if len(values) == 1:
+            return {"resolved": True, "value": conflict_sources[0]["value"],
+                    "strategy": "no_conflict"}
+
+        # 高风险字段：人工升级
+        HIGH_RISK_FIELDS = {"price", "compliance_status", "legal_requirement"}
+        if field in HIGH_RISK_FIELDS:
+            self._escalate_to_human(conflict_sources, field)
+            return {"resolved": False, "action": "human_escalate",
+                    "conflict": [s["value"] for s in conflict_sources]}
+
+        # 一般字段：信源权重最高者优先
+        winner = max(conflict_sources, key=lambda s: s["trust_level"])
+        return {"resolved": True, "value": winner["value"],
+                "strategy": "authority_wins", "overridden": len(conflict_sources) - 1}
+
+    def _escalate_to_human(self, sources, field):
+        import json
+        from pathlib import Path
+        queue_file = Path("escalation_queue.jsonl")
+        with open(queue_file, "a") as f:
+            f.write(json.dumps({
+                "field": field,
+                "conflict_values": [s["value"] for s in sources],
+                "sources": [s["source"] for s in sources],
+                "timestamp": "now",
+                "priority": "HIGH"
+            }, ensure_ascii=False) + "\n")
+```
+
+### 抽取失败的优雅降级
+
+```python
+def extract_with_fallback(content: str, primary_extractor, fallback_extractor=None) -> dict:
+    """
+    三层降级：主提取器 → 备用提取器 → 原文保存
+    任何层都不应静默失败
+    """
+    # 层1：主提取器
+    try:
+        result = primary_extractor(content)
+        if result.get("confidence", 0) >= 0.7:
+            return {"status": "success", "data": result, "method": "primary"}
+    except Exception as e:
+        log_extraction_error("primary", str(e), content[:200])
+
+    # 层2：备用提取器（如有）
+    if fallback_extractor:
+        try:
+            result = fallback_extractor(content)
+            if result.get("confidence", 0) >= 0.5:
+                return {"status": "fallback", "data": result, "method": "fallback",
+                        "warning": "使用备用提取器，置信度较低"}
+        except Exception as e:
+            log_extraction_error("fallback", str(e), content[:200])
+
+    # 层3：保存原文，等待人工处理
+    save_to_manual_review_queue(content)
+    return {
+        "status": "failed",
+        "data": None,
+        "action": "原文已保存到人工审核队列",
+        "never_silent": True   # 显式声明：这个失败不会被静默吞掉
+    }
+```
+
+### Pipeline 的异常分级告警
+
+```python
+ALERT_LEVELS = {
+    "CRITICAL": "schema_breaking_change | high_risk_field_conflict | >30%_extraction_failure",
+    "WARNING":  "schema_additive_change | low_risk_conflict | 10-30%_extraction_failure",
+    "INFO":     "first_new_source | fallback_extractor_used | <10%_extraction_failure",
+}
+```
+
+:::info 核心原则：宁可停下来，不要静默通过
+Pipeline 遇到不确定性时，应该**明确告警并等待处理**，而不是用默认值填充。一个静默通过的错误，在知识库里会以最高复用效率扩散；一个及时告警的停滞，只影响当次处理。
+:::

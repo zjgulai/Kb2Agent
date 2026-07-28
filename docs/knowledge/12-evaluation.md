@@ -624,3 +624,77 @@ def refresh_evaluation_set(current_set: list[dict],
 :::tip 下一章
 评估体系建立后，高频使用的 Prompt 模板和工具调用可以进一步固化——详见 [第十五章：Codex Prompts 速查](15-codex-prompts.md)。
 :::
+
+---
+
+## 12.10 错误成本分层与层间归因链路
+
+### 错误成本分层评估
+
+不同层次的错误，对应完全不同的修复方向和优先级。用错误层次决定"先修哪里"比用指标绝对值更有效。
+
+| 评估层 | 典型错误 | 错误成本量级 | 修复路径 |
+|--------|----------|-------------|----------|
+| **检索层** | Top-K 召回了无关文档 | 低（影响单次回答质量） | 调整 embedding 模型或重排序参数 |
+| **生成层** | 模型根据正确文档给出了错误结论 | 中（影响用户信任） | 加强事实锚定，引入二次验证 |
+| **业务层** | 正确回答但用户做出了错误决策 | 高（直接业务损失） | 重新定义回答格式，补充决策上下文 |
+| **治理层** | 系统以错误的方式进化（评分器漂移） | 极高（系统性偏移） | 回滚评分器，重建校准基准 |
+
+### 层间归因链路
+
+当业务结果变差时，按以下顺序归因，从最低层开始排查：
+
+```python
+def attribute_failure(failure_case: dict) -> str:
+    """
+    failure_case: {
+        "user_complaint": str,
+        "retrieved_docs": list,
+        "generated_answer": str,
+        "user_action": str,
+        "business_outcome": str
+    }
+    返回：失败发生在哪一层
+    """
+    # 层1：检索层检查
+    doc_relevance = check_doc_relevance(
+        failure_case["retrieved_docs"],
+        failure_case["user_complaint"]
+    )
+    if doc_relevance < 0.5:
+        return "retrieval_layer: 召回文档与问题不相关，需优化检索策略"
+
+    # 层2：生成层检查
+    answer_faithfulness = check_faithfulness(
+        failure_case["generated_answer"],
+        failure_case["retrieved_docs"]
+    )
+    if answer_faithfulness < 0.7:
+        return "generation_layer: 答案不忠实于检索文档，存在幻觉"
+
+    # 层3：业务层检查
+    answer_usefulness = check_usefulness(
+        failure_case["generated_answer"],
+        failure_case["user_action"],
+        failure_case["business_outcome"]
+    )
+    if not answer_usefulness:
+        return "business_layer: 答案技术正确但对决策无帮助，需重设回答格式"
+
+    # 层4：治理层检查（需要历史对比）
+    return "governance_layer: 单案例无法判断，需要统计多个案例的趋势"
+```
+
+### 归因后的修复优先级规则
+
+```
+检索层失败   → 优先调参（低成本，1-2天）
+生成层失败   → 加强验证机制（中成本，1-2周）
+业务层失败   → 重新定义问题（高成本，需要与业务方对齐）
+治理层失败   → 系统性重建（极高成本，需要回滚）
+```
+
+:::warning 跨层归因的常见错误
+**不要把业务层失败当成检索层失败来修复。** 提升召回率解决不了"答案正确但用户不知道怎么用"的问题。层间归因必须从底往上逐层排查，确认低层没有问题后再往上看。
+:::
+

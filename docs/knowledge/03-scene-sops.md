@@ -839,3 +839,109 @@ TEMPLATE
 :::tip → 下一章
 场景SOP到手，深入理解全链路技术架构 → [04-architecture](04-architecture.md)
 :::
+
+---
+
+## 场景前置：输入诊断器
+
+**在进入任何具体场景SOP之前**，先运行输入诊断器。它回答一个问题：这批输入值不值得处理，以及应该走哪条路。
+
+```python
+from dataclasses import dataclass
+from enum import Enum
+
+class InputTier(Enum):
+    SKIP = "skip"          # 不值得入库，直接归档原文
+    CACHE = "cache"        # 半衰期短，走缓存层而非向量库
+    PROCESS = "process"    # 正常走SOP
+    ESCALATE = "escalate"  # 混合/复杂，需要人工分诊
+
+@dataclass
+class DiagnosisResult:
+    tier: InputTier
+    primary_type: str      # A/B/C/D/E/F/G/H/I/J
+    half_life_days: int
+    confidence_ceiling: float  # 这批输入能达到的最高置信度
+    reason: str
+    recommended_sop: str
+
+def diagnose_input(content_preview: str, source_meta: dict) -> DiagnosisResult:
+    """
+    输入诊断器：五个判断维度
+    1. 来源可信度  2. 内容完整度  3. 半衰期  4. 信息密度  5. 验证成本
+    """
+    # 维度1：来源可信度
+    source_trust = source_meta.get("trust_level", "unknown")
+    if source_trust == "untrusted":
+        return DiagnosisResult(
+            tier=InputTier.SKIP,
+            primary_type="unknown",
+            half_life_days=0,
+            confidence_ceiling=0.3,
+            reason="来源不可信，入库会污染知识库",
+            recommended_sop="归档原文，不处理"
+        )
+
+    # 维度2：内容完整度
+    completeness = source_meta.get("completeness", 1.0)
+    if completeness < 0.4:
+        return DiagnosisResult(
+            tier=InputTier.ESCALATE,
+            primary_type=source_meta.get("type", "unknown"),
+            half_life_days=source_meta.get("half_life_days", 90),
+            confidence_ceiling=0.5,
+            reason=f"内容缺失率 {1-completeness:.0%}，需要人工补证后再处理",
+            recommended_sop="人工补证 → 重新诊断"
+        )
+
+    # 维度3：半衰期
+    half_life = source_meta.get("half_life_days", 90)
+    if half_life < 7:
+        return DiagnosisResult(
+            tier=InputTier.CACHE,
+            primary_type=source_meta.get("type", "D"),
+            half_life_days=half_life,
+            confidence_ceiling=0.7,
+            reason=f"半衰期仅 {half_life} 天，走缓存层，不入向量库",
+            recommended_sop="Redis TTL缓存，不做结构化提取"
+        )
+
+    # 维度4：值不值得处理（信息密度×验证成本）
+    info_density = source_meta.get("info_density", 0.5)
+    verify_cost = source_meta.get("verify_cost", "medium")
+    if info_density < 0.2 and verify_cost == "high":
+        return DiagnosisResult(
+            tier=InputTier.SKIP,
+            primary_type=source_meta.get("type", "D"),
+            half_life_days=half_life,
+            confidence_ceiling=0.4,
+            reason="信息密度低且验证成本高，投入产出比不合格",
+            recommended_sop="跳过，记录到盲区日志供后续评估"
+        )
+
+    # 通过：正常处理
+    return DiagnosisResult(
+        tier=InputTier.PROCESS,
+        primary_type=source_meta.get("type", "A"),
+        half_life_days=half_life,
+        confidence_ceiling=0.9,
+        reason="通过诊断，进入对应场景SOP",
+        recommended_sop=f"场景{source_meta.get('type', 'A')} SOP"
+    )
+```
+
+### 诊断结果处置路由
+
+| 诊断结果 | 行动 | 记录到 |
+|----------|------|--------|
+| `SKIP` | 原文归档，不处理 | `skipped_inputs.log` + 说明原因 |
+| `CACHE` | Redis TTL缓存，不进向量库 | `cache_layer`，过期自动清除 |
+| `PROCESS` | 按 `primary_type` 进入对应场景 SOP | 正常流水线 |
+| `ESCALATE` | 进入人工分诊队列，48h内处理 | `escalation_queue.jsonl` |
+
+:::tip 最小可行版本
+没时间跑完整诊断器？至少做这两个判断：
+1. **这条信息三个月后还有人需要吗？** → 否则 SKIP
+2. **这条信息的来源，我能在原处实时查到吗？** → 能则 CACHE，否则 PROCESS
+:::
+

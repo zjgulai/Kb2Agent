@@ -649,3 +649,63 @@ pip install colpali-engine
 | `google/langextract` | 37.7K | 结构提取 | 从文本提取结构化信息 |
 | `Aider-AI/aider` | 27K | 代码仓库 | Repomix：仓库打包为单文件 |
 | `FLHonker/Awesome-KD` | 2.7K | 学术参考 | 神经网络蒸馏论文全集（2014-2021）|
+
+---
+
+## G. 工具生命周期风险与组合副作用
+
+### G.1 主流工具生命周期风险表
+
+选型时不只看当前能力，也要评估工具的持续可用性风险。
+
+| 工具 | 维护状态 | 主要风险 | 替代方案 | 迁移成本 |
+|------|----------|----------|----------|----------|
+| **MinerU** | 活跃（opendatalab） | 商业化后可能限速/收费 | Docling（MIT）| 中：需重新适配输出格式 |
+| **Docling** | 活跃（IBM/MIT） | 企业内部优先，社区支持可能减弱 | Marker | 低：输出格式相近 |
+| **SenseVoice** | 活跃（阿里）| 依赖国内基础设施，海外部署受限 | faster-whisper | 中：精度有差异 |
+| **LightRAG** | 活跃（香港大学）| 学术项目，长期维护不确定 | 自建 + Neo4j | 高：需重写图索引逻辑 |
+| **Graphiti** | 活跃（Zep商业）| 商业产品，免费层可能受限 | 自建时态图谱 | 高：核心功能依赖商业API |
+| **ChromaDB** | 活跃（Chroma Inc）| 商业化进程中，持久化稳定性仍在改善 | pgvector / Qdrant | 中：需迁移 collection |
+| **Qdrant** | 活跃（Qdrant GmbH）| 商业公司，云版本可能侵蚀开源版 | pgvector | 低：API兼容性好 |
+| **ColPali** | 研究状态 | 论文级项目，生产稳定性未验证 | MinerU + GPT-4o | 高：方案完全不同 |
+| **Playwright** | 活跃（微软）| 企业级维护，稳定性高 | Selenium | 低 |
+
+**风险信号监控**：
+- GitHub commit 频率下降 > 3个月无更新 → 评估替代方案
+- 核心维护者离职/项目转让 → 立即评估迁移
+- 开源协议变更（如 BSL）→ 法务评估后决定
+
+### G.2 常见工具组合的已知副作用
+
+在真实系统中，工具间的相互作用常常是故障的根本原因。
+
+| 组合 | 已知副作用 | 缓解方法 |
+|------|-----------|----------|
+| **MinerU + ChromaDB** | MinerU 输出的 JSON 结构字段较多，ChromaDB 的 metadata 大小限制（默认）可能导致部分字段被截断 | 启用 ChromaDB 的 `allow_reset=True` 模式，或将大字段存入独立存储后只在 metadata 里存引用 |
+| **LightRAG + SenseVoice** | SenseVoice 输出的时间戳格式与 LightRAG 期望的文本格式不兼容，直接管道会导致实体提取混乱 | 在管道中间加一个格式转换层，将时间戳段落转为纯文本段落再送入 LightRAG |
+| **Graphiti + ChromaDB** | 两者都会维护自己的 embedding，对同一文本会生成两套向量，存储成本翻倍，且两套向量可能检索结果不一致 | 共用一个 embedding 模型和存储后端，或明确划分：Graphiti 只管时态记忆，ChromaDB 管静态知识 |
+| **darwinSkill + Codex Prompts** | darwin 迭代后的 Skill 可能与 Prompts 速查里的模板不再兼容（Prompt 依赖旧版 Skill 的输出格式） | 每次 darwin 迭代后，检查相关 Prompt 模板的 `expiry_signals` 是否触发 |
+| **faster-whisper + MinerU** | 音视频内容提取的时间成本（faster-whisper 慢）与文档解析时间成本（MinerU GPU 密集）叠加，串行处理会成为严重瓶颈 | 将两条处理路径并行化，或将音视频处理排入异步队列 |
+| **ColPali + LightRAG** | ColPali 的多向量 patch embedding 与 LightRAG 期望的文本节点格式不匹配，无法直接用 ColPali 结果建图 | ColPali 只用于检索阶段（图像相似度），LightRAG 用于文本关系图谱，两者分开维护 |
+
+### G.3 工具选型的第四维度：退出成本
+
+除了能力/成本/维护状态，选型时必须评估退出成本：
+
+```
+退出成本 = 数据迁移成本 + 接口改造成本 + 重新测试成本 + 团队学习成本
+
+低退出成本工具（优先）：
+  - 使用标准化输出格式（JSON-LD、OpenAPI）
+  - 有官方迁移工具或文档
+  - 竞品有接口兼容模式
+
+高退出成本工具（谨慎引入）：
+  - 专有数据格式（厂商锁定）
+  - 深度集成到业务逻辑
+  - 无竞品可平替
+```
+
+:::tip 组合选型的最小风险原则
+在核心路径（采集→提取→入库→检索）上，每个环节的工具应选择**退出成本最低的方案**，即使它不是性能最优的。性能可以后期优化，但高退出成本工具一旦进入核心路径，替换代价会随时间指数增长。
+:::

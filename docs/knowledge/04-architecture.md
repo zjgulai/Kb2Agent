@@ -5,7 +5,7 @@ description: 全链路五阶段架构文档，涵盖采集、提取、入库、�
 
 # 第四章：全链路技术架构（+MCP封装层）
 
-> 六阶段流水线：内容接入 → 结构化提取 → 质量验证 → 入库路由 → 检索消费 → **MCP 封装（2026新增）**
+> **七阶段流水线**：需求建模 → 内容接入 → 结构化提取 → 质量验证 → 入库路由 → 检索消费 → **MCP 封装（2026新增）**
 
 :::tip 术语说明
 本章中的"知识蒸馏"统一使用**「结构化提取」**（Structured Extraction）表述，指通过 LLM 将非结构化文本转化为结构化知识单元，与 ML 领域的模型压缩技术无关。
@@ -13,7 +13,112 @@ description: 全链路五阶段架构文档，涵盖采集、提取、入库、�
 
 ---
 
-## 总览：六阶段流水线
+## Stage 0：需求建模——问题→证据→验收闭环
+
+:::danger 最常被跳过的阶段，也是最重要的阶段
+所有后续阶段的质量上限，由 Stage 0 定义问题的质量决定。没有问题集，就没有验收标准；没有验收标准，就无法判断系统是否完成。
+:::
+
+### Step 1：定义黄金问题集
+
+黄金问题集是系统必须能回答的 20-50 个代表性问题，覆盖四种类型：
+
+| 类型 | 示例 | 测试能力 |
+|------|------|----------|
+| **精确事实** | "产品 A 的最低起订量是多少？" | 检索精度 |
+| **多跳推理** | "哪些供应商同时出现在合规风险和财务报告中？" | 图谱推理 |
+| **跨文档综合** | "过去三季度用户投诉主题有何变化？" | 全局理解 |
+| **执行指导** | "跨页表格解析失败时完整处理步骤？" | Skill 调用 |
+
+### Step 2：为每个问题标注证据要求
+
+问题集不是问题清单，每个问题必须同时标注：
+
+```python
+GOLDEN_QUESTION = {
+    "id": "GQ-001",
+    "question": "美国市场暖奶器价格带分布是什么？",
+    "type": "factual",
+    "required_evidence": {
+        "source": "Amazon竞品数据 2026Q1",          # 答案应来自哪里
+        "evidence_level": 3,                        # Level 1-5，见附录A
+        "staleness_limit_days": 30,                 # 超过多少天答案失效
+    },
+    "acceptance_criteria": {
+        "must_include": ["价格区间", "代表品牌数量"],  # 答案必须包含的要素
+        "must_not_include": ["2024年数据"],           # 答案不能包含的内容
+        "confidence_floor": 0.75,                    # 最低置信度要求
+    },
+    "failure_consequence": "选品方向错误，影响库存决策",  # 答错后果
+    "owner": "选品负责人",
+}
+```
+
+### Step 3：运行验收测试
+
+每次架构变更或数据更新后，用黄金问题集跑验收测试：
+
+```python
+def run_acceptance_test(kb_client, golden_set: list[dict]) -> dict:
+    results = []
+    for q in golden_set:
+        response = kb_client.query(q["question"])
+
+        # 检查接受标准
+        passed = True
+        failures = []
+
+        for term in q["acceptance_criteria"]["must_include"]:
+            if term not in response["answer"]:
+                passed = False
+                failures.append(f"缺少必要元素：{term}")
+
+        for term in q["acceptance_criteria"]["must_not_include"]:
+            if term in response["answer"]:
+                passed = False
+                failures.append(f"包含禁止内容：{term}")
+
+        if response.get("confidence", 0) < q["acceptance_criteria"]["confidence_floor"]:
+            passed = False
+            failures.append(f"置信度 {response['confidence']:.2f} 低于要求")
+
+        results.append({
+            "id": q["id"],
+            "passed": passed,
+            "failures": failures,
+            "consequence": q["failure_consequence"] if not passed else None
+        })
+
+    passed_count = sum(1 for r in results if r["passed"])
+    failed_critical = [r for r in results if not r["passed"] and
+                       golden_set[results.index(r)]["failure_consequence"]]
+
+    return {
+        "pass_rate": passed_count / len(results),
+        "blocked": len(failed_critical) > 0,   # 有关键问题失败则阻断上线
+        "failed_critical": failed_critical,
+        "summary": f"{passed_count}/{len(results)} 通过"
+    }
+```
+
+### Step 4：上线门控
+
+验收测试结果决定是否允许上线：
+
+```
+验收结果
+├── pass_rate >= 0.80 AND blocked == False → 允许上线
+├── pass_rate >= 0.70 AND blocked == False → 有条件上线（需标注已知盲区）
+└── pass_rate < 0.70 OR blocked == True   → 禁止上线，返回 Stage 0 重新定义问题
+```
+
+:::tip 最低可行版本
+没时间做完整黄金问题集？至少写下这五个问题：**"如果系统答错了这道题，会造成真实的业务损失。"** 这五个问题就是你的最小化验收集，每次上线前必跑。
+:::
+
+---
+
+## 总览：六阶段流水线（Stage 1-6）
 
 ```mermaid
 flowchart TD
