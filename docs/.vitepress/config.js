@@ -59,6 +59,7 @@ export default withMermaid(defineConfig({
           { text: '14. 评估质量体系', link: '/knowledge/12-evaluation' },
           { text: '15. Codex Prompts速查', link: '/knowledge/15-codex-prompts' },
           { text: '16. VOC实战案例：Momcozy', link: '/knowledge/16-voc-case-study' },
+          { text: '17. 三个失败案例与教训', link: '/knowledge/17-failure-cases' },
         ]
       },
     ],
@@ -99,6 +100,7 @@ export default withMermaid(defineConfig({
             { text: '14. 评估质量体系', link: '/knowledge/12-evaluation' },
             { text: '15. Codex Prompts与工具速查', link: '/knowledge/15-codex-prompts' },
             { text: '16. VOC实战案例：Momcozy', link: '/knowledge/16-voc-case-study' },
+            { text: '17. 三个失败案例与教训', link: '/knowledge/17-failure-cases' },
           ]
         },
       ]

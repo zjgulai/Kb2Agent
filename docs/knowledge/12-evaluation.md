@@ -526,6 +526,101 @@ def run_ragas_eval(dataset: Dataset) -> dict:
     return scores
 ```
 
+## 12.8 对抗性评估：主动寻找系统不知道自己不知道的盲区
+
+好的评估体系不只测试"已知的通过场景"，还要主动设计让系统失败的用例。
+
+### 对抗性测试用例的四种类型
+
+**类型一：边界溢出测试**
+故意问在 Skill 的 `scope_out` 范围之内的问题，验证系统是否会拒绝回答而不是给出错误指导。
+
+```python
+ADVERSARIAL_BOUNDARY = [
+    {
+        "question": "扫描版 PDF 应该用什么工具解析？",
+        "expected_behavior": "拒绝，并指引使用 OCR 流程",
+        "trap": "系统可能直接推荐 MinerU，但 MinerU 的最优路径是用于排版 PDF"
+    }
+]
+```
+
+**类型二：知识版本攻击**
+故意询问已知已更新的历史信息，验证系统是否会用过期知识回答。
+
+**类型三：合成悖论**
+构造两条在知识库中都存在但相互矛盾的知识，验证系统如何处理冲突，是否会假装给出一个"综合"答案而不披露矛盾。
+
+**类型四：权威诱导**
+用听起来权威的虚假前提提问，验证系统是否会顺着错误前提推理（而不是纠正前提）。
+
+```python
+# 错误前提诱导测试
+{
+    "question": "既然 GraphRAG 的准确率比 VectorRAG 高 40%，我们是不是所有场景都应该用 GraphRAG？",
+    "trap": "前提是错误的，正确系统应该先纠正前提",
+    "expected_behavior": "纠正前提：GraphRAG 在事实检索上通常低于 VectorRAG"
+}
+```
+
+---
+
+## 12.9 评估集的保鲜机制
+
+评估集一旦固定，就有被"过拟合"的风险——系统在刻意或无意间，被优化成通过这批特定问题而不是真正提升质量。
+
+### 三层保鲜策略
+
+**策略一：定期轮换（每季度）**
+每季度替换 20-30% 的黄金问题集，用新问题取代已被反复测试的老问题。旧问题归档但不删除，用于纵向趋势追踪。
+
+**策略二：盲测隔离**
+主评估集与调优集严格分离。调优时使用的问题不得出现在最终评估集里，防止 Goodhart 定律生效。
+
+**策略三：用户贡献注入**
+每月从真实用户查询日志中随机抽取 10-20 个"有意义的失败案例"，由人工标注后加入评估集。这些来自真实使用的失败案例，比人工设计的测试用例更能代表系统的真实弱点。
+
+```python
+def refresh_evaluation_set(current_set: list[dict],
+                            query_log_path: str,
+                            refresh_ratio: float = 0.25) -> list[dict]:
+    """
+    季度评估集刷新
+    1. 归档当前评估集
+    2. 从查询日志中提取失败案例
+    3. 替换 refresh_ratio 比例的旧问题
+    """
+    archive_path = f"eval_sets/archive_{datetime.now().strftime('%Y%m')}.json"
+    with open(archive_path, "w") as f:
+        json.dump(current_set, f, ensure_ascii=False, indent=2)
+
+    # 从查询日志提取低分案例（score < 0.5）
+    failed_queries = []
+    for line in Path(query_log_path).read_text().split("\n"):
+        if not line: continue
+        record = json.loads(line)
+        if record.get("user_rating") == "bad" or record.get("max_similarity", 1) < 0.4:
+            failed_queries.append(record["query"])
+
+    n_replace = int(len(current_set) * refresh_ratio)
+    new_questions = [
+        {"question": q, "type": "user_failure", "source": "query_log",
+         "added_at": datetime.now().isoformat()}
+        for q in failed_queries[:n_replace]
+    ]
+
+    retained = current_set[n_replace:]
+    refreshed = retained + new_questions
+    print(f"评估集刷新：保留 {len(retained)} 条，新增 {len(new_questions)} 条失败案例")
+    return refreshed
+```
+
+:::tip 评估体系的元问题
+你的评估指标本身也需要被评估。每半年问一次：**你现在追踪的指标，还能代表你真正关心的业务结果吗？** 如果发现追踪的是"可测量的"而不是"重要的"，及时调整。
+:::
+
+---
+
 :::tip 下一章
 评估体系建立后，高频使用的 Prompt 模板和工具调用可以进一步固化——详见 [第十五章：Codex Prompts 速查](15-codex-prompts.md)。
 :::
