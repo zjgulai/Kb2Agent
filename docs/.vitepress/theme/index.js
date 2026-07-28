@@ -52,26 +52,48 @@ function closeLightbox() {
   document.body.style.overflow = ''
 }
 
-function bindMermaidLightbox() {
-  document.querySelectorAll('.vp-doc .mermaid:not([data-lightbox-bound])').forEach((el) => {
-    el.setAttribute('data-lightbox-bound', '1')
-    el.style.cursor = 'zoom-in'
-    if (!el.querySelector('.mkd-zoom-hint')) {
-      const hint = document.createElement('div')
-      hint.className = 'mkd-zoom-hint'
-      hint.textContent = '点击放大'
-      el.appendChild(hint)
-    }
-    el.addEventListener('click', () => {
-      const svg = el.querySelector('svg')
-      if (!svg) return
-      const clone = svg.cloneNode(true)
-      clone.removeAttribute('width')
-      clone.removeAttribute('height')
-      clone.style.cssText = 'max-width:min(90vw,1400px);height:auto;display:block;'
-      openLightbox(clone)
-    })
+function attachMermaid(el) {
+  const svg = el.querySelector('svg')
+  if (!svg) return false
+  if (svg.hasAttribute('data-lbox')) return true
+
+  svg.setAttribute('data-lbox', '1')
+  el.style.cursor = 'zoom-in'
+
+  if (!el.querySelector('.mkd-zoom-hint')) {
+    const hint = document.createElement('div')
+    hint.className = 'mkd-zoom-hint'
+    hint.textContent = '点击放大'
+    el.appendChild(hint)
+  }
+
+  el.addEventListener('click', () => {
+    const s = el.querySelector('svg')
+    if (!s) return
+    const clone = s.cloneNode(true)
+    clone.removeAttribute('width')
+    clone.removeAttribute('height')
+    clone.style.cssText = 'max-width:min(90vw,1400px);height:auto;display:block;'
+    openLightbox(clone)
   })
+  return true
+}
+
+let _observer = null
+
+function startMermaidObserver() {
+  if (_observer) { _observer.disconnect(); _observer = null }
+
+  _observer = new MutationObserver(() => {
+    document.querySelectorAll('.vp-doc .mermaid').forEach(attachMermaid)
+  })
+
+  const doc = document.querySelector('.vp-doc')
+  if (doc) {
+    _observer.observe(doc, { childList: true, subtree: true })
+  }
+
+  document.querySelectorAll('.vp-doc .mermaid').forEach(attachMermaid)
 }
 
 function bindImgLightbox() {
@@ -94,17 +116,11 @@ function bindSidebarTooltips() {
   })
 }
 
-function bindAll() {
-  bindMermaidLightbox()
-  bindImgLightbox()
-  bindSidebarTooltips()
-}
-
 function scheduleBind() {
   nextTick(() => {
-    bindAll()
-    setTimeout(bindAll, 800)
-    setTimeout(bindAll, 2200)
+    startMermaidObserver()
+    bindImgLightbox()
+    bindSidebarTooltips()
   })
 }
 
