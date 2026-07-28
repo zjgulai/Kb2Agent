@@ -9,7 +9,7 @@ description: 完整可运行端到端Pipeline文档，提供从数据采集到Ag
 
 ---
 
-## 项目结构
+## 12.1 项目结构
 
 ```text
 kb-agent/
@@ -33,7 +33,7 @@ kb-agent/
 
 ---
 
-## requirements.txt
+## 12.2 依赖配置（requirements.txt）
 
 ```txt
 # 文档解析
@@ -64,7 +64,7 @@ typer>=0.12.0
 
 ---
 
-## config.yaml
+## 12.3 配置文件（config.yaml）
 
 ```yaml
 # ==================== 模型配置 ====================
@@ -122,7 +122,7 @@ evolution:
 
 ---
 
-## pipeline/ingest.py（Stage 1+2+3）
+## 12.4 采集与提取（ingest.py）
 
 ```python
 """
@@ -535,7 +535,7 @@ async def ingest(source_path: str) -> dict:
 
 ---
 
-## pipeline/storage.py（Stage 4）
+## 12.5 入库路由（storage.py）
 
 ```python
 """
@@ -628,16 +628,16 @@ created_at: {__import__('datetime').datetime.now().isoformat()}
 
 # {entry.get('name', skill_name)}
 
-## 触发条件
+### 触发条件
 {entry.get('trigger', '待补充')}
 
-## 执行步骤
+### 执行步骤
 {entry.get('steps', '待补充')}
 
-## 边界与禁忌
+### 边界与禁忌
 {entry.get('boundary', '待补充')}
 
-## 来源引用
+### 来源引用
 {entry.get('reference', '待补充')}
 """
         (skill_dir / "SKILL.md").write_text(skill_content, encoding='utf-8')
@@ -664,7 +664,7 @@ created_at: {__import__('datetime').datetime.now().isoformat()}
 
 ---
 
-## pipeline/retrieval.py（Stage 5）
+## 12.6 检索与消费（retrieval.py）
 
 ```python
 """
@@ -736,7 +736,7 @@ class KnowledgeRetriever:
 
 ---
 
-## main.py（入口）
+## 12.7 主入口（main.py）
 
 ```python
 """
@@ -812,7 +812,7 @@ if __name__ == "__main__":
 
 ---
 
-## 快速启动
+## 12.8 快速启动
 
 ```bash
 # 1. 安装依赖
@@ -841,7 +841,7 @@ Pipeline跑通后，建立知识库进化与自进化机制 → [11-kb-evolution
 
 ---
 
-## 12.13 异常优先设计：生产系统的真实可信度来自异常路径
+## 12.9 异常优先设计：生产系统的真实可信度来自异常路径
 
 **一个只测试 happy path 的 Pipeline，在生产环境里等于没有测试。** 真实业务里，数据源变更、字段改名、格式漂移、多源冲突、抽取失败是常态，不是例外。
 
