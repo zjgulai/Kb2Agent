@@ -1,6 +1,6 @@
 /* ============================================================
-   MKD Guide — Design System v5  莫兰迪色彩重建版
-   字体：中文楷体加粗 / 英文 -apple-system
+   MKD Guide — Design System v6  仿宋+莫兰迪
+   字体：中文仿宋体（STFangsong/FangSong）/ 英文 -apple-system
    颜色：Giorgio Morandi 低饱和度灰调色板
    排版：呼吸感优先，行距宽松，段间距充足
    ============================================================ */
@@ -58,7 +58,7 @@
 
   /* ── 字体栈 ── */
   --font-en:  -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
-  --font-zh:  'LXGW WenKai', 'STKaiti', 'KaiTi', 'AR PL UKai CN', 'Kaiti SC', '楷体', Georgia, serif;
+  --font-zh:  'STFangsong', 'FangSong', 'FangSong_GB2312', 'LXGW WenKai', Georgia, serif;
   --font-mono:'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
 
   --vp-font-family-base: var(--font-en);
@@ -342,14 +342,15 @@ nav, header {
   mix-blend-mode: multiply;
 }
 
-/* ─── 7. 文章排版 — 楷体加粗，充足呼吸感 ────────────────── */
+/* ─── 7. 文章排版 — 仿宋体，充足呼吸感 ────────────────── */
+/* 字号阶梯：H1 2.25rem / H2 1.5rem / H3 1.2rem / H4 1.05rem / 正文 1rem */
 
 .vp-doc h1 {
   font-family: var(--font-zh);
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 700;
   letter-spacing: 0.03em;
-  line-height: 1.4;
+  line-height: 1.35;
   color: var(--ink);
   margin-top: 0;
   margin-bottom: 2rem;
@@ -359,7 +360,7 @@ nav, header {
 
 .vp-doc h2 {
   font-family: var(--font-zh);
-  font-size: 1.375rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   color: var(--ink);
@@ -374,7 +375,7 @@ nav, header {
 
 .vp-doc h3 {
   font-family: var(--font-zh);
-  font-size: 1.125rem;
+  font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--ink);
@@ -395,7 +396,7 @@ nav, header {
 
 .vp-doc h4 {
   font-family: var(--font-zh);
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--sage-deep);
@@ -403,20 +404,20 @@ nav, header {
   margin-bottom: 0.75rem;
 }
 
-/* 正文 — 楷体加粗，行距宽松，段间距充足 */
+/* 正文 — 仿宋体，字重500，行距宽松，段间距充足 */
 .vp-doc p {
   font-family: var(--font-zh);
   font-size: 1.0rem;
-  font-weight: 600;          /* 楷体加粗 */
-  line-height: 2.1;           /* 宽松行距，充分呼吸感 */
+  font-weight: 500;
+  line-height: 2.1;
   color: var(--body);
-  margin-bottom: 1.6rem;     /* 段间距充足 */
+  margin-bottom: 1.6rem;
   text-align: justify;
   word-break: break-word;
 }
 
 .vp-doc strong {
-  font-weight: 800;
+  font-weight: 700;
   color: var(--ink);
   font-family: var(--font-zh);
 }
@@ -428,7 +429,7 @@ nav, header {
 
 .vp-doc a {
   color: var(--accent-deep);
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
   border-bottom: 1px dashed rgba(106,130,150,0.50);
   transition: border-color .15s, color .15s;
@@ -480,7 +481,7 @@ nav, header {
 }
 .vp-doc blockquote p {
   font-family: var(--font-zh);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--warm-deep);
   margin-bottom: 0;
   font-size: 0.975rem;
@@ -492,7 +493,7 @@ nav, header {
 .vp-doc ul { padding-left: 1.5rem; }
 .vp-doc ul > li {
   font-family: var(--font-zh);
-  font-weight: 600;
+  font-weight: 500;
   margin: 0.55rem 0;
   line-height: 2;
   color: var(--body);
@@ -500,7 +501,7 @@ nav, header {
 .vp-doc ul > li::marker { color: var(--accent); }
 .vp-doc ol > li {
   font-family: var(--font-zh);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 2;
   color: var(--body);
 }
@@ -536,7 +537,7 @@ nav, header {
 }
 .vp-doc td {
   font-family: var(--font-zh);
-  font-weight: 600;
+  font-weight: 500;
   padding: 0.9rem 1.125rem;
   border-bottom: 1px solid var(--line);
   color: var(--body);
@@ -601,7 +602,7 @@ div[class*='language-']::before {
 }
 .vp-doc .custom-block p {
   font-family: var(--font-zh);
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 0;
   font-size: 0.935rem;
   text-align: left;
@@ -1036,9 +1037,9 @@ div[class*='language-']::before {
 
 /* ─── 22. Mobile ─────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .vp-doc h1 { font-size: 1.625rem; letter-spacing: 0.01em; }
-  .vp-doc h2 { font-size: 1.2rem; margin-top: 2.75rem; }
-  .vp-doc h3 { font-size: 1.05rem; }
+  .vp-doc h1 { font-size: 1.75rem; letter-spacing: 0.01em; }
+  .vp-doc h2 { font-size: 1.3rem; margin-top: 2.75rem; }
+  .vp-doc h3 { font-size: 1.1rem; }
   .vp-doc p  { font-size: 0.975rem; line-height: 2; }
   .VPHero .name { font-size: 2.25rem !important; }
   .VPHero .text { font-size: 1.125rem !important; }
@@ -1123,4 +1124,159 @@ div[class*='language-']::before {
   padding: 0.5rem 0.75rem;
   background: rgba(126,150,168,0.10);
   border-radius: 6px;
+}
+
+/* ─── 24. 首页任务流卡片 ─────────────────────────────────── */
+.task-section,
+.chapter-grid-section {
+  max-width: 1020px;
+  margin: 3rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.task-section-label {
+  font-family: var(--font-en);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 3.5rem;
+}
+
+@media (max-width: 768px) {
+  .task-grid { grid-template-columns: 1fr; }
+}
+
+.task-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem 1.75rem 1.5rem;
+  background: var(--vp-c-bg-elv);
+  border: 1px solid var(--line-mid);
+  border-radius: 14px;
+  text-decoration: none !important;
+  cursor: pointer;
+  color: inherit;
+  box-shadow: 0 1px 4px rgba(58,54,48,0.05);
+  transition: transform .2s, border-color .2s, box-shadow .22s;
+  position: relative;
+  overflow: hidden;
+}
+.task-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-deep), var(--warm));
+  opacity: 0;
+  transition: opacity .22s;
+}
+.task-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(126,150,168,0.45);
+  box-shadow: 0 10px 32px rgba(126,150,168,0.15), 0 2px 8px rgba(58,54,48,0.07);
+  text-decoration: none !important;
+}
+.task-card:hover::before { opacity: 1; }
+
+.task-num {
+  font-family: var(--font-en);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: var(--accent-deep);
+  margin-bottom: 0.75rem;
+  opacity: 0.7;
+}
+
+.task-title {
+  font-family: var(--font-zh);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.task-desc {
+  font-family: var(--font-zh);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--body);
+  line-height: 1.85;
+  flex: 1;
+  margin-bottom: 1.25rem;
+}
+
+.task-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.task-links span {
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent-deep);
+  background: rgba(126,150,168,0.10);
+  border: 1px solid rgba(126,150,168,0.25);
+  border-radius: 20px;
+  padding: 0.2rem 0.65rem;
+  letter-spacing: 0.02em;
+}
+
+/* ─── 25. 首页章节格栅 ──────────────────────────────────── */
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 640px) {
+  .chapter-grid { grid-template-columns: 1fr; }
+}
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.125rem;
+  background: var(--vp-c-bg-elv);
+  border: 1px solid var(--line-mid);
+  border-radius: 8px;
+  text-decoration: none !important;
+  color: var(--body);
+  font-family: var(--font-zh);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.chapter-item:hover {
+  border-color: var(--accent);
+  background: rgba(126,150,168,0.06);
+  color: var(--ink);
+  text-decoration: none !important;
+}
+
+.chapter-tag {
+  font-family: var(--font-en);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--accent-deep);
+  background: rgba(126,150,168,0.12);
+  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }

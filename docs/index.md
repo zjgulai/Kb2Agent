@@ -12,59 +12,8 @@ hero:
     - theme: alt
       text: 直接看 Pipeline 代码
       link: /knowledge/10-e2e-pipeline
-
-features:
-  - title: 10个反直觉洞察
-    details: 知识库越多不等于检索越好。实时数据不该入库。推理模型降低预处理必要性。动手之前先建立正确认知，避免踩坑。
-    link: /knowledge/00-introduction
-    linkText: 读导论
-
-  - title: 数据安全与合规 必读
-    details: 内部经营数据绝不经公网LLM API。PII脱敏、数据分级L1-L4、RBAC权限、审计日志——企业级安全架构的完整实现。
-    link: /knowledge/05-security-compliance
-    linkText: 安全架构
-
-  - title: 10种场景工程SOP
-    details: PDF含复杂图表、长视频、播客、代码仓库、实时直播……每种场景均有分环境（有GPU/无GPU）的完整可运行代码。
-    link: /knowledge/03-scene-sops
-    linkText: 场景SOP
-
-  - title: MCP协议——知识库作为通用工具
-    details: 2026年事实标准。封装为MCP Server后，Claude Desktop、Cursor、Codex App无需适配代码即可直接调用。
-    link: /knowledge/06-agent-call
-    linkText: MCP接入
-
-  - title: 成本模型与预算管理
-    details: 全链路成本计算器、三档预算方案、成本熔断机制。让你在上线前就能回答：这个知识库每月多少钱？
-    link: /knowledge/10-cost-model
-    linkText: 成本规划
-
-  - title: 推理模型时代的重构
-    details: DeepSeek-R1/o3可在查询时做深度推理，降低80%预处理必要性。何时"深提取"、何时"浅提取+重推理"的决策框架。
-    link: /knowledge/09-reasoning-models
-    linkText: 推理模型策略
 ---
 
-<div class="role-guide">
-  <h2>按你的第一个问题找入口</h2>
-  <div class="role-cards">
-    <a class="role-card" href="/Kb2Agent/knowledge/00-introduction">
-      <div class="role-icon-label">判</div>
-      <div class="role-title">值不值得做知识库？</div>
-      <div class="role-desc">先建立判断，再动手。五大反模式先看清楚。</div>
-      <div class="role-path">→ 导论 + 决策矩阵 + 失败案例</div>
-    </a>
-    <a class="role-card" href="/Kb2Agent/knowledge/05-security-compliance">
-      <div class="role-icon-label">安</div>
-      <div class="role-title">内部数据能不能用 AI？</div>
-      <div class="role-desc">合规红线先划清楚，再选工具。</div>
-      <div class="role-path">→ 安全合规 + 数据分级 + RBAC</div>
-    </a>
-    <a class="role-card" href="/Kb2Agent/knowledge/03-scene-sops">
-      <div class="role-icon-label">跑</div>
-      <div class="role-title">有数据，直接想跑起来</div>
-      <div class="role-desc">PDF / 视频 / 代码库 / 专家经验，每种都有可运行代码。</div>
-      <div class="role-path">→ 场景 SOP + Pipeline + Prompts</div>
-    </a>
-  </div>
-</div>
+<div class="task-section"><p class="task-section-label">从你当下的问题出发</p><div class="task-grid"><a class="task-card" href="/Kb2Agent/knowledge/00-introduction"><div class="task-num">01</div><div class="task-title">值不值得做知识库？</div><div class="task-desc">五大反模式、十个反直觉洞察、真实失败案例——先建立正确判断，再动手，避免架构级返工。</div><div class="task-links"><span>导论</span><span>决策矩阵</span><span>失败案例</span></div></a><a class="task-card" href="/Kb2Agent/knowledge/05-security-compliance"><div class="task-num">02</div><div class="task-title">内部数据能不能用 AI？</div><div class="task-desc">数据分级 L1-L4、PII 脱敏、RBAC 权限、推断性隐私攻击演练——合规红线先划清楚。</div><div class="task-links"><span>安全合规</span><span>数据分级</span><span>攻击演练</span></div></a><a class="task-card" href="/Kb2Agent/knowledge/03-scene-sops"><div class="task-num">03</div><div class="task-title">有数据，想直接跑起来</div><div class="task-desc">PDF / 视频 / 代码库 / 专家经验……10 种场景均有可运行代码，分 GPU/无 GPU 两条路线。</div><div class="task-links"><span>场景 SOP</span><span>Pipeline</span><span>Prompts 速查</span></div></a><a class="task-card" href="/Kb2Agent/knowledge/10-cost-model"><div class="task-num">04</div><div class="task-title">上线要花多少钱？ROI 怎么算？</div><div class="task-desc">三档预算方案、全链路 TCO、ROI 公式、成本熔断——上线前给老板一个有公式有上限的答案。</div><div class="task-links"><span>成本模型</span><span>TCO 公式</span><span>VOC 案例</span></div></a></div></div>
+
+<div class="chapter-grid-section"><p class="task-section-label">按章节直达</p><div class="chapter-grid"><a class="chapter-item" href="/Kb2Agent/knowledge/04-architecture"><span class="chapter-tag">架构</span>全链路五阶段 + Stage 0 需求建模</a><a class="chapter-item" href="/Kb2Agent/knowledge/05-graphrag"><span class="chapter-tag">图谱</span>GraphRAG / LightRAG 构建 SOP</a><a class="chapter-item" href="/Kb2Agent/knowledge/06-agent-call"><span class="chapter-tag">MCP</span>知识库封装为通用 Agent 工具</a><a class="chapter-item" href="/Kb2Agent/knowledge/07-advanced-theory"><span class="chapter-tag">选型</span>LoD 阶梯 · 四路线混编决策</a><a class="chapter-item" href="/Kb2Agent/knowledge/09-reasoning-models"><span class="chapter-tag">推理</span>浅提取 vs 深提取 · 延迟预算</a><a class="chapter-item" href="/Kb2Agent/knowledge/11-kb-evolution"><span class="chapter-tag">进化</span>自进化闭环 · 健康度监控</a><a class="chapter-item" href="/Kb2Agent/knowledge/12-evaluation"><span class="chapter-tag">评估</span>三层评估 · 幻觉检测 · 对抗测试</a><a class="chapter-item" href="/Kb2Agent/knowledge/16-voc-case-study"><span class="chapter-tag">案例</span>14万条评论 → 3个产品机会</a></div></div>
