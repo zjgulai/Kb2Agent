@@ -454,3 +454,76 @@ asyncio.run(run_agent())
 | A-RAG | Agentic 检索 | 三层次工具自主检索 | 复杂多步推理 |
 | Graphiti（Zep）| 时态记忆 | Agent 时态知识图谱 | 知识随时间变化 |
 ---
+
+## MCP 路由冲突与裁决机制
+
+当知识库被封装为多个 MCP Server，且多个 Server 提供功能重叠的工具时，路由器面临裁决问题。这不是协议问题，而是**知识治理问题**。
+
+### 三类典型冲突场景
+
+**冲突一：同名工具，不同数据源**
+`search_product_info` 在 `kb-server-public`（公开竞品数据）和 `kb-server-internal`（内部产品数据）都存在。Agent 调用时选哪个？
+
+**冲突二：重叠覆盖，质量不同**
+`get_pricing_data` 同时存在于"历史价格库"（周度更新）和"实时报价库"（分钟更新），两者对同一产品给出不同价格。
+
+**冲突三：权限边界交叉**
+Agent 有 Server A 的完整权限和 Server B 的只读权限，但完成当前任务需要 Server B 的最新数据。
+
+### 裁决框架：PTDS 四维优先级
+
+在发生路由冲突时，按以下优先级顺序裁决：
+
+| 优先级 | 维度 | 规则 | 示例 |
+|--------|------|------|------|
+| P1 | **精确性（Precision）** | 更精确匹配任务意图的工具优先 | 任务要"内部数据"则走内部Server |
+| P2 | **时效性（Timeliness）** | 时效要求高时，新鲜度优先于深度 | 实时价格 > 月度报告 |
+| P3 | **数据级别（Data Level）** | 默认优先使用最低敏感级别能满足需求的来源 | 能用L1回答就不调L3 |
+| P4 | **成本（Cost）** | 同等质量下，低成本路由优先 | 本地缓存 > API调用 |
+
+```python
+class MCPRouter:
+    def resolve_conflict(self, candidates: list[dict], task_context: dict) -> dict:
+        """
+        candidates: [{"server": "...", "tool": "...", "freshness": ..., 
+                       "data_level": ..., "cost": ..., "precision_score": ...}]
+        返回唯一胜出的工具调用方案
+        """
+        # P1: 精确性过滤
+        best_precision = max(c["precision_score"] for c in candidates)
+        candidates = [c for c in candidates 
+                      if c["precision_score"] >= best_precision - 0.05]
+        
+        # P2: 若任务有时效要求，选最新鲜的
+        if task_context.get("requires_realtime"):
+            candidates = sorted(candidates, key=lambda c: c["freshness"])[:1]
+        
+        # P3: 最低敏感数据级别优先
+        min_level = min(c["data_level"] for c in candidates)
+        candidates = [c for c in candidates if c["data_level"] == min_level]
+        
+        # P4: 最低成本
+        return min(candidates, key=lambda c: c["cost"])
+```
+
+### 冲突日志与审计
+
+**所有路由冲突必须记录**，否则无法发现系统性偏差：
+
+```python
+def log_routing_conflict(candidates, winner, task_id):
+    record = {
+        "timestamp": datetime.now().isoformat(),
+        "task_id": task_id,
+        "candidates": len(candidates),
+        "winner": winner["server"] + "." + winner["tool"],
+        "reason": winner.get("selection_reason", "PTDS"),
+        "losers": [c["server"] + "." + c["tool"] for c in candidates if c != winner]
+    }
+    # 每日汇总：哪些工具总是输？可能说明某个Server需要升级或下线
+    append_to_audit_log("mcp_routing_conflicts.jsonl", record)
+```
+
+:::tip 路由治理的核心原则
+协议标准化（MCP）解决的是接口问题，不解决语义冲突和责任归属。**每个 MCP Server 应该有明确的"服务边界声明"**：它承诺回答什么、不回答什么、精度保证范围是什么。没有边界声明的Server接入越多，路由器的不确定性越高。
+:::
