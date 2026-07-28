@@ -1,3 +1,8 @@
+---
+name: knowledge-advanced-architecture
+description: 架构选型深度指南，覆盖5级蒸馏阶梯LoD、四条技术路线对比、Skill蒸馏终局论证。当面临架构选型或需要深度技术判断时使用。
+---
+
 # 第八章：架构选型深度指南与进阶分层理论
 
 > 本章回答两个核心问题：**何时不该用 RAG？** 以及 **选了 RAG，该选哪种架构？**
@@ -117,11 +122,11 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 
 | 蒸馏阶梯 | DIKW 映射 | 核心动作 | 代表级开源仓库 | Agent 评估与应用实效 |
 | :--- | :--- | :--- | :--- | :--- |
-| **LoD 0 (Flat)** | 数据 (Data) | **切块 + 向量化** | `LangChain`, `LlamaIndex` | **单跳事实检索 60%，多跳 <10%**。<br/>Agent 像在垃圾堆里抽盲盒，极易“Lost in the Middle”。 |
-| **LoD 1 (Enriched)**| 信息 (Info) | **元数据 + 实体附着** | `UnWeaver` (arXiv:2603) | **零图谱成本，超越早期 GraphRAG**。<br/>用 LLM 抽实体绑在 Chunk 尾部，用轻量过滤代替昂贵的图遍历。 |
-| **LoD 2 (Hierarchical)**| 知识 (Knowledge)| **分层目录树构建** | `Corpus2Skill` (HF, 2026) | **WixQA F1: 46.0% (超 Dense 27%)**。<br/>让 Agent **放弃被动检索，主动 Navigate(导航)** `INDEX.md` 目录树。 |
-| **LoD 3 (Relational)** | 知识网络 | **图谱与社区摘要** | `GraphRAG`, `LightRAG` | **全库主题综合（Sensemaking）霸主**。<br/>解决“这些报告共同的主题是什么”等全局泛化问题，但单跳事实查询成本极高。 |
-| **LoD 4 (Procedural)** | 智慧 (Wisdom) | **方法论与行为契约** | `cangjie-skill`, `colleague-skill`, `ex-skill` | **qsv 成功率 98.85%**。<br/>最高阶蒸馏。将书籍、长视频、前任对话(`ex-skill`)甚至自己(`yourself-skill`) 提炼为带触发条件、禁忌和决策流的 `SKILL.md`。 |
+| **LoD 0 (Flat)** | 数据 (Data) | **切块 + 向量化** | `LangChain`, `LlamaIndex` | **单跳事实检索 60%，多跳 <10%**。Agent 像在垃圾堆里抽盲盒，极易“Lost in the Middle”。 |
+| **LoD 1 (Enriched)**| 信息 (Info) | **元数据 + 实体附着** | `UnWeaver` (arXiv:2603) | **零图谱成本，超越早期 GraphRAG**。用 LLM 抽实体绑在 Chunk 尾部，用轻量过滤代替昂贵的图遍历。 |
+| **LoD 2 (Hierarchical)**| 知识 (Knowledge)| **分层目录树构建** | `Corpus2Skill` (HF, 2026) | **WixQA F1: 46.0% (超 Dense 27%)**。让 Agent **放弃被动检索，主动 Navigate** `INDEX.md` 目录树。 |
+| **LoD 3 (Relational)** | 知识网络 | **图谱与社区摘要** | `GraphRAG`, `LightRAG` | **全库主题综合（Sensemaking）霸主**。解决“这些报告共同的主题是什么”等全局泛化问题，但单跳事实查询成本极高。 |
+| **LoD 4 (Procedural)** | 智慧 (Wisdom) | **方法论与行为契约** | `cangjie-skill`, `colleague-skill`, `ex-skill` | **qsv 成功率 98.85%**。最高阶蒸馏：将书籍、长视频、前任对话提炼为带触发条件、禁忌和决策流的 `SKILL.md`。 |
 
 > **深度洞察：LoD 4 (Skill 蒸馏) 为什么是终局？**
 > 从 `colleague-skill` (同事经验) 到 `yourself-skill` (自我永生)，再到 `anti-distill` (防止被公司资本家吸干经验的防蒸馏工具)。开源社区的走向证明：**最高价值的知识不是“事实”，而是“判断启发式 (Heuristics)”与“SOP 肌肉记忆”**。这也是为什么提供 `SKILL.md` 能让 Agent 的执行成功率发生断层式领先。
@@ -176,8 +181,8 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 
 | 仓库名称 | 核心生态定位 | 蒸馏的深度与形态 | 对 Agent 调用的有效性评估 (ROI) |
 | :--- | :--- | :--- | :--- |
-| **`cangjie-skill` (仓颉)**<br/>`book2skill` | **造书**：从文本/视频/播客提炼方法论 | **结构化动作流**：不提取故事，只提取 `RIA-TV++`（引用/重写/案例/触发/边界）。 | **高**。将几万字杂音浓缩为纯动作指令，解决大语料下 Agent 迷失问题。配合 `test-prompts.json` 强校验。 |
-| **`nuwa-skill` (女娲)**<br/>`ex-skill` | **造人**：公众人物/前任的思维与表达克隆 | **双轨认知克隆**：分离 `能力轨道 (工作方法)` 与 `行为轨道 (表达DNA/语气)`。 | **极高**。让通用大模型发生“人格坍缩”，高度聚焦特定场景的决策模式，拒绝废话。 |
+| **`cangjie-skill` (仓颉)** / `book2skill` | **造书**：从文本/视频/播客提炼方法论 | **结构化动作流**：不提取故事，只提取 `RIA-TV++`（引用/重写/案例/触发/边界）。 | **高**。将几万字杂音浓缩为纯动作指令，解决大语料下 Agent 迷失问题。配合 `test-prompts.json` 强校验。 |
+| **`nuwa-skill` (女娲)** / `ex-skill` | **造人**：公众人物/前任的思维与表达克隆 | **双轨认知克隆**：分离 `能力轨道 (工作方法)` 与 `行为轨道 (表达DNA/语气)`。 | **极高**。让通用大模型发生“人格坍缩”，高度聚焦特定场景的决策模式，拒绝废话。 |
 | **`darwin-skill` (达尔文)** | **进化**：Skill 的自我博弈与迭代 | **动态生命周期**：9维度加权打分 + 棘轮机制 (Ratchet) = 仅保留带来正向收益的代码。 | **革命性**。引入了类似微软 `SkillOpt` 的 validation-gated 验证拦截，解决人工维护 Skill 库的疲劳。 |
 
 #### 取其精华、去其糟粕的整合选型 (Integrative Selection)

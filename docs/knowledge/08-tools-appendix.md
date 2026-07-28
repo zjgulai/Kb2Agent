@@ -1,3 +1,8 @@
+---
+name: knowledge-tools-appendix
+description: 工具完整手册与选型决策树，包含MinerU、SenseVoice、LightRAG、Playwright等主流工具的安装配置与适用边界。当需要查找具体工具用法时使用。
+---
+
 # 第八章（附录）：工具完整手册与选型决策树
 
 > **使用方式**：先看选型决策树确定你需要哪个工具，再查对应工具的完整安装和使用指引。每个工具都标注了 GPU 要求、操作系统兼容性和实际适用边界。

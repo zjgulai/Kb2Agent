@@ -1,3 +1,8 @@
+---
+name: knowledge-decision-matrix
+description: 产品形态决策矩阵文档，覆盖向量知识库、图谱、NL2SQL、MCP第5形态的选型判断标准。当需要决定用哪种知识产品形态时使用。
+---
+
 # 第二章：输入类型 × 输出形式决策矩阵
 
 > 从信息源到知识的路由决策。2026 年新增第 5 种产品形态：MCP 工具形态。
@@ -133,8 +138,6 @@ JSONL      Markdown    Markdown      SKILL.md        JSONL        Neo4j
 └── 需要人类阅读的结构化文档
     └── 输出：Markdown 文档（标准知识库文档）
 ```
-
----
 
 ---
 

@@ -1,3 +1,8 @@
+---
+name: knowledge-graphrag-construction
+description: GraphRAG知识图谱构建文档，详解实体抽取、关系建模、社区摘要与LightRAG集成方案。当需要构建图谱增强检索时使用。
+---
+
 # 第六章：GraphRAG 知识图谱构建
 
 > **前四章解决了数据接入与结构化提取**，本章解决「如何构建可被复杂查询的知识库」——GraphRAG 是普通向量库的升级选项，不是替代。

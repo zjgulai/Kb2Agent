@@ -1,3 +1,8 @@
+---
+name: knowledge-e2e-pipeline
+description: 完整可运行端到端Pipeline文档，提供从数据采集到Agent查询的全链路Python代码实现。当需要直接运行或参考完整代码时使用。
+---
+
 # 第十二章：端到端完整 Pipeline（可直接运行）
 
 > **本章目标**：一个从零到能用的完整工程模板。复制这段代码，填入你的 API Key，就能跑起来。生产环境的所有关键配置都在这里。

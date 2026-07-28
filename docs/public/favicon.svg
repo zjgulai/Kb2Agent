@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- 莫兰迪石板蓝灰底圆 -->
+  <rect width="32" height="32" rx="8" fill="#7E96A8"/>
+  <!-- 蒸馏漏斗形状：顶部宽梯形 + 细颈 + 下方点 -->
+  <path d="M7 9 L25 9 L19 17 L19 22 L13 22 L13 17 Z" fill="white" opacity="0.92"/>
+  <circle cx="16" cy="25" r="2" fill="white" opacity="0.85"/>
+</svg>

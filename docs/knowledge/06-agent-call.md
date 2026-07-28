@@ -1,3 +1,8 @@
+---
+name: knowledge-agent-mcp-protocol
+description: Agent调用与MCP协议文档，包含MCP Server封装、Claude Desktop/Cursor接入、工具调用链路设计。当将知识库暴露为Agent工具时使用。
+---
+
 # 第七章：知识库被 Agent 调用 —— 从 RAG 到 MCP
 
 > **这是完整链路的最后一环**：知识已经蒸馏、已经入库，Agent 如何高效调用它？

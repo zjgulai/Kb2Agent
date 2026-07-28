@@ -87,9 +87,17 @@ function bindImgLightbox() {
   })
 }
 
+function bindSidebarTooltips() {
+  document.querySelectorAll('.VPSidebarItem.level-1 .item .link .text').forEach((el) => {
+    const full = el.textContent.trim()
+    if (full) el.parentElement.setAttribute('title', full)
+  })
+}
+
 function bindAll() {
   bindMermaidLightbox()
   bindImgLightbox()
+  bindSidebarTooltips()
 }
 
 function scheduleBind() {

@@ -10,6 +10,7 @@ export default withMermaid(defineConfig({
   appearance: false,
 
   head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/Kb2Agent/favicon.svg' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     ['link', {
@@ -43,6 +44,7 @@ export default withMermaid(defineConfig({
           { text: '05. 数据安全与合规架构', link: '/knowledge/05-security-compliance' },
           { text: '06. GraphRAG知识图谱构建', link: '/knowledge/05-graphrag' },
           { text: '07. Agent调用 + MCP协议', link: '/knowledge/06-agent-call' },
+          { text: '附录. 工具完整手册与选型决策树', link: '/knowledge/08-tools-appendix' },
         ]
       },
       {
@@ -81,6 +83,7 @@ export default withMermaid(defineConfig({
             { text: '05. 数据安全与合规架构（必读）', link: '/knowledge/05-security-compliance' },
             { text: '06. GraphRAG知识图谱构建', link: '/knowledge/05-graphrag' },
             { text: '07. Agent调用 + MCP协议', link: '/knowledge/06-agent-call' },
+            { text: '附录. 工具完整手册与选型决策树', link: '/knowledge/08-tools-appendix' },
           ]
         },
         {
@@ -120,24 +123,25 @@ export default withMermaid(defineConfig({
   mermaid: {
     theme: 'base',
     themeVariables: {
-      background:        '#FDF8F4',
-      primaryColor:      '#F9D0D6',
-      primaryBorderColor:'#C44A5E',
-      primaryTextColor:  '#2C1018',
-      secondaryColor:    '#F5EDD4',
-      secondaryBorderColor:'#C9A84C',
-      secondaryTextColor:'#6b5020',
-      tertiaryColor:     '#DCF0DC',
-      tertiaryBorderColor:'#5E8B5E',
-      tertiaryTextColor: '#224d22',
-      lineColor:         '#9B8F8C',
-      textColor:         '#3A2428',
-      edgeLabelBackground:'#FDF8F4',
-      noteBkgColor:      '#F5EDD4',
-      noteTextColor:     '#6b5020',
-      clusterBkg:        '#FAF3EE',
-      clusterBorder:     '#D75C70',
-      titleColor:        '#2C1018',
+      /* 莫兰迪色板 — 与 custom.css v5 保持一致 */
+      background:           '#F4EFE6',   /* --paper */
+      primaryColor:         '#D0DCE6',   /* --accent-soft 石板蓝灰色块 */
+      primaryBorderColor:   '#6A8296',   /* --accent-deep */
+      primaryTextColor:     '#3A3630',   /* --ink */
+      secondaryColor:       '#E0D6C6',   /* --warm-soft 暖棕灰色块 */
+      secondaryBorderColor: '#8C7C66',   /* --warm-deep */
+      secondaryTextColor:   '#54504A',   /* --body */
+      tertiaryColor:        '#CFDBD4',   /* --sage-soft 鼠尾草绿色块 */
+      tertiaryBorderColor:  '#6E8676',   /* --sage-deep */
+      tertiaryTextColor:    '#3C5848',
+      lineColor:            '#9A948C',   /* --muted */
+      textColor:            '#3A3630',   /* --ink */
+      edgeLabelBackground:  '#F4EFE6',   /* --paper */
+      noteBkgColor:         '#E0D6C6',   /* --warm-soft */
+      noteTextColor:        '#54504A',
+      clusterBkg:           '#EDE7DB',   /* --paper-2 */
+      clusterBorder:        '#7E96A8',   /* --accent */
+      titleColor:           '#3A3630',   /* --ink */
     }
   }
 }))
