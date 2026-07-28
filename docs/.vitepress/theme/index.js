@@ -58,6 +58,16 @@ function attachMermaid(el) {
   if (svg.hasAttribute('data-lbox')) return true
 
   svg.setAttribute('data-lbox', '1')
+
+  const vb = (svg.getAttribute('viewBox') || '').split(' ').map(Number)
+  if (vb.length === 4 && vb[2] > 0 && vb[3] > 0) {
+    const nativeW = vb[2]
+    const nativeH = vb[3]
+    svg.removeAttribute('width')
+    svg.removeAttribute('height')
+    svg.style.cssText = `width:${nativeW}px;height:${nativeH}px;max-width:none;display:block;`
+  }
+
   el.style.cursor = 'zoom-in'
 
   if (!el.querySelector('.mkd-zoom-hint')) {
