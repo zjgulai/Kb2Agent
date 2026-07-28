@@ -1,6 +1,6 @@
 /* ============================================================
-   MKD Guide — Design System v6  仿宋+莫兰迪
-   字体：中文仿宋体（STFangsong/FangSong）/ 英文 -apple-system
+   MKD Guide — Design System v7  微软雅黑+莫兰迪
+   字体：中文微软雅黑/苹方 / 英文 -apple-system
    颜色：Giorgio Morandi 低饱和度灰调色板
    排版：呼吸感优先，行距宽松，段间距充足
    ============================================================ */
@@ -58,7 +58,7 @@
 
   /* ── 字体栈 ── */
   --font-en:  -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
-  --font-zh:  'STFangsong', 'FangSong', 'FangSong_GB2312', 'LXGW WenKai', Georgia, serif;
+  --font-zh:  'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', 'Hiragino Sans GB', sans-serif;
   --font-mono:'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
 
   --vp-font-family-base: var(--font-en);
@@ -293,20 +293,14 @@ nav, header {
 }
 .VPDocAsideOutline { width: 200px !important; }
 
-/* 有大纲时限制正文宽，避免挤占大纲空间 */
+/* 正文区铺满 sidebar 右侧到 aside 左侧的全部空间 */
 @media (min-width: 1280px) {
   .VPDoc.has-aside .content-container {
-    max-width: 680px !important;
+    max-width: none !important;
   }
   .VPDoc.has-aside .vp-doc {
     padding-left: 1.5rem !important;
     padding-right: 1.5rem !important;
-  }
-}
-
-@media (min-width: 1440px) {
-  .VPDoc.has-aside .content-container {
-    max-width: 720px !important;
   }
 }
 
@@ -408,7 +402,7 @@ nav, header {
 .vp-doc p {
   font-family: var(--font-zh);
   font-size: 1.0rem;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 2.1;
   color: var(--body);
   margin-bottom: 1.6rem;
@@ -429,7 +423,7 @@ nav, header {
 
 .vp-doc a {
   color: var(--accent-deep);
-  font-weight: 500;
+  font-weight: 700;
   text-decoration: none;
   border-bottom: 1px dashed rgba(106,130,150,0.50);
   transition: border-color .15s, color .15s;
@@ -481,7 +475,7 @@ nav, header {
 }
 .vp-doc blockquote p {
   font-family: var(--font-zh);
-  font-weight: 500;
+  font-weight: 700;
   color: var(--warm-deep);
   margin-bottom: 0;
   font-size: 0.975rem;
@@ -493,7 +487,7 @@ nav, header {
 .vp-doc ul { padding-left: 1.5rem; }
 .vp-doc ul > li {
   font-family: var(--font-zh);
-  font-weight: 500;
+  font-weight: 700;
   margin: 0.55rem 0;
   line-height: 2;
   color: var(--body);
@@ -501,7 +495,7 @@ nav, header {
 .vp-doc ul > li::marker { color: var(--accent); }
 .vp-doc ol > li {
   font-family: var(--font-zh);
-  font-weight: 500;
+  font-weight: 700;
   line-height: 2;
   color: var(--body);
 }
@@ -537,7 +531,7 @@ nav, header {
 }
 .vp-doc td {
   font-family: var(--font-zh);
-  font-weight: 500;
+  font-weight: 700;
   padding: 0.9rem 1.125rem;
   border-bottom: 1px solid var(--line);
   color: var(--body);
@@ -602,7 +596,7 @@ div[class*='language-']::before {
 }
 .vp-doc .custom-block p {
   font-family: var(--font-zh);
-  font-weight: 500;
+  font-weight: 700;
   margin-bottom: 0;
   font-size: 0.935rem;
   text-align: left;
@@ -1110,14 +1104,14 @@ div[class*='language-']::before {
 }
 .role-desc {
   font-family: var(--font-zh);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.825rem;
   color: var(--vp-c-text-3);
   margin-bottom: 0.75rem;
 }
 .role-path {
   font-family: var(--font-zh);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.78rem;
   color: var(--accent-deep);
   line-height: 1.7;

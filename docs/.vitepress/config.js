@@ -19,7 +19,7 @@ export default withMermaid(defineConfig({
     }],
     ['link', {
       rel: 'stylesheet',
-      href: 'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css'
+      href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap'
     }]
   ],
 
