@@ -63,7 +63,7 @@ description: 10种输入场景完整SOP文档，包含PDF、视频、播客、�
 
 **选型决策树：**
 
-```
+```text
 有 GPU（显存≥8GB）？
 ├── 有 → 文档有跨页连续结构/超长表格？
 │   ├── 有 → baidu/Unlimited-OCR（32K上下文一次吞入）
@@ -72,7 +72,7 @@ description: 10种输入场景完整SOP文档，包含PDF、视频、播客、�
 └── 没有 → 文档是金融/财报类？
     ├── 是 → Docling（TableFormer 专为此优化）
     └── 否 → MinerU pipeline 后端（纯CPU降级）
-```
+```text
 
 ### 完整 SOP
 
@@ -84,7 +84,7 @@ pip install docling
 # 一行命令：自动保留标题层级、表格结构、阅读顺序
 docling your_document.pdf --output ./output/
 # 产物：output/your_document.md（图像生成描述占位符）
-```
+```text
 
 **路线二：有 GPU，高精度（MinerU）**
 
@@ -107,7 +107,7 @@ for img in output/images/*.png; do
   # 送给 VLM 描述
   echo "处理: $img"
 done
-```
+```text
 
 **路线三：超复杂长文档（Unlimited-OCR）**
 
@@ -147,7 +147,7 @@ model.infer_multi(
     ngram_window=1024,        # 多页必须用 1024，单页用 128
     save_results=True,
 )
-```
+```text
 
 ### 天坑避免
 
@@ -264,7 +264,7 @@ cat transcript.txt frame_descriptions.md > combined_input.md
 # Step 7: 压力测试
 # cangjie-skill 自动生成 test-prompts.json
 # 验证所有测试用例 Agent 能给出正确触发路径
-```
+```text
 
 ### 天坑避免
 
@@ -361,7 +361,7 @@ EOF
 
 # 个人录音日记：
 # /yourself-skill
-```
+```text
 
 ### 天坑避免
 
@@ -439,7 +439,7 @@ EOF
 # Step 4: 持续监控
 # 用 wigolo-watch 监控目标博客
 # 每月清理 expires 日期已过的临时卡片
-```
+```text
 
 ### 天坑避免
 
@@ -510,7 +510,7 @@ npx repomix \
 # 任何路线的最后一步：Context7 补充最新文档
 # 通过 Context7 MCP 实时获取官方最新文档
 # 在 Skill 里标注 version: >=X.Y.Z 防止过时
-```
+```text
 
 ### 天坑避免
 
@@ -556,7 +556,7 @@ npx skills add titanwings/colleague-skill
 # 多来源聚合（书+视频+访谈）
 # 先分别用 A/B/C 场景处理各类来源，再合并
 # /cangjie-skill buffett_letters.md buffett_speeches/ buffett_interviews.md
-```
+```text
 
 ### 天坑避免
 
@@ -611,7 +611,7 @@ PROMPT = """
 # 决策规则 → Rules JSONL（用于自动化监控）
 # 分析洞察 → 摘要原子笔记（带有效期：生成日期 + 有效期）
 # 原始表格 → 向量库（元数据：quarter/year/metric_type）
-```
+```text
 
 ### 天坑避免
 
@@ -683,7 +683,7 @@ def describe_image(image_path: str, image_type: str) -> str:
         ]}]
     )
     return resp.choices[0].message.content
-```
+```text
 
 ### 天坑避免
 
@@ -750,7 +750,7 @@ for resp in api_responses:
     df.to_markdown(f"data_{fname}.md")
 
 # 然后送入场景 G 的蒸馏流程
-```
+```text
 
 ---
 
@@ -809,7 +809,7 @@ TEMPLATE
 # raw/meetings/YYYY-MM-DD-主题.md   ← 原始转写，只读，永不删除
 # wiki/decisions/                   ← 提炼的方法论 Skill
 # wiki/architecture-decisions/      ← ADR 文档
-```
+```text
 
 ### 天坑避免
 

@@ -37,7 +37,7 @@ flowchart LR
     classDef store fill:#e0f2f1,stroke:#0f766e,color:#134e4a;
     class A,B,C,D,E,F entry;
     class K store;
-```
+```text
 
 | 数据源 | 接入方式 | 数据量 | 更新频率 | 敏感级别 |
 | --- | --- | --- | --- | --- |
@@ -72,7 +72,7 @@ flowchart LR
     class W2 focus;
     class W3 decision;
     class W4,W5,W6,W7 execution;
-```
+```text
 
 这个流程的关键不在“7 个 AI 角色”，而在于**每一步都消耗上一步的结构化输出，而不是重新从原始评论开始问模型**。这正是知识库存在的意义：把一次性分析沉淀成可重复调用的业务资产。
 
@@ -96,7 +96,7 @@ flowchart LR
     class S2,S3,S4,S6,S7 process;
     class S5 storage;
     class S8 output;
-```
+```text
 
 这里刻意没有把系统做成“万能 RAG 问答”。因为 WF03 之后的节点需要的是**稳定的中间结构**，例如机会分数、产品定位、关键词簇，而不是自由文本回答。这也是后面会提到的“什么时候不要只靠 RAG”。
 
@@ -150,7 +150,7 @@ def extract_jtbd_scenarios(review_batch: list[str]) -> str:
         messages=[{"role": "user", "content": prompt}],
     )
     return resp.content[0].text
-```
+```text
 
 ### 情感词云提取代码
 
@@ -170,7 +170,7 @@ def build_emotion_wordcloud_tokens(comments: list[str]) -> list[tuple[str, int]]
             if token in emotion_lexicon:
                 counter[token] += 1
     return counter.most_common(20)
-```
+```text
 
 ### 反直觉需求发现
 
@@ -275,7 +275,7 @@ def normalize_record(text: str, source: str, product: str, brand: str) -> VOCRec
         brand=brand,
         collected_at=datetime.utcnow().isoformat(),
     )
-```
+```text
 
 ### 2. VOC 情感分析 + 痛点提取 Prompt
 
@@ -292,7 +292,7 @@ VOC_PROMPT = """
 """
 
 # 这段 Prompt 的关键不是“总结”，而是强制模型输出可统计、可聚类、可追溯的字段。
-```
+```text
 
 ### 3. 机会评分矩阵计算
 
@@ -351,4 +351,10 @@ $5K AI 方案 vs $50K 传统市调——这个成本对比忽略了一个维度�
 
 :::info 正确的定位
 这套方法在**高频、低风险、快速决策**场景下价值最大——比如选品方向参考、营销文案方向、用户分层标签。它不适合替代需要法律背书或深度定性研究的决策。
+:::
+
+---
+
+:::tip → 下一章
+成功案例之后，看三个真实失败案例——了解知识库在哪里失败，以及如何提前发现 → [17-failure-cases](17-failure-cases.md)
 :::

@@ -22,13 +22,13 @@ description: 架构选型深度指南，覆盖5级蒸馏阶梯LoD、四条技术
 
 **快速选型路径**：
 
-```
+```text
 数据量 < 1万 + 查询简单 + 无实时要求  →  ChromaDB + 本地 Qwen  (轻量方案)
 精确字段过滤需求强                     →  深度结构化提取 + Qdrant
 关系推理（"连带品类"/"上下游"）       →  轻量图谱（Kùzu/NetworkX）
 全库主题综合（"这批报告共同主题是？"）→  GraphRAG / LightRAG
 复杂多步自主决策                       →  Agentic RAG (LangGraph)
-```
+```text
 
 ---
 
@@ -50,7 +50,7 @@ results = kb.search("选品评分标准是什么")
 def opportunity_score(demand: float, competition: float,
                       profit: float, operation: float) -> float:
     return demand * 0.40 + competition * 0.30 + profit * 0.25 + operation * 0.05
-```
+```text
 
 ### 场景 2：实时数据 → 直接 API 调用，不入库
 
@@ -68,7 +68,7 @@ def opportunity_score(demand: float, competition: float,
 -- (OK) NL2SQL 返回精确值
 SELECT SUM(revenue) FROM sales_orders
 WHERE category='solar_charger' AND month='2026-07'
-```
+```text
 
 ### 场景 4：单文档短文本 + 低频查询 → 长上下文直接加载
 
@@ -85,7 +85,7 @@ response = client.messages.create(
     max_tokens=4096,
     messages=[{"role": "user", "content": f"报告全文：{report}\n\n问题：{query}"}]
 )
-```
+```text
 
 **判断准则**：文档 < 100 页 且 查询频率 < 50 次/月 → 优先试长上下文基线
 
@@ -97,7 +97,7 @@ result = llm.ask("计算这些销售数据的中位数和标准差")  # 可能�
 
 # (OK) pandas 直接计算
 stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
-```
+```text
 
 ---
 
@@ -223,7 +223,7 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 
 ---
 
-## 7.5 LoD 升降级触发判据与四路线混编模式
+## 8.3 LoD 升降级触发判据与四路线混编模式
 
 ### LoD 升降级：什么情况该上移，什么情况该下退
 
@@ -253,41 +253,41 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 
 **模式一：cangjie 打底 + darwin 迭代**（最常见）
 
-```
+```text
 输入：书籍/文档/专家访谈
 → cangjie：首次蒸馏，生成结构化SKILL.md（方法论版本v1）
 → 部署使用，收集真实反馈
 → darwin：基于反馈做棘轮迭代（需配评分器校准，见第十三章）
 → 输出：经过实战验证的方法论Skill
-```
+```text
 
 适用场景：已有成熟方法论文档、愿意投入迭代周期的场景。
 
 **模式二：R2S 生成骨架 + cangjie 填充方法论**
 
-```
+```text
 输入：教程视频 + 技术文章 + 示例代码
 → R2S：从多模态资源提炼可执行操作步骤（骨架）
 → cangjie：补充判断逻辑、例外处理、边界说明（血肉）
 → 输出：既可执行又有判断力的完整Skill
-```
+```text
 
 适用场景：工程操作类知识，有丰富的教程资源但缺乏系统化方法论。
 
 **模式三：nuwa 克隆风格 + cangjie 注入方法论**
 
-```
+```text
 输入：公众人物/专家的公开内容
 → nuwa：提炼表达风格和思维模式（风格层）
 → cangjie：从其著作/演讲中提炼方法论（内容层）
 → 组合：风格层+内容层 → 有方法论支撑的人格化Skill
-```
+```text
 
 适用场景：需要同时保持特定表达风格和方法论准确性的场景（如内部培训、品牌传播）。
 
 **模式四：darwin 单独使用**（仅用于已有Skill的持续优化）
 
-```
+```text
 前提：已有来自任意路线的SKILL.md
 → 部署使用，收集成功/失败案例
 → darwin：基于案例做精准迭代

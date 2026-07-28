@@ -37,7 +37,7 @@ def search_products(query: str, top_k: int = 5) -> str:
 
 if __name__ == "__main__":
     mcp.run()
-```
+```text
 
 MCP 协议将知识库从"被调用的服务"升级为"通用工具基础设施"。
 :::
@@ -64,7 +64,7 @@ flowchart LR
     
     classDef protocol fill:#fff3e0,stroke:#ff9800,stroke-width:2px
     class E protocol
-```
+```text
 
 ---
 
@@ -87,14 +87,14 @@ flowchart LR
 
 ### 2.2 输出形式全谱（6种，按粒度排序）
 
-```
+```text
 细粒度                                                         粗粒度
   │                                                              │
   ▼                                                              ▼
 Rules      原子笔记    Wiki 页面     Agent Skill    Fine-tune    知识图谱
 JSONL      Markdown    Markdown      SKILL.md        JSONL        Neo4j
 (bdistill) (Zettel.)   (LLM-Wiki)   (可执行)        (训练数据)   (关系库)
-```
+```text
 
 ---
 
@@ -117,7 +117,7 @@ JSONL      Markdown    Markdown      SKILL.md        JSONL        Neo4j
 
 ### 2.4 输出形式选择决策树
 
-```
+```text
 你的知识最终怎么用？
 │
 ├── Agent 需要调用执行某类任务
@@ -137,7 +137,7 @@ JSONL      Markdown    Markdown      SKILL.md        JSONL        Neo4j
 │
 └── 需要人类阅读的结构化文档
     └── 输出：Markdown 文档（标准知识库文档）
-```
+```text
 
 ---
 

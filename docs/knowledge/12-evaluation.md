@@ -52,7 +52,7 @@ flowchart TD
         S2[用户满意度<br/>CSAT]
         S3[成本效率<br/>Token per Success]
     end
-```
+```text
 
 ---
 
@@ -157,7 +157,7 @@ class HallucinationDetector:
                 else "high"
             )
         }
-```
+```text
 
 ---
 
@@ -233,7 +233,7 @@ Skill 内容：
             all_tests.extend(tests)
 
         return all_tests
-```
+```text
 
 ---
 
@@ -318,7 +318,7 @@ class EvaluationDashboard:
               f"{'(OK)' if metrics['hallucination_rate'] < 0.1 else '[P0]'}")
         print(f"\n系统状态: {status_icon} {report['status'].upper()}")
         print(f"{'='*50}\n")
-```
+```text
 
 ---
 
@@ -336,7 +336,7 @@ score = gpt4o.evaluate(answer)  # 这个评分不可信
 # (OK) 正确：用不同模型评估
 answer = gpt4o_mini.generate(question)
 score = gpt4o.evaluate(answer)  # 不同能力级别，更可信
-```
+```text
 
 **铁律 2：幻觉检测必须在句子级别，不是文档级别**
 
@@ -392,7 +392,7 @@ def skill_iteration_with_eval(skill_path: str):
 
 ---
 
-## 14.8 A/B 测试框架（评估驱动迭代）
+## 12.8 A/B 测试框架（评估驱动迭代）
 
 :::tip 核心原则
 不靠感觉判断哪个 Prompt 或架构更好——用标准测试集 + 统计显著性检验。
@@ -476,9 +476,9 @@ def run_ab_test(search_fn_a, search_fn_b, test_set=None) -> dict:
     }
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return report
-```
+```text
 
-## 14.9 ragas 集成：自动化 RAG 质量评估
+## 12.9 ragas 集成：自动化 RAG 质量评估
 
 ```python
 """ragas_eval.py — 用 ragas 评估知识库检索质量"""
@@ -524,9 +524,9 @@ def run_ragas_eval(dataset: Dataset) -> dict:
         status = "(OK)" if v > 0.7 else ("[!]" if v > 0.5 else "(X)")
         print(f"  {status} {k}: {v}")
     return scores
-```
+```text
 
-## 12.8 对抗性评估：主动寻找系统不知道自己不知道的盲区
+## 12.10 对抗性评估：主动寻找系统不知道自己不知道的盲区
 
 好的评估体系不只测试"已知的通过场景"，还要主动设计让系统失败的用例。
 
@@ -543,7 +543,7 @@ ADVERSARIAL_BOUNDARY = [
         "trap": "系统可能直接推荐 MinerU，但 MinerU 的最优路径是用于排版 PDF"
     }
 ]
-```
+```text
 
 **类型二：知识版本攻击**
 故意询问已知已更新的历史信息，验证系统是否会用过期知识回答。
@@ -561,11 +561,11 @@ ADVERSARIAL_BOUNDARY = [
     "trap": "前提是错误的，正确系统应该先纠正前提",
     "expected_behavior": "纠正前提：GraphRAG 在事实检索上通常低于 VectorRAG"
 }
-```
+```text
 
 ---
 
-## 12.9 评估集的保鲜机制
+## 12.11 评估集的保鲜机制
 
 评估集一旦固定，就有被"过拟合"的风险——系统在刻意或无意间，被优化成通过这批特定问题而不是真正提升质量。
 
@@ -613,7 +613,7 @@ def refresh_evaluation_set(current_set: list[dict],
     refreshed = retained + new_questions
     print(f"评估集刷新：保留 {len(retained)} 条，新增 {len(new_questions)} 条失败案例")
     return refreshed
-```
+```text
 
 :::tip 评估体系的元问题
 你的评估指标本身也需要被评估。每半年问一次：**你现在追踪的指标，还能代表你真正关心的业务结果吗？** 如果发现追踪的是"可测量的"而不是"重要的"，及时调整。
@@ -627,7 +627,7 @@ def refresh_evaluation_set(current_set: list[dict],
 
 ---
 
-## 12.10 错误成本分层与层间归因链路
+## 12.12 错误成本分层与层间归因链路
 
 ### 错误成本分层评估
 
@@ -683,11 +683,11 @@ def attribute_failure(failure_case: dict) -> str:
 
     # 层4：治理层检查（需要历史对比）
     return "governance_layer: 单案例无法判断，需要统计多个案例的趋势"
-```
+```text
 
 ### 归因后的修复优先级规则
 
-```
+```text
 检索层失败   → 优先调参（低成本，1-2天）
 生成层失败   → 加强验证机制（中成本，1-2周）
 业务层失败   → 重新定义问题（高成本，需要与业务方对齐）

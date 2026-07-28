@@ -46,7 +46,7 @@ flowchart LR
         A4[已有 SKILL.md] --> B4[9维评估+棘轮机制] --> C4[更强的下一版 SKILL.md]
     end
     classDef default fill:#fafafa,stroke:#334155,stroke-width:1px;
-```
+```text
 
 ---
 
@@ -60,7 +60,7 @@ flowchart LR
 
 cangjie-skill 的真正竞争壁垒在于它的蒸馏流水线设计极其严格：
 
-```
+```text
 阶段 0: 整书理解（Adler 分析阅读法）
          ↓ 四步拆解：结构 / 解释 / 批判 / 应用 → BOOK_OVERVIEW.md
 阶段 1: 5 路并行提取器
@@ -77,7 +77,7 @@ cangjie-skill 的真正竞争壁垒在于它的蒸馏流水线设计极其严格
 阶段 4: 压力测试
          每个 skill 设计包含诱饵题的测试用例
          未通过 → 回炉 阶段 2
-```
+```text
 
 ### book2skill 的实战证明
 
@@ -107,17 +107,17 @@ book2skill 已经对《缠论》、《茶经》、《微信背后的产品观》
 
 ### 三个仓库的精准差异
 
-```
+```text
 nuwa-skill（女娲）：公众人物 → 思维操作系统（决策框架+心智模型）
 ex-skill（前任）：  私人聊天记录 → 语气复现+情感记忆（情绪价值导向）
 yourself-skill：    个人日记/记录 → 自我镜像（Part A:记忆 + Part B:人格）
-```
+```text
 
 ### nuwa-skill 的架构精髓
 
 nuwa-skill 的核心不是让 Agent 说话像某人，而是提取其**可迁移的认知工具（Transferable Cognitive Tools）**：
 
-```
+```text
 输入：一个人名（如 Naval Ravikant）
        ↓
 Phase 1: 6路并行调研 Agent
@@ -129,7 +129,7 @@ Phase 3: 双轨结构化
          行为轨（表达 DNA/语气边界）
 Phase 4: SKILL.md 封装
          + darwin-skill 内置评估驱动的持续进化
-```
+```text
 
 **核心理念**：当用户遇到 SaaS 获客成本高的问题，经过马斯克 Skill 处理后，得到的不是"马斯克的口吻"，而是**第一性原理的解构框架**——先算物理极限，再看实际路径与极限的倍数。
 
@@ -183,7 +183,7 @@ Resource2Skill 的每个 Skill 条目（Entry）包含以下字段，这是整�
     "no_duplication": true
   }
 }
-```
+```text
 
 **关键设计**：`acceptance_predicate`（可接受谓词）是一个显式的质量门控，只有同时满足4个条件的 Skill 才能入库。
 
@@ -217,7 +217,7 @@ Resource2Skill 的每个 Skill 条目（Entry）包含以下字段，这是整�
 
 棘轮（Ratchet）只能向前转，这是 darwin-skill 最精髓的设计：
 
-```
+```text
 1. 基线评估（9维度加权打分，满分100）
         ↓
 2. 单维度优化实验（每轮只改一个维度）
@@ -227,7 +227,7 @@ Resource2Skill 的每个 Skill 条目（Entry）包含以下字段，这是整�
    得分提升? → (OK) 保留（git commit）
    得分持平? → (X) 回滚（git revert）
    得分降低? → (X) 回滚 + 标注失败模式
-```
+```text
 
 **9个评估维度**（v2.0，对齐微软 SkillLens 论文）：
 1. 触发精确性
@@ -325,7 +325,7 @@ flowchart TD
     class Router,Validate decision;
     class Discard,Revert danger;
     class Library,Agent success;
-```
+```text
 
 ### 三条核心整合原则
 
@@ -374,7 +374,7 @@ Skill蒸馏到位后，跑通完整可运行Pipeline → [10-e2e-pipeline](10-e2
 
 ### 模式一：cangjie → darwin（方法论迭代，最常用）
 
-```
+```text
 适用：已有成熟文档/书籍，愿意投入迭代周期
 顺序：首次蒸馏 → 部署验证 → 基于真实反馈优化
 
@@ -387,11 +387,11 @@ Skill蒸馏到位后，跑通完整可运行Pipeline → [10-e2e-pipeline](10-e2
 注意事项：
 - 不要在收集足够反馈前就启动 darwin（样本太少会过拟合）
 - darwin 每次迭代必须和黄金样本做对比，防止漂移
-```
+```text
 
 ### 模式二：R2S → cangjie（工程操作补充方法论）
 
-```
+```text
 适用：有丰富教程/视频资源，但缺乏系统化方法论
 顺序：操作步骤骨架 → 判断逻辑填充
 
@@ -403,11 +403,11 @@ Skill蒸馏到位后，跑通完整可运行Pipeline → [10-e2e-pipeline](10-e2
 3. 人工合并两份产出，确保风格一致
 
 典型应用：数据库运维 SOP（R2S提炼操作步骤 + cangjie提炼故障判断逻辑）
-```
+```text
 
 ### 模式三：nuwa → cangjie（风格+方法论双轨）
 
-```
+```text
 适用：需要同时保持特定表达风格和方法论准确性
 顺序：风格克隆 → 方法论注入
 
@@ -422,11 +422,11 @@ Skill蒸馏到位后，跑通完整可运行Pipeline → [10-e2e-pipeline](10-e2
 - nuwa 的幻觉风险最高，方法论层必须有独立证据来源
 - 不要让风格层影响方法论的准确性
 - 必须标注："本Skill的内容基于公开资料，风格是模拟，非本人授权"
-```
+```text
 
 ### 模式四：单独使用 darwin（仅用于优化已有Skill）
 
-```
+```text
 适用：已有来自任意路线的 SKILL.md，需要持续改进
 前提：必须已有完整的评分器配置和黄金样本集
 

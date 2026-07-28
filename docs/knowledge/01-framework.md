@@ -79,7 +79,7 @@ flowchart LR
     class K1,K2,K3,K4 kb;
     class A1,A2,A3 agt;
     class E1,E2,E3 evo;
-```
+```text
 
 **读完本指南，你将能构建这整条链路，每个环节都有可运行代码支撑。**
 
@@ -104,7 +104,7 @@ flowchart LR
       执行步骤：先问这三个验证问题...
       禁忌：不要在未验证假设前就开始开发
       → Agent 收到问题时直接调用，无需二次推理
-```
+```text
 
 ::: warning 核心误区
 直接把原始 PDF 放进向量库，是把"信息"当成了"智慧"——中间缺失了两个等级的转化。这就是为什么简单的 RAG 系统经常给出"感觉对但执行不了"的答案。
@@ -140,7 +140,7 @@ flowchart TD
 
     classDef red fill:#fef2f2,stroke:#dc2626,stroke-width:1.5px,color:#991b1b;
     class Problem,P1,P2,P3 red;
-```
+```text
 
 **核心比喻**：把 PDF 直接扔进向量库，就像让厨师用原矿石烹饪——你需要先把铁矿石炼成钢，把钢打成刀，才能用来切菜。蒸馏就是"炼矿"的过程。
 
@@ -185,7 +185,7 @@ flowchart TD
     class B1,B2,B3 base;
     class T1,T2,T3 top;
     class Raw,Parse src;
-```
+```text
 
 ::: info 为什么要分两层？
 - **基础层**是"完整性"——确保知识没有遗漏，供检索和人类阅读
@@ -212,7 +212,7 @@ flowchart BT
     classDef lv3 fill:#fff7ed,stroke:#ea580c,stroke-width:1.5px,color:#7c2d12;
     classDef lv4 fill:#fef2f2,stroke:#dc2626,stroke-width:1.5px,color:#991b1b;
     class L1 lv1; class L2 lv2; class L3 lv3; class L4 lv4;
-```
+```text
 
 **压缩比**：每页约 13 个 Atomic Insight → 1 个 Concept（13:1 压缩）
 
@@ -224,7 +224,7 @@ flowchart BT
 
 核心思想：**LLM 不只在查询时检索文档，而是持续编译维护一个活的 Wiki。**
 
-```
+```text
 knowledge-base/
 ├── raw/                    ← 只读原始资料，永不删除
 │   ├── books/
@@ -237,7 +237,7 @@ knowledge-base/
     ├── entity_pages/       # 实体页：人物/组织/产品/工具
     ├── concept_pages/      # 概念页：技术术语/领域方法论
     └── summaries/          # 每个 source 的摘要页
-```
+```text
 
 每次 Ingest 固定五步：解析 → 写摘要页 → 更新总目录 → 合并实体/概念页 → 追加日志。
 
@@ -308,14 +308,14 @@ L4 Skill 的错误通常不会触发明显的系统告警，而是通过以下�
 
 当检测到 L4 Skill 可能出错时，按以下路径溯源：
 
-```
+```text
 L4 Skill 错误
   ↓ 步骤1：隔离受影响的 Skill 版本，暂停 darwin 迭代
   ↓ 步骤2：找到最近一次"业务验证通过"的 Skill 版本，回滚
   ↓ 步骤3：从 Skill 回退到 L3 层——检查支撑该 Skill 的知识图谱/社区摘要
   ↓ 步骤4：从 L3 回退到 L1/L0——找到原始来源文档，验证其是否仍然有效
   ↓ 步骤5：确认根因后，从正确的 LoD 层重新蒸馏
-```
+```text
 
 ### 每个 Skill 必须记录的纠错锚点
 

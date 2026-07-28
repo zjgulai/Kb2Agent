@@ -75,7 +75,7 @@ flowchart TD
 
     classDef tool fill:#f0fdf4,stroke:#16a34a,stroke-width:1px;
     class T_unlimited,T_mineru,T_marker,T_docling,T_mineru_cpu,T_sense,T_whisper,T_pyannote,T_cangjie,T_nuwa,T_r2s,T_darwin,T_lightrag,T_graphrag,T_graphiti,T_c2s tool;
-```
+```text
 
 ---
 
@@ -107,7 +107,7 @@ mineru-api --host 0.0.0.0 --port 8080
 # Docker 部署（推荐生产环境）
 docker pull opendatalab/mineru:latest
 docker run -p 8080:8080 opendatalab/mineru:latest
-```
+```text
 
 **产物说明**：
 - `output.md`：保留阅读顺序的 Markdown（表格→HTML，公式→LaTeX）
@@ -142,7 +142,7 @@ python -m sglang.launch_server \
 
 # 方式三：Transformers 直接推理
 pip install transformers torch pymupdf
-```
+```text
 
 ```python
 # 核心调用代码
@@ -177,7 +177,7 @@ model.infer_multi(
     ngram_window=1024,   # 多页必须 1024，单页用 128
     save_results=True,
 )
-```
+```text
 
 **选型边界**：超复杂跨页表格、混排长文档首选；简单文档用 MinerU 更经济
 
@@ -207,7 +207,7 @@ marker_single document.pdf ./output/ --use_llm
 # --mode balanced  默认，GPU 上精度最好（76.0% olmOCR-bench）
 # --mode fast      速度优先（66.6%）
 # --disable_ocr    纯 CPU，不调用 VLM（43.6%，23.7页/秒）
-```
+```text
 
 ---
 
@@ -247,7 +247,7 @@ results = converter.convert_all(Path("./pdf_folder").glob("*.pdf"))
 for res in results:
     out_path = Path("output") / res.input.file.stem
     res.document.save_as_markdown(out_path.with_suffix(".md"))
-```
+```text
 
 ---
 
@@ -286,7 +286,7 @@ res = model.generate(
 for seg in res:
     print(f"[{seg.get('start',0):.1f}s] {seg['text']}")
 EOF
-```
+```text
 
 ---
 
@@ -320,7 +320,7 @@ with open("transcript.txt", "w") as f:
 # tiny / base / small / medium / large-v2 / large-v3
 # 中文推荐：large-v3（精度最好）
 # 速度优先：medium（精度/速度平衡）
-```
+```text
 
 ---
 
@@ -351,7 +351,7 @@ for turn, _, speaker in diarization.itertracks(yield_label=True):
 
 # 结合 faster-whisper 时间戳，将说话人标签和文字对齐
 EOF
-```
+```text
 
 ---
 
@@ -376,7 +376,7 @@ yt-dlp "PODCAST_URL" -x --audio-format mp3
 
 # 查看可用字幕列表
 yt-dlp --list-subs "VIDEO_URL"
-```
+```text
 
 ---
 
@@ -406,7 +406,7 @@ npx skills add kangarooking/cangjie-skill
 #     SKILL.md          主 Skill 文件（RIA++ 结构）
 # INDEX.md              Skill 之间的关系图
 # test-prompts.json     压力测试用例（必须全部通过）
-```
+```text
 
 **RIA++ 结构说明**（每个 SKILL.md 必须包含）：
 - **R**：原文引用（≥2处独立佐证）
@@ -433,7 +433,7 @@ git clone https://github.com/alchaincyf/nuwa-skill ~/.claude/skills/nuwa-skill
 
 # 支持 50+ AI Agent 运行时：
 # Claude Code / Codex / Cursor / OpenClaw / Hermes Agent 等
-```
+```text
 
 **输出结构**：
 - `能力轨（work_skill.md）`：工作方法 / 心智模型 / 决策启发式
@@ -451,7 +451,7 @@ npx skills add alchaincyf/darwin-skill
 
 # 在 Claude Code 中对任意 SKILL.md 执行优化：
 /darwin-skill path/to/SKILL.md
-```
+```text
 
 **核心机制**：
 - **9维度加权评分**（v2.0，对齐微软 SkillLens 论文）
@@ -504,7 +504,7 @@ python cli.py validate-domain --domain web  # 验证环境
 # code_field: 完整可运行代码（含所有 import）
 # visual_examples: before/after 截图路径
 # source_path: 原始资源路径（溯源）
-```
+```text
 
 ---
 
@@ -542,7 +542,7 @@ with open("knowledge.md", "r") as f:
 # naive  → 退化为纯向量 RAG
 
 result = rag.query("主要风险主题", param=QueryParam(mode="mix"))
-```
+```text
 
 **[!] 关键约束**：Embedding 模型选定后**不能更换**（更换需重新 embed 全部内容）
 
@@ -573,7 +573,7 @@ python -m corpus2skill compile \
 
 # 成本优化：默认开启 Anthropic Prompt Cache
 # 每次查询：$0.172 → $0.089（节省 48%）
-```
+```text
 
 ---
 
@@ -591,7 +591,7 @@ curl "r.jina.ai/https://example.com/article" > article.md
 for url in url1 url2 url3; do
   curl "r.jina.ai/$url" > "$(echo $url | md5sum | cut -c1-8).md"
 done
-```
+```text
 
 ---
 
@@ -605,7 +605,7 @@ pip install playwright
 playwright install chromium
 
 # 基础用法（见场景 J 的完整代码）
-```
+```text
 
 ---
 
@@ -619,7 +619,7 @@ pip install colpali-engine
 
 # 基础用法（见场景 H 的完整代码）
 # 核心：图像直接变向量，文字 Query 可检索图像，无需任何文字提取
-```
+```text
 
 ---
 
@@ -692,7 +692,7 @@ pip install colpali-engine
 
 除了能力/成本/维护状态，选型时必须评估退出成本：
 
-```
+```text
 退出成本 = 数据迁移成本 + 接口改造成本 + 重新测试成本 + 团队学习成本
 
 低退出成本工具（优先）：
@@ -708,4 +708,10 @@ pip install colpali-engine
 
 :::tip 组合选型的最小风险原则
 在核心路径（采集→提取→入库→检索）上，每个环节的工具应选择**退出成本最低的方案**，即使它不是性能最优的。性能可以后期优化，但高退出成本工具一旦进入核心路径，替换代价会随时间指数增长。
+:::
+
+---
+
+:::tip → 下一章
+工具选好后，进入推理模型时代的新范式——浅提取 vs 深提取、延迟预算与幻觉风险 → [09-reasoning-models](09-reasoning-models.md)
 :::

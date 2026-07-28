@@ -37,7 +37,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 4. 代码里把抓取规则抽成配置，方便替换为其他电商榜单。
 5. 增加 robots.txt 检查、请求间隔、User-Agent 轮换和异常日志。
 6. 最后给我一个 `python scripts/fetch_amazon_bestseller.py --url "[URL]"` 的运行命令。
-```
+```text
 
 **预期输出文件名**：`data/raw/amazon-best-seller-[category]-[date].md`
 
@@ -57,7 +57,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 4. `price_band` 需要按 `[价格区间规则]` 自动分类；`competitive_position` 需要给出 `budget/mass/premium/luxury` 之一。
 5. 生成 `scripts/extract_products_to_json.py`，并把结果写入 `data/structured/products-[category]-[date].json`。
 6. 同时生成一个 JSON Schema 校验脚本，保证空字段、类型错误、缺失字段都能被拦截。
-```
+```text
 
 **预期输出文件名**：`data/structured/products-[category]-[date].json`
 
@@ -77,7 +77,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 4. 集合名使用 `[collection_name]`，支持重复导入时按 `product_url + captured_at` 去重。
 5. 输出 `scripts/load_into_chromadb.py` 和 `config/vector_store.yaml`。
 6. 运行后打印导入数量、去重数量、失败数量和示例检索结果。
-```
+```text
 
 **预期输出文件名**：`scripts/load_into_chromadb.py`
 
@@ -97,7 +97,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 4. 生成 `app/main.py`、`app/schemas.py`、`app/retriever.py`、`tests/test_query_api.py`。
 5. 给出本地启动命令、示例请求和 Pytest 用例。
 6. 代码风格以生产可维护为目标，不要把所有逻辑写在一个文件里。
-```
+```text
 
 **预期输出文件名**：`app/main.py`
 
@@ -117,7 +117,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 4. 为健康检查、配置加载失败、向量库不可用等场景补充错误处理。
 5. 输出 `app/middleware.py`、`app/audit.py`、`docker-compose.yml`、`Dockerfile`。
 6. 再补一份 `README-production.md`，说明部署方式、环境变量、风险点和回滚步骤。
-```
+```text
 
 **预期输出文件名**：`README-production.md`
 
@@ -138,7 +138,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 3. 生成 `jobs/freshness_check.py` 和定时运行配置（cron 或 APScheduler）。
 4. 对于低于阈值的记录，标记需要重新抓取或重新提取。
 5. 提供一份日报 Markdown：`reports/freshness-[date].md`。
-```
+```text
 
 **预期输出文件名**：`reports/freshness-[date].md`
 
@@ -158,7 +158,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 4. 输出 `data/derived/internal-kb-[date].json`，再导入 `[internal_collection]`。
 5. 生成 `pipelines/process_internal_csv.py`、`pipelines/summarize_with_ollama.py`、`pipelines/load_internal_vectors.py`。
 6. 为缺失值、字段名变化、数值异常补充校验和告警。
-```
+```text
 
 **预期输出文件名**：`data/derived/internal-kb-[date].json`
 
@@ -176,7 +176,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 2. 再生成 `eval/run_retrieval_eval.py`，统计 Hit Rate@3、Hit Rate@5、MRR。
 3. 输出 `reports/retrieval-eval-[date].md`，汇总失败样例和建议修复点。
 4. 评估脚本要能作为 CI 命令运行。
-```
+```text
 
 **预期输出文件名**：`eval/test_queries.json`
 
@@ -195,7 +195,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 3. 统计 Hit Rate@3、Hit Rate@5、MRR、平均响应时间、索引体积。
 4. 产出 `reports/embedding-benchmark-[date].md` 和 `reports/embedding-benchmark-[date].csv`。
 5. 明确给出推荐模型和不推荐原因。
-```
+```text
 
 **预期输出文件名**：`reports/embedding-benchmark-[date].md`
 
@@ -214,7 +214,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 3. 把重试次数、降级原因、最终路径写入结构化日志。
 4. 生成 `core/retry.py`、`core/fallbacks.py`、`tests/test_fallbacks.py`。
 5. 最后给出一张失败路径流程图和告警建议。
-```
+```text
 
 **预期输出文件名**：`core/fallbacks.py`
 
@@ -233,7 +233,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 3. 提供一跳扩展查询函数，例如“查询某品牌后顺带返回相邻品类与价格带”。
 4. 输出 `graph/build_graph.py`、`graph/query_graph.py`、`data/graph/market_graph.gpickle`。
 5. 再生成一个简单可视化脚本输出 PNG。
-```
+```text
 
 **预期输出文件名**：`data/graph/market_graph.gpickle`
 
@@ -252,7 +252,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 3. 生成 `mcp_server/server.py`、`mcp_server/tools.py`、`mcp_server/README.md`。
 4. 给出 Cursor 或 Claude Desktop 的 MCP 配置示例。
 5. 确保 Tool 输出稳定、字段名固定、错误信息可追踪。
-```
+```text
 
 **预期输出文件名**：`mcp_server/server.py`
 
@@ -273,7 +273,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 3. 输出字段至少包含 `market_summary`、`price_gap_opportunities`、`competition_intensity`、`opportunity_score`、`reasoning_chain`。
 4. 把 `reasoning_chain` 单独存为审计字段，方便复核。
 5. 生成 `analysis/reasoning_insights.py` 和 `reports/reasoning-analysis-[date].json`。
-```
+```text
 
 **预期输出文件名**：`reports/reasoning-analysis-[date].json`
 
@@ -292,7 +292,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 3. 提供 `POST /image-query` 接口，输入图片文件，输出相似商品及相似度。
 4. 生成 `multimodal/embed_images.py`、`multimodal/search.py`、`app/image_api.py`。
 5. 附一个最小前端页面用于上传图片测试。
-```
+```text
 
 **预期输出文件名**：`app/image_api.py`
 
@@ -311,7 +311,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 3. 输出 `streaming/binlog_listener.py`、`streaming/sync_pipeline.py`、`streaming/checkpoint.json`。
 4. 支持断点续跑和重复消费保护。
 5. 生成一份增量同步时序说明文档。
-```
+```text
 
 **预期输出文件名**：`streaming/binlog_listener.py`
 
@@ -329,7 +329,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 2. 自动做显著性检验，判断差异是否可信。
 3. 输出 `abtest/run_abtest.py`、`abtest/prompts.yaml`、`reports/abtest-[date].md`。
 4. 报告里要说明哪个版本胜出，以及建议上线条件。
-```
+```text
 
 **预期输出文件名**：`reports/abtest-[date].md`
 
@@ -347,7 +347,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 2. 生成一个 Streamlit 仪表盘，按天、按模块、按模型查看消耗。
 3. 增加月预算阈值，超出后触发熔断或降级到本地模型。
 4. 生成 `monitoring/cost_tracker.py`、`dashboard/streamlit_cost_app.py`、`reports/monthly-cost-[month].md`。
-```
+```text
 
 **预期输出文件名**：`dashboard/streamlit_cost_app.py`
 
@@ -365,7 +365,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 2. 生成脱敏前后差异日志，但日志中不得保留原始敏感值。
 3. 输出 `security/pii_redaction.py`、`security/redaction_policy.yaml`、`reports/pii-audit-[date].md`。
 4. 为误杀和漏检提供人工复核入口。
-```
+```text
 
 **预期输出文件名**：`security/pii_redaction.py`
 
@@ -383,7 +383,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 2. 冲突类型至少包括 `value_conflict`、`time_conflict`、`taxonomy_conflict`、`source_conflict`。
 3. 生成 `validation/contradiction_scan.py`、`validation/conflict_rules.yaml`、`reports/conflict-report-[date].html`。
 4. 报告中展示冲突证据、来源、建议处理动作和优先级。
-```
+```text
 
 **预期输出文件名**：`reports/conflict-report-[date].html`
 
@@ -402,7 +402,7 @@ description: Codex Prompts 速查文档，涵盖多模态知识蒸馏到智能�
 3. 生成一个更新模块，根据真实结果校准原来的 `opportunity_score` 与 `confidence`。
 4. 输出 `feedback/recommendation_loop.py`、`feedback/update_confidence.py`、`reports/feedback-loop-[date].md`。
 5. 说明如何把这个闭环接入下一轮 Prompt 和评估体系。
-```
+```text
 
 **预期输出文件名**：`feedback/update_confidence.py`
 
@@ -602,11 +602,11 @@ prompt_metadata:
   owner: "工程负责人"
   last_reviewed: "2026-07-01"
   next_review: "2026-10-01"    # 建议每季度复审一次
-```
+```text
 
 ### Prompt 生命周期管理流程
 
-```
+```text
 创建 → 标注元数据 → 沙箱测试 → 上线
   ↓                              ↓
   ↓←←← 过期信号触发 ←←←←←←←←←←←←←←←←←

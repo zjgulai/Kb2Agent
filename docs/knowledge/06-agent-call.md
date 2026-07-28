@@ -13,7 +13,7 @@ description: Agent调用与MCP协议文档，包含MCP Server封装、Claude Des
 
 知识库被 Agent 调用有三种根本不同的模式，不可混淆：
 
-```
+```text
 模式1：RAG 检索（被动）
   Agent 查询 → 知识库返回相关块 → Agent 用于生成回答
   → 适合：声明性知识（是什么/为什么），频繁更新的参考资料
@@ -25,7 +25,7 @@ description: Agent调用与MCP协议文档，包含MCP Server封装、Claude Des
 模式3：Agentic RAG（自主迭代）
   Agent 自主决定何时检索、检索什么、是否足够、是否重试
   → 适合：复杂多跳问题，需要多步推理的任务
-```
+```text
 
 **RAG 提供声明性证据（是什么），Skill 提供程序性指导（怎么做）。最佳实践是两者结合：**
 
@@ -60,7 +60,7 @@ knowledge_retrieval_tool = Tool(
     适用：当需要查询事实、参考资料、文档内容时""",
     func=lambda q: vectorstore.similarity_search(q, k=5)
 )
-```
+```text
 
 **GraphRAG 调用（LightRAG）**：
 
@@ -82,7 +82,7 @@ class LightRAGTool(BaseTool):
     async def _arun(self, query: str, mode: str = "mix") -> str:
         result = await rag.aquery(query, param=QueryParam(mode=mode))
         return result
-```
+```text
 
 **查询路由（向量 RAG vs GraphRAG 混合）**：
 
@@ -101,7 +101,7 @@ def retrieve(query: str) -> str:
     else:
         docs = vectorstore.similarity_search(query, k=5)
         return "\n\n".join([d.page_content for d in docs])
-```
+```text
 
 ---
 
@@ -118,7 +118,7 @@ python -m corpus2skill compile \
   --max-top 8 \
   --model claude-sonnet-4-6 \
   --embed-model Qwen/Qwen3-Embedding-0.6B
-```
+```text
 
 **Agent 调用时（serve time）**：
 
@@ -133,7 +133,7 @@ from corpus2skill import serve
 # 轮1：Agent 读 SKILL.md → 了解知识库全局结构（鸟瞰图）
 # 轮2：Agent 读相关 INDEX.md → 缩小到具体文档列表
 # 轮3：Agent 调用 get_document → 获取完整证据
-```
+```text
 
 **Corpus2Skill 的核心优势**：Agent 知道"还有多少没看"，可以回溯，可以跨分支综合——这是向量检索永远无法提供的结构性可见性。
 
@@ -179,11 +179,11 @@ flowchart TD
     classDef default fill:#fafafa,stroke:#334155,stroke-width:1px;
     classDef decision fill:#fef08a,stroke:#ca8a04,stroke-width:1px;
     class Reason,Check decision;
-```
+```text
 
 **五种 Agentic RAG 模式（按复杂度排序）**：
 
-```
+```text
 模式 1 — 迭代检索（Iterative Retrieval）
   流程：检索 → 阅读 → 评估缺口 → 精化查询 → 重复
   适用：单一查询，但第一次检索不够完整
@@ -208,7 +208,7 @@ flowchart TD
   流程：检索多份可能矛盾的证据 → 按来源可信度加权 → 合成
   适用：不同文档对同一问题有不同说法
   成本：中（额外一次推理用于合成）
-```
+```text
 
 **A-RAG 实现（推荐起点）**：
 
@@ -228,7 +228,7 @@ agent = ARAG(
 result = agent.query("哪些项目同时涉及风险A和风险B，且负责人都是同一团队？")
 # Agent 自主选择：先 keyword_search 找关键实体，再 semantic_search 补充，
 # 最后 chunk_read 读完整上下文——无需预设工作流
-```
+```text
 
 ---
 
@@ -257,11 +257,11 @@ system_prompt = """
 # 2. search_skills("需要做什么") → 找到候选 Skill
 # 3. load_skill("匹配的Skill名") → 加载 SKILL.md
 # 4. 按 Skill 指导执行
-```
+```text
 
 **组合 Skill 路由（Gao 2026 论文，Compositional Skill Routing）**：
 
-```
+```text
 任务分解器（Decomposer）
     ↓ 分解为原子子任务
 双编码器检索（Bi-encoder FAISS）
@@ -270,7 +270,7 @@ Skill-Aware 反馈循环（SAD）
     ↓ 将检索结果反馈给分解器重新调整（准确率 51% → 67.7%）
 DAG 规划器（Dependency-Aware Planner）
     ↓ 组合为可执行计划
-```
+```text
 
 **适用阈值**：
 - < 50 Skills → 直接 prompt caching 全量加载，不需要检索
@@ -283,7 +283,7 @@ DAG 规划器（Dependency-Aware Planner）
 
 **TencentDB Agent Memory 架构**（Tencent，2026，集成 OpenClaw）：
 
-```
+```text
 短期记忆（任务内）：
   底层：完整工具输出（refs/*.md，只读存档）
   中层：步骤摘要（JSONL）
@@ -295,11 +295,11 @@ DAG 规划器（Dependency-Aware Planner）
            ↓
   L2 Scenario（场景块）→ L3 Persona（用户档案）
   → Agent 日常只查 L3 Persona，细节时下钻到 L1 Atom
-```
+```text
 
 **记忆层写入时机**：
 
-```
+```text
 任务完成时 → 写入长期记忆
   · 蒸馏本次任务中涌现的新知识 → wiki/
   · 更新用户偏好 → Persona
@@ -308,13 +308,13 @@ DAG 规划器（Dependency-Aware Planner）
 任务失败时 → 写入经验教训
   · 记录失败原因和解决方案 → bdistill 规则提取
   · 更新 Skill 的 contraindications（禁忌）字段
-```
+```text
 
 ---
 
 ### 6.7 完整端到端链路（蒸馏 → 入库 → Agent 调用）
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────┐
 │                          原始多模态内容                               │
 │                  (PDF/视频/音频/网页/代码/图像...)                    │
@@ -369,7 +369,7 @@ DAG 规划器（Dependency-Aware Planner）
                    │ (长期记忆 │
                    │  更新)   │
                    └──────────┘
-```
+```text
 
 ---
 
@@ -407,11 +407,11 @@ MCP 不是"插件"，是 2026 年 Agent 与知识库连接的**标准协议**。
 
 ### MCP 协议三类能力
 
-```
+```text
 Tools（工具）   — Agent 可以调用的函数，如 search_products()
 Resources（资源）— Agent 可以读取的静态数据，如知识库 schema
 Prompts（提示词）— 预置的对话模板，引导用户更好地描述需求
-```
+```text
 
 ### 完整 MCP Server 示例
 
@@ -441,7 +441,7 @@ async def run_agent():
     print(result["messages"][-1].content)
 
 asyncio.run(run_agent())
-```
+```text
 
 ### 知识库调用工具全景（2026 更新版）
 
@@ -504,7 +504,7 @@ class MCPRouter:
         
         # P4: 最低成本
         return min(candidates, key=lambda c: c["cost"])
-```
+```text
 
 ### 冲突日志与审计
 
@@ -526,4 +526,10 @@ def log_routing_conflict(candidates, winner, task_id):
 
 :::tip 路由治理的核心原则
 协议标准化（MCP）解决的是接口问题，不解决语义冲突和责任归属。**每个 MCP Server 应该有明确的"服务边界声明"**：它承诺回答什么、不回答什么、精度保证范围是什么。没有边界声明的Server接入越多，路由器的不确定性越高。
+:::
+
+---
+
+:::tip → 下一章
+Agent 调用架构到位后，深入进阶选型——如何在 LoD 阶梯上选对蒸馏深度、何时用图谱 → [07-advanced-theory](07-advanced-theory.md)
 :::

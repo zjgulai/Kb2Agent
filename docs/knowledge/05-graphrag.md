@@ -52,7 +52,7 @@ flowchart LR
     class E,G,C graph;
     class Q1,Q2,Q3 query;
     class M mcp;
-```
+```text
 
 ---
 
@@ -110,7 +110,7 @@ flowchart LR
 
 无论用哪个框架，GraphRAG 的核心索引逻辑相同：
 
-```
+```text
 Stage 1: 文本切块（Chunking）
   · 将文档切分为 TextUnit（分析单元）
   · 保留 chunk 边界不跨实体
@@ -143,7 +143,7 @@ Stage 5: 查询路由（Query Routing）
   · global 模式：社区摘要聚合（全局主题综合）
   · hybrid/mix 模式：两者合并（推荐默认）
   · naive 模式：退化为纯向量 RAG（基准对比用）
-```
+```text
 
 ---
 
@@ -157,7 +157,7 @@ pip install lightrag-hku
 # 环境变量
 export OPENAI_API_KEY="..."    # 或配置本地 LLM
 export LIGHTRAG_DIR="./lightrag_storage"
-```
+```text
 
 **四种角色 LLM 配置**（LightRAG v1.5+ 要求）：
 
@@ -180,7 +180,7 @@ rag = LightRAG(
     # Rerank（可选，推荐本地部署）：
     # rerank_model="BAAI/bge-reranker-v2-m3"
 )
-```
+```text
 
 **核心建议**（官方文档警告）：
 - Embedding 模型**一旦开始索引就不能更换**（更换需重新 embed 所有内容）
@@ -201,7 +201,7 @@ from lightrag.utils import EmbeddingFunc
 async def batch_insert(docs: list[str]):
     tasks = [rag.ainsert(doc) for doc in docs]
     await asyncio.gather(*tasks)
-```
+```text
 
 **五种查询模式**：
 
@@ -220,7 +220,7 @@ result = rag.query("...", param=QueryParam(mode="mix"))
 
 # naive：退化为纯向量 RAG（仅用于对比基准）
 result = rag.query("...", param=QueryParam(mode="naive"))
-```
+```text
 
 ---
 
@@ -236,7 +236,7 @@ graphrag init --root ./graphrag_project
 
 # [!] 每次小版本升级都要重新 init：
 # graphrag init --root ./graphrag_project --force
-```
+```text
 
 **配置文件关键项**（settings.yaml）：
 
@@ -255,7 +255,7 @@ chunks:
 
 entity_extraction:
   max_gleanings: 1            # 减少重复抽取，控制成本
-```
+```text
 
 **提示词调优（必做）**：
 
@@ -265,7 +265,7 @@ graphrag prompt-tune --root ./graphrag_project --config settings.yaml
 
 # 索引（[!] 耗时耗钱，先用小样本测试）
 graphrag index --root ./graphrag_project
-```
+```text
 
 **查询**：
 
@@ -288,7 +288,7 @@ result = await global_search(
 
 # DRIFT 搜索（2024年底新增，比 global 省 40-60% token）
 result = await drift_search(query="...", config=config)
-```
+```text
 
 ---
 
@@ -299,7 +299,7 @@ result = await drift_search(query="...", config=config)
 ```bash
 pip install graphiti-core
 # 需要 Neo4j 实例（本地 Docker 或 Neo4j AuraDB）
-```
+```text
 
 ```python
 from graphiti_core import Graphiti
@@ -331,13 +331,13 @@ historical = await graphiti.search(
     "产品B",
     reference_time=datetime(2026, 7, 20)  # 查询7月20日时的知识状态
 )
-```
+```text
 
 ---
 
 ## 6.7 知识库架构选型决策树
 
-```
+```text
 你的知识库是什么类型？
 │
 ├── 静态语料（文档不经常变化）
@@ -367,7 +367,7 @@ historical = await graphiti.search(
         简单事实查找 → 向量 RAG（快，便宜）
         多跳/综合查询 → GraphRAG
         路由逻辑：小分类器 or LLM 意图判断
-```
+```text
 
 ---
 
@@ -434,7 +434,7 @@ def get_entity_relations(entity: str) -> str:
 
 if __name__ == "__main__":
     mcp.run()
-```
+```text
 
 **配置示例**（Claude Desktop）：
 ```json
@@ -446,7 +446,7 @@ if __name__ == "__main__":
     }
   }
 }
-```
+```text
 
 :::tip 向下一章
 图谱构建完成后，下一步是让 Agent 高效调用——包括 MCP 协议、RAG 模式选择、Skill 导航等，详见 [第七章：Agent 调用 + MCP 协议](06-agent-call.md)。
@@ -496,7 +496,7 @@ def check_graphrag_health(graph_client) -> dict:
             health[metric] = {"value": value, "ok": value >= threshold}
     health["overall"] = all(h["ok"] for h in health.values() if isinstance(h, dict))
     return health
-```
+```text
 
 ### 退化策略：何时自动退回向量检索
 

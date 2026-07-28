@@ -113,7 +113,7 @@ if __name__ == "__main__":
     print(json.dumps(asdict(commercial), indent=2, ensure_ascii=False))
     print("=== 全本地方案 ===")
     print(json.dumps(asdict(local), indent=2, ensure_ascii=False))
-```
+```text
 
 ## 10.3 三档预算方案
 
@@ -132,7 +132,7 @@ if __name__ == "__main__":
 ```text
 月收益 = 每月节省工时 × 人均小时成本 × 实际采用率
 年化 ROI = (年化收益 - 年化总成本) / 年化总成本 × 100%
-```
+```text
 
 **真实场景：10 人选品团队**
 
@@ -148,7 +148,7 @@ if __name__ == "__main__":
 
 ```text
 ROI = (970,200 - 300,000) / 300,000 × 100% = 223.4%
-```
+```text
 
 ### Year 2 / 3：成熟期
 
@@ -158,7 +158,7 @@ ROI = (970,200 - 300,000) / 300,000 × 100% = 223.4%
 
 ```text
 ROI = (1,386,000 - 150,000) / 150,000 × 100% = 824%
-```
+```text
 
 **决策建议**：即使按“Year 1 只有 70% 采用率”的保守口径，ROI 仍然 **> 200%**。所以老板不该问“能不能做”，而该问“先在哪个团队做最先回本”。
 
@@ -261,7 +261,7 @@ if __name__ == "__main__":
         guard.record(decision.approved_cost)
     else:
         print("停止执行非核心任务")
-```
+```text
 
 这个守卫至少要做到 4 件事：
 
@@ -365,7 +365,7 @@ if __name__ == "__main__":
         monitor.after_task(task_name, actual_cost=10.5)
     else:
         print("任务被预算系统拦截")
-```
+```text
 
 这段逻辑的关键不是“记账”，而是**在每次自动任务前检查预算余额，并给钉钉 / Slack 发告警**。这样你就不会因为一个“自进化代理”周末自己跑嗨了，周一看到 API 账单才发现出事。
 
@@ -448,7 +448,7 @@ def estimate_failure_cost(monthly_queries: int, error_rate: float,
 risk = estimate_failure_cost(1000, 0.02, 10000)
 print(f"期望月度风险成本：¥{risk:,.0f}")  # ¥200,000
 # → 这个风险成本远超技术成本，说明必须在质量保障上加大投入
-```
+```text
 
 **关键洞察**：当期望月度失败成本超过系统月度运营成本的 10%，说明当前的质量保障投入严重不足。
 
@@ -479,7 +479,7 @@ print(f"期望月度风险成本：¥{risk:,.0f}")  # ¥200,000
 
 ### 完整 TCO（总拥有成本）公式
 
-```
+```text
 月度 TCO = 技术成本 + 失败期望成本 + 治理成本月均摊 + 机会成本（如能量化）
 
 年度 ROI = (节省人力成本 + 决策质量提升收益 - 年度 TCO) / 年度 TCO × 100%

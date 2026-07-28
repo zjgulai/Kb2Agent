@@ -11,7 +11,7 @@ description: 完整可运行端到端Pipeline文档，提供从数据采集到Ag
 
 ## 项目结构
 
-```
+```text
 kb-agent/
 ├── pipeline/
 │   ├── __init__.py
@@ -29,7 +29,7 @@ kb-agent/
 ├── config.yaml            # 所有配置
 ├── requirements.txt
 └── main.py                # 入口文件
-```
+```text
 
 ---
 
@@ -60,7 +60,7 @@ pydantic>=2.0.0
 httpx>=0.27.0
 loguru>=0.7.0
 typer>=0.12.0
-```
+```text
 
 ---
 
@@ -118,7 +118,7 @@ evolution:
   staleness_days: 90
   # darwin-skill 评估维度最低分
   skill_min_score: 70
-```
+```text
 
 ---
 
@@ -531,7 +531,7 @@ async def ingest(source_path: str) -> dict:
             "acceptance_rate": len(validated_entries) / max(len(raw_entries), 1),
         }
     }
-```
+```text
 
 ---
 
@@ -660,7 +660,7 @@ created_at: {__import__('datetime').datetime.now().isoformat()}
                 )
                 skill_md.write_text(content)
                 logger.info(f"标记过期: {skill_md}")
-```
+```text
 
 ---
 
@@ -732,7 +732,7 @@ class KnowledgeRetriever:
                 })
 
         return {"type": "skill", "results": matched[:3]}
-```
+```text
 
 ---
 
@@ -808,7 +808,7 @@ def health():
 
 if __name__ == "__main__":
     app()
-```
+```text
 
 ---
 
@@ -831,7 +831,7 @@ python main.py query "精益创业的核心方法论是什么？"
 
 # 5. 健康度检查
 python main.py health
-```
+```text
 
 ---
 
@@ -895,7 +895,7 @@ class SourceChangeDetector:
                 "action": "CONTINUE_WITH_WARNING: 新字段出现，记录到变更日志"
             }
         return {"status": "stable", "drift": False}
-```
+```text
 
 ### 多源冲突处理
 
@@ -943,7 +943,7 @@ class MultiSourceConflictResolver:
                 "timestamp": "now",
                 "priority": "HIGH"
             }, ensure_ascii=False) + "\n")
-```
+```text
 
 ### 抽取失败的优雅降级
 
@@ -979,7 +979,7 @@ def extract_with_fallback(content: str, primary_extractor, fallback_extractor=No
         "action": "原文已保存到人工审核队列",
         "never_silent": True   # 显式声明：这个失败不会被静默吞掉
     }
-```
+```text
 
 ### Pipeline 的异常分级告警
 

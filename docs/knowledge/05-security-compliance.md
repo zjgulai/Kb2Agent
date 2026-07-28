@@ -50,7 +50,7 @@ flowchart LR
     class IN,C1,C2,C3,C4 entry;
     class L1,L2,L3,L4 store;
     class A1,A2,A3,A4 success;
-```
+```text
 
 一个实用原则：**级别按最高风险字段上浮，不按平均值下调**。一份客服会话里只要出现手机号和订单地址，就不再是 L2，而是 L3；一份经营周报里只要出现毛利率和价格策略，就直接按 L4 管理。
 
@@ -73,7 +73,7 @@ ollama serve
 # 另开终端拉取模型
 ollama pull qwen2.5:14b
 curl http://127.0.0.1:11434/api/tags
-```
+```text
 
 如果是 Linux systemd，可用以下服务文件：
 
@@ -91,7 +91,7 @@ User=ollama
 
 [Install]
 WantedBy=multi-user.target
-```
+```text
 
 ### 5.2.2 数据敏感性检查中间件
 
@@ -152,7 +152,7 @@ async def sensitivity_guard(request: Request, call_next):
         raise HTTPException(status_code=403, detail=decision.reason)
 
     return await call_next(request)
-```
+```text
 
 ### 5.2.3 一条数据能否走公网 API 的判定标准
 
@@ -282,7 +282,7 @@ def sanitize_before_index(text: str, data_source: str, sensitivity_level: str) -
 if __name__ == "__main__":
     sample = "Alice lives at 1 Infinite Loop, email alice@example.com, phone 13800138000."
     print(sanitize_before_index(sample, data_source="crm_export.csv", sensitivity_level="L3"))
-```
+```text
 
 ### 5.3.3 审计日志 schema
 
@@ -297,7 +297,7 @@ if __name__ == "__main__":
   "operator": "system",
   "created_at": "2026-07-27T10:00:00Z"
 }
-```
+```text
 
 ---
 
@@ -333,7 +333,7 @@ flowchart LR
     class P1,P2,P3,P4 success;
     class R1,R2,R3 store;
     class R4 fail;
-```
+```text
 
 ### 5.4.1 FastAPI RBAC 中间件示例
 
@@ -418,7 +418,7 @@ def read_collection(collection: str, role: Role = Depends(require_permission("L2
 @app.post("/collections/{collection}")
 def write_collection(collection: str, role: Role = Depends(require_permission("L2", "write"))):
     return {"collection": collection, "role": role, "status": "written"}
-```
+```text
 
 生产环境里应再叠加两层：
 
@@ -514,7 +514,7 @@ if __name__ == "__main__":
     init_db()
     log_query("u_001", "查 7 月退款原因", ["doc_12", "doc_18"], 143)
     log_write("crm_export.csv", "L3", True)
-```
+```text
 
 ### 5.5.2 最低审计要求
 
@@ -609,7 +609,7 @@ def check_query_scope(collections_accessed: list[str]) -> bool:
         if a in collections_accessed and b in collections_accessed:
             raise PrivacyViolation(f"禁止同时访问 {a} 和 {b}")
     return True
-```
+```text
 
 ---
 
@@ -688,7 +688,7 @@ INFERENCE_ATTACK_SCENARIOS = [
         "risk_if_leaked": "商业机密泄露"
     }
 ]
-```
+```text
 
 **步骤 2：记录实际拦截情况**
 
@@ -723,7 +723,7 @@ def run_inference_drill(kb_client, scenarios: list[dict]) -> dict:
         "passed": sum(1 for r in results if r["passed"]),
         "details": results
     }
-```
+```text
 
 **步骤 3：修复未拦截的场景**
 对每个未通过的推断路径，在 `FORBIDDEN_COMBINATIONS` 规则里新增对应的 collection 组合限制（见 §5.8）。
@@ -776,7 +776,7 @@ client.create_collection("quarantine_kb")
 # ... 移动逻辑
 print("隔离完成，可疑内容已移出活跃索引")
 EOF
-```
+```text
 
 ### 回滚步骤（若确认污染）
 

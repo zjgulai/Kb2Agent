@@ -25,7 +25,7 @@ flowchart TD
 
     classDef red fill:#fee2e2,stroke:#dc2626,stroke-width:1px;
     class Death,D1,D2,D3 red;
-```
+```text
 
 **解决方案：建立知识库的"免疫系统"**——由三个机制构成：
 1. **健康度监控**（定期扫描，发现病灶）
@@ -232,7 +232,7 @@ class KnowledgeHealthChecker:
             if dims['skills']['outdated'] > 0:
                 print(f"  → 重新蒸馏 {dims['skills']['outdated']} 个过期 Skill")
         print(f"{'='*60}\n")
-```
+```text
 
 ---
 
@@ -240,14 +240,14 @@ class KnowledgeHealthChecker:
 
 ### 核心原则
 
-```
+```text
 棘轮原理：只能向前，不能后退
   每次修改 Skill → 9维度评分
   评分提升 → git commit（保留改进）
   评分持平/下降 → git revert（回滚）
 
 结果：Skill 库只会越来越好，永远不会因为一次糟糕的更新而退化
-```
+```text
 
 ### 9维度评估实现
 
@@ -417,7 +417,7 @@ class SkillEvolver:
             skill_path.write_text(original_content)
             logger.warning(f"(X) 改进未达标，回滚: {new_score:.1f} <= {old_score:.1f}")
             return {"improved": False, "old_score": old_score, "new_score": new_score}
-```
+```text
 
 ---
 
@@ -519,7 +519,7 @@ class ConflictDetector:
             logger.warning(f"[P0] 发现知识冲突，已记录: {conflict_file}")
             new_entry["has_conflict"] = True
             new_entry["conflict_file"] = str(conflict_file)
-```
+```text
 
 ---
 
@@ -584,7 +584,7 @@ jobs:
               print(f'::warning::知识库健康度告警: {score:.1f}/100')
               exit(1)
           "
-```
+```text
 
 ### 每次 Ingest 后自动触发的检查
 
@@ -604,7 +604,7 @@ def post_ingest_check(ingest_result: dict):
         logger.warning(f"[!] 知识通过率偏低: {acceptance_rate:.1%}，建议检查三重验证参数")
 
     logger.success(f"(OK) Ingest 健康: 通过率 {acceptance_rate:.1%}")
-```
+```text
 
 ---
 
@@ -633,11 +633,11 @@ flowchart TD
     class Continue green;
     class Action,Monitor yellow;
     class Discard red;
-```
+```text
 
 ---
 
-## 13.7 五层自进化飞轮（新增）
+## 11.7 五层自进化飞轮
 
 > 知识库从"静态资产"到"会学习的系统"，需要五层机制依次建立。
 
@@ -670,7 +670,7 @@ flowchart TD
     style L3 fill:#fff3e0,stroke:#ea580c
     style L4 fill:#f3e5f5,stroke:#9333ea
     style L5 fill:#fce4ec,stroke:#dc2626
-```
+```text
 
 ### 第一层实践：半衰期新鲜度检查（30分钟可上线）
 
@@ -742,7 +742,7 @@ if __name__ == "__main__":
         print(f"\n过期知识（前5条）：")
         for item in r.expired_items[:5]:
             print(f"  {item['title'][:40]} | 已过期{item['age_days']}天 | 建议: {item['action']}")
-```
+```text
 
 ### 第三层实践：未命中分析（发现盲区）
 
@@ -783,7 +783,7 @@ def analyze_query_log(log_path: str = "query_audit.jsonl") -> dict:
     for q in no_hit[:5]:
         print(f"  → {q}")
     return {"no_hit": no_hit, "low_score": low_score, "missing_keywords": words.most_common(10)}
-```
+```text
 
 ### 预测验证闭环（选品场景专属第六层）
 
@@ -819,11 +819,11 @@ def validate_prediction(category: str, market: str,
     confidence_delta = 0.1 if accuracy > 0.8 else (-0.15 if accuracy < 0.5 else 0)
     print(f"置信度调整: {confidence_delta:+.2f}")
     return {"accuracy": accuracy, "verdict": verdict, "confidence_delta": confidence_delta}
-```
+```text
 
 ---
 
-## 13.8 三阶段实施路线
+## 11.8 三阶段实施路线
 
 | 阶段 | 时间 | 目标 | 关键动作 |
 |------|------|------|---------|
@@ -833,7 +833,7 @@ def validate_prediction(category: str, market: str,
 
 ---
 
-## 13.9 评分器治理：谁来管理进化准则本身
+## 11.9 评分器治理：谁来管理进化准则本身
 
 darwin-skill 棘轮机制依赖一个核心假设：**9维综合评分能代表知识质量**。但这个假设本身需要被治理——否则评分器会悄悄成为新的单点故障。
 
@@ -860,7 +860,7 @@ def calibrate_scorer(scorer, golden_samples: list[dict], expected_min: float = 0
         print(f"[警告] 评分器偏离：黄金样本均分 {avg:.2f}，低于期望 {expected_min}")
         print("建议：重新标注维度权重，或增补低覆盖维度的训练样本")
     return {"avg_score": avg, "needs_recalibration": avg < expected_min}
-```
+```text
 
 **步骤二：维度相关性验证**
 检验每个评分维度与"用户正向反馈率"的相关系数。若某维度相关系数低于 0.3，说明该维度已失去预测价值，需要重新定义或替换。

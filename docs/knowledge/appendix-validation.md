@@ -42,7 +42,7 @@ VTRCE_PROFILES = {
 def score_system(metrics: dict, profile: str) -> float:
     weights = VTRCE_PROFILES[profile]
     return sum(metrics.get(k, 0) * w for k, w in weights.items())
-```
+```text
 
 ---
 
@@ -95,7 +95,7 @@ QUARTERLY_REVIEW_CHECKLIST = {
         "团队是否出现判断能力退化信号",
     ]
 }
-```
+```text
 
 ---
 
@@ -112,7 +112,7 @@ QUARTERLY_REVIEW_CHECKLIST = {
 
 ### 原则二：证据强度分级
 
-```
+```text
 Level 1（最弱）：单一来源，无验证
 Level 2：多来源相互印证，无实验
 Level 3：有实验/测试数据支撑

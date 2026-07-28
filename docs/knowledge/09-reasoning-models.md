@@ -28,7 +28,7 @@ flowchart LR
     classDef fail fill:#ffcdd2,stroke:#e53935,stroke-width:1px;
     classDef external fill:#e1bee7,stroke:#8e24aa,stroke-width:1px;
     classDef storage fill:#e0f2f1,stroke:#00897b,stroke-width:1px;
-```
+```text
 
 | 对比维度 | 传统范式（2024） | 推理范式（2026） |
 | --- | --- | --- |
@@ -60,7 +60,7 @@ flowchart LR
     classDef success fill:#c8e6c9,stroke:#43a047,stroke-width:1px;
     classDef external fill:#e1bee7,stroke:#8e24aa,stroke-width:1px;
     classDef storage fill:#e0f2f1,stroke:#00897b,stroke-width:1px;
-```
+```text
 
 可以把它翻译成 5 条硬规则：
 
@@ -196,7 +196,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-```
+```text
 
 这个脚本的核心不是“更聪明”，而是“更克制”：把推理留到查询阶段，把入库阶段压到最低成本。
 
@@ -294,7 +294,7 @@ def run_reasoning(query: str) -> dict[str, Any]:
 if __name__ == "__main__":
     result = run_reasoning("便携太阳能充电器US市场分析")
     print(json.dumps(result, ensure_ascii=False, indent=2))
-```
+```text
 
 这里最重要的变化是：**知识库不再试图预先回答“市场机会在哪”，它只负责把原始证据找回来；真正的判断，由推理模型在查询时完成。**
 
@@ -345,7 +345,7 @@ if __name__ == "__main__":
 
 ### 延迟预算决策树
 
-```
+```text
 你的 P90 延迟预算是多少？
 │
 ├── < 3s（实时对话、用户直接等待）
@@ -361,7 +361,7 @@ if __name__ == "__main__":
 │
 └── > 30s（批量离线处理）
     └── 任意模型，按成本最优选
-```
+```text
 
 ---
 
@@ -398,7 +398,7 @@ def anchor_reasoning_output(response: str, kb_client, threshold=0.75):
     if len(unverified) / max(len(claims), 1) > 0.3:
         return response, {"warning": f"{len(unverified)} 个声明无法在知识库中找到支撑"}
     return response, {"verified": True}
-```
+```text
 
 ---
 
