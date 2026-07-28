@@ -297,6 +297,12 @@ flowchart LR
 
 ---
 
+:::info 全书统一验证框架
+本章的所有判断——"该不该建库""建哪种库""怎么评估好坏"——最终都可以用**附录 A 的 VTRCE 五维框架**（Validity/Timeliness/Relevance/Cost/Error Cost）做统一裁决。当章节间出现决策冲突时，VTRCE 是全书的最高裁决层。→ [查看附录 A](appendix-validation.md)
+:::
+
+---
+
 :::tip → 下一章
 建立认知框架后，进入信息/知识/智慧的本质辨析 → [01-framework](01-framework.md)
 :::

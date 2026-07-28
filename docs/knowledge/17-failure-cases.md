@@ -210,6 +210,12 @@ Skill 上线后，初级顾问的工作效率确实提升了——但仅限于"�
 
 ---
 
+:::info 用 VTRCE 框架裁决失败类型
+四类失败都可以用**附录 A 的 VTRCE 五维框架**进行标准化分析：问题构成错误影响 Validity，代理指标错误影响所有维度，知识表征错误影响 Validity 和 Relevance，组织激励错误影响全局治理。→ [查看附录 A：统一验证框架](appendix-validation.md)
+:::
+
+---
+
 :::tip → 下一章
 在理解了失败边界之后，回到全局视角查看本指南的完整地图 → [00-introduction](00-introduction.md)
 :::

@@ -5,6 +5,14 @@ description: Agent调用与MCP协议文档，包含MCP Server封装、Claude Des
 
 # 第七章：知识库被 Agent 调用 —— 从 RAG 到 MCP
 
+:::info 本章在全书中的角色
+**读完本章你能做到**：把建好的知识库暴露给 Claude Desktop、Cursor、Codex App 等任意 MCP Client 调用，设计多工具并存时的路由裁决机制。
+
+**前置条件**：已完成第四章架构（有向量库/图谱/Skill 库）和第五章安全配置（权限已就绪）。
+
+**三类读者**：工程师 → 直接从 MCP Server 代码段开始；架构师 → 重点看路由冲突与裁决机制；产品经理 → 重点看 MCP 是什么、与传统 API 的区别。
+:::
+
 > **这是完整链路的最后一环**：知识已经蒸馏、已经入库，Agent 如何高效调用它？
 
 ---

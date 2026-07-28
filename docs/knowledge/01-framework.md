@@ -340,6 +340,28 @@ validated_by: "张工"
 
 ---
 
+## 框架映射总表：本章所有概念的统一坐标系
+
+本章引入了多个分层框架，它们描述的是**同一个系统的不同切面**，而非并列的独立体系。
+
+| DIKW 层 | L0-L4 蒸馏层 | 存储形态 | 建设工具 | 检索方式 | 最适合的场景 |
+|---------|-------------|---------|---------|---------|------------|
+| Data（数据） | L0 平铺 | 文本 Chunks | LangChain / LlamaIndex | 向量相似度 | 快速 PoC，低预算 |
+| Information（信息） | L1 实体增强 | 富化 Chunks + 实体标注 | UnWeaver | 向量 + 元数据过滤 | 低成本超越早期 GraphRAG |
+| Knowledge（知识） | L2 层级导航 | INDEX.md 目录树 | Corpus2Skill | 导航 + 精确检索 | 单域文档，Agent 主动导航 |
+| Knowledge Network | L3 知识图谱 | 实体关系网络 | LightRAG / GraphRAG | 图遍历 + 社区摘要 | 跨文档推理，全局主题综合 |
+| Wisdom（智慧） | L4 可执行契约 | SKILL.md | cangjie-skill / R2S | 直接执行，无检索 | 高频决策流程，零推理 |
+
+**四层金字塔**（Atomic / Concept / Abstract / Index）是 L1–L2 层的**内部数据结构**，不是独立框架。
+
+**Karpathy LLM-Wiki** 是 L2 层级导航的一种实现范式：以 INDEX.md 为根节点，知识以 Markdown 页面树生长，支持 Agent 主动导航。
+
+**反蒸馏框架**是 L4 的使用边界：它告诉你哪些知识**不该升到 L4**，必须停留在 L0/L1/原文层。
+
+**Skill 反向纠错链路**是 L4 的安全机制：当 L4 Skill 出错时，沿着血缘链路向下回滚到 L0 原始案例定位根因。
+
+---
+
 ## 本章小结：动手前的三个决策
 
 ::: info 决策 1：主要用途？
