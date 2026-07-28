@@ -126,11 +126,58 @@ function bindSidebarTooltips() {
   })
 }
 
+let _outlineObserver = null
+
+function bindOutlineCollapse() {
+  if (_outlineObserver) {
+    _outlineObserver.disconnect()
+    _outlineObserver = null
+  }
+
+  function expandActiveGroup() {
+    const items = Array.from(document.querySelectorAll('.VPDocOutlineItem'))
+    if (!items.length) return
+
+    let currentH2 = null
+    items.forEach(item => {
+      const isH2 = item.classList.contains('level-2')
+      const isH3 = item.classList.contains('level-3')
+
+      if (isH2) {
+        currentH2 = item
+        return
+      }
+
+      if (isH3 && currentH2) {
+        const h2Active = currentH2.classList.contains('active')
+        const h3Active = item.classList.contains('active')
+        if (h2Active || h3Active) {
+          item.style.maxHeight = '200px'
+        } else {
+          item.style.maxHeight = '0'
+          item.style.overflow = 'hidden'
+        }
+      }
+    })
+  }
+
+  expandActiveGroup()
+
+  _outlineObserver = new MutationObserver(expandActiveGroup)
+  const outline = document.querySelector('.VPDocAsideOutline')
+  if (outline) {
+    _outlineObserver.observe(outline, { attributes: true, subtree: true, attributeFilter: ['class'] })
+  }
+}
+
 function scheduleBind() {
   nextTick(() => {
     startMermaidObserver()
     bindImgLightbox()
     bindSidebarTooltips()
+    bindOutlineCollapse()
+    setTimeout(bindOutlineCollapse, 800)
+    setTimeout(bindOutlineCollapse, 2000)
   })
 }
 

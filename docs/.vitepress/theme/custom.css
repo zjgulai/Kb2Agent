@@ -283,15 +283,15 @@ nav, header {
   padding-right: 2.5rem !important;
 }
 
-/* 大纲宽度 */
+/* 大纲宽度（由 section 17 的详细规则控制，此处同步） */
 .VPDocAside {
-  width: 200px !important;
-  min-width: 200px !important;
+  width: 160px !important;
+  min-width: 160px !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
   margin-left: 0 !important;
 }
-.VPDocAsideOutline { width: 200px !important; }
+.VPDocAsideOutline { width: 160px !important; }
 
 /* 正文区铺满 sidebar 右侧到 aside 左侧的全部空间 */
 @media (min-width: 1280px) {
@@ -778,29 +778,30 @@ div[class*='language-']::before {
 }
 
 /* ─── 17. Outline（右侧目录）────────────────────────────── */
+/* ─── 17. Outline（右侧目录）────────────────────────────── */
 .VPDocAside {
-  width: 220px !important;
-  min-width: 220px !important;
+  width: 160px !important;
+  min-width: 160px !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
   margin-left: 0 !important;
 }
 
 .VPDocAsideOutline {
-  width: 220px !important;
+  width: 160px !important;
   border-left: 1px solid var(--line-mid);
-  padding-left: 1rem;
-  padding-right: 0.5rem;
+  padding-left: 0.75rem;
+  padding-right: 0.25rem;
 }
 
 .VPDocAsideOutline .title {
   font-family: var(--font-en) !important;
-  font-size: 0.65rem !important;
+  font-size: 0.62rem !important;
   font-weight: 900 !important;
   letter-spacing: 0.14em !important;
   text-transform: uppercase !important;
   color: var(--muted) !important;
-  padding-bottom: 0.625rem !important;
+  padding-bottom: 0.5rem !important;
   margin-bottom: 0.25rem !important;
   border-bottom: 1px solid var(--line-mid) !important;
   display: flex !important;
@@ -810,60 +811,83 @@ div[class*='language-']::before {
 .VPDocAsideOutline .title::before {
   content: '';
   display: inline-block;
-  width: 10px;
+  width: 8px;
   height: 2px;
   background: var(--accent-deep);
   border-radius: 1px;
   flex-shrink: 0;
 }
 
+/* 链接：换行显示，不截断 */
 .VPDocOutlineItem a {
-  font-family: var(--font-en) !important;
+  font-family: var(--font-zh) !important;
   font-size: 0.72rem !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
+  font-weight: 500 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  word-break: break-all !important;
   max-width: 100% !important;
   display: block !important;
-  line-height: 1.5 !important;
-  padding: 0.2rem 0 !important;
+  line-height: 1.55 !important;
+  padding: 0.22rem 0 !important;
   color: var(--muted);
-  transition: color .12s, padding-left .12s;
+  transition: color .12s;
   position: relative;
 }
 .VPDocOutlineItem a:hover {
   color: var(--body) !important;
-  padding-left: 0.35rem !important;
 }
 
+/* h3：缩进 + 字号略小 + 颜色稍淡 */
 .VPDocOutlineItem.level-3 > a {
-  padding-left: 0.875rem !important;
-  font-size: 0.69rem !important;
+  padding-left: 0.625rem !important;
+  font-size: 0.68rem !important;
+  color: rgba(154,148,140,0.85) !important;
+  border-left: 1.5px solid var(--line-mid) !important;
+  margin-left: 0.25rem !important;
 }
 .VPDocOutlineItem.level-3 > a:hover {
-  padding-left: 1.125rem !important;
+  color: var(--body) !important;
 }
 
+/* h3 默认折叠 */
+.VPDocOutlineItem.level-3 {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.25s ease;
+}
+
+/* h2 激活时，相邻 h3 展开 */
+.VPDocOutlineItem.level-2.is-active ~ .VPDocOutlineItem.level-3,
+.VPDocOutlineItem.level-3.active {
+  max-height: 200px;
+}
+
+/* h2 hover 时展开其下的 h3（JS 辅助更可靠，CSS 仅作备用） */
+.VPDocOutlineItem.level-2:hover ~ .VPDocOutlineItem.level-3 {
+  max-height: 200px;
+}
+
+/* 激活状态：左侧品牌色条 */
 .VPDocOutlineItem.active > a {
   color: var(--accent-deep) !important;
   font-weight: 700 !important;
-  padding-left: 0.625rem !important;
-  background: rgba(126,150,168,0.08) !important;
-  border-radius: 4px !important;
 }
 .VPDocOutlineItem.active > a::before {
   content: '' !important;
   position: absolute !important;
-  left: 0 !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  width: 2.5px !important;
-  height: 60% !important;
+  left: -0.75rem !important;
+  top: 0.25rem !important;
+  bottom: 0.25rem !important;
+  width: 2px !important;
   background: var(--accent-deep) !important;
-  border-radius: 0 1.5px 1.5px 0 !important;
+  border-radius: 1px !important;
 }
 .VPDocOutlineItem.level-3.active > a {
-  padding-left: 1.375rem !important;
+  padding-left: 0.625rem !important;
+  color: var(--accent-deep) !important;
+  border-left-color: var(--accent-deep) !important;
 }
 
 /* ─── 18. Mermaid ────────────────────────────────────────── */
