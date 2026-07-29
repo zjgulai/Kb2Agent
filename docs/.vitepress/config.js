@@ -56,6 +56,11 @@ export default withMermaid(defineConfig({
           { text: 'Skill 蒸馏九仓库', link: '/knowledge/09-skill-distillation-deep-dive' },
           { text: '完整 Pipeline', link: '/knowledge/10-e2e-pipeline' },
           { text: '知识库自进化', link: '/knowledge/11-kb-evolution' },
+        ]
+      },
+      {
+        text: '实战篇',
+        items: [
           { text: '评估与幻觉检测', link: '/knowledge/12-evaluation' },
           { text: 'Prompts 速查', link: '/knowledge/15-codex-prompts' },
           { text: 'VOC 实战案例', link: '/knowledge/16-voc-case-study' },
@@ -63,6 +68,7 @@ export default withMermaid(defineConfig({
           { text: '统一验证框架', link: '/knowledge/appendix-validation' },
           { text: '技术选型深度指南', link: '/knowledge/18-tech-selection-2026' },
           { text: '技术选型深度指南（二）', link: '/knowledge/19-tech-selection-vol2' },
+          { text: '生产运维 Runbook', link: '/knowledge/20-ops-runbook' },
         ]
       },
     ],
@@ -91,7 +97,7 @@ export default withMermaid(defineConfig({
           ]
         },
         {
-          text: '进阶篇 · 架构成本进化',
+          text: '进阶篇 · 架构与成本',
           collapsed: false,
           items: [
             { text: '架构选型 LoD', link: '/knowledge/07-advanced-theory' },
@@ -100,6 +106,12 @@ export default withMermaid(defineConfig({
             { text: 'Skill 蒸馏九仓库', link: '/knowledge/09-skill-distillation-deep-dive' },
             { text: '完整 Pipeline', link: '/knowledge/10-e2e-pipeline' },
             { text: '知识库自进化', link: '/knowledge/11-kb-evolution' },
+          ]
+        },
+        {
+          text: '实战篇 · 工具与案例',
+          collapsed: false,
+          items: [
             { text: '评估 · 幻觉检测', link: '/knowledge/12-evaluation' },
             { text: 'Prompts 速查', link: '/knowledge/15-codex-prompts' },
             { text: 'VOC 实战案例', link: '/knowledge/16-voc-case-study' },
@@ -107,6 +119,7 @@ export default withMermaid(defineConfig({
             { text: '统一验证框架', link: '/knowledge/appendix-validation' },
             { text: '技术选型深度指南 2026', link: '/knowledge/18-tech-selection-2026' },
             { text: '技术选型深度指南（二）', link: '/knowledge/19-tech-selection-vol2' },
+            { text: '生产运维 Runbook', link: '/knowledge/20-ops-runbook' },
           ]
         },
       ]
