@@ -61,6 +61,7 @@ export default withMermaid(defineConfig({
           { text: 'VOC 实战案例', link: '/knowledge/16-voc-case-study' },
           { text: '三个失败案例', link: '/knowledge/17-failure-cases' },
           { text: '统一验证框架', link: '/knowledge/appendix-validation' },
+          { text: '技术选型深度指南', link: '/knowledge/18-tech-selection-2026' },
         ]
       },
     ],
@@ -103,6 +104,7 @@ export default withMermaid(defineConfig({
             { text: 'VOC 实战案例', link: '/knowledge/16-voc-case-study' },
             { text: '三个失败案例', link: '/knowledge/17-failure-cases' },
             { text: '统一验证框架', link: '/knowledge/appendix-validation' },
+            { text: '技术选型深度指南 2026', link: '/knowledge/18-tech-selection-2026' },
           ]
         },
       ]
