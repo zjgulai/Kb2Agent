@@ -62,6 +62,7 @@ export default withMermaid(defineConfig({
           { text: '三个失败案例', link: '/knowledge/17-failure-cases' },
           { text: '统一验证框架', link: '/knowledge/appendix-validation' },
           { text: '技术选型深度指南', link: '/knowledge/18-tech-selection-2026' },
+          { text: '技术选型深度指南（二）', link: '/knowledge/19-tech-selection-vol2' },
         ]
       },
     ],
@@ -105,6 +106,7 @@ export default withMermaid(defineConfig({
             { text: '三个失败案例', link: '/knowledge/17-failure-cases' },
             { text: '统一验证框架', link: '/knowledge/appendix-validation' },
             { text: '技术选型深度指南 2026', link: '/knowledge/18-tech-selection-2026' },
+            { text: '技术选型深度指南（二）', link: '/knowledge/19-tech-selection-vol2' },
           ]
         },
       ]
