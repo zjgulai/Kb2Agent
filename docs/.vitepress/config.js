@@ -39,6 +39,7 @@ export default withMermaid(defineConfig({
       {
         text: '工程篇',
         items: [
+          { text: '多模态数据采集', link: '/knowledge/21-data-collection' },
           { text: '10种场景 SOP', link: '/knowledge/03-scene-sops' },
           { text: '全链路架构', link: '/knowledge/04-architecture' },
           { text: '安全合规（必读）', link: '/knowledge/05-security-compliance' },
@@ -69,6 +70,7 @@ export default withMermaid(defineConfig({
           { text: '技术选型深度指南', link: '/knowledge/18-tech-selection-2026' },
           { text: '技术选型深度指南（二）', link: '/knowledge/19-tech-selection-vol2' },
           { text: '生产运维 Runbook', link: '/knowledge/20-ops-runbook' },
+          { text: 'Agent 设计与编排', link: '/knowledge/22-agent-design' },
         ]
       },
     ],
@@ -88,6 +90,7 @@ export default withMermaid(defineConfig({
           text: '工程篇 · 数据到知识库',
           collapsed: false,
           items: [
+            { text: '多模态数据采集', link: '/knowledge/21-data-collection' },
             { text: '10种场景 SOP', link: '/knowledge/03-scene-sops' },
             { text: '全链路五阶段架构', link: '/knowledge/04-architecture' },
             { text: '安全合规 · 必读', link: '/knowledge/05-security-compliance' },
@@ -120,6 +123,7 @@ export default withMermaid(defineConfig({
             { text: '技术选型深度指南 2026', link: '/knowledge/18-tech-selection-2026' },
             { text: '技术选型深度指南（二）', link: '/knowledge/19-tech-selection-vol2' },
             { text: '生产运维 Runbook', link: '/knowledge/20-ops-runbook' },
+            { text: 'Agent 设计与编排', link: '/knowledge/22-agent-design' },
           ]
         },
       ]
