@@ -57,6 +57,7 @@ export default withMermaid(defineConfig({
           { text: 'Skill 蒸馏九仓库', link: '/knowledge/09-skill-distillation-deep-dive' },
           { text: '完整 Pipeline', link: '/knowledge/10-e2e-pipeline' },
           { text: '知识库自进化', link: '/knowledge/11-kb-evolution' },
+          { text: 'Fine-tuning vs RAG 决策', link: '/knowledge/23-finetuning-vs-rag' },
         ]
       },
       {
@@ -109,6 +110,7 @@ export default withMermaid(defineConfig({
             { text: 'Skill 蒸馏九仓库', link: '/knowledge/09-skill-distillation-deep-dive' },
             { text: '完整 Pipeline', link: '/knowledge/10-e2e-pipeline' },
             { text: '知识库自进化', link: '/knowledge/11-kb-evolution' },
+            { text: 'Fine-tuning vs RAG 决策', link: '/knowledge/23-finetuning-vs-rag' },
           ]
         },
         {
