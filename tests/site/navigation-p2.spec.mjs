@@ -94,6 +94,8 @@ test('search handles empty, keyboard, navigation and local-only preference state
   const firstResult = modal.locator('.results > li > a.result').first()
   const selectedStatus = modal.locator('.mkd-search-status')
   await expect(firstResult).toHaveAttribute('href', /\/knowledge\/12-evaluation/)
+  // Detailed search publishes raw results before async excerpts; start keyboard input after the final publication.
+  await expect(firstResult.locator('.excerpt')).toBeVisible()
   await expect(firstResult).toHaveClass(/selected/)
   await expect(selectedStatus).toHaveAttribute('role', 'status')
   await expect(selectedStatus).toHaveAttribute('aria-live', 'polite')
