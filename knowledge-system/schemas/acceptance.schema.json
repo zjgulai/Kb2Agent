@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd-guide.local/schemas/acceptance-registry.schema.json",
+  "title": "MKD Guide repository-content acceptance registry",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "registry",
+    "reviewedAt",
+    "coverageMode",
+    "acceptanceScope",
+    "scopeNote",
+    "contracts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "registry": { "type": "string", "minLength": 1 },
+    "reviewedAt": { "$ref": "#/$defs/date" },
+    "coverageMode": { "const": "three-document-pilot" },
+    "acceptanceScope": { "const": "repository-content" },
+    "scopeNote": { "type": "string", "minLength": 20 },
+    "contracts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/contract" }
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "nullableEvidenceRef": {
+      "oneOf": [
+        { "type": "string", "pattern": "^EVD-[A-Z0-9-]+$" },
+        { "type": "null" }
+      ]
+    },
+    "dataset": {
+      "type": "object",
+      "required": [
+        "datasetId",
+        "version",
+        "path",
+        "sha256",
+        "kind",
+        "authorizationState",
+        "authorizationRoleId",
+        "authorizationEvidenceRef"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "datasetId": { "type": "string", "pattern": "^ADS-[A-Z0-9-]+$" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "kind": { "enum": ["synthetic-fixture", "authorized-business"] },
+        "authorizationState": { "enum": ["synthetic-only", "business-authorized"] },
+        "authorizationRoleId": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+        "authorizationEvidenceRef": { "$ref": "#/$defs/nullableEvidenceRef" }
+      }
+    },
+    "threshold": {
+      "type": "object",
+      "required": [
+        "thresholdId",
+        "metric",
+        "operator",
+        "value",
+        "status",
+        "approvalRoleId",
+        "approvalEvidenceRef"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "thresholdId": { "type": "string", "pattern": "^ACT-[A-Z0-9-]+$" },
+        "metric": { "enum": ["passRate", "externalCalls", "sideEffects"] },
+        "operator": { "enum": ["eq", "gte", "lte"] },
+        "value": { "type": "number" },
+        "status": { "enum": ["illustrative", "approved"] },
+        "approvalRoleId": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+        "approvalEvidenceRef": { "$ref": "#/$defs/nullableEvidenceRef" }
+      }
+    },
+    "regression": {
+      "type": "object",
+      "required": [
+        "runner",
+        "command",
+        "baselineReceiptId",
+        "baselinePath",
+        "baselineSha256",
+        "maxPassRateDrop"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "runner": { "enum": ["security-governance", "cost-model", "evaluation-regression"] },
+        "command": { "type": "string", "pattern": "^node scripts/run-acceptance-fixtures\\.mjs --contract ACC-[A-Z0-9-]+$" },
+        "baselineReceiptId": { "type": "string", "pattern": "^ACR-[A-Z0-9-]+$" },
+        "baselinePath": { "type": "string", "minLength": 1 },
+        "baselineSha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "maxPassRateDrop": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "finalReceipt": {
+      "type": "object",
+      "required": ["state", "approverRoleId", "evidenceRef"],
+      "additionalProperties": false,
+      "properties": {
+        "state": { "enum": ["missing", "issued"] },
+        "approverRoleId": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+        "evidenceRef": { "$ref": "#/$defs/nullableEvidenceRef" }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "required": [
+        "acceptanceId",
+        "documentId",
+        "targetMaturity",
+        "targetVerification",
+        "acceptanceScope",
+        "productionReady",
+        "dataset",
+        "thresholds",
+        "regression",
+        "ownerRoleRefs",
+        "finalReceipt",
+        "declaredState",
+        "declaredDecision",
+        "declaredBlockers",
+        "nextEvidence"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "acceptanceId": { "type": "string", "pattern": "^ACC-[A-Z0-9-]+$" },
+        "documentId": { "type": "string", "pattern": "^KS-[A-Z0-9-]+$" },
+        "targetMaturity": { "const": "acceptance" },
+        "targetVerification": { "const": "acceptance-tested" },
+        "acceptanceScope": { "const": "repository-content" },
+        "productionReady": { "const": false },
+        "dataset": { "$ref": "#/$defs/dataset" },
+        "thresholds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/threshold" }
+        },
+        "regression": { "$ref": "#/$defs/regression" },
+        "ownerRoleRefs": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" }
+        },
+        "finalReceipt": { "$ref": "#/$defs/finalReceipt" },
+        "declaredState": { "enum": ["draft-invalid", "regression-blocked", "approval-blocked", "accepted"] },
+        "declaredDecision": { "enum": ["blocked", "accepted"] },
+        "declaredBlockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "LOCAL_REPLAY_FAILED",
+              "REGRESSION_DETECTED",
+              "DATASET_NOT_BUSINESS_AUTHORIZED",
+              "THRESHOLDS_NOT_APPROVED",
+              "OWNER_ACCEPTANCE_INCOMPLETE",
+              "FINAL_RECEIPT_MISSING"
+            ]
+          }
+        },
+        "nextEvidence": { "type": "string", "minLength": 20 }
+      }
+    }
+  }
+}

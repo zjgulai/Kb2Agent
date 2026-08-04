@@ -1,0 +1,193 @@
+schemaVersion: "1.0"
+registry: MKD Guide repository-content acceptance contracts
+reviewedAt: "2026-08-02"
+coverageMode: three-document-pilot
+acceptanceScope: repository-content
+scopeNote: 本注册表只裁决知识页面能否升级为本仓库的可验收内容，不证明生产部署、法律合规、预算批准或真实模型效果。
+
+contracts:
+  - acceptanceId: ACC-SECURITY-001
+    documentId: KS-SECURITY-COMPLIANCE
+    targetMaturity: acceptance
+    targetVerification: acceptance-tested
+    acceptanceScope: repository-content
+    productionReady: false
+    dataset:
+      datasetId: ADS-SECURITY-LOCAL-V1
+      version: "1.0.0"
+      path: knowledge-system/acceptance/datasets/security-local-v1.json
+      sha256: sha256:1e2727555bf12c853e365baec6c304da85667a6da081c9bc031303ea70dd8322
+      kind: synthetic-fixture
+      authorizationState: synthetic-only
+      authorizationRoleId: ROLE-SEC-EVIDENCE
+      authorizationEvidenceRef: null
+    thresholds:
+      - thresholdId: ACT-SEC-PASS-RATE
+        metric: passRate
+        operator: gte
+        value: 1
+        status: illustrative
+        approvalRoleId: ROLE-SEC-APPROVER
+        approvalEvidenceRef: null
+      - thresholdId: ACT-SEC-EXTERNAL-CALLS
+        metric: externalCalls
+        operator: eq
+        value: 0
+        status: illustrative
+        approvalRoleId: ROLE-SEC-APPROVER
+        approvalEvidenceRef: null
+      - thresholdId: ACT-SEC-SIDE-EFFECTS
+        metric: sideEffects
+        operator: eq
+        value: 0
+        status: illustrative
+        approvalRoleId: ROLE-SEC-APPROVER
+        approvalEvidenceRef: null
+    regression:
+      runner: security-governance
+      command: node scripts/run-acceptance-fixtures.mjs --contract ACC-SECURITY-001
+      baselineReceiptId: ACR-SECURITY-LOCAL-V1
+      baselinePath: knowledge-system/acceptance/receipts/security-local-v1.json
+      baselineSha256: sha256:a77bef6acce191332ab49127f47f8a6e529270cacd94532b1863bfcd838b8ed3
+      maxPassRateDrop: 0
+    ownerRoleRefs:
+      - ROLE-SEC-CONTENT
+      - ROLE-SEC-EVIDENCE
+      - ROLE-SEC-TEST
+      - ROLE-SEC-APPROVER
+    finalReceipt:
+      state: missing
+      approverRoleId: ROLE-SEC-APPROVER
+      evidenceRef: null
+    declaredState: approval-blocked
+    declaredDecision: blocked
+    declaredBlockers:
+      - DATASET_NOT_BUSINESS_AUTHORIZED
+      - THRESHOLDS_NOT_APPROVED
+      - OWNER_ACCEPTANCE_INCOMPLETE
+      - FINAL_RECEIPT_MISSING
+    nextEvidence: 绑定获授权业务样本与辖区控制表，由四类具名责任人接受职责并批准阈值，再签发仓库内容验收回执。
+
+  - acceptanceId: ACC-COST-001
+    documentId: KS-COST-MODEL
+    targetMaturity: acceptance
+    targetVerification: acceptance-tested
+    acceptanceScope: repository-content
+    productionReady: false
+    dataset:
+      datasetId: ADS-COST-LOCAL-V1
+      version: "1.0.0"
+      path: knowledge-system/acceptance/datasets/cost-local-v1.json
+      sha256: sha256:a373327709ec0cc748acfd57a2d4c4dea4e1941e55a94efe7f87316b95764b8f
+      kind: synthetic-fixture
+      authorizationState: synthetic-only
+      authorizationRoleId: ROLE-COST-EVIDENCE
+      authorizationEvidenceRef: null
+    thresholds:
+      - thresholdId: ACT-COST-PASS-RATE
+        metric: passRate
+        operator: gte
+        value: 1
+        status: illustrative
+        approvalRoleId: ROLE-COST-APPROVER
+        approvalEvidenceRef: null
+      - thresholdId: ACT-COST-EXTERNAL-CALLS
+        metric: externalCalls
+        operator: eq
+        value: 0
+        status: illustrative
+        approvalRoleId: ROLE-COST-APPROVER
+        approvalEvidenceRef: null
+      - thresholdId: ACT-COST-SIDE-EFFECTS
+        metric: sideEffects
+        operator: eq
+        value: 0
+        status: illustrative
+        approvalRoleId: ROLE-COST-APPROVER
+        approvalEvidenceRef: null
+    regression:
+      runner: cost-model
+      command: node scripts/run-acceptance-fixtures.mjs --contract ACC-COST-001
+      baselineReceiptId: ACR-COST-LOCAL-V1
+      baselinePath: knowledge-system/acceptance/receipts/cost-local-v1.json
+      baselineSha256: sha256:d11e4dc32fbdac56c49bb72fb401bef1b81455973aa02b7489bdb7d79c70c23a
+      maxPassRateDrop: 0
+    ownerRoleRefs:
+      - ROLE-COST-CONTENT
+      - ROLE-COST-EVIDENCE
+      - ROLE-COST-TEST
+      - ROLE-COST-APPROVER
+    finalReceipt:
+      state: missing
+      approverRoleId: ROLE-COST-APPROVER
+      evidenceRef: null
+    declaredState: approval-blocked
+    declaredDecision: blocked
+    declaredBlockers:
+      - DATASET_NOT_BUSINESS_AUTHORIZED
+      - THRESHOLDS_NOT_APPROVED
+      - OWNER_ACCEPTANCE_INCOMPLETE
+      - FINAL_RECEIPT_MISSING
+    nextEvidence: 使用目标供应商、区域、币种与真实负载建立获授权评估集，由 FinOps 与预算责任人批准误差阈值并签发仓库内容验收回执。
+
+  - acceptanceId: ACC-EVALUATION-001
+    documentId: KS-EVALUATION
+    targetMaturity: acceptance
+    targetVerification: acceptance-tested
+    acceptanceScope: repository-content
+    productionReady: false
+    dataset:
+      datasetId: ADS-EVALUATION-LOCAL-V1
+      version: "1.0.0"
+      path: knowledge-system/acceptance/datasets/evaluation-local-v1.json
+      sha256: sha256:e37f8965f066e6103180895a2b148f60602cedbac54cf0f10a6142641380efbb
+      kind: synthetic-fixture
+      authorizationState: synthetic-only
+      authorizationRoleId: ROLE-EVAL-EVIDENCE
+      authorizationEvidenceRef: null
+    thresholds:
+      - thresholdId: ACT-EVAL-PASS-RATE
+        metric: passRate
+        operator: gte
+        value: 1
+        status: illustrative
+        approvalRoleId: ROLE-EVAL-APPROVER
+        approvalEvidenceRef: null
+      - thresholdId: ACT-EVAL-EXTERNAL-CALLS
+        metric: externalCalls
+        operator: eq
+        value: 0
+        status: illustrative
+        approvalRoleId: ROLE-EVAL-APPROVER
+        approvalEvidenceRef: null
+      - thresholdId: ACT-EVAL-SIDE-EFFECTS
+        metric: sideEffects
+        operator: eq
+        value: 0
+        status: illustrative
+        approvalRoleId: ROLE-EVAL-APPROVER
+        approvalEvidenceRef: null
+    regression:
+      runner: evaluation-regression
+      command: node scripts/run-acceptance-fixtures.mjs --contract ACC-EVALUATION-001
+      baselineReceiptId: ACR-EVALUATION-LOCAL-V1
+      baselinePath: knowledge-system/acceptance/receipts/evaluation-local-v1.json
+      baselineSha256: sha256:e00622c7b6f5908caffe7f14c82c3e8a3a70c370550612d95967f63db7a26d9a
+      maxPassRateDrop: 0
+    ownerRoleRefs:
+      - ROLE-EVAL-CONTENT
+      - ROLE-EVAL-EVIDENCE
+      - ROLE-EVAL-TEST
+      - ROLE-EVAL-APPROVER
+    finalReceipt:
+      state: missing
+      approverRoleId: ROLE-EVAL-APPROVER
+      evidenceRef: null
+    declaredState: approval-blocked
+    declaredDecision: blocked
+    declaredBlockers:
+      - DATASET_NOT_BUSINESS_AUTHORIZED
+      - THRESHOLDS_NOT_APPROVED
+      - OWNER_ACCEPTANCE_INCOMPLETE
+      - FINAL_RECEIPT_MISSING
+    nextEvidence: 将三用例 mock 集替换为获授权版本化业务集，批准错误成本阈值并锁定真实模型版本，由四类具名责任人签发验收回执。

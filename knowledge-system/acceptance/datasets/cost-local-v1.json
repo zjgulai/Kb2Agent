@@ -1,0 +1,92 @@
+{
+  "datasetId": "ADS-COST-LOCAL-V1",
+  "version": "1.0.0",
+  "documentId": "KS-COST-MODEL",
+  "kind": "synthetic-fixture",
+  "cases": [
+    {
+      "caseId": "cost-dated-regional-baseline",
+      "caseClass": "positive",
+      "input": {
+        "currency": "USD",
+        "region": "US",
+        "effectiveAt": "2026-08-01",
+        "monthlyQueries": 10000,
+        "inputTokensPerQuery": 4000,
+        "cachedInputTokensPerQuery": 1000,
+        "outputTokensPerQuery": 500,
+        "embeddingTokens": 50000000,
+        "fixedMonthlyCost": 25,
+        "prices": {
+          "inputPerMillion": 2,
+          "cachedInputPerMillion": 0.5,
+          "outputPerMillion": 8,
+          "embeddingPerMillion": 0.1
+        }
+      },
+      "expected": {
+        "total": 135,
+        "currency": "USD",
+        "region": "US",
+        "effectiveAt": "2026-08-01"
+      }
+    },
+    {
+      "caseId": "cost-cached-input-overflow",
+      "caseClass": "negative",
+      "input": {
+        "currency": "USD",
+        "region": "US",
+        "effectiveAt": "2026-08-01",
+        "monthlyQueries": 1,
+        "inputTokensPerQuery": 10,
+        "cachedInputTokensPerQuery": 11,
+        "outputTokensPerQuery": 1,
+        "prices": {
+          "inputPerMillion": 1,
+          "outputPerMillion": 1
+        }
+      },
+      "expected": {
+        "errorIncludes": "cached input cannot exceed total input"
+      }
+    },
+    {
+      "caseId": "cost-missing-region",
+      "caseClass": "negative",
+      "input": {
+        "currency": "USD",
+        "effectiveAt": "2026-08-01",
+        "monthlyQueries": 1,
+        "inputTokensPerQuery": 10,
+        "outputTokensPerQuery": 1,
+        "prices": {
+          "inputPerMillion": 1,
+          "outputPerMillion": 1
+        }
+      },
+      "expected": {
+        "errorIncludes": "region is required"
+      }
+    },
+    {
+      "caseId": "cost-invalid-effective-date",
+      "caseClass": "negative",
+      "input": {
+        "currency": "USD",
+        "region": "US",
+        "effectiveAt": "undated",
+        "monthlyQueries": 1,
+        "inputTokensPerQuery": 10,
+        "outputTokensPerQuery": 1,
+        "prices": {
+          "inputPerMillion": 1,
+          "outputPerMillion": 1
+        }
+      },
+      "expected": {
+        "errorIncludes": "effectiveAt must be YYYY-MM-DD"
+      }
+    }
+  ]
+}

@@ -2,16 +2,45 @@
   "name": "mkd-guide",
   "version": "1.0.0",
   "description": "Multimodal Knowledge Distillation Guide",
+  "engines": {
+    "node": ">=22.19.0"
+  },
   "scripts": {
-    "docs:dev": "vitepress dev docs",
+    "docs:dev": "vitepress dev docs --host 127.0.0.1",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "node scripts/preview-local.mjs",
+    "docs:metrics": "node scripts/check-content-metrics.mjs",
+    "docs:identity": "node scripts/check-document-identity.mjs",
+    "docs:concepts": "node scripts/check-concepts.mjs",
+    "docs:claims": "node scripts/check-claims.mjs",
+    "docs:evidence": "node scripts/check-evidence.mjs",
+    "docs:acceptance": "node scripts/check-acceptance.mjs",
+    "docs:audit": "node scripts/docs-audit.mjs",
+    "docs:semantic-links": "node scripts/check-semantic-links.mjs",
+    "docs:headings": "node scripts/check-rendered-headings.mjs",
+    "docs:links": "node scripts/check-links.mjs",
+    "docs:snippets": "node scripts/check-snippets.mjs",
+    "docs:performance": "node scripts/check-site-performance.mjs",
+    "docs:preview-isolation": "node scripts/check-preview-isolation.mjs",
+    "docs:lighthouse": "node scripts/check-lighthouse.mjs",
+    "test:content": "node --test tests/content/*.test.mjs",
+    "test:site": "playwright test",
+    "docs:qa": "npm run docs:metrics && npm run docs:identity && npm run docs:concepts && npm run docs:claims && npm run docs:evidence && npm run docs:acceptance && npm run docs:audit && npm run docs:semantic-links && npm run docs:links && npm run docs:snippets && npm run test:content && npm run docs:build && npm run docs:headings && npm run docs:preview-isolation && npm run docs:performance && npm run docs:lighthouse && npm run test:site"
   },
   "devDependencies": {
-    "mermaid": "^11.16.0",
-    "vitepress": "^1.0.0",
-    "vitepress-plugin-mermaid": "^2.0.17",
-    "vue": "^3.4.0"
+    "@axe-core/playwright": "4.12.1",
+    "@phosphor-icons/vue": "2.2.1",
+    "@playwright/test": "1.62.1",
+    "chrome-launcher": "1.2.1",
+    "gray-matter": "4.0.3",
+    "lighthouse": "13.4.1",
+    "mermaid": "11.16.0",
+    "remark-gfm": "4.0.1",
+    "remark-parse": "11.0.0",
+    "unified": "11.0.5",
+    "unist-util-visit": "5.1.0",
+    "vitepress": "1.6.4",
+    "vue": "3.5.40"
   },
   "type": "module"
 }

@@ -1,0 +1,81 @@
+{
+  "datasetId": "ADS-SECURITY-LOCAL-V1",
+  "version": "1.0.0",
+  "documentId": "KS-SECURITY-COMPLIANCE",
+  "kind": "synthetic-fixture",
+  "cases": [
+    {
+      "caseId": "security-synthetic-isolated",
+      "caseClass": "positive",
+      "operation": "security-drill",
+      "input": {
+        "sampleId": "FIXTURE-SYNTHETIC-001",
+        "environment": "isolated-fixture",
+        "dataClass": "synthetic",
+        "retentionHours": 4,
+        "destructionReceiptMode": "fixture-receipt"
+      },
+      "expected": {
+        "decision": "allowed-fixture-only",
+        "externalSideEffect": false,
+        "productionApproval": false
+      }
+    },
+    {
+      "caseId": "security-production-data-rejected",
+      "caseClass": "negative",
+      "operation": "security-drill",
+      "input": {
+        "sampleId": "FORBIDDEN-PRODUCTION-001",
+        "environment": "isolated-fixture",
+        "dataClass": "production",
+        "retentionHours": 4,
+        "destructionReceiptMode": "fixture-receipt"
+      },
+      "expected": {
+        "errorIncludes": "production data is forbidden"
+      }
+    },
+    {
+      "caseId": "security-authorization-required",
+      "caseClass": "negative",
+      "operation": "security-drill",
+      "input": {
+        "sampleId": "FIXTURE-MINIMIZED-001",
+        "environment": "isolated-fixture",
+        "dataClass": "authorized-minimized",
+        "retentionHours": 4,
+        "destructionReceiptMode": "fixture-receipt"
+      },
+      "expected": {
+        "errorIncludes": "authorizationRef"
+      }
+    },
+    {
+      "caseId": "security-retention-stays-illustrative",
+      "caseClass": "positive",
+      "operation": "retention-control",
+      "input": {
+        "controlId": "LOG-STANDARD",
+        "status": "illustrative"
+      },
+      "expected": {
+        "decision": "example-only",
+        "productionApproved": false
+      }
+    },
+    {
+      "caseId": "security-incomplete-production-baseline",
+      "caseClass": "negative",
+      "operation": "retention-control",
+      "input": {
+        "controlId": "LOG-STANDARD",
+        "status": "production-baseline",
+        "jurisdiction": "FIXTURE-JURISDICTION"
+      },
+      "expected": {
+        "errorIncludes": "dataCategory"
+      }
+    }
+  ]
+}

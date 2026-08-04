@@ -1,0 +1,25 @@
+{
+  "receiptId": "ACR-EVALUATION-LOCAL-V1",
+  "contractId": "ACC-EVALUATION-001",
+  "recordedAt": "2026-08-02",
+  "datasetSha256": "sha256:e37f8965f066e6103180895a2b148f60602cedbac54cf0f10a6142641380efbb",
+  "runnerVersion": "mkd-acceptance-runner-v1",
+  "datasetId": "ADS-EVALUATION-LOCAL-V1",
+  "datasetVersion": "1.0.0",
+  "evidenceGrade": "L2-fixture-or-dry-run",
+  "environment": "local-deterministic-fixture",
+  "externalCalls": 0,
+  "sideEffects": 0,
+  "metrics": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "passRate": 1
+  },
+  "decision": "fixture-pass",
+  "cases": [
+    { "caseId": "grounded-answer", "caseClass": "positive", "passed": true },
+    { "caseId": "insufficient-evidence-refusal", "caseClass": "negative", "passed": true },
+    { "caseId": "malformed-provider-output", "caseClass": "negative", "passed": true }
+  ]
+}

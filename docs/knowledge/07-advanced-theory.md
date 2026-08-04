@@ -1,9 +1,31 @@
 ---
-name: knowledge-advanced-architecture
-description: 架构选型深度指南，覆盖5级蒸馏阶梯LoD、四条技术路线对比、Skill蒸馏终局论证。当面临架构选型或需要深度技术判断时使用。
+name: "knowledge-advanced-architecture"
+docId: "KS-LOD-THEORY"
+displayNumber: "08"
+route: "/knowledge/07-advanced-theory"
+learningOrder: 10
+title: "第八章：架构选型深度指南与进阶分层理论"
+description: "架构选型深度指南，覆盖5级蒸馏阶梯LoD、四条技术路线对比、Skill蒸馏终局论证。当面临架构选型或需要深度技术判断时使用。"
+chapter: "08"
+order: 10
+section: advanced
+stage: design
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第八章：架构选型深度指南与进阶分层理论
+
+<a id="concept-use-dikw-001"></a>
+
+本章沿用 DIKW 的抽象层级来判断知识形态，但不把它当作工程加工深度。
+
+<a id="concept-use-lod-001"></a>
+
+LoD 在这里用于选择加工深度：它回答材料应该停留在原文、结构化知识、图谱还是可执行契约。
 
 :::info 本章在全书中的角色
 **读完本章你能做到**：根据你的查询类型、团队能力、数据规模，做出「向量 RAG / GraphRAG / Skill 蒸馏 / 混合架构」的选型决策，并知道何时该升级、何时该降级。
@@ -38,7 +60,7 @@ description: 架构选型深度指南，覆盖5级蒸馏阶梯LoD、四条技术
 关系推理（"连带品类"/"上下游"）       →  轻量图谱（Kùzu/NetworkX）
 全库主题综合（"这批报告共同主题是？"）→  GraphRAG / LightRAG
 复杂多步自主决策                       →  Agentic RAG (LangGraph)
-```text
+```
 
 ---
 
@@ -60,7 +82,7 @@ results = kb.search("选品评分标准是什么")
 def opportunity_score(demand: float, competition: float,
                       profit: float, operation: float) -> float:
     return demand * 0.40 + competition * 0.30 + profit * 0.25 + operation * 0.05
-```text
+```
 
 ### 场景 2：实时数据 → 直接 API 调用，不入库
 
@@ -78,7 +100,7 @@ def opportunity_score(demand: float, competition: float,
 -- (OK) NL2SQL 返回精确值
 SELECT SUM(revenue) FROM sales_orders
 WHERE category='solar_charger' AND month='2026-07'
-```text
+```
 
 ### 场景 4：单文档短文本 + 低频查询 → 长上下文直接加载
 
@@ -95,7 +117,7 @@ response = client.messages.create(
     max_tokens=4096,
     messages=[{"role": "user", "content": f"报告全文：{report}\n\n问题：{query}"}]
 )
-```text
+```
 
 **判断准则**：文档 < 100 页 且 查询频率 < 50 次/月 → 优先试长上下文基线
 
@@ -107,7 +129,7 @@ result = llm.ask("计算这些销售数据的中位数和标准差")  # 可能�
 
 # (OK) pandas 直接计算
 stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
-```text
+```
 
 ---
 
@@ -115,7 +137,7 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 
 > 本章基于对 2025-2026 年顶会论文（ACL、NeurIPS、ICLR）及 GitHub 高星项目（A-RAG, Corpus2Skill, Anything2Skill, xMemory 等）的深度解构，围绕**第一性原理**，为你提供从理论到落地的极致压榨指南。
 
-### 7.1 第一性原理推演：Agent 到底需要什么？
+### 8.2.1 第一性原理推演：Agent 到底需要什么？
 
 传统的 RAG 认为 Agent 需要的是“知识片段”（Chunks）；
 但在真实生产环境中，Agent 需要的是**“能力重用（Capability Reuse）”**和**“自主的信息漏斗（Information Funnel）”**。
@@ -124,7 +146,7 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 1. **声明式外包（Declarative Grounding）**：模型不知道库里有什么，只能瞎问，库塞给他什么他就读什么（经典 Vector RAG）。
 2. **程序式导航（Procedural Navigation）**：模型获得了一张**全景地图**，它主动决定该下钻到哪一层，该读取哪些完整原件（Agentic RAG / Skill 目录树）。
 
-### 7.2 知识蒸馏与 Agent 调用的 DIKW 深度阶梯 (Level of Distillation)
+### 8.2.2 知识蒸馏与 Agent 调用的 DIKW 深度阶梯 (Level of Distillation)
 
 通过对工业界（Microsoft, HuggingFace）和开源极客社区（如 `zjgulai` 收藏的知识图谱生态）的深度解构，我们发现所谓的“蒸馏”不仅是格式转换，而是从**“数据(Data)”向“智慧(Wisdom)”**的跨越。
 
@@ -141,7 +163,7 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 > **深度洞察：LoD 4 (Skill 蒸馏) 为什么是终局？**
 > 从 `colleague-skill` (同事经验) 到 `yourself-skill` (自我永生)，再到 `anti-distill` (防止被公司资本家吸干经验的防蒸馏工具)。开源社区的走向证明：**最高价值的知识不是“事实”，而是“判断启发式 (Heuristics)”与“SOP 肌肉记忆”**。这也是为什么提供 `SKILL.md` 能让 Agent 的执行成功率发生断层式领先。
 
-### 7.3 技术路由选型指南 (Input → Routing → Selection → Techniques)
+### 8.2.3 技术路由选型指南 (Input → Routing → Selection → Techniques)
 
 结合各大开源框架的共同点和差异点，我们梳理出最高效的落地实践路由。
 
@@ -181,7 +203,7 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
     *   **L0 -> L3 金字塔**：L0(原对话) -> L1(事实原子) -> L2(场景快照) -> L3(用户偏好/人设)。Agent 平时只读取 L3，遇到具体问题才通过索引下钻到 L1。这种方式被证明能使 Context Token 下降 61%，Persona 召回率提升至 76%。
 
 
-### 7.5 实战案例深度对决：“女娲-仓颉-达尔文”生态与认知克隆
+### 8.2.4 实战案例深度对决：“女娲-仓颉-达尔文”生态与认知克隆
 
 在 `zjgulai` 的知识图谱高星列表中，隐藏着一条极具工业启发的“认知克隆”路线。这条路线完全抛弃了传统的 Chunk 检索，而是将人类经验提炼为 `Agent Skill` (Level 4/5)，并且形成了闭环的生态系统。
 
@@ -221,7 +243,7 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 4.  **达尔文式防腐**：在 CI/CD 中挂载 `darwin-skill` 脚本，每次有人修改知识库，自动生成 10 个极端问题去问 Agent，如果 Agent 按着新的 Skill 执行反而报错（如格式越界、遗漏安全检查），直接阻断该次提交 (`revert`)。
 
 
-### 7.4 核心误区：GraphRAG (Level 3) 与 VectorRAG (Level 0) 的终极辩论
+### 8.2.5 核心误区：GraphRAG (Level 3) 与 VectorRAG (Level 0) 的终极辩论
 
 2026年多个独立评估（如 `UnWeaver` 论文）得出了一个冷酷的结论：**GraphRAG 并没有全面干掉 VectorRAG。**
 
@@ -269,7 +291,7 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 → 部署使用，收集真实反馈
 → darwin：基于反馈做棘轮迭代（需配评分器校准，见第十三章）
 → 输出：经过实战验证的方法论Skill
-```text
+```
 
 适用场景：已有成熟方法论文档、愿意投入迭代周期的场景。
 
@@ -280,7 +302,7 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 → R2S：从多模态资源提炼可执行操作步骤（骨架）
 → cangjie：补充判断逻辑、例外处理、边界说明（血肉）
 → 输出：既可执行又有判断力的完整Skill
-```text
+```
 
 适用场景：工程操作类知识，有丰富的教程资源但缺乏系统化方法论。
 
@@ -291,7 +313,7 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 → nuwa：提炼表达风格和思维模式（风格层）
 → cangjie：从其著作/演讲中提炼方法论（内容层）
 → 组合：风格层+内容层 → 有方法论支撑的人格化Skill
-```text
+```
 
 适用场景：需要同时保持特定表达风格和方法论准确性的场景（如内部培训、品牌传播）。
 
@@ -313,3 +335,10 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 :::tip → 下一章
 架构选型完成后，了解推理模型如何重构知识库策略 → [09-reasoning-models](09-reasoning-models.md)
 :::
+
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

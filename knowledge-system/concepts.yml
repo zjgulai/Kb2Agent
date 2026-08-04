@@ -1,0 +1,309 @@
+schemaVersion: 2
+registry: MKD Guide concept usage graph
+reviewedAt: "2026-08-01"
+coverageMode: reviewed-semantic-sample
+scopeNote: >-
+  Each usedIn entry is a reviewed semantic use, not an exhaustive list of every lexical occurrence.
+  Definitions and relations are canonical within this guide; they do not by themselves prove an
+  external fact, implementation result, or production outcome.
+relationContract:
+  definedIn: The first registered explanatory node; it must precede every registered use in learning order.
+  usedIn: A reviewed cross-document application, comparison, dependency, validation, implementation, or governance use.
+  prerequisiteOf: A directed learning dependency; the complete graph must remain acyclic.
+  conflictsWith: A symmetric non-equivalence or boundary warning; it means the concepts must not be conflated.
+  related: A symmetric navigation relation without dependency or conflict semantics.
+concepts:
+  - conceptId: CONCEPT-KNOWLEDGE-SYSTEM
+    term: Knowledge System
+    aliases: [知识体系, 知识库系统]
+    definition: Knowledge System（知识体系）是一条受治理的知识流水线，负责采集、结构化、检索、应用、评估与可追溯演进，而不是某一种数据库。
+    canonicalDocument: KS-INTRO
+    definedIn:
+      documentId: KS-INTRO
+      anchor: concept-knowledge-system
+      locatorText: Knowledge System（知识体系）是一条受治理的知识流水线
+    usedIn:
+      - usageId: USE-KNOWLEDGE-SYSTEM-001
+        documentId: KS-KB-EVOLUTION
+        anchor: concept-use-knowledge-system-001
+        locatorText: Knowledge System 只有在变更被提出、评估、批准、应用并可回滚时
+        usageType: governs
+    prerequisiteOf: [CONCEPT-DIKW, CONCEPT-RAG, CONCEPT-AGENT, CONCEPT-EVIDENCE-MATURITY]
+    conflictsWith:
+      - conceptId: CONCEPT-RAG
+        kind: not-equivalent
+        reason: Knowledge System 是受治理的端到端系统；RAG 只是其中一种检索模式。
+    related: [CONCEPT-DIKW, CONCEPT-RAG, CONCEPT-AGENT, CONCEPT-EVIDENCE-MATURITY, CONCEPT-KNOWLEDGE-EVOLUTION]
+
+  - conceptId: CONCEPT-DIKW
+    term: DIKW
+    aliases: [数据-信息-知识-智慧, 认知层级]
+    definition: DIKW 是本指南区分原始观察、语境化信息、可复用知识与面向决策智慧的认知层级，不是工程加工步骤表。
+    canonicalDocument: KS-FRAMEWORK-DIKW
+    definedIn:
+      documentId: KS-FRAMEWORK-DIKW
+      anchor: concept-dikw
+      locatorText: DIKW 是本指南区分原始观察、语境化信息、可复用知识与面向决策智慧的认知层级
+    usedIn:
+      - usageId: USE-DIKW-001
+        documentId: KS-LOD-THEORY
+        anchor: concept-use-dikw-001
+        locatorText: 本章沿用 DIKW 的抽象层级来判断知识形态
+        usageType: applies
+    prerequisiteOf: [CONCEPT-LOD, CONCEPT-SKILL-DISTILLATION]
+    conflictsWith:
+      - conceptId: CONCEPT-LOD
+        kind: not-equivalent
+        reason: DIKW 描述认知抽象层级；LoD 描述项目对加工深度的选择。
+    related: [CONCEPT-KNOWLEDGE-SYSTEM, CONCEPT-LOD, CONCEPT-SKILL-DISTILLATION]
+
+  - conceptId: CONCEPT-LOD
+    term: LoD
+    aliases: [Level of Distillation, 蒸馏层级]
+    definition: LoD（Level of Distillation）是项目对材料加工深度的选择模型，用来决定内容应停留在原文、结构化知识、关系网络还是可执行契约。
+    canonicalDocument: KS-LOD-THEORY
+    definedIn:
+      documentId: KS-FRAMEWORK-DIKW
+      anchor: concept-lod
+      locatorText: LoD（Level of Distillation）是项目对材料加工深度的选择模型
+    usedIn:
+      - usageId: USE-LOD-001
+        documentId: KS-LOD-THEORY
+        anchor: concept-use-lod-001
+        locatorText: LoD 在这里用于选择加工深度
+        usageType: applies
+    prerequisiteOf: [CONCEPT-RAG, CONCEPT-GRAPHRAG, CONCEPT-SKILL-DISTILLATION, CONCEPT-FT-VS-RAG]
+    conflictsWith:
+      - conceptId: CONCEPT-DIKW
+        kind: not-equivalent
+        reason: LoD 是工程加工选择；DIKW 是认知抽象模型。
+    related: [CONCEPT-DIKW, CONCEPT-RAG, CONCEPT-GRAPHRAG, CONCEPT-SKILL-DISTILLATION, CONCEPT-FT-VS-RAG]
+
+  - conceptId: CONCEPT-RAG
+    term: RAG
+    aliases: [Retrieval-Augmented Generation, 检索增强生成]
+    definition: RAG（检索增强生成）是在查询时检索证据并把所选证据提供给模型的回答模式；它不等同于完整知识体系。
+    canonicalDocument: KS-DECISION-MATRIX
+    definedIn:
+      documentId: KS-DECISION-MATRIX
+      anchor: concept-rag
+      locatorText: RAG（检索增强生成）是在查询时检索证据并把所选证据提供给模型的回答模式
+    usedIn:
+      - usageId: USE-RAG-001
+        documentId: KS-GRAPHRAG
+        anchor: concept-use-rag-001
+        locatorText: 本章把 RAG 作为检索基线
+        usageType: compares
+    prerequisiteOf: [CONCEPT-GRAPHRAG, CONCEPT-AGENT, CONCEPT-FT-VS-RAG, CONCEPT-EVALUATION-GATE]
+    conflictsWith:
+      - conceptId: CONCEPT-KNOWLEDGE-SYSTEM
+        kind: not-equivalent
+        reason: RAG 是检索模式；Knowledge System 还包含治理、应用、评估与演进。
+      - conceptId: CONCEPT-GRAPHRAG
+        kind: not-equivalent
+        reason: 向量优先 RAG 与图谱增强检索的证据结构和成本曲线不同。
+      - conceptId: CONCEPT-SKILL-DISTILLATION
+        kind: not-equivalent
+        reason: RAG 在查询时提供证据；Skill Distillation 产出有边界的程序性指令。
+      - conceptId: CONCEPT-FT-VS-RAG
+        kind: not-equivalent
+        reason: RAG 是候选路线之一；Fine-tuning vs RAG 是更上层的决策问题。
+    related: [CONCEPT-KNOWLEDGE-SYSTEM, CONCEPT-LOD, CONCEPT-GRAPHRAG, CONCEPT-AGENT, CONCEPT-SKILL-DISTILLATION, CONCEPT-EVALUATION-GATE, CONCEPT-FT-VS-RAG]
+
+  - conceptId: CONCEPT-GRAPHRAG
+    term: GraphRAG
+    aliases: [图谱增强检索]
+    definition: GraphRAG 是在证据选择中引入显式实体、关系或社区摘要的检索路线，适用于关系推理与跨文档聚合，而非所有查询的默认升级。
+    canonicalDocument: KS-GRAPHRAG
+    definedIn:
+      documentId: KS-DECISION-MATRIX
+      anchor: concept-graphrag
+      locatorText: GraphRAG 是在证据选择中引入显式实体、关系或社区摘要的检索路线
+    usedIn:
+      - usageId: USE-GRAPHRAG-001
+        documentId: KS-GRAPHRAG
+        anchor: concept-use-graphrag-001
+        locatorText: GraphRAG 在本章承担关系型检索与跨文档聚合
+        usageType: implements
+    prerequisiteOf: [CONCEPT-AGENT, CONCEPT-EVALUATION-GATE]
+    conflictsWith:
+      - conceptId: CONCEPT-RAG
+        kind: not-equivalent
+        reason: GraphRAG 增加显式关系结构；一般 RAG 不隐含图索引或图遍历。
+    related: [CONCEPT-LOD, CONCEPT-RAG, CONCEPT-AGENT, CONCEPT-EVALUATION-GATE]
+
+  - conceptId: CONCEPT-MCP
+    term: MCP
+    aliases: [Model Context Protocol, 模型上下文协议]
+    definition: MCP（Model Context Protocol）是本指南把受治理知识能力暴露给 Agent 的工具接口边界；它不替代鉴权、路由、超时或责任治理。
+    canonicalDocument: KS-AGENT-MCP
+    definedIn:
+      documentId: KS-DECISION-MATRIX
+      anchor: concept-mcp
+      locatorText: MCP（Model Context Protocol）是本指南把受治理知识能力暴露给 Agent 的工具接口边界
+    usedIn:
+      - usageId: USE-MCP-001
+        documentId: KS-AGENT-MCP
+        anchor: concept-use-mcp-001
+        locatorText: 本章使用 MCP 作为受治理的工具接口边界
+        usageType: implements
+    prerequisiteOf: [CONCEPT-KNOWLEDGE-EVOLUTION]
+    conflictsWith:
+      - conceptId: CONCEPT-AGENT
+        kind: not-equivalent
+        reason: MCP 定义接口边界；Agent 通过一个或多个接口做出决策与行动。
+    related: [CONCEPT-AGENT, CONCEPT-EVIDENCE-MATURITY, CONCEPT-KNOWLEDGE-EVOLUTION]
+
+  - conceptId: CONCEPT-AGENT
+    term: Agent
+    aliases: [智能体]
+    definition: Agent（智能体）是在显式权限、证据与控制边界内选择工具并产生行动的执行单元；它不是知识真实性的来源。
+    canonicalDocument: KS-AGENT-DESIGN
+    definedIn:
+      documentId: KS-INTRO
+      anchor: concept-agent
+      locatorText: Agent（智能体）是在显式权限、证据与控制边界内选择工具并产生行动的执行单元
+    usedIn:
+      - usageId: USE-AGENT-001
+        documentId: KS-FRAMEWORK-DIKW
+        anchor: concept-use-agent-001
+        locatorText: 在这条闭环里，Agent 是受控的知识消费者和行动执行者
+        usageType: applies
+    prerequisiteOf: [CONCEPT-MCP, CONCEPT-SKILL-DISTILLATION, CONCEPT-KNOWLEDGE-EVOLUTION]
+    conflictsWith:
+      - conceptId: CONCEPT-MCP
+        kind: not-equivalent
+        reason: Agent 是受控的决策与执行单元；MCP 是它可能使用的接口协议。
+    related: [CONCEPT-KNOWLEDGE-SYSTEM, CONCEPT-RAG, CONCEPT-GRAPHRAG, CONCEPT-MCP, CONCEPT-SKILL-DISTILLATION, CONCEPT-KNOWLEDGE-EVOLUTION]
+
+  - conceptId: CONCEPT-SKILL-DISTILLATION
+    term: Skill Distillation
+    aliases: [Skill 蒸馏, 技能蒸馏]
+    definition: Skill Distillation（技能蒸馏）是把可复用的推理或操作模式转化为有触发条件、步骤、边界与验证方法的执行契约。
+    canonicalDocument: KS-SKILL-DISTILLATION
+    definedIn:
+      documentId: KS-FRAMEWORK-DIKW
+      anchor: concept-skill-distillation
+      locatorText: Skill Distillation（技能蒸馏）是把可复用的推理或操作模式转化为有触发条件、步骤、边界与验证方法的执行契约
+    usedIn:
+      - usageId: USE-SKILL-DISTILLATION-001
+        documentId: KS-SKILL-DISTILLATION
+        anchor: concept-use-skill-distillation-001
+        locatorText: 本章把 Skill Distillation 落到可执行契约
+        usageType: implements
+    prerequisiteOf: [CONCEPT-KNOWLEDGE-EVOLUTION]
+    conflictsWith:
+      - conceptId: CONCEPT-RAG
+        kind: not-equivalent
+        reason: Skill Distillation 治理可复用程序；RAG 在查询时检索证据。
+    related: [CONCEPT-DIKW, CONCEPT-LOD, CONCEPT-RAG, CONCEPT-AGENT, CONCEPT-EVIDENCE-MATURITY, CONCEPT-KNOWLEDGE-EVOLUTION]
+
+  - conceptId: CONCEPT-EVIDENCE-MATURITY
+    term: Evidence Maturity
+    aliases: [证据成熟度, 原理-方案-可运行-可验收]
+    definition: Evidence Maturity（证据成熟度）描述内容从原理、方案、可复现运行到明确验收回执的本地进展，不代表生产部署状态。
+    canonicalDocument: KS-VALIDATION-FRAMEWORK
+    definedIn:
+      documentId: KS-INTRO
+      anchor: concept-evidence-maturity
+      locatorText: Evidence Maturity（证据成熟度）描述内容从原理、方案、可复现运行到明确验收回执的本地进展
+    usedIn:
+      - usageId: USE-EVIDENCE-MATURITY-001
+        documentId: KS-EVALUATION
+        anchor: concept-use-evidence-maturity-001
+        locatorText: Evidence Maturity 约束本章的表述
+        usageType: governs
+    prerequisiteOf: [CONCEPT-VTRCE, CONCEPT-EVALUATION-GATE, CONCEPT-KNOWLEDGE-EVOLUTION]
+    conflictsWith:
+      - conceptId: CONCEPT-VTRCE
+        kind: not-equivalent
+        reason: Evidence Maturity 是进展状态；VTRCE 是多维决策框架。
+    related: [CONCEPT-KNOWLEDGE-SYSTEM, CONCEPT-MCP, CONCEPT-SKILL-DISTILLATION, CONCEPT-VTRCE, CONCEPT-EVALUATION-GATE, CONCEPT-KNOWLEDGE-EVOLUTION]
+
+  - conceptId: CONCEPT-VTRCE
+    term: VTRCE
+    aliases: [统一验证框架]
+    definition: VTRCE 是本指南用 Validity、Timeliness、Relevance、Cost 与 Error Cost 五个维度裁决系统取舍的统一验证框架。
+    canonicalDocument: KS-VALIDATION-FRAMEWORK
+    definedIn:
+      documentId: KS-EVALUATION
+      anchor: concept-vtrce
+      locatorText: VTRCE 是本指南用 Validity、Timeliness、Relevance、Cost 与 Error Cost 五个维度裁决系统取舍的统一验证框架
+    usedIn:
+      - usageId: USE-VTRCE-001
+        documentId: KS-VALIDATION-FRAMEWORK
+        anchor: concept-use-vtrce-001
+        locatorText: 本附录使用 VTRCE 将正确性、时效性、相关性、成本与错误代价放进同一个裁决坐标系
+        usageType: validates
+    prerequisiteOf: [CONCEPT-EVALUATION-GATE]
+    conflictsWith:
+      - conceptId: CONCEPT-EVIDENCE-MATURITY
+        kind: not-equivalent
+        reason: VTRCE 比较决策维度；Evidence Maturity 描述本地交付证据强度。
+      - conceptId: CONCEPT-EVALUATION-GATE
+        kind: not-equivalent
+        reason: VTRCE 提供评估维度；Evaluation Gate 执行阻断条件。
+    related: [CONCEPT-EVIDENCE-MATURITY, CONCEPT-EVALUATION-GATE]
+
+  - conceptId: CONCEPT-EVALUATION-GATE
+    term: Evaluation Gate
+    aliases: [评估门禁, 质量门禁]
+    definition: Evaluation Gate（评估门禁）是缺少指定数据集、阈值、负例或回执时阻断成熟度升级或发布声明的可检查条件。
+    canonicalDocument: KS-EVALUATION
+    definedIn:
+      documentId: KS-EVALUATION
+      anchor: concept-evaluation-gate
+      locatorText: Evaluation Gate（评估门禁）是缺少指定数据集、阈值、负例或回执时阻断成熟度升级或发布声明的可检查条件
+    usedIn:
+      - usageId: USE-EVALUATION-GATE-001
+        documentId: KS-VALIDATION-FRAMEWORK
+        anchor: concept-use-evaluation-gate-001
+        locatorText: Evaluation Gate 在这里不是评分展示
+        usageType: validates
+    prerequisiteOf: [CONCEPT-KNOWLEDGE-EVOLUTION]
+    conflictsWith:
+      - conceptId: CONCEPT-VTRCE
+        kind: not-equivalent
+        reason: Evaluation Gate 阻断不合格声明；VTRCE 为裁决提供维度与权重。
+    related: [CONCEPT-RAG, CONCEPT-GRAPHRAG, CONCEPT-EVIDENCE-MATURITY, CONCEPT-VTRCE, CONCEPT-KNOWLEDGE-EVOLUTION, CONCEPT-FT-VS-RAG]
+
+  - conceptId: CONCEPT-KNOWLEDGE-EVOLUTION
+    term: Knowledge Evolution
+    aliases: [知识库进化, 自进化闭环]
+    definition: Knowledge Evolution（知识演进）是提出、评估、批准、应用并可回滚知识变更的受控反馈闭环，不等于无人审核的自动改写。
+    canonicalDocument: KS-KB-EVOLUTION
+    definedIn:
+      documentId: KS-KB-EVOLUTION
+      anchor: concept-knowledge-evolution
+      locatorText: Knowledge Evolution（知识演进）是提出、评估、批准、应用并可回滚知识变更的受控反馈闭环
+    usedIn:
+      - usageId: USE-KNOWLEDGE-EVOLUTION-001
+        documentId: KS-VALIDATION-FRAMEWORK
+        anchor: concept-use-knowledge-evolution-001
+        locatorText: Knowledge Evolution 必须消费评估回执并保留批准与回滚轨迹
+        usageType: governs
+    prerequisiteOf: []
+    conflictsWith: []
+    related: [CONCEPT-KNOWLEDGE-SYSTEM, CONCEPT-MCP, CONCEPT-AGENT, CONCEPT-SKILL-DISTILLATION, CONCEPT-EVIDENCE-MATURITY, CONCEPT-EVALUATION-GATE]
+
+  - conceptId: CONCEPT-FT-VS-RAG
+    term: Fine-tuning vs RAG
+    aliases: [微调与 RAG 决策]
+    definition: Fine-tuning vs RAG 是在任务约束下比较检索、参数适配、规则与混合路线的决策问题，而不是二选一的固定答案。
+    canonicalDocument: KS-FT-VS-RAG
+    definedIn:
+      documentId: KS-FT-VS-RAG
+      anchor: concept-ft-vs-rag
+      locatorText: Fine-tuning vs RAG 是在任务约束下比较检索、参数适配、规则与混合路线的决策问题
+    usedIn:
+      - usageId: USE-FT-VS-RAG-001
+        documentId: KS-VALIDATION-FRAMEWORK
+        anchor: concept-use-ft-vs-rag-001
+        locatorText: Fine-tuning vs RAG 的选择应作为受约束的验证问题进入 VTRCE
+        usageType: compares
+    prerequisiteOf: []
+    conflictsWith:
+      - conceptId: CONCEPT-RAG
+        kind: not-equivalent
+        reason: Fine-tuning vs RAG 是决策框架；RAG 是框架内的一条候选路线。
+    related: [CONCEPT-LOD, CONCEPT-RAG, CONCEPT-EVALUATION-GATE]

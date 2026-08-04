@@ -1,17 +1,47 @@
 ---
-name: security-compliance-architecture
-description: 数据安全与合规架构章节文档，涵盖知识库建设中的数据分级、PII 脱敏、权限控制、审计与供应商风险边界。当工程师在生产环境落地多模态知识库前进行安全设计与上线自查时使用。
+name: "security-compliance-architecture"
+docId: "KS-SECURITY-COMPLIANCE"
+displayNumber: "05"
+route: "/knowledge/05-security-compliance"
+learningOrder: 6
+title: "第五章：数据安全与合规架构 —— 构建知识库前必读"
+description: "数据安全与合规架构章节文档，涵盖知识库建设中的数据分级、PII 脱敏、权限控制、审计与供应商风险边界。当工程师在生产环境落地多模态知识库前进行安全设计与上线自查时使用。"
+chapter: "05"
+order: 6
+section: engineering
+stage: design
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
+claimRefs:
+  - CLM-SEC-001
+  - CLM-SEC-002
+  - CLM-SEC-003
+  - CLM-SEC-004
+acceptanceRef: ACC-SECURITY-001
 ---
-
 # 第五章：数据安全与合规架构 —— 构建知识库前必读
 
 :::danger 三条绝对红线
-- [P0] 内部经营数据（销售 / 供应链 / 客户 / 定价）绝不通过公网 LLM API。
+- [P0] 内部经营数据在没有完成数据映射、合法性依据、供应商条款、保留策略和书面审批前，不得发送到公网 LLM API。
 - [P0] 含 PII 数据未脱敏不得入向量库。
 - [P0] 知识库 API 暴露公网必须有认证 + 限流。
 :::
 
 很多团队做知识库时，第一反应是“先把资料丢进去，再慢慢治理”。这在生产环境里是最危险的路径。知识库不是一个搜索盒子，而是一条数据处理链：采集、清洗、脱敏、嵌入、存储、查询、审计，每一步都可能形成合规责任。真正的顺序必须反过来：**先定义安全边界，再决定技术栈**。如果边界没画清，向量库、GraphRAG、本地 Agent 做得越快，风险暴露就越快。
+
+<a id="claim-clm-sec-002"></a>
+
+:::warning 司法辖区与责任边界
+本章是工程控制清单，不构成法律意见。适用义务取决于组织角色、数据主体、部署地点、预期用途与行业规则；上线前必须由法务或隐私负责人确认适用辖区。NIST AI RMF 属于自愿风险管理框架，不能替代法律合规判断；EU AI Act 可能适用于在欧盟境内外、但把系统投放欧盟市场或在欧盟使用系统的主体。
+:::
+
+<a id="claim-clm-sec-001"></a>
+
+本轮参考的基准截至 **2026-08-01**。NIST 官方页面明确提示 AI RMF 1.0 正在修订，因此这里不把版本号写成永久结论；欧盟规则按系统预期用途和风险分类适用，不能仅凭“用了大模型”判断风险级别。
 
 ---
 
@@ -50,7 +80,7 @@ flowchart LR
     class IN,C1,C2,C3,C4 entry;
     class L1,L2,L3,L4 store;
     class A1,A2,A3,A4 success;
-```text
+```
 
 一个实用原则：**级别按最高风险字段上浮，不按平均值下调**。一份客服会话里只要出现手机号和订单地址，就不再是 L2，而是 L3；一份经营周报里只要出现毛利率和价格策略，就直接按 L4 管理。
 
@@ -73,7 +103,7 @@ ollama serve
 # 另开终端拉取模型
 ollama pull qwen2.5:14b
 curl http://127.0.0.1:11434/api/tags
-```text
+```
 
 如果是 Linux systemd，可用以下服务文件：
 
@@ -91,13 +121,13 @@ User=ollama
 
 [Install]
 WantedBy=multi-user.target
-```text
+```
 
 ### 5.2.2 数据敏感性检查中间件
 
 下面的中间件把“能不能调用公网模型”收敛为显式规则：先看数据级别，再看是否命中 PII，再决定路由。
 
-```python
+```python verify=syntax
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -152,7 +182,7 @@ async def sensitivity_guard(request: Request, call_next):
         raise HTTPException(status_code=403, detail=decision.reason)
 
     return await call_next(request)
-```text
+```
 
 ### 5.2.3 一条数据能否走公网 API 的判定标准
 
@@ -282,7 +312,7 @@ def sanitize_before_index(text: str, data_source: str, sensitivity_level: str) -
 if __name__ == "__main__":
     sample = "Alice lives at 1 Infinite Loop, email alice@example.com, phone 13800138000."
     print(sanitize_before_index(sample, data_source="crm_export.csv", sensitivity_level="L3"))
-```text
+```
 
 ### 5.3.3 审计日志 schema
 
@@ -297,7 +327,7 @@ if __name__ == "__main__":
   "operator": "system",
   "created_at": "2026-07-27T10:00:00Z"
 }
-```text
+```
 
 ---
 
@@ -333,7 +363,7 @@ flowchart LR
     class P1,P2,P3,P4 success;
     class R1,R2,R3 store;
     class R4 fail;
-```text
+```
 
 ### 5.4.1 FastAPI RBAC 中间件示例
 
@@ -418,7 +448,7 @@ def read_collection(collection: str, role: Role = Depends(require_permission("L2
 @app.post("/collections/{collection}")
 def write_collection(collection: str, role: Role = Depends(require_permission("L2", "write"))):
     return {"collection": collection, "role": role, "status": "written"}
-```text
+```
 
 生产环境里应再叠加两层：
 
@@ -514,7 +544,7 @@ if __name__ == "__main__":
     init_db()
     log_query("u_001", "查 7 月退款原因", ["doc_12", "doc_18"], 143)
     log_write("crm_export.csv", "L3", True)
-```text
+```
 
 ### 5.5.2 最低审计要求
 
@@ -522,6 +552,12 @@ if __name__ == "__main__":
 - 每次写入记录：`data_source / sensitivity_level / pii_detected`；
 - 日志默认不可被普通业务用户删除；
 - 日志保留周期至少 180 天，L4 建议 365 天以上。
+
+<a id="claim-clm-sec-004"></a>
+
+:::warning 示例期限不是法定义务
+本地控制 fixture 将 180/365 天、48 小时和 30 天固定标记为 illustrative；缺少辖区、数据类别、合同依据、批准引用和复核日期时，校验器会拒绝形成 `production-baseline`。这只能证明本地规则不会静默晋级，不是跨司法辖区的通用法定期限，也不是已经批准的生产基线。
+:::
 
 ---
 
@@ -609,7 +645,7 @@ def check_query_scope(collections_accessed: list[str]) -> bool:
         if a in collections_accessed and b in collections_accessed:
             raise PrivacyViolation(f"禁止同时访问 {a} 和 {b}")
     return True
-```text
+```
 
 ---
 
@@ -688,7 +724,7 @@ INFERENCE_ATTACK_SCENARIOS = [
         "risk_if_leaked": "商业机密泄露"
     }
 ]
-```text
+```
 
 **步骤 2：记录实际拦截情况**
 
@@ -723,13 +759,15 @@ def run_inference_drill(kb_client, scenarios: list[dict]) -> dict:
         "passed": sum(1 for r in results if r["passed"]),
         "details": results
     }
-```text
+```
 
 **步骤 3：修复未拦截的场景**
 对每个未通过的推断路径，在 `FORBIDDEN_COMBINATIONS` 规则里新增对应的 collection 组合限制（见 §5.8）。
 
-:::warning 演练必须在生产数据上进行
-在脱敏测试数据上通过的演练没有意义。真实的推断攻击路径只能在真实数据集上被发现。建议在预生产环境（与生产数据完全一致）上每季度执行一次。
+<a id="claim-clm-sec-003"></a>
+
+:::warning 演练必须使用已授权的代表性数据
+本地安全演练 fixture 会拒绝任何标记为 production 的样本，并要求隔离环境、受支持的非生产数据分类、保留时长和销毁回执模式。Fixture 通过只证明失败关闭逻辑；真实演练仍须优先使用合成数据、脱敏样本或经数据负责人批准的最小化快照，并记录授权范围、保留期限与销毁回执。
 :::
 
 ---
@@ -776,7 +814,7 @@ client.create_collection("quarantine_kb")
 # ... 移动逻辑
 print("隔离完成，可疑内容已移出活跃索引")
 EOF
-```text
+```
 
 ### 回滚步骤（若确认污染）
 
@@ -802,3 +840,20 @@ echo "毒化事故记录到 incidents/$(date +%Y%m%d)-poisoning.md"
 没有定期快照，就没有可回滚的版本。建议：每日增量备份 + 每周全量快照，至少保留 30 天。这是整个回滚 Runbook 的基础，没有它，其他步骤都是空话。
 :::
 
+## 验收契约
+
+`ACC-SECURITY-001` 已锁定 5 个本地合成用例，其中 3 个是失败关闭负例。当前复放为 5/5，但数据集不是获授权业务样本、阈值仍是本地示意门槛、四类角色均未具名接受，也没有最终验收回执，因此本章继续保持 `solution / pending`。
+
+<AcceptanceWorkbench acceptance-id="ACC-SECURITY-001" />
+
+## 关键断言与证据
+
+<ClaimLedger document-id="KS-SECURITY-COMPLIANCE" />
+
+## 来源与复核
+
+- **一手基准（截至 2026-08-01）**：[NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)（自愿框架，1.0 正在修订）与 [European Commission: Navigating the AI Act](https://digital-strategy.ec.europa.eu/en/faqs/navigating-ai-act)（适用范围、风险分类与高风险义务）。
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：混合边界。`fixtures/security-governance.mjs` 及其测试为 L2 本地 fixture；本章其他代码仍是示意代码。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：由具名角色接受责任后，绑定真实辖区与授权样本，在隔离环境完成演练和销毁回执。

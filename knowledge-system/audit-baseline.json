@@ -1,0 +1,271 @@
+{
+  "baselineVersion": 4,
+  "capturedAt": "2026-08-02",
+  "scope": "docs/knowledge/*.md",
+  "measurementNotes": "Counts are derived from remark AST nodes. Markdown links exclude autolink text and include only explicit link nodes. Baseline v4 adds one visible acceptance-contract H2 to each of the three G2.4 pilot pages and one aggregate machine-acceptance H2 to Appendix A; code and link totals are unchanged.",
+  "metrics": {
+    "pageCount": 26,
+    "headingDepths": {
+      "h1": 26,
+      "h2": 265,
+      "h3": 443,
+      "h4": 6
+    },
+    "codeBlocks": 352,
+    "markdownLinks": 167,
+    "linkKinds": {
+      "internalPath": 49,
+      "fragmentOnly": 18,
+      "externalOccurrences": 100,
+      "uniqueExternal": 83,
+      "contact": 0
+    },
+    "languages": {
+      "python": 175,
+      "text": 60,
+      "bash": 51,
+      "plain": 26,
+      "mermaid": 25,
+      "yaml": 8,
+      "json": 4,
+      "txt": 2,
+      "sql": 1
+    },
+    "documents": [
+      {
+        "source": "docs/knowledge/00-introduction.md",
+        "docId": "KS-INTRO",
+        "h1": 1,
+        "h2": 7,
+        "h3": 19,
+        "codeBlocks": 1,
+        "links": 9
+      },
+      {
+        "source": "docs/knowledge/01-framework.md",
+        "docId": "KS-FRAMEWORK-DIKW",
+        "h1": 1,
+        "h2": 9,
+        "h3": 11,
+        "codeBlocks": 8,
+        "links": 3
+      },
+      {
+        "source": "docs/knowledge/02-decision-matrix.md",
+        "docId": "KS-DECISION-MATRIX",
+        "h1": 1,
+        "h2": 5,
+        "h3": 5,
+        "codeBlocks": 5,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/03-scene-sops.md",
+        "docId": "KS-SCENE-SOPS",
+        "h1": 1,
+        "h2": 15,
+        "h3": 42,
+        "codeBlocks": 14,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/04-architecture.md",
+        "docId": "KS-ARCHITECTURE",
+        "h1": 1,
+        "h2": 11,
+        "h3": 22,
+        "codeBlocks": 19,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/05-graphrag.md",
+        "docId": "KS-GRAPHRAG",
+        "h1": 1,
+        "h2": 11,
+        "h3": 3,
+        "codeBlocks": 17,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/05-security-compliance.md",
+        "docId": "KS-SECURITY-COMPLIANCE",
+        "h1": 1,
+        "h2": 15,
+        "h3": 20,
+        "codeBlocks": 14,
+        "links": 3
+      },
+      {
+        "source": "docs/knowledge/06-agent-call.md",
+        "docId": "KS-AGENT-MCP",
+        "h1": 1,
+        "h2": 11,
+        "h3": 8,
+        "codeBlocks": 18,
+        "links": 3
+      },
+      {
+        "source": "docs/knowledge/07-advanced-theory.md",
+        "docId": "KS-LOD-THEORY",
+        "h1": 1,
+        "h2": 5,
+        "h3": 12,
+        "codeBlocks": 9,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/08-tools-appendix.md",
+        "docId": "KS-TOOLS-APPENDIX",
+        "h1": 1,
+        "h2": 10,
+        "h3": 20,
+        "codeBlocks": 20,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/09-reasoning-models.md",
+        "docId": "KS-REASONING",
+        "h1": 1,
+        "h2": 11,
+        "h3": 7,
+        "codeBlocks": 7,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/09-skill-distillation-deep-dive.md",
+        "docId": "KS-SKILL-DISTILLATION",
+        "h1": 1,
+        "h2": 12,
+        "h3": 23,
+        "codeBlocks": 11,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/10-cost-model.md",
+        "docId": "KS-COST-MODEL",
+        "h1": 1,
+        "h2": 13,
+        "h3": 9,
+        "codeBlocks": 8,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/10-e2e-pipeline.md",
+        "docId": "KS-E2E-PIPELINE",
+        "h1": 1,
+        "h2": 10,
+        "h3": 4,
+        "codeBlocks": 12,
+        "links": 2
+      },
+      {
+        "source": "docs/knowledge/11-kb-evolution.md",
+        "docId": "KS-KB-EVOLUTION",
+        "h1": 1,
+        "h2": 11,
+        "h3": 14,
+        "codeBlocks": 15,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/12-evaluation.md",
+        "docId": "KS-EVALUATION",
+        "h1": 1,
+        "h2": 14,
+        "h3": 9,
+        "codeBlocks": 12,
+        "links": 2
+      },
+      {
+        "source": "docs/knowledge/15-codex-prompts.md",
+        "docId": "KS-PROMPTS",
+        "h1": 1,
+        "h2": 8,
+        "h3": 38,
+        "codeBlocks": 22,
+        "links": 1
+      },
+      {
+        "source": "docs/knowledge/16-voc-case-study.md",
+        "docId": "KS-VOC-CASE",
+        "h1": 1,
+        "h2": 12,
+        "h3": 16,
+        "codeBlocks": 8,
+        "links": 6
+      },
+      {
+        "source": "docs/knowledge/17-failure-cases.md",
+        "docId": "KS-FAILURE-CASES",
+        "h1": 1,
+        "h2": 8,
+        "h3": 12,
+        "codeBlocks": 0,
+        "links": 2
+      },
+      {
+        "source": "docs/knowledge/18-tech-selection-2026.md",
+        "docId": "KS-TECH-SELECTION-I",
+        "h1": 1,
+        "h2": 9,
+        "h3": 31,
+        "codeBlocks": 23,
+        "links": 23
+      },
+      {
+        "source": "docs/knowledge/19-tech-selection-vol2.md",
+        "docId": "KS-TECH-SELECTION-II",
+        "h1": 1,
+        "h2": 10,
+        "h3": 26,
+        "codeBlocks": 21,
+        "links": 24
+      },
+      {
+        "source": "docs/knowledge/20-ops-runbook.md",
+        "docId": "KS-OPS-RUNBOOK",
+        "h1": 1,
+        "h2": 8,
+        "h3": 19,
+        "codeBlocks": 19,
+        "links": 6
+      },
+      {
+        "source": "docs/knowledge/21-data-collection.md",
+        "docId": "KS-DATA-COLLECTION",
+        "h1": 1,
+        "h2": 12,
+        "h3": 23,
+        "codeBlocks": 20,
+        "links": 36
+      },
+      {
+        "source": "docs/knowledge/22-agent-design.md",
+        "docId": "KS-AGENT-DESIGN",
+        "h1": 1,
+        "h2": 10,
+        "h3": 23,
+        "codeBlocks": 27,
+        "links": 26
+      },
+      {
+        "source": "docs/knowledge/23-finetuning-vs-rag.md",
+        "docId": "KS-FT-VS-RAG",
+        "h1": 1,
+        "h2": 10,
+        "h3": 21,
+        "codeBlocks": 19,
+        "links": 11
+      },
+      {
+        "source": "docs/knowledge/appendix-validation.md",
+        "docId": "KS-VALIDATION-FRAMEWORK",
+        "h1": 1,
+        "h2": 8,
+        "h3": 6,
+        "codeBlocks": 3,
+        "links": 0
+      }
+    ]
+  }
+}

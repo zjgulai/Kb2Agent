@@ -1,9 +1,31 @@
 ---
-name: knowledge-kb-evolution
-description: 知识库进化与自进化闭环文档，涵盖健康度监控、Skill迭代、冲突仲裁与自动更新机制。当需要让知识库持续自我优化时使用。
+name: "knowledge-kb-evolution"
+docId: "KS-KB-EVOLUTION"
+displayNumber: "13"
+route: "/knowledge/11-kb-evolution"
+learningOrder: 15
+title: "第十三章：知识库进化与自进化闭环"
+description: "知识库进化与自进化闭环文档，涵盖健康度监控、Skill迭代、冲突仲裁与自动更新机制。当需要让知识库持续自我优化时使用。"
+chapter: "13"
+order: 15
+section: advanced
+stage: operate
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
+<a id="concept-knowledge-evolution"></a>
 
 # 第十三章：知识库进化与自进化闭环
+
+**Knowledge Evolution（知识演进）是提出、评估、批准、应用并可回滚知识变更的受控反馈闭环**，不等于无人审核的自动改写。
+
+<a id="concept-use-knowledge-system-001"></a>
+
+Knowledge System 只有在变更被提出、评估、批准、应用并可回滚时，才形成受治理的演进闭环。
 
 :::info 本章在全书中的角色
 **读完本章你能做到**：让知识库从"一次性工程"变成"会自我维护的活体系统"——包括健康度监控、Skill 迭代优化、冲突仲裁，以及最重要的：防止进化系统把自己优化偏。
@@ -74,7 +96,7 @@ flowchart TD
 
     classDef red fill:#fee2e2,stroke:#dc2626,stroke-width:1px;
     class Death,D1,D2,D3 red;
-```text
+```
 
 **解决方案：建立知识库的"免疫系统"**——由三个机制构成：
 1. **健康度监控**（定期扫描，发现病灶）
@@ -281,7 +303,7 @@ class KnowledgeHealthChecker:
             if dims['skills']['outdated'] > 0:
                 print(f"  → 重新蒸馏 {dims['skills']['outdated']} 个过期 Skill")
         print(f"{'='*60}\n")
-```text
+```
 
 ---
 
@@ -296,7 +318,7 @@ class KnowledgeHealthChecker:
   评分持平/下降 → git revert（回滚）
 
 结果：Skill 库只会越来越好，永远不会因为一次糟糕的更新而退化
-```text
+```
 
 ### 9维度评估实现
 
@@ -332,7 +354,7 @@ class SkillEvaluator:
         # [!] 重要：评估模型必须和蒸馏模型不同（防止自评偏差）
         # LLM 自评准确率仅 46.4%（SkillLens 实证）
         self.llm = OpenAI()
-        self.eval_model = "gpt-4o"  # 不能是 gpt-4o-mini
+        self.eval_model = "gpt-5.6"  # 采用当前 Responses API quickstart 模型
 
     def evaluate(self, skill_content: str) -> dict:
         """对 SKILL.md 内容进行9维度评估"""
@@ -384,15 +406,15 @@ class SkillEvaluator:
         }
 
         try:
-            resp = self.llm.chat.completions.create(
+            resp = self.llm.responses.create(
                 model=self.eval_model,
-                messages=[{
+                input=[{
                     "role": "user",
                     "content": f"{prompts.get(dim, '')}\n\nSKILL 内容：\n{content[:2000]}\n\n只返回 0-1 之间的数字："
                 }],
-                max_tokens=10,
+                max_output_tokens=10,
             )
-            score_str = resp.choices[0].message.content.strip()
+            score_str = resp.output_text.strip()
             return min(1.0, max(0.0, float(score_str)))
         except (ValueError, Exception):
             return 0.5
@@ -430,9 +452,9 @@ class SkillEvolver:
         llm = OpenAI()
         dim_name = SkillEvaluator.DIMENSIONS.get(dimension, {}).get("name", dimension)
 
-        resp = llm.chat.completions.create(
-            model="gpt-4o",
-            messages=[{
+        resp = llm.responses.create(
+            model="gpt-5.6",
+            input=[{
                 "role": "user",
                 "content": f"""改进以下 SKILL.md 的「{dim_name}」维度。
 只改这一个维度，不要改动其他内容。
@@ -443,7 +465,7 @@ class SkillEvolver:
 请输出改进后的完整 SKILL.md 内容："""
             }]
         )
-        improved_content = resp.choices[0].message.content
+        improved_content = resp.output_text
 
         # 写入改进版本
         skill_path.write_text(improved_content)
@@ -466,7 +488,7 @@ class SkillEvolver:
             skill_path.write_text(original_content)
             logger.warning(f"(X) 改进未达标，回滚: {new_score:.1f} <= {old_score:.1f}")
             return {"improved": False, "old_score": old_score, "new_score": new_score}
-```text
+```
 
 ---
 
@@ -508,9 +530,9 @@ class ConflictDetector:
         )
 
         # 用 LLM 判断是否有冲突
-        resp = self.llm.chat.completions.create(
-            model="gpt-4o",
-            messages=[{
+        resp = self.llm.responses.create(
+            model="gpt-5.6",
+            input=[{
                 "role": "user",
                 "content": f"""判断新知识与现有知识是否存在矛盾：
 
@@ -526,10 +548,9 @@ class ConflictDetector:
 输出 JSON：
 {{"conflict": bool, "type": "none/numerical/temporal/opinion", "preferred": "new/existing/both", "reason": "..."}}"""
             }],
-            response_format={"type": "json_object"},
         )
 
-        result = json.loads(resp.choices[0].message.content)
+        result = json.loads(resp.output_text)
 
         if result.get("conflict"):
             self._handle_conflict(new_entry, similar, result)
@@ -568,7 +589,7 @@ class ConflictDetector:
             logger.warning(f"[P0] 发现知识冲突，已记录: {conflict_file}")
             new_entry["has_conflict"] = True
             new_entry["conflict_file"] = str(conflict_file)
-```text
+```
 
 ---
 
@@ -633,7 +654,7 @@ jobs:
               print(f'::warning::知识库健康度告警: {score:.1f}/100')
               exit(1)
           "
-```text
+```
 
 ### 每次 Ingest 后自动触发的检查
 
@@ -653,7 +674,7 @@ def post_ingest_check(ingest_result: dict):
         logger.warning(f"[!] 知识通过率偏低: {acceptance_rate:.1%}，建议检查三重验证参数")
 
     logger.success(f"(OK) Ingest 健康: 通过率 {acceptance_rate:.1%}")
-```text
+```
 
 ---
 
@@ -682,7 +703,7 @@ flowchart TD
     class Continue green;
     class Action,Monitor yellow;
     class Discard red;
-```text
+```
 
 ---
 
@@ -719,7 +740,7 @@ flowchart TD
     style L3 fill:#fff3e0,stroke:#ea580c
     style L4 fill:#f3e5f5,stroke:#9333ea
     style L5 fill:#fce4ec,stroke:#dc2626
-```text
+```
 
 ### 第一层实践：半衰期新鲜度检查（30分钟可上线）
 
@@ -791,7 +812,7 @@ if __name__ == "__main__":
         print(f"\n过期知识（前5条）：")
         for item in r.expired_items[:5]:
             print(f"  {item['title'][:40]} | 已过期{item['age_days']}天 | 建议: {item['action']}")
-```text
+```
 
 ### 第三层实践：未命中分析（发现盲区）
 
@@ -832,7 +853,7 @@ def analyze_query_log(log_path: str = "query_audit.jsonl") -> dict:
     for q in no_hit[:5]:
         print(f"  → {q}")
     return {"no_hit": no_hit, "low_score": low_score, "missing_keywords": words.most_common(10)}
-```text
+```
 
 ### 预测验证闭环（选品场景专属第六层）
 
@@ -868,7 +889,7 @@ def validate_prediction(category: str, market: str,
     confidence_delta = 0.1 if accuracy > 0.8 else (-0.15 if accuracy < 0.5 else 0)
     print(f"置信度调整: {confidence_delta:+.2f}")
     return {"accuracy": accuracy, "verdict": verdict, "confidence_delta": confidence_delta}
-```text
+```
 
 ---
 
@@ -909,7 +930,7 @@ def calibrate_scorer(scorer, golden_samples: list[dict], expected_min: float = 0
         print(f"[警告] 评分器偏离：黄金样本均分 {avg:.2f}，低于期望 {expected_min}")
         print("建议：重新标注维度权重，或增补低覆盖维度的训练样本")
     return {"avg_score": avg, "needs_recalibration": avg < expected_min}
-```text
+```
 
 **步骤二：维度相关性验证**
 检验每个评分维度与"用户正向反馈率"的相关系数。若某维度相关系数低于 0.3，说明该维度已失去预测价值，需要重新定义或替换。
@@ -944,3 +965,10 @@ scorer_versions:
 :::tip 下一章
 知识库进化得好不好，需要量化评估——详见 [第十四章：评估质量体系](12-evaluation.md)。
 :::
+
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

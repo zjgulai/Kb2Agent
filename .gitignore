@@ -4,3 +4,7 @@ docs/.vitepress/dist
 docs/.vitepress/cache
 .playwright-mcp/
 .playwright-mcp/
+test-results/
+playwright-report/
+__pycache__/
+*.pyc

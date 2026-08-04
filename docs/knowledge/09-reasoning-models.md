@@ -1,8 +1,22 @@
 ---
-name: reasoning-models
-description: 推理模型时代知识库重构文档，涵盖浅提取、深提取与推理查询的决策框架。当需要根据数据变化频率、查询频率和安全约束设计知识库存储策略时使用。
+name: "reasoning-models"
+docId: "KS-REASONING"
+displayNumber: "09"
+route: "/knowledge/09-reasoning-models"
+learningOrder: 11
+title: "第九章：推理模型时代的知识库重构"
+description: "推理模型时代知识库重构文档，涵盖浅提取、深提取与推理查询的决策框架。当需要根据数据变化频率、查询频率和安全约束设计知识库存储策略时使用。"
+chapter: "09"
+order: 11
+section: advanced
+stage: design
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第九章：推理模型时代的知识库重构
 
 > DeepSeek-R1、o3、Gemini 2.5 Thinking 把一个旧假设打穿了：知识库不一定要在入库前把信息“榨干”，很多分析可以推迟到查询时再做。
@@ -28,7 +42,7 @@ flowchart LR
     classDef fail fill:#ffcdd2,stroke:#e53935,stroke-width:1px;
     classDef external fill:#e1bee7,stroke:#8e24aa,stroke-width:1px;
     classDef storage fill:#e0f2f1,stroke:#00897b,stroke-width:1px;
-```text
+```
 
 | 对比维度 | 传统范式（2024） | 推理范式（2026） |
 | --- | --- | --- |
@@ -60,7 +74,7 @@ flowchart LR
     classDef success fill:#c8e6c9,stroke:#43a047,stroke-width:1px;
     classDef external fill:#e1bee7,stroke:#8e24aa,stroke-width:1px;
     classDef storage fill:#e0f2f1,stroke:#00897b,stroke-width:1px;
-```text
+```
 
 可以把它翻译成 5 条硬规则：
 
@@ -196,7 +210,7 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-```text
+```
 
 这个脚本的核心不是“更聪明”，而是“更克制”：把推理留到查询阶段，把入库阶段压到最低成本。
 
@@ -294,7 +308,7 @@ def run_reasoning(query: str) -> dict[str, Any]:
 if __name__ == "__main__":
     result = run_reasoning("便携太阳能充电器US市场分析")
     print(json.dumps(result, ensure_ascii=False, indent=2))
-```text
+```
 
 这里最重要的变化是：**知识库不再试图预先回答“市场机会在哪”，它只负责把原始证据找回来；真正的判断，由推理模型在查询时完成。**
 
@@ -323,6 +337,19 @@ if __name__ == "__main__":
 :::warning 反直觉洞察
 推理模型不会消灭知识库，而是改变知识库的存储策略：从“存结构化知识”转向“存干净的原始信息 + 少量关键 metadata”。
 :::
+
+## 9.7 证据边界与失败降级
+
+推理模型生成的“判断”不能自动升级为知识事实。每次回答至少保留 `source_id`、检索时间、模型标识、提示版本与不确定性；当来源不足、互相冲突或超出延迟预算时，系统必须退回到“仅返回证据，不给结论”的安全模式。
+
+| 失败信号 | 默认降级 | 重新开放条件 |
+| --- | --- | --- |
+| 无可引用来源 | 返回空结论与缺失字段 | 补齐最小证据数量 |
+| 来源相互矛盾 | 并列呈现，不自动裁决 | 有时间戳、权威等级与人工决策 |
+| 推理超时 | 退回关键词 / 向量检索 | 在离线任务中完成深推理 |
+| 高错误代价问题 | 阻断自动执行 | 人工批准且保留审计轨迹 |
+
+下面的模型延迟数字仅是示意口径。真实选型必须在目标地区、账号层级、上下文长度和并发配置下重测 P50/P90/P99，不能把静态表格当成 SLA。
 
 ## 9.8 延迟预算：被遗漏的第三条约束
 
@@ -361,7 +388,7 @@ if __name__ == "__main__":
 │
 └── > 30s（批量离线处理）
     └── 任意模型，按成本最优选
-```text
+```
 
 ---
 
@@ -398,7 +425,7 @@ def anchor_reasoning_output(response: str, kb_client, threshold=0.75):
     if len(unverified) / max(len(claims), 1) > 0.3:
         return response, {"warning": f"{len(unverified)} 个声明无法在知识库中找到支撑"}
     return response, {"verified": True}
-```text
+```
 
 ---
 
@@ -465,3 +492,9 @@ LEVEL_TO_STRATEGY = {
 L3及以上场景，请忽略该阈值，优先按错误代价选型。
 :::
 
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

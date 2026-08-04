@@ -1,0 +1,26 @@
+{
+  "receiptId": "ACR-COST-LOCAL-V1",
+  "contractId": "ACC-COST-001",
+  "recordedAt": "2026-08-02",
+  "datasetSha256": "sha256:a373327709ec0cc748acfd57a2d4c4dea4e1941e55a94efe7f87316b95764b8f",
+  "runnerVersion": "mkd-acceptance-runner-v1",
+  "datasetId": "ADS-COST-LOCAL-V1",
+  "datasetVersion": "1.0.0",
+  "evidenceGrade": "L2-fixture-or-dry-run",
+  "environment": "local-deterministic-fixture",
+  "externalCalls": 0,
+  "sideEffects": 0,
+  "metrics": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "passRate": 1
+  },
+  "decision": "fixture-pass",
+  "cases": [
+    { "caseId": "cost-dated-regional-baseline", "caseClass": "positive", "passed": true },
+    { "caseId": "cost-cached-input-overflow", "caseClass": "negative", "passed": true },
+    { "caseId": "cost-missing-region", "caseClass": "negative", "passed": true },
+    { "caseId": "cost-invalid-effective-date", "caseClass": "negative", "passed": true }
+  ]
+}
