@@ -1,0 +1,27 @@
+{
+  "receiptId": "ACR-SECURITY-LOCAL-V1",
+  "contractId": "ACC-SECURITY-001",
+  "recordedAt": "2026-08-02",
+  "datasetSha256": "sha256:1e2727555bf12c853e365baec6c304da85667a6da081c9bc031303ea70dd8322",
+  "runnerVersion": "mkd-acceptance-runner-v1",
+  "datasetId": "ADS-SECURITY-LOCAL-V1",
+  "datasetVersion": "1.0.0",
+  "evidenceGrade": "L2-fixture-or-dry-run",
+  "environment": "local-deterministic-fixture",
+  "externalCalls": 0,
+  "sideEffects": 0,
+  "metrics": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "passRate": 1
+  },
+  "decision": "fixture-pass",
+  "cases": [
+    { "caseId": "security-synthetic-isolated", "caseClass": "positive", "passed": true },
+    { "caseId": "security-production-data-rejected", "caseClass": "negative", "passed": true },
+    { "caseId": "security-authorization-required", "caseClass": "negative", "passed": true },
+    { "caseId": "security-retention-stays-illustrative", "caseClass": "positive", "passed": true },
+    { "caseId": "security-incomplete-production-baseline", "caseClass": "negative", "passed": true }
+  ]
+}

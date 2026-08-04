@@ -1,0 +1,320 @@
+schemaVersion: 1
+registry: MKD Guide document identity
+reviewedAt: "2026-08-01"
+identityContract:
+  docId: Stable semantic identity; must not change when a title, route, or reading order changes.
+  displayNumber: Human-facing chapter or appendix identifier.
+  route: Existing public route; G1 preserves every route in this registry.
+  learningOrder: Zero-based recommended reading order; independent from displayNumber.
+documents:
+  - docId: KS-INTRO
+    source: docs/knowledge/00-introduction.md
+    title: "第零章：导论 —— 2026 年知识库全景与十个反直觉洞察"
+    displayNumber: "00"
+    route: /knowledge/00-introduction
+    learningOrder: 0
+    documentType: chapter
+    section: foundation
+    stage: concept
+    maturity: principle
+    prerequisites: []
+
+  - docId: KS-FRAMEWORK-DIKW
+    source: docs/knowledge/01-framework.md
+    title: "第一章：认知框架——信息、知识与智慧的本质差异"
+    displayNumber: "01"
+    route: /knowledge/01-framework
+    learningOrder: 1
+    documentType: chapter
+    section: foundation
+    stage: concept
+    maturity: solution
+    prerequisites: [KS-INTRO]
+
+  - docId: KS-DECISION-MATRIX
+    source: docs/knowledge/02-decision-matrix.md
+    title: "第二章：输入类型 × 输出形式决策矩阵"
+    displayNumber: "02"
+    route: /knowledge/02-decision-matrix
+    learningOrder: 2
+    documentType: chapter
+    section: foundation
+    stage: design
+    maturity: solution
+    prerequisites: [KS-INTRO, KS-FRAMEWORK-DIKW]
+
+  - docId: KS-DATA-COLLECTION
+    source: docs/knowledge/21-data-collection.md
+    title: "第二十一章：多模态数据采集方法论"
+    displayNumber: "21"
+    route: /knowledge/21-data-collection
+    learningOrder: 3
+    documentType: chapter
+    section: engineering
+    stage: build
+    maturity: solution
+    prerequisites: [KS-DECISION-MATRIX]
+
+  - docId: KS-SCENE-SOPS
+    source: docs/knowledge/03-scene-sops.md
+    title: "第三章：10 种输入场景完整工程 SOP"
+    displayNumber: "03"
+    route: /knowledge/03-scene-sops
+    learningOrder: 4
+    documentType: chapter
+    section: engineering
+    stage: build
+    maturity: solution
+    prerequisites: [KS-DATA-COLLECTION]
+
+  - docId: KS-ARCHITECTURE
+    source: docs/knowledge/04-architecture.md
+    title: "第四章：全链路技术架构（+MCP封装层）"
+    displayNumber: "04"
+    route: /knowledge/04-architecture
+    learningOrder: 5
+    documentType: chapter
+    section: engineering
+    stage: design
+    maturity: solution
+    prerequisites: [KS-DECISION-MATRIX, KS-SCENE-SOPS]
+
+  - docId: KS-SECURITY-COMPLIANCE
+    source: docs/knowledge/05-security-compliance.md
+    title: "第五章：数据安全与合规架构 —— 构建知识库前必读"
+    displayNumber: "05"
+    route: /knowledge/05-security-compliance
+    learningOrder: 6
+    documentType: chapter
+    section: engineering
+    stage: design
+    maturity: solution
+    prerequisites: [KS-ARCHITECTURE]
+
+  - docId: KS-GRAPHRAG
+    source: docs/knowledge/05-graphrag.md
+    title: "第六章：GraphRAG 知识图谱构建"
+    displayNumber: "06"
+    route: /knowledge/05-graphrag
+    learningOrder: 7
+    documentType: chapter
+    section: engineering
+    stage: build
+    maturity: solution
+    prerequisites: [KS-ARCHITECTURE, KS-SECURITY-COMPLIANCE]
+
+  - docId: KS-AGENT-MCP
+    source: docs/knowledge/06-agent-call.md
+    title: "第七章：知识库被 Agent 调用 —— 从 RAG 到 MCP"
+    displayNumber: "07"
+    route: /knowledge/06-agent-call
+    learningOrder: 8
+    documentType: chapter
+    section: engineering
+    stage: build
+    maturity: solution
+    prerequisites: [KS-GRAPHRAG, KS-SECURITY-COMPLIANCE]
+
+  - docId: KS-TOOLS-APPENDIX
+    source: docs/knowledge/08-tools-appendix.md
+    title: "附录 B：工具完整手册与选型决策树"
+    displayNumber: "B"
+    route: /knowledge/08-tools-appendix
+    learningOrder: 9
+    documentType: appendix
+    section: engineering
+    stage: build
+    maturity: solution
+    prerequisites: [KS-ARCHITECTURE]
+
+  - docId: KS-LOD-THEORY
+    source: docs/knowledge/07-advanced-theory.md
+    title: "第八章：架构选型深度指南与进阶分层理论"
+    displayNumber: "08"
+    route: /knowledge/07-advanced-theory
+    learningOrder: 10
+    documentType: chapter
+    section: advanced
+    stage: design
+    maturity: solution
+    prerequisites: [KS-FRAMEWORK-DIKW, KS-DECISION-MATRIX]
+
+  - docId: KS-REASONING
+    source: docs/knowledge/09-reasoning-models.md
+    title: "第九章：推理模型时代的知识库重构"
+    displayNumber: "09"
+    route: /knowledge/09-reasoning-models
+    learningOrder: 11
+    documentType: chapter
+    section: advanced
+    stage: design
+    maturity: solution
+    prerequisites: [KS-LOD-THEORY]
+
+  - docId: KS-COST-MODEL
+    source: docs/knowledge/10-cost-model.md
+    title: "第十章：成本模型与预算管理"
+    displayNumber: "10"
+    route: /knowledge/10-cost-model
+    learningOrder: 12
+    documentType: chapter
+    section: advanced
+    stage: design
+    maturity: runnable
+    prerequisites: [KS-ARCHITECTURE]
+
+  - docId: KS-SKILL-DISTILLATION
+    source: docs/knowledge/09-skill-distillation-deep-dive.md
+    title: "第十一章：Skill 蒸馏 —— 九大仓库深度解构"
+    displayNumber: "11"
+    route: /knowledge/09-skill-distillation-deep-dive
+    learningOrder: 13
+    documentType: chapter
+    section: advanced
+    stage: build
+    maturity: solution
+    prerequisites: [KS-REASONING, KS-AGENT-MCP]
+
+  - docId: KS-E2E-PIPELINE
+    source: docs/knowledge/10-e2e-pipeline.md
+    title: "第十二章：端到端 Pipeline 与最小可运行样例"
+    displayNumber: "12"
+    route: /knowledge/10-e2e-pipeline
+    learningOrder: 14
+    documentType: chapter
+    section: advanced
+    stage: build
+    maturity: runnable
+    prerequisites: [KS-ARCHITECTURE, KS-AGENT-MCP, KS-COST-MODEL]
+
+  - docId: KS-KB-EVOLUTION
+    source: docs/knowledge/11-kb-evolution.md
+    title: "第十三章：知识库进化与自进化闭环"
+    displayNumber: "13"
+    route: /knowledge/11-kb-evolution
+    learningOrder: 15
+    documentType: chapter
+    section: advanced
+    stage: operate
+    maturity: solution
+    prerequisites: [KS-E2E-PIPELINE]
+
+  - docId: KS-FT-VS-RAG
+    source: docs/knowledge/23-finetuning-vs-rag.md
+    title: "第二十三章：Fine-tuning vs RAG 决策深度指南"
+    displayNumber: "23"
+    route: /knowledge/23-finetuning-vs-rag
+    learningOrder: 16
+    documentType: chapter
+    section: advanced
+    stage: design
+    maturity: solution
+    prerequisites: [KS-DECISION-MATRIX, KS-COST-MODEL]
+
+  - docId: KS-EVALUATION
+    source: docs/knowledge/12-evaluation.md
+    title: "第十四章：Agent 知识调用质量评估"
+    displayNumber: "14"
+    route: /knowledge/12-evaluation
+    learningOrder: 17
+    documentType: chapter
+    section: practice
+    stage: operate
+    maturity: solution
+    prerequisites: [KS-E2E-PIPELINE]
+
+  - docId: KS-PROMPTS
+    source: docs/knowledge/15-codex-prompts.md
+    title: "第十五章：Codex Prompts 速查与工具生态"
+    displayNumber: "15"
+    route: /knowledge/15-codex-prompts
+    learningOrder: 18
+    documentType: chapter
+    section: practice
+    stage: build
+    maturity: solution
+    prerequisites: [KS-AGENT-MCP]
+
+  - docId: KS-VOC-CASE
+    source: docs/knowledge/16-voc-case-study.md
+    title: "第十六章：VOC 洞察系统方法示例 —— 母婴电器合成案例"
+    displayNumber: "16"
+    route: /knowledge/16-voc-case-study
+    learningOrder: 19
+    documentType: chapter
+    section: practice
+    stage: build
+    maturity: solution
+    prerequisites: [KS-E2E-PIPELINE]
+
+  - docId: KS-FAILURE-CASES
+    source: docs/knowledge/17-failure-cases.md
+    title: "第十七章：三个复合失败案例——知识库建设的系统性代价"
+    displayNumber: "17"
+    route: /knowledge/17-failure-cases
+    learningOrder: 20
+    documentType: chapter
+    section: practice
+    stage: operate
+    maturity: principle
+    prerequisites: [KS-ARCHITECTURE]
+
+  - docId: KS-VALIDATION-FRAMEWORK
+    source: docs/knowledge/appendix-validation.md
+    title: "附录 A：从问题定义到证据裁决——统一验证框架"
+    displayNumber: "A"
+    route: /knowledge/appendix-validation
+    learningOrder: 21
+    documentType: appendix
+    section: practice
+    stage: operate
+    maturity: solution
+    prerequisites: [KS-EVALUATION, KS-FAILURE-CASES]
+
+  - docId: KS-TECH-SELECTION-I
+    source: docs/knowledge/18-tech-selection-2026.md
+    title: "第十八章：技术选型深度指南 2026"
+    displayNumber: "18"
+    route: /knowledge/18-tech-selection-2026
+    learningOrder: 22
+    documentType: chapter
+    section: practice
+    stage: design
+    maturity: solution
+    prerequisites: [KS-DECISION-MATRIX, KS-TOOLS-APPENDIX]
+
+  - docId: KS-TECH-SELECTION-II
+    source: docs/knowledge/19-tech-selection-vol2.md
+    title: "第十九章：技术选型深度指南 2026（第二卷）"
+    displayNumber: "19"
+    route: /knowledge/19-tech-selection-vol2
+    learningOrder: 23
+    documentType: chapter
+    section: practice
+    stage: design
+    maturity: solution
+    prerequisites: [KS-TECH-SELECTION-I]
+
+  - docId: KS-OPS-RUNBOOK
+    source: docs/knowledge/20-ops-runbook.md
+    title: "第二十章：生产运维 Runbook"
+    displayNumber: "20"
+    route: /knowledge/20-ops-runbook
+    learningOrder: 24
+    documentType: chapter
+    section: practice
+    stage: operate
+    maturity: solution
+    prerequisites: [KS-E2E-PIPELINE, KS-EVALUATION, KS-VALIDATION-FRAMEWORK]
+
+  - docId: KS-AGENT-DESIGN
+    source: docs/knowledge/22-agent-design.md
+    title: "第二十二章：智能体设计与编排"
+    displayNumber: "22"
+    route: /knowledge/22-agent-design
+    learningOrder: 25
+    documentType: chapter
+    section: practice
+    stage: build
+    maturity: solution
+    prerequisites: [KS-AGENT-MCP, KS-KB-EVOLUTION, KS-OPS-RUNBOOK]

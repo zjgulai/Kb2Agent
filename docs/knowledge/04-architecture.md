@@ -1,8 +1,22 @@
 ---
-name: knowledge-architecture-pipeline
-description: 全链路五阶段架构文档，涵盖采集、提取、入库、检索、MCP封装的完整工程设计。当设计或评审知识库系统架构时使用。
+name: "knowledge-architecture-pipeline"
+docId: "KS-ARCHITECTURE"
+displayNumber: "04"
+route: "/knowledge/04-architecture"
+learningOrder: 5
+title: "第四章：全链路技术架构（+MCP封装层）"
+description: "全链路架构文档，由 Stage 0 需求与验收门禁加 Stage 1-6 六阶段执行流水线组成。当设计或评审知识库系统架构时使用。"
+chapter: "04"
+order: 5
+section: engineering
+stage: design
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第四章：全链路技术架构（+MCP封装层）
 
 > **七阶段流水线**：需求建模 → 内容接入 → 结构化提取 → 质量验证 → 入库路由 → 检索消费 → **MCP 封装（2026新增）**
@@ -38,7 +52,7 @@ description: 全链路五阶段架构文档，涵盖采集、提取、入库、�
 
 问题集不是问题清单，每个问题必须同时标注：
 
-```python
+```python verify=syntax
 GOLDEN_QUESTION = {
     "id": "GQ-001",
     "question": "美国市场暖奶器价格带分布是什么？",
@@ -56,7 +70,7 @@ GOLDEN_QUESTION = {
     "failure_consequence": "选品方向错误，影响库存决策",  # 答错后果
     "owner": "选品负责人",
 }
-```text
+```
 
 ### Step 3：运行验收测试
 
@@ -103,7 +117,7 @@ def run_acceptance_test(kb_client, golden_set: list[dict]) -> dict:
         "failed_critical": failed_critical,
         "summary": f"{passed_count}/{len(results)} 通过"
     }
-```text
+```
 
 ### Step 4：上线门控
 
@@ -114,7 +128,7 @@ def run_acceptance_test(kb_client, golden_set: list[dict]) -> dict:
 ├── pass_rate >= 0.80 AND blocked == False → 允许上线
 ├── pass_rate >= 0.70 AND blocked == False → 有条件上线（需标注已知盲区）
 └── pass_rate < 0.70 OR blocked == True   → 禁止上线，返回 Stage 0 重新定义问题
-```text
+```
 
 :::tip 最低可行版本
 没时间做完整黄金问题集？至少写下这五个问题：**"如果系统答错了这道题，会造成真实的业务损失。"** 这五个问题就是你的最小化验收集，每次上线前必跑。
@@ -123,6 +137,8 @@ def run_acceptance_test(kb_client, golden_set: list[dict]) -> dict:
 ---
 
 ## 总览：六阶段流水线（Stage 1-6）
+
+**编号口径**：Stage 0 是进入工程流水线前的需求与验收门禁，不计入执行阶段数量；真正的数据处理与交付链路固定为 Stage 1-6。全站不再使用“五阶段”描述。
 
 ```mermaid
 flowchart TD
@@ -174,7 +190,7 @@ flowchart TD
     S1 --> S2 --> S3 --> S4 --> S5
 
     classDef plain fill:#fafafa,stroke:#334155,stroke-width:1px;
-```text
+```
 
 ---
 
@@ -223,7 +239,7 @@ def route_parser(file_path: str, has_gpu: bool = False) -> ParseRoute:
         return ParseRoute.JINA_READER
 
     return ParseRoute.DOCLING  # 兜底
-```text
+```
 
 ### 核心配置
 
@@ -251,7 +267,7 @@ STAGE1_CONFIG = {
         "max_chunk_tokens": 1000,
     }
 }
-```text
+```
 
 ### 关键约束
 - **绝对不能用 token 数切块**：必须按文档结构边界（标题/段落/表格）切
@@ -286,7 +302,7 @@ def route_distill(content: str, content_type: str) -> str:
         return "persona"    # → nuwa-skill 双轨提炼
     else:
         return "pyramid"    # → 四层金字塔默认路由
-```text
+```
 
 ### 四层金字塔提取 Prompt 工程
 
@@ -330,7 +346,7 @@ CONFLICT_PROMPT = """
 3. 置信度更高的是哪个？理由是什么？
 输出格式：{"conflict": bool, "type": "...", "preferred": "A/B/both", "reason": "..."}
 """
-```text
+```
 
 ### RIA-TV++ 六阶段（cangjie-skill 核心）
 
@@ -358,7 +374,7 @@ Phase 3: Zettelkasten 链接
 Phase 4: 压力测试
   → 每个 Skill 设计包含诱饵题的测试用例
   → 未通过 → 回炉 Phase 2
-```text
+```
 
 ---
 
@@ -426,7 +442,7 @@ class KnowledgeValidator:
         answers = [self.llm.answer(v) for v in variants]
         consistency = self._measure_semantic_consistency(answers)
         return consistency
-```text
+```
 
 ### Acceptance Predicate（Resource2Skill 标准）
 
@@ -454,7 +470,7 @@ def acceptance_predicate(entry: dict) -> bool:
         all(Path(p).exists() for p in entry["visual_examples"]),
     ]
     return all(checks)
-```text
+```
 
 ---
 
@@ -487,7 +503,7 @@ def route_to_storage(knowledge: dict) -> str:
 
     # 其余声明性知识 → 向量库
     return "vector"
-```text
+```
 
 ### 生产级存储后端配置
 
@@ -514,7 +530,7 @@ HYBRID_RETRIEVAL_CONFIG = {
     "neo4j_uri": "bolt://localhost:7687",
     "id_sync_strategy": "hash_based",  # 保证两侧 ID 一致
 }
-```text
+```
 
 ### 三态一致性与级联删除（防知识腐败）
 
@@ -551,7 +567,7 @@ class KnowledgeLifecycleManager:
         )
         with open(skill_path, 'w') as f:
             f.write(content)
-```text
+```
 
 ---
 
@@ -583,7 +599,7 @@ def classify_intent(query: str, context: dict = None) -> QueryIntent:
     elif context and context.get("conversation_turns", 0) > 2:
         return QueryIntent.CONVERSATIONAL
     return QueryIntent.FACTUAL
-```text
+```
 
 ### 混合检索实现
 
@@ -615,7 +631,7 @@ async def hybrid_retrieve(
         memories = memory_store.retrieve(query, top_k=5)
         vector_result = await rag.aquery(query, param=QueryParam(mode="local"))
         return {"type": "hybrid", "memories": memories, "knowledge": vector_result}
-```text
+```
 
 ---
 
@@ -679,7 +695,7 @@ flowchart LR
 
     classDef protocol fill:#fff3e0,stroke:#ff9800,stroke-width:2px;
     class P1 protocol;
-```text
+```
 
 **最小可运行 MCP Server**：
 
@@ -727,7 +743,7 @@ def get_market_overview(market: str) -> str:
 
 if __name__ == "__main__":
     mcp.run()
-```text
+```
 
 **Claude Desktop 配置**（`~/Library/Application Support/Claude/claude_desktop_config.json`）：
 
@@ -750,3 +766,10 @@ if __name__ == "__main__":
 :::tip → 下一章
 架构理解后，先看数据安全合规（P0必读） → [05-security-compliance](05-security-compliance.md)
 :::
+
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

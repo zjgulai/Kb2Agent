@@ -1,9 +1,43 @@
 ---
-name: knowledge-evaluation-system
-description: 评估质量体系文档，包含检索准确率、生成质量、延迟成本的量化评估框架与自动化测试代码。当验证知识库上线质量时使用。
+name: "knowledge-evaluation-system"
+docId: "KS-EVALUATION"
+displayNumber: "14"
+route: "/knowledge/12-evaluation"
+learningOrder: 17
+title: "第十四章：Agent 知识调用质量评估"
+description: "评估质量体系文档，包含检索准确率、生成质量、延迟成本的量化评估框架与自动化测试代码。当验证知识库上线质量时使用。"
+chapter: "14"
+order: 17
+section: practice
+stage: operate
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
+claimRefs:
+  - CLM-EVAL-001
+  - CLM-EVAL-002
+  - CLM-EVAL-003
+  - CLM-EVAL-004
+acceptanceRef: ACC-EVALUATION-001
 ---
-
 # 第十四章：Agent 知识调用质量评估
+
+:::info 本章采用的三个治理概念
+<a id="concept-vtrce"></a>
+
+**VTRCE 是本指南用 Validity、Timeliness、Relevance、Cost 与 Error Cost 五个维度裁决系统取舍的统一验证框架**。
+
+<a id="concept-evaluation-gate"></a>
+
+**Evaluation Gate（评估门禁）是缺少指定数据集、阈值、负例或回执时阻断成熟度升级或发布声明的可检查条件**。
+
+<a id="concept-use-evidence-maturity-001"></a>
+
+Evidence Maturity 约束本章的表述：只有可复现运行和明确验收回执，才能从方案继续升级。
+:::
 
 :::info 本章在全书中的角色
 **读完本章你能做到**：用三层评估体系（检索层/生成层/业务层）量化知识库质量，设计能发现系统不知道自己不知道的对抗性测试，建立评估集保鲜机制防止 Goodhart 定律生效。
@@ -14,6 +48,16 @@ description: 评估质量体系文档，包含检索准确率、生成质量、�
 :::
 
 > **核心问题**：你的知识库建完之后，怎么知道它真的有用？这一章给出可量化的评估方法、幻觉检测机制、以及基准测试设计原则。
+
+<a id="claim-clm-eval-001"></a>
+
+:::danger 验收证据门槛
+验收至少需要版本化固定评估集、负例、阈值和可比较的回归回执。页面中的方法、代码和目标数字本身不能替代这些产物。
+:::
+
+<a id="claim-clm-eval-002"></a>
+
+截至 **2026-08-01**，本章新增了一个三用例、零外部调用的最小 mock provider fixture，并能比较基线与退化候选；但它不是获授权业务评估集，也没有批准阈值、真实模型版本或最终接受回执，因此 frontmatter 继续保持 `maturity: solution` 与 `verification: pending`。
 
 ---
 
@@ -60,7 +104,7 @@ flowchart TD
         S2[用户满意度<br/>CSAT]
         S3[成本效率<br/>Token per Success]
     end
-```text
+```
 
 ---
 
@@ -91,7 +135,7 @@ class HallucinationDetector:
         from openai import OpenAI
         self.llm = OpenAI()
         # 评估专用模型（必须与生成模型不同！）
-        self.eval_model = "gpt-4o"
+        self.eval_model = "gpt-5.6"
 
     def check(self, query: str, context: str, response: str) -> dict:
         """
@@ -121,9 +165,9 @@ class HallucinationDetector:
             if len(sent) < 10:  # 跳过过短的句子
                 continue
 
-            resp = self.llm.chat.completions.create(
+            resp = self.llm.responses.create(
                 model=self.eval_model,
-                messages=[{
+                input=[{
                     "role": "user",
                     "content": f"""判断以下声明是否能被上下文支撑。
 
@@ -141,10 +185,9 @@ class HallucinationDetector:
 输出 JSON：
 {{"verdict": "supported/partial/unsupported", "reason": "...", "confidence": 0.0-1.0}}"""
                 }],
-                response_format={"type": "json_object"},
             )
 
-            result = json.loads(resp.choices[0].message.content)
+            result = json.loads(resp.output_text)
             if result.get("verdict") == "unsupported" and result.get("confidence", 0) > 0.7:
                 unsupported.append({
                     "sentence": sent,
@@ -165,13 +208,19 @@ class HallucinationDetector:
                 else "high"
             )
         }
-```text
+```
 
 ---
 
 ## 12.4 基准测试设计
 
 好的基准测试必须覆盖四类问题，缺一不可：
+
+<a id="claim-clm-eval-003"></a>
+
+:::warning 阈值边界
+本章出现的目标分数与判定阈值全部是示意值。只有在绑定版本化数据集、模型、依赖、错误成本与审批责任人后，阈值才可以进入验收门禁。
+:::
 
 ### 四类测试问题设计原则
 
@@ -217,9 +266,9 @@ class BenchmarkDesigner:
         all_tests = []
 
         for q_type, config in self.QUESTION_TYPES.items():
-            resp = llm.chat.completions.create(
-                model="gpt-4o",
-                messages=[{
+            resp = llm.responses.create(
+                model="gpt-5.6",
+                input=[{
                     "role": "user",
                     "content": f"""为以下 Skill 生成 {n_per_type} 个「{config['description']}」类型的测试问题。
 
@@ -234,14 +283,13 @@ Skill 内容：
 输出 JSON：
 {{"tests": [{{"question": "...", "expected": "...", "type": "{q_type}", "is_adversarial": false}}]}}"""
                 }],
-                response_format={"type": "json_object"},
             )
 
-            tests = json.loads(resp.choices[0].message.content).get("tests", [])
+            tests = json.loads(resp.output_text).get("tests", [])
             all_tests.extend(tests)
 
         return all_tests
-```text
+```
 
 ---
 
@@ -326,7 +374,7 @@ class EvaluationDashboard:
               f"{'(OK)' if metrics['hallucination_rate'] < 0.1 else '[P0]'}")
         print(f"\n系统状态: {status_icon} {report['status'].upper()}")
         print(f"{'='*50}\n")
-```text
+```
 
 ---
 
@@ -344,7 +392,7 @@ score = gpt4o.evaluate(answer)  # 这个评分不可信
 # (OK) 正确：用不同模型评估
 answer = gpt4o_mini.generate(question)
 score = gpt4o.evaluate(answer)  # 不同能力级别，更可信
-```text
+```
 
 **铁律 2：幻觉检测必须在句子级别，不是文档级别**
 
@@ -484,9 +532,15 @@ def run_ab_test(search_fn_a, search_fn_b, test_set=None) -> dict:
     }
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return report
-```text
+```
 
 ## 12.9 ragas 集成：自动化 RAG 质量评估
+
+<a id="claim-clm-eval-004"></a>
+
+:::warning 代码验证边界
+最小 mock provider 评估 fixture 已覆盖成功、拒答、解析失败与退化阻断，并产出机器可比较的本地结果对象；它不安装或运行 RAGAS，不调用真实模型，也不证明本章其他片段、业务数据集或阈值已经验收。
+:::
 
 ```python
 """ragas_eval.py — 用 ragas 评估知识库检索质量"""
@@ -532,7 +586,7 @@ def run_ragas_eval(dataset: Dataset) -> dict:
         status = "(OK)" if v > 0.7 else ("[!]" if v > 0.5 else "(X)")
         print(f"  {status} {k}: {v}")
     return scores
-```text
+```
 
 ## 12.10 对抗性评估：主动寻找系统不知道自己不知道的盲区
 
@@ -543,7 +597,7 @@ def run_ragas_eval(dataset: Dataset) -> dict:
 **类型一：边界溢出测试**
 故意问在 Skill 的 `scope_out` 范围之内的问题，验证系统是否会拒绝回答而不是给出错误指导。
 
-```python
+```python verify=syntax
 ADVERSARIAL_BOUNDARY = [
     {
         "question": "扫描版 PDF 应该用什么工具解析？",
@@ -551,7 +605,7 @@ ADVERSARIAL_BOUNDARY = [
         "trap": "系统可能直接推荐 MinerU，但 MinerU 的最优路径是用于排版 PDF"
     }
 ]
-```text
+```
 
 **类型二：知识版本攻击**
 故意询问已知已更新的历史信息，验证系统是否会用过期知识回答。
@@ -569,7 +623,7 @@ ADVERSARIAL_BOUNDARY = [
     "trap": "前提是错误的，正确系统应该先纠正前提",
     "expected_behavior": "纠正前提：GraphRAG 在事实检索上通常低于 VectorRAG"
 }
-```text
+```
 
 ---
 
@@ -621,7 +675,7 @@ def refresh_evaluation_set(current_set: list[dict],
     refreshed = retained + new_questions
     print(f"评估集刷新：保留 {len(retained)} 条，新增 {len(new_questions)} 条失败案例")
     return refreshed
-```text
+```
 
 :::tip 评估体系的元问题
 你的评估指标本身也需要被评估。每半年问一次：**你现在追踪的指标，还能代表你真正关心的业务结果吗？** 如果发现追踪的是"可测量的"而不是"重要的"，及时调整。
@@ -691,7 +745,7 @@ def attribute_failure(failure_case: dict) -> str:
 
     # 层4：治理层检查（需要历史对比）
     return "governance_layer: 单案例无法判断，需要统计多个案例的趋势"
-```text
+```
 
 ### 归因后的修复优先级规则
 
@@ -706,3 +760,20 @@ def attribute_failure(failure_case: dict) -> str:
 **不要把业务层失败当成检索层失败来修复。** 提升召回率解决不了"答案正确但用户不知道怎么用"的问题。层间归因必须从底往上逐层排查，确认低层没有问题后再往上看。
 :::
 
+## 验收契约
+
+`ACC-EVALUATION-001` 将回答、拒答和解析失败固定为 3 个可重放用例，其中 2 个是负例。当前 mock provider 复放为 3/3、相对基线差异为 0，但它没有业务授权数据、真实模型锁定、批准阈值、具名责任接受或最终回执，因此本章继续保持 `solution / pending`。
+
+<AcceptanceWorkbench acceptance-id="ACC-EVALUATION-001" />
+
+## 关键断言与证据
+
+<ClaimLedger document-id="KS-EVALUATION" />
+
+## 来源与复核
+
+- **本轮接口核对（截至 2026-08-01）**：[OpenAI Responses API quickstart](https://developers.openai.com/api/docs/quickstart)；评估阈值仍需固定数据集与负例回归支持。
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：混合边界。`fixtures/evaluation-regression.mjs` 及其测试为 L2 本地 fixture；RAGAS、真实模型与其余评估片段仍是示意代码。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：具名角色接受责任后，用获授权的版本化数据集、批准阈值和锁定模型复放同一回归合同。

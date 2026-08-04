@@ -1,9 +1,27 @@
 ---
-name: knowledge-validation-framework
-description: 全书统一验证框架文档，提供从问题定义到证据裁决的完整知识库系统验证方法。当需要对知识库系统做整体质量评审、上线前验收、或章节间一致性检查时使用。
+name: "knowledge-validation-framework"
+docId: "KS-VALIDATION-FRAMEWORK"
+displayNumber: "A"
+route: "/knowledge/appendix-validation"
+learningOrder: 21
+title: "附录 A：从问题定义到证据裁决——统一验证框架"
+description: "全书统一验证框架文档，提供从问题定义到证据裁决的完整知识库系统验证方法。当需要对知识库系统做整体质量评审、上线前验收、或章节间一致性检查时使用。"
+chapter: "A"
+order: 21
+section: practice
+stage: operate
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 附录 A：从问题定义到证据裁决——统一验证框架
+
+<a id="concept-use-vtrce-001"></a>
+
+本附录使用 VTRCE 将正确性、时效性、相关性、成本与错误代价放进同一个裁决坐标系。
 
 :::tip 本附录是全书的「裁决层」
 **什么时候用这个附录**：当你面临跨章节的决策冲突时——Stage 0 验收标准、三层评估体系、成本模型 ROI 计算，这三套标准哪个优先？答案在这里。
@@ -14,6 +32,34 @@ description: 全书统一验证框架文档，提供从问题定义到证据裁�
 :::
 
 > **本附录解决一个贯穿全书的隐性问题**：各章节都有自己的验收标准（Stage 0 黄金问题集、Acceptance Predicate、9维度评分、三层评估体系……），但在系统层面，这些标准是否互相一致？谁来最终裁决"这个知识库系统是可信的"？
+
+---
+
+## 概念使用图
+
+下方工作台展示 13 个核心概念的首次定义、跨章语义使用样本、学习前置与不可混同边界，并用 Evidence Maturity 区分知识结构完成度与交付证据强度。它是已复核样本，不是全文每一次词面出现的穷尽索引。
+
+<a id="concept-use-evaluation-gate-001"></a>
+
+Evaluation Gate 在这里不是评分展示，而是缺少必要证据时必须阻断升级或发布的条件。
+
+<a id="concept-use-knowledge-evolution-001"></a>
+
+Knowledge Evolution 必须消费评估回执并保留批准与回滚轨迹，不能把自动改写等同于受控进化。
+
+<a id="concept-use-ft-vs-rag-001"></a>
+
+Fine-tuning vs RAG 的选择应作为受约束的验证问题进入 VTRCE，而不是凭技术偏好一次性定案。
+
+<ConceptMap />
+
+---
+
+## 机器可验收契约
+
+下方工作台把“固定评估集、负例、阈值、回归差异、责任接受、最终回执”作为六类独立条件重新计算。绿色的本地复放只能证明 L2 fixture 可重复；只要业务授权、阈值批准、责任接受或最终回执任一缺失，页面就不能升级到 `acceptance / acceptance-tested`。
+
+<AcceptanceWorkbench />
 
 ---
 
@@ -39,7 +85,7 @@ description: 全书统一验证框架文档，提供从问题定义到证据裁�
 
 **关键洞察**：不同业务场景的五维权重不同。
 
-```python
+```python verify=syntax
 VTRCE_PROFILES = {
     "合规/财务场景": {"V": 0.35, "T": 0.15, "R": 0.20, "C": 0.10, "E": 0.20},
     "选品/营销场景": {"V": 0.20, "T": 0.30, "R": 0.25, "C": 0.20, "E": 0.05},
@@ -50,7 +96,7 @@ VTRCE_PROFILES = {
 def score_system(metrics: dict, profile: str) -> float:
     weights = VTRCE_PROFILES[profile]
     return sum(metrics.get(k, 0) * w for k, w in weights.items())
-```text
+```
 
 ---
 
@@ -103,7 +149,7 @@ QUARTERLY_REVIEW_CHECKLIST = {
         "团队是否出现判断能力退化信号",
     ]
 }
-```text
+```
 
 ---
 
@@ -115,7 +161,7 @@ QUARTERLY_REVIEW_CHECKLIST = {
 
 任何进入决策的知识声明，至少需要满足以下之一：
 - **两个独立来源**相互印证（非同一作者的引用链）
-- **一个来源 + 一个实验验证**（真实数据或可运行代码）
+- **一个来源 + 一个实验验证**（真实数据或带回执的可执行 fixture）
 - **一个来源 + 一个反例分析**（说明在什么条件下该结论不成立）
 
 ### 原则二：证据强度分级
@@ -156,3 +202,10 @@ Level 5（最强）：有受控对照实验
 3. 在季度复审：用季度复审清单逐项评估
 4. 在发生争议时：用证据裁决原则判断谁的主张有足够支撑
 :::
+
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

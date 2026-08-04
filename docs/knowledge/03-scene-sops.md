@@ -1,8 +1,22 @@
 ---
-name: knowledge-scene-sops
-description: 10种输入场景完整SOP文档，包含PDF、视频、播客、代码仓库、实时直播等各类数据源的分环境可运行代码。当处理具体类型的数据源时使用。
+name: "knowledge-scene-sops"
+docId: "KS-SCENE-SOPS"
+displayNumber: "03"
+route: "/knowledge/03-scene-sops"
+learningOrder: 4
+title: "第三章：10 种输入场景完整工程 SOP"
+description: "10 种输入场景 SOP，覆盖 PDF、视频、播客、代码仓库和实时直播等数据源。代码按环境列出但默认属于示意实现，需补依赖锁定与 smoke evidence。"
+chapter: "03"
+order: 4
+section: engineering
+stage: build
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第三章：10 种输入场景完整工程 SOP
 
 > **阅读方式**：每个场景严格遵循同一结构——小白认知比喻 → 微观任务拆解 → GitHub 仓库选型表（分环境）→ 可运行 SOP → 天坑避免。所有仓库均经过一手验证。
@@ -11,7 +25,7 @@ description: 10种输入场景完整SOP文档，包含PDF、视频、播客、�
 :::info 本章读法
 **三类读者的阅读策略**：
 
-- **工程师** → 先跑「输入诊断器」，确认值不值得处理 → 找对应场景 SOP → 直接看可运行代码
+- **工程师** → 先看「输入诊断器」的示意逻辑，确认值不值得处理 → 找对应场景 SOP → 在离线 fixture 中补齐依赖后再执行
 - **数据分析师** → 先看「场景横向对比总表」，了解各场景复杂度和失败风险 → 按业务数据类型选场景
 - **CTO/决策者** → 重点看「场景横向对比总表」和「场景 F 专家经验」——后者是最难量化 ROI 的场景
 
@@ -107,7 +121,7 @@ description: 10种输入场景完整SOP文档，包含PDF、视频、播客、�
 └── 没有 → 文档是金融/财报类？
     ├── 是 → Docling（TableFormer 专为此优化）
     └── 否 → MinerU pipeline 后端（纯CPU降级）
-```text
+```
 
 ### 完整 SOP
 
@@ -119,7 +133,7 @@ pip install docling
 # 一行命令：自动保留标题层级、表格结构、阅读顺序
 docling your_document.pdf --output ./output/
 # 产物：output/your_document.md（图像生成描述占位符）
-```text
+```
 
 **路线二：有 GPU，高精度（MinerU）**
 
@@ -142,7 +156,7 @@ for img in output/images/*.png; do
   # 送给 VLM 描述
   echo "处理: $img"
 done
-```text
+```
 
 **路线三：超复杂长文档（Unlimited-OCR）**
 
@@ -182,7 +196,7 @@ model.infer_multi(
     ngram_window=1024,        # 多页必须用 1024，单页用 128
     save_results=True,
 )
-```text
+```
 
 ### 天坑避免
 
@@ -272,14 +286,14 @@ results = []
 for fname in sorted(os.listdir("frames")):
     with open(f"frames/{fname}", "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
-    resp = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[{"role":"user","content":[
-            {"type":"text","text": PROMPT},
-            {"type":"image_url","image_url":{"url":f"data:image/jpeg;base64,{b64}"}}
+    resp = client.responses.create(
+        model="gpt-5.6",
+        input=[{"role":"user","content":[
+            {"type":"input_text","text": PROMPT},
+            {"type":"input_image","image_url":f"data:image/jpeg;base64,{b64}"}
         ]}]
     )
-    results.append(f"[{fname}]\n{resp.choices[0].message.content}")
+    results.append(f"[{fname}]\n{resp.output_text}")
 
 with open("frame_descriptions.md","w") as f:
     f.write("\n\n---\n\n".join(results))
@@ -299,7 +313,7 @@ cat transcript.txt frame_descriptions.md > combined_input.md
 # Step 7: 压力测试
 # cangjie-skill 自动生成 test-prompts.json
 # 验证所有测试用例 Agent 能给出正确触发路径
-```text
+```
 
 ### 天坑避免
 
@@ -396,7 +410,7 @@ EOF
 
 # 个人录音日记：
 # /yourself-skill
-```text
+```
 
 ### 天坑避免
 
@@ -474,7 +488,7 @@ EOF
 # Step 4: 持续监控
 # 用 wigolo-watch 监控目标博客
 # 每月清理 expires 日期已过的临时卡片
-```text
+```
 
 ### 天坑避免
 
@@ -545,7 +559,7 @@ npx repomix \
 # 任何路线的最后一步：Context7 补充最新文档
 # 通过 Context7 MCP 实时获取官方最新文档
 # 在 Skill 里标注 version: >=X.Y.Z 防止过时
-```text
+```
 
 ### 天坑避免
 
@@ -591,7 +605,7 @@ npx skills add titanwings/colleague-skill
 # 多来源聚合（书+视频+访谈）
 # 先分别用 A/B/C 场景处理各类来源，再合并
 # /cangjie-skill buffett_letters.md buffett_speeches/ buffett_interviews.md
-```text
+```
 
 ### 天坑避免
 
@@ -646,7 +660,7 @@ PROMPT = """
 # 决策规则 → Rules JSONL（用于自动化监控）
 # 分析洞察 → 摘要原子笔记（带有效期：生成日期 + 有效期）
 # 原始表格 → 向量库（元数据：quarter/year/metric_type）
-```text
+```
 
 ### 天坑避免
 
@@ -710,15 +724,15 @@ PROMPTS = {
 def describe_image(image_path: str, image_type: str) -> str:
     with open(image_path, "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
-    resp = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[{"role":"user","content":[
-            {"type":"text","text": PROMPTS[image_type]},
-            {"type":"image_url","image_url":{"url":f"data:image/png;base64,{b64}"}}
+    resp = client.responses.create(
+        model="gpt-5.6",
+        input=[{"role":"user","content":[
+            {"type":"input_text","text": PROMPTS[image_type]},
+            {"type":"input_image","image_url":f"data:image/png;base64,{b64}"}
         ]}]
     )
-    return resp.choices[0].message.content
-```text
+    return resp.output_text
+```
 
 ### 天坑避免
 
@@ -785,7 +799,7 @@ for resp in api_responses:
     df.to_markdown(f"data_{fname}.md")
 
 # 然后送入场景 G 的蒸馏流程
-```text
+```
 
 ---
 
@@ -844,7 +858,7 @@ TEMPLATE
 # raw/meetings/YYYY-MM-DD-主题.md   ← 原始转写，只读，永不删除
 # wiki/decisions/                   ← 提炼的方法论 Skill
 # wiki/architecture-decisions/      ← ADR 文档
-```text
+```
 
 ### 天坑避免
 
@@ -980,3 +994,9 @@ def diagnose_input(content_preview: str, source_meta: dict) -> DiagnosisResult:
 2. **这条信息的来源，我能在原处实时查到吗？** → 能则 CACHE，否则 PROCESS
 :::
 
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

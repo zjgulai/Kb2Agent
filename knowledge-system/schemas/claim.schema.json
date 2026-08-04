@@ -1,0 +1,298 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd-guide.local/schemas/claim-registry.schema.json",
+  "title": "MKD Guide claim and evidence registry",
+  "type": "object",
+  "required": ["schemaVersion", "pilotDocumentIds", "ownerRoles", "sources", "evidence", "claims"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "2.0"
+    },
+    "pilotDocumentIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^KS-[A-Z0-9-]+$"
+      }
+    },
+    "ownerRoles": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/ownerRole"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "source": {
+      "type": "object",
+      "required": ["sourceId", "title", "kind", "authority", "reviewedAt", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "pattern": "^SRC-[A-Z0-9-]+$"
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["official-web", "repository"] },
+        "authority": { "enum": ["first-party", "project"] },
+        "url": { "type": "string", "pattern": "^https://" },
+        "path": { "type": "string", "minLength": 1 },
+        "reviewedAt": { "$ref": "#/$defs/date" },
+        "notes": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "official-web" } } },
+          "then": { "required": ["url"] }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "repository" } } },
+          "then": { "required": ["path"] }
+        }
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["evidenceId", "title", "kind", "path", "grade", "assertion"],
+      "additionalProperties": false,
+      "properties": {
+        "evidenceId": {
+          "type": "string",
+          "pattern": "^EVD-[A-Z0-9-]+$"
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["fixture", "test", "read-only-audit", "acceptance-receipt", "production-observation", "authorized-live-receipt"] },
+        "path": { "type": "string", "minLength": 1 },
+        "grade": { "$ref": "#/$defs/evidenceGrade" },
+        "command": { "type": ["string", "null"] },
+        "assertion": { "type": "string", "minLength": 1 },
+        "receipt": { "$ref": "#/$defs/acceptanceReceiptMetadata" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "kind": { "const": "acceptance-receipt" } },
+            "required": ["kind"]
+          },
+          "then": {
+            "required": ["receipt"],
+            "properties": { "grade": { "const": "L4-authorized-live" } }
+          },
+          "else": { "not": { "required": ["receipt"] } }
+        }
+      ]
+    },
+    "acceptanceReceiptMetadata": {
+      "type": "object",
+      "required": [
+        "acceptanceId",
+        "purpose",
+        "subjectId",
+        "approverRoleId",
+        "issuedAt",
+        "decision",
+        "artifactSha256"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "acceptanceId": { "type": "string", "pattern": "^ACC-[A-Z0-9-]+$" },
+        "purpose": {
+          "enum": ["owner-acceptance", "dataset-authorization", "threshold-approval", "final-acceptance"]
+        },
+        "subjectId": { "type": "string", "pattern": "^(ROLE|ADS|ACT|ACC)-[A-Z0-9-]+$" },
+        "approverRoleId": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+        "issuedAt": { "$ref": "#/$defs/date" },
+        "decision": { "const": "accepted" },
+        "artifactSha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+      }
+    },
+    "acceptanceReceiptArtifact": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "evidenceId",
+        "acceptanceId",
+        "purpose",
+        "subjectId",
+        "approverRoleId",
+        "issuedAt",
+        "decision"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "const": "1.0" },
+        "evidenceId": { "type": "string", "pattern": "^EVD-[A-Z0-9-]+$" },
+        "acceptanceId": { "type": "string", "pattern": "^ACC-[A-Z0-9-]+$" },
+        "purpose": {
+          "enum": ["owner-acceptance", "dataset-authorization", "threshold-approval", "final-acceptance"]
+        },
+        "subjectId": { "type": "string", "pattern": "^(ROLE|ADS|ACT|ACC)-[A-Z0-9-]+$" },
+        "approverRoleId": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+        "issuedAt": { "$ref": "#/$defs/date" },
+        "decision": { "const": "accepted" }
+      }
+    },
+    "evidenceGrade": {
+      "enum": [
+        "L0-unverified",
+        "L1-public-or-runtime",
+        "LO-S-synthetic",
+        "L2-fixture-or-dry-run",
+        "L3-production-read-only",
+        "L4-authorized-live"
+      ]
+    },
+    "ownerFunction": {
+      "enum": ["content-owner", "evidence-reviewer", "test-owner", "final-approver"]
+    },
+    "ownerRole": {
+      "type": "object",
+      "required": [
+        "roleId",
+        "documentId",
+        "function",
+        "label",
+        "responsibilities",
+        "assignmentState",
+        "assignee",
+        "acceptedAt",
+        "acceptanceEvidenceRef"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "roleId": {
+          "type": "string",
+          "pattern": "^ROLE-[A-Z0-9-]+$"
+        },
+        "documentId": {
+          "type": "string",
+          "pattern": "^KS-[A-Z0-9-]+$"
+        },
+        "function": { "$ref": "#/$defs/ownerFunction" },
+        "label": { "type": "string", "minLength": 4 },
+        "responsibilities": { "type": "string", "minLength": 12 },
+        "assignmentState": { "enum": ["role-mapped", "assigned", "accepted"] },
+        "assignee": { "type": ["string", "null"] },
+        "acceptedAt": {
+          "oneOf": [
+            { "$ref": "#/$defs/date" },
+            { "type": "null" }
+          ]
+        },
+        "acceptanceEvidenceRef": {
+          "oneOf": [
+            { "type": "string", "pattern": "^EVD-[A-Z0-9-]+$" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "ownership": {
+      "type": "object",
+      "required": ["contentOwner", "evidenceReviewer", "testOwner", "finalApprover"],
+      "additionalProperties": false,
+      "properties": {
+        "contentOwner": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+        "evidenceReviewer": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+        "testOwner": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+        "finalApprover": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "required": [
+        "claimId",
+        "documentId",
+        "anchor",
+        "locatorText",
+        "statement",
+        "claimType",
+        "risk",
+        "volatility",
+        "verification",
+        "evidenceGrade",
+        "asOf",
+        "ownership",
+        "applicability",
+        "limitations",
+        "sourceRefs",
+        "evidenceRefs",
+        "nextAction"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "claimId": {
+          "type": "string",
+          "pattern": "^CLM-[A-Z0-9-]+$"
+        },
+        "documentId": {
+          "type": "string",
+          "pattern": "^KS-[A-Z0-9-]+$"
+        },
+        "anchor": {
+          "type": "string",
+          "pattern": "^claim-clm-[a-z0-9-]+$"
+        },
+        "locatorText": { "type": "string", "minLength": 8 },
+        "statement": { "type": "string", "minLength": 12 },
+        "claimType": {
+          "enum": ["external-fact", "legal-context", "normative-control", "calculation", "interface-contract", "current-state", "methodology"]
+        },
+        "risk": { "enum": ["high", "critical"] },
+        "volatility": { "enum": ["low", "medium", "high"] },
+        "verification": {
+          "enum": ["pending", "source-reviewed", "synthetic-supported", "fixture-verified", "production-observed", "authorized-live", "blocked"]
+        },
+        "evidenceGrade": { "$ref": "#/$defs/evidenceGrade" },
+        "asOf": {
+          "oneOf": [
+            { "$ref": "#/$defs/date" },
+            { "type": "null" }
+          ]
+        },
+        "ownership": { "$ref": "#/$defs/ownership" },
+        "applicability": { "type": "string", "minLength": 1 },
+        "limitations": { "type": "string", "minLength": 1 },
+        "sourceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^SRC-[A-Z0-9-]+$" }
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^EVD-[A-Z0-9-]+$" }
+        },
+        "nextAction": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

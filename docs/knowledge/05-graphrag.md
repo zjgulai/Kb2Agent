@@ -1,9 +1,31 @@
 ---
-name: knowledge-graphrag-construction
-description: GraphRAG知识图谱构建文档，详解实体抽取、关系建模、社区摘要与LightRAG集成方案。当需要构建图谱增强检索时使用。
+name: "knowledge-graphrag-construction"
+docId: "KS-GRAPHRAG"
+displayNumber: "06"
+route: "/knowledge/05-graphrag"
+learningOrder: 7
+title: "第六章：GraphRAG 知识图谱构建"
+description: "GraphRAG知识图谱构建文档，详解实体抽取、关系建模、社区摘要与LightRAG集成方案。当需要构建图谱增强检索时使用。"
+chapter: "06"
+order: 7
+section: engineering
+stage: build
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第六章：GraphRAG 知识图谱构建
+
+<a id="concept-use-rag-001"></a>
+
+本章把 RAG 作为检索基线：先验证文本块证据能否满足问题，再判断是否需要引入关系结构。
+
+<a id="concept-use-graphrag-001"></a>
+
+GraphRAG 在本章承担关系型检索与跨文档聚合，而不是替代所有向量检索。
 
 > **前四章解决了数据接入与结构化提取**，本章解决「如何构建可被复杂查询的知识库」——GraphRAG 是普通向量库的升级选项，不是替代。
 
@@ -52,7 +74,7 @@ flowchart LR
     class E,G,C graph;
     class Q1,Q2,Q3 query;
     class M mcp;
-```text
+```
 
 ---
 
@@ -143,7 +165,7 @@ Stage 5: 查询路由（Query Routing）
   · global 模式：社区摘要聚合（全局主题综合）
   · hybrid/mix 模式：两者合并（推荐默认）
   · naive 模式：退化为纯向量 RAG（基准对比用）
-```text
+```
 
 ---
 
@@ -157,7 +179,7 @@ pip install lightrag-hku
 # 环境变量
 export OPENAI_API_KEY="..."    # 或配置本地 LLM
 export LIGHTRAG_DIR="./lightrag_storage"
-```text
+```
 
 **四种角色 LLM 配置**（LightRAG v1.5+ 要求）：
 
@@ -180,7 +202,7 @@ rag = LightRAG(
     # Rerank（可选，推荐本地部署）：
     # rerank_model="BAAI/bge-reranker-v2-m3"
 )
-```text
+```
 
 **核心建议**（官方文档警告）：
 - Embedding 模型**一旦开始索引就不能更换**（更换需重新 embed 所有内容）
@@ -201,7 +223,7 @@ from lightrag.utils import EmbeddingFunc
 async def batch_insert(docs: list[str]):
     tasks = [rag.ainsert(doc) for doc in docs]
     await asyncio.gather(*tasks)
-```text
+```
 
 **五种查询模式**：
 
@@ -220,7 +242,7 @@ result = rag.query("...", param=QueryParam(mode="mix"))
 
 # naive：退化为纯向量 RAG（仅用于对比基准）
 result = rag.query("...", param=QueryParam(mode="naive"))
-```text
+```
 
 ---
 
@@ -236,7 +258,7 @@ graphrag init --root ./graphrag_project
 
 # [!] 每次小版本升级都要重新 init：
 # graphrag init --root ./graphrag_project --force
-```text
+```
 
 **配置文件关键项**（settings.yaml）：
 
@@ -255,7 +277,7 @@ chunks:
 
 entity_extraction:
   max_gleanings: 1            # 减少重复抽取，控制成本
-```text
+```
 
 **提示词调优（必做）**：
 
@@ -265,7 +287,7 @@ graphrag prompt-tune --root ./graphrag_project --config settings.yaml
 
 # 索引（[!] 耗时耗钱，先用小样本测试）
 graphrag index --root ./graphrag_project
-```text
+```
 
 **查询**：
 
@@ -288,7 +310,7 @@ result = await global_search(
 
 # DRIFT 搜索（2024年底新增，比 global 省 40-60% token）
 result = await drift_search(query="...", config=config)
-```text
+```
 
 ---
 
@@ -299,7 +321,7 @@ result = await drift_search(query="...", config=config)
 ```bash
 pip install graphiti-core
 # 需要 Neo4j 实例（本地 Docker 或 Neo4j AuraDB）
-```text
+```
 
 ```python
 from graphiti_core import Graphiti
@@ -331,7 +353,7 @@ historical = await graphiti.search(
     "产品B",
     reference_time=datetime(2026, 7, 20)  # 查询7月20日时的知识状态
 )
-```text
+```
 
 ---
 
@@ -367,7 +389,7 @@ historical = await graphiti.search(
         简单事实查找 → 向量 RAG（快，便宜）
         多跳/综合查询 → GraphRAG
         路由逻辑：小分类器 or LLM 意图判断
-```text
+```
 
 ---
 
@@ -403,7 +425,9 @@ LightRAG 需要四类存储，生产环境推荐：
 
 ---
 
-## 6.7 MCP 封装：让任意 Agent 直接查询图谱
+<a id="_6-7-mcp-封装-让任意-agent-直接查询图谱"></a>
+
+## 6.9 MCP 封装：让任意 Agent 直接查询图谱
 
 将 GraphRAG 封装为 MCP Server 后，Claude Desktop、Cursor、Codex App 无需写适配代码即可调用。
 
@@ -434,7 +458,7 @@ def get_entity_relations(entity: str) -> str:
 
 if __name__ == "__main__":
     mcp.run()
-```text
+```
 
 **配置示例**（Claude Desktop）：
 ```json
@@ -446,7 +470,7 @@ if __name__ == "__main__":
     }
   }
 }
-```text
+```
 
 :::tip 向下一章
 图谱构建完成后，下一步是让 Agent 高效调用——包括 MCP 协议、RAG 模式选择、Skill 导航等，详见 [第七章：Agent 调用 + MCP 协议](06-agent-call.md)。
@@ -454,7 +478,9 @@ if __name__ == "__main__":
 
 ---
 
-## 6.8 GraphRAG 启用阈值矩阵与退化策略
+<a id="_6-8-graphrag-启用阈值矩阵与退化策略"></a>
+
+## 6.10 GraphRAG 启用阈值矩阵与退化策略
 
 ### 启用阈值矩阵
 
@@ -496,7 +522,7 @@ def check_graphrag_health(graph_client) -> dict:
             health[metric] = {"value": value, "ok": value >= threshold}
     health["overall"] = all(h["ok"] for h in health.values() if isinstance(h, dict))
     return health
-```text
+```
 
 ### 退化策略：何时自动退回向量检索
 
@@ -524,3 +550,9 @@ def should_use_graph(query: str, graph_health: dict) -> bool:
 退化到向量检索是**设计行为**，不是故障。健康的系统应该在图谱状态不佳时自动切换，保证用户始终得到回答，即使质量略低。
 :::
 
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

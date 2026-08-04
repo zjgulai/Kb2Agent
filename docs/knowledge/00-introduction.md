@@ -1,8 +1,22 @@
 ---
-name: knowledge-introduction-2026
-description: 导论章节文档，概述 2026 年知识库全景与关键认知边界。当读者在动手构建多模态知识蒸馏与 Agent 调用系统前建立认知框架时使用。
+name: "knowledge-introduction-2026"
+docId: "KS-INTRO"
+displayNumber: "00"
+route: "/knowledge/00-introduction"
+learningOrder: 0
+title: "第零章：导论 —— 2026 年知识库全景与十个反直觉洞察"
+description: "导论章节文档，概述 2026 年知识库全景与关键认知边界。当读者在动手构建多模态知识蒸馏与 Agent 调用系统前建立认知框架时使用。"
+chapter: "00"
+order: 0
+section: foundation
+stage: concept
+maturity: principle
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第零章：导论 —— 2026 年知识库全景与十个反直觉洞察
 
 :::info 本章能给你什么
@@ -11,6 +25,20 @@ description: 导论章节文档，概述 2026 年知识库全景与关键认知�
 **本章在全书中的角色**：它是一道筛子。让该建库的项目有信心动手，让不该建库的项目提前止损。如果你读完后仍不确定要不要建，说明你需要先回答「谁为知识质量负责」这个组织问题。
 
 **三种读者的起点**：工程师 → 可跳到第三章直接看 SOP；分析师/决策者 → 线性读完本章再继续；CTO → 重点看「反模式」和「劣化机制」两节。
+:::
+
+:::info 核心概念起点
+<a id="concept-knowledge-system"></a>
+
+**Knowledge System（知识体系）是一条受治理的知识流水线**，负责采集、结构化、检索、应用、评估与可追溯演进，而不是某一种数据库。
+
+<a id="concept-agent"></a>
+
+**Agent（智能体）是在显式权限、证据与控制边界内选择工具并产生行动的执行单元**；它不是知识真实性的来源。
+
+<a id="concept-evidence-maturity"></a>
+
+**Evidence Maturity（证据成熟度）描述内容从原理、方案、可复现运行到明确验收回执的本地进展**，不代表生产部署状态。
 :::
 
 在 2026 年谈知识库，最容易犯的错，是把它理解成"长上下文出现之前的过渡技术"。这恰恰反了。模型上下文窗口越来越长，推理能力越来越强，确实让很多过去必须预处理的工作变得"可以临时现读"；但只要你的信息存在版本差异、权限边界、跨模态转换、事实校验、成本约束和可追溯责任，知识库就不会消失。长上下文擅长一次性吞入、即时推理；知识库擅长持续整理、稳定复用、权限隔离和可审计演化。两者的边界正在变模糊：一部分低频知识可以不入库直接全文加载，另一部分高价值知识必须被结构化、被索引、被治理。真正的问题不再是"要不要做知识库"，而是"哪些知识该蒸馏，哪些知识该原样保留，哪些知识根本不该入库"。
@@ -97,13 +125,13 @@ flowchart LR
 | :--- | :--- | :--- |
 | 工程师 | 直接从 [第 3 章 SOP](03-scene-sops.md) 开始 | 先拿到可运行路径，再回看第 0、1、2 章补世界观，效率最高 |
 | 数据分析师 / 决策者 | 从第 0 章开始线性阅读 | 需要先建立边界感：什么该入库、什么不该入库、怎么衡量 ROI |
-| CTO / 架构师 | 直接看 [第 5 章安全合规](05-graphrag.md) + [第 10 章成本模型](10-e2e-pipeline.md) | 先把红线和预算模型看清，再决定是否值得大规模铺开 |
+| CTO / 架构师 | 直接看 [第 5 章安全合规](05-security-compliance.md) + [第 10 章成本模型](10-cost-model.md) | 先把红线和预算模型看清，再决定是否值得大规模铺开 |
 
 ---
 
 ## 十个反直觉洞察
 
-### 1. RAG 不是万能药
+### 1. [RAG](02-decision-matrix.md#concept-rag) 不是万能药
 
 :::warning 关键点
 **直觉思维**：有文档就做 RAG。  
@@ -292,13 +320,13 @@ flowchart LR
 :::
 
 :::tip 决策 3：你的系统最先要优化的是精度、成本，还是安全？
-这三者决定你后面选 RAG、GraphRAG、Skill 蒸馏、私有化部署还是混合架构，顺序一旦错，后面整条链路都会返工。
+这三者决定你后面选 RAG、[GraphRAG](02-decision-matrix.md#concept-graphrag)、[Skill 蒸馏](01-framework.md#concept-skill-distillation)、私有化部署还是混合架构，顺序一旦错，后面整条链路都会返工。
 :::
 
 ---
 
 :::info 全书统一验证框架
-本章的所有判断——"该不该建库""建哪种库""怎么评估好坏"——最终都可以用**附录 A 的 VTRCE 五维框架**（Validity/Timeliness/Relevance/Cost/Error Cost）做统一裁决。当章节间出现决策冲突时，VTRCE 是全书的最高裁决层。→ [查看附录 A](appendix-validation.md)
+本章的所有判断——"该不该建库""建哪种库""怎么评估好坏"——最终都可以用**[VTRCE 五维框架](12-evaluation.md#concept-vtrce)**（Validity/Timeliness/Relevance/Cost/Error Cost）做统一裁决。当章节间出现决策冲突时，VTRCE 是全书的最高裁决层。→ [查看附录 A](appendix-validation.md)
 :::
 
 ---
@@ -306,3 +334,10 @@ flowchart LR
 :::tip → 下一章
 建立认知框架后，进入信息/知识/智慧的本质辨析 → [01-framework](01-framework.md)
 :::
+
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

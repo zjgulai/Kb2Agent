@@ -1,8 +1,22 @@
 ---
-name: knowledge-ops-runbook
-description: 知识库工程生产运维Runbook，覆盖腐烂告警/向量库迁移/Embedding升级/MCP上线回滚/成本熔断五大SOP，每项均包含可直接执行的检测脚本和决策树。供运维/工程师在生产事故中快速定位和处置。
+name: "knowledge-ops-runbook"
+docId: "KS-OPS-RUNBOOK"
+displayNumber: "20"
+route: "/knowledge/20-ops-runbook"
+learningOrder: 24
+title: "第二十章：生产运维 Runbook"
+description: "知识库工程生产运维Runbook，覆盖腐烂告警/向量库迁移/Embedding升级/MCP上线回滚/成本熔断五大SOP，每项均包含可直接执行的检测脚本和决策树。供运维/工程师在生产事故中快速定位和处置。"
+chapter: "20"
+order: 24
+section: practice
+stage: operate
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第二十章：生产运维 Runbook
 
 > **本章用途**：从「学会了」到「敢上生产」的最后一关。第1-19章覆盖构建知识，本章覆盖**运维知识**——出了问题怎么诊断、怎么修、怎么不再犯。每个 SOP 都可直接复制执行。
@@ -124,12 +138,12 @@ def check_collection_health(
         scores = []
         for query in sample_queries[:20]:  # 最多取20条避免超时
             q_emb = encoder.encode([query], normalize_embeddings=True)[0]
-            hits = client.search(
+            hits = client.query_points(
                 collection_name=collection,
-                query_vector=q_emb.tolist(),
+                query=q_emb.tolist(),
                 limit=1,
                 score_threshold=0.0,
-            )
+            ).points
             if hits:
                 score = hits[0].score
                 scores.append(score)
@@ -256,15 +270,12 @@ def init_qdrant_collection(
     client: QdrantClient,
     collection: str,
     vector_dim: int,
-    recreate: bool = False,
 ):
     existing = [c.name for c in client.get_collections().collections]
     if collection in existing:
-        if recreate:
-            client.delete_collection(collection)
-        else:
-            print(f"集合 {collection} 已存在，跳过创建（追加模式）")
-            return
+        raise RuntimeError(
+            f"目标集合 {collection} 已存在；迁移必须使用新的唯一集合名，禁止覆盖"
+        )
     
     client.create_collection(
         collection_name=collection,
@@ -374,11 +385,11 @@ def verify_migration(
         chroma_res = src.query(query_embeddings=[vec], n_results=top_k)
         chroma_ids = set(chroma_res["ids"][0])
         
-        qdrant_res = qdrant.search(
+        qdrant_res = qdrant.query_points(
             collection_name=qdrant_collection,
-            query_vector=vec,
+            query=vec,
             limit=top_k,
-        )
+        ).points
         qdrant_ids = set(str(r.payload.get("_chroma_id", r.id)) for r in qdrant_res)
         
         overlap = len(chroma_ids & qdrant_ids) / top_k
@@ -492,7 +503,9 @@ def reembed_collection(
     # 创建新集合
     existing = [c.name for c in client.get_collections().collections]
     if new_collection in existing:
-        client.delete_collection(new_collection)
+        raise RuntimeError(
+            f"目标集合 {new_collection} 已存在；请换用唯一名称，禁止原地覆盖"
+        )
     client.create_collection(
         collection_name=new_collection,
         vectors_config=VectorParams(size=sample_dim, distance=Distance.COSINE),
@@ -596,8 +609,16 @@ def ab_compare(
         old_vec = enc_old.encode([q], normalize_embeddings=True)[0]
         new_vec = enc_new.encode([q], prompt_name="query", normalize_embeddings=True)[0]
         
-        old_hits = client.search(old_collection, old_vec.tolist(), limit=top_k)
-        new_hits = client.search(new_collection, new_vec.tolist(), limit=top_k)
+        old_hits = client.query_points(
+            collection_name=old_collection,
+            query=old_vec.tolist(),
+            limit=top_k,
+        ).points
+        new_hits = client.query_points(
+            collection_name=new_collection,
+            query=new_vec.tolist(),
+            limit=top_k,
+        ).points
         
         old_score = old_hits[0].score if old_hits else 0
         new_score = new_hits[0].score if new_hits else 0
@@ -630,13 +651,33 @@ export QDRANT_COLLECTION="knowledge_v2"   # 新集合
 # 3. 若使用 systemd
 systemctl reload myapp  # 触发配置重载，不停进程
 
-# 4. 观察 1h 无问题后，删除旧集合释放存储
-python -c "
+# 4. 至少观察 24h；删除前先创建可恢复快照
+curl -fsS -X POST \
+  "http://localhost:6333/collections/knowledge_v1/snapshots"
+
+# 5. dry-run：只打印显式目标，不执行删除
+export DELETE_COLLECTION="knowledge_v1"
+python - <<'PY'
+import os
+print(f"DRY RUN: would delete {os.environ['DELETE_COLLECTION']}")
+PY
+
+# 6. 人工核对快照回执后，再提供逐字确认值
+export CONFIRM_DELETE="delete:knowledge_v1"
+python - <<'PY'
+import os
 from qdrant_client import QdrantClient
-QdrantClient('http://localhost:6333').delete_collection('knowledge_v1')
-print('旧集合已删除')
-"
+
+target = os.environ["DELETE_COLLECTION"]
+if os.environ.get("CONFIRM_DELETE") != f"delete:{target}":
+    raise SystemExit("确认值不匹配，拒绝删除")
+
+QdrantClient("http://localhost:6333").delete_collection(target)
+print(f"已删除显式目标：{target}；保留快照用于回滚")
+PY
 ```
+
+回滚路径：从上一步快照恢复 `knowledge_v1`，把 `QDRANT_COLLECTION` 切回旧集合，并重新进入 24 小时观察窗。任何一步缺少快照路径、显式目标、逐字确认或回滚负责人时，都不得执行删除。
 
 ---
 
@@ -644,7 +685,7 @@ print('旧集合已删除')
 
 ### 上线前检查清单
 
-```bash
+```bash verify=syntax
 #!/bin/bash
 # scripts/mcp_precheck.sh
 # 用法：bash scripts/mcp_precheck.sh
@@ -920,13 +961,13 @@ def safe_llm_call(model: str, messages: list, **kwargs):
     
     from openai import OpenAI
     client = OpenAI()
-    response = client.chat.completions.create(
-        model=model, messages=messages, **kwargs
+    response = client.responses.create(
+        model=model, input=messages, **kwargs
     )
     
     # 记录消耗
     usage = response.usage
-    cost = guard.record(model, usage.prompt_tokens, usage.completion_tokens)
+    cost = guard.record(model, usage.input_tokens, usage.output_tokens)
     
     # 检查是否触发告警（但不阻断当前请求）
     for alert in guard.check():
@@ -1030,3 +1071,11 @@ python3 scripts/kb_health_check.py \
 - 技术选型（Qdrant/vLLM/SGLang）→ [18-tech-selection-2026](18-tech-selection-2026.md)
 - 失败案例与根因分析 → [17-failure-cases](17-failure-cases.md)
 :::
+
+## 来源与复核
+
+- **本轮接口核对（截至 2026-08-01）**：[Qdrant Local Quickstart](https://qdrant.tech/documentation/quickstart/) 与 [OpenAI Responses API quickstart](https://developers.openai.com/api/docs/quickstart)。危险删除示例已加入快照、dry-run、显式目标、逐字确认和回滚路径。
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

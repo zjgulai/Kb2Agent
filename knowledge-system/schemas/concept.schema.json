@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd-guide.local/schemas/concept-usage-graph.schema.json",
+  "title": "MKD Guide concept usage graph",
+  "type": "object",
+  "required": ["schemaVersion", "registry", "reviewedAt", "coverageMode", "scopeNote", "relationContract", "concepts"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "registry": { "type": "string", "minLength": 1 },
+    "reviewedAt": { "$ref": "#/$defs/date" },
+    "coverageMode": { "const": "reviewed-semantic-sample" },
+    "scopeNote": { "type": "string", "minLength": 1 },
+    "relationContract": {
+      "type": "object",
+      "required": ["definedIn", "usedIn", "prerequisiteOf", "conflictsWith", "related"],
+      "additionalProperties": false,
+      "properties": {
+        "definedIn": { "type": "string", "minLength": 1 },
+        "usedIn": { "type": "string", "minLength": 1 },
+        "prerequisiteOf": { "type": "string", "minLength": 1 },
+        "conflictsWith": { "type": "string", "minLength": 1 },
+        "related": { "type": "string", "minLength": 1 }
+      }
+    },
+    "concepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/concept" }
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "conceptId": {
+      "type": "string",
+      "pattern": "^CONCEPT-[A-Z0-9-]+$"
+    },
+    "documentId": {
+      "type": "string",
+      "pattern": "^KS-[A-Z0-9-]+$"
+    },
+    "location": {
+      "type": "object",
+      "required": ["documentId", "anchor", "locatorText"],
+      "additionalProperties": false,
+      "properties": {
+        "documentId": { "$ref": "#/$defs/documentId" },
+        "anchor": { "type": "string", "pattern": "^concept-[a-z0-9-]+$" },
+        "locatorText": { "type": "string", "minLength": 8 }
+      }
+    },
+    "usage": {
+      "type": "object",
+      "required": ["usageId", "documentId", "anchor", "locatorText", "usageType"],
+      "additionalProperties": false,
+      "properties": {
+        "usageId": { "type": "string", "pattern": "^USE-[A-Z0-9-]+-\\d{3}$" },
+        "documentId": { "$ref": "#/$defs/documentId" },
+        "anchor": { "type": "string", "pattern": "^concept-use-[a-z0-9-]+-\\d{3}$" },
+        "locatorText": { "type": "string", "minLength": 8 },
+        "usageType": {
+          "enum": ["applies", "compares", "depends-on", "validates", "implements", "governs"]
+        }
+      }
+    },
+    "conflict": {
+      "type": "object",
+      "required": ["conceptId", "kind", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "conceptId": { "$ref": "#/$defs/conceptId" },
+        "kind": { "enum": ["not-equivalent", "boundary-conflict"] },
+        "reason": { "type": "string", "minLength": 12 }
+      }
+    },
+    "concept": {
+      "type": "object",
+      "required": [
+        "conceptId",
+        "term",
+        "aliases",
+        "definition",
+        "canonicalDocument",
+        "definedIn",
+        "usedIn",
+        "prerequisiteOf",
+        "conflictsWith",
+        "related"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "conceptId": { "$ref": "#/$defs/conceptId" },
+        "term": { "type": "string", "minLength": 1 },
+        "aliases": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "definition": { "type": "string", "minLength": 16 },
+        "canonicalDocument": { "$ref": "#/$defs/documentId" },
+        "definedIn": { "$ref": "#/$defs/location" },
+        "usedIn": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/usage" }
+        },
+        "prerequisiteOf": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/conceptId" }
+        },
+        "conflictsWith": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/conflict" }
+        },
+        "related": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/conceptId" }
+        }
+      }
+    }
+  }
+}

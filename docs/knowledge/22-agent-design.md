@@ -1,8 +1,22 @@
 ---
-name: knowledge-agent-design
-description: 智能体设计与编排深度指南，覆盖单智能体/多智能体系统架构设计原理、Tools/MCP/Memory/Skill等能力构建，推荐2026年最新主流平台，含完整可运行代码。蒸馏工程的能力层。
+name: "knowledge-agent-design"
+docId: "KS-AGENT-DESIGN"
+displayNumber: "22"
+route: "/knowledge/22-agent-design"
+learningOrder: 25
+title: "第二十二章：智能体设计与编排"
+description: "智能体设计与编排深度指南，覆盖单智能体/多智能体系统架构设计原理、Tools/MCP/Memory/Skill等能力构建，推荐2026年最新主流平台，含完整可运行代码。蒸馏工程的能力层。"
+chapter: "22"
+order: 25
+section: practice
+stage: build
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第二十二章：智能体设计与编排
 
 > **本章定位**：从「调用知识库的 Agent」升维到「如何设计 Agent 系统本身」。覆盖单智能体架构、多智能体系统（MAS）、工具能力构建（Tools/MCP/Memory/Skill）、主流编排平台对比，以及与蒸馏知识库的深度集成范式。
@@ -15,12 +29,12 @@ description: 智能体设计与编排深度指南，覆盖单智能体/多智能
 
 | 主题 | 核心内容 | 跳转 |
 |------|---------|------|
-| **[单智能体架构](#221-单智能体架构设计)** | ReAct/Plan-Execute/Reflection 范式 | §22.1 |
-| **[多智能体系统 MAS](#222-多智能体系统-mas)** | Orchestrator/Worker、并行/流水线模式 | §22.2 |
-| **[Tools 能力构建](#223-tools-能力构建体系)** | Skill/MCP/Memory/API/Plugin 五维工具栈 | §22.3 |
-| **[主流编排平台](#224-主流编排平台全景)** | LangGraph/Agno/Google ADK/Flowise 等 | §22.4 |
-| **[知识库集成范式](#225-与蒸馏知识库的集成范式)** | RAG-as-Tool vs Memory-as-Store 两种模型 | §22.5 |
-| **[生产部署要点](#226-生产部署与可观测性)** | 幂等性/成本控制/链路追踪 | §22.6 |
+| **[单智能体架构](#_22-1-单智能体架构设计)** | ReAct/Plan-Execute/Reflection 范式 | §22.1 |
+| **[多智能体系统 MAS](#_22-2-多智能体系统-mas)** | Orchestrator/Worker、并行/流水线模式 | §22.2 |
+| **[Tools 能力构建](#_22-3-tools-能力构建体系)** | Skill/MCP/Memory/API/Plugin 五维工具栈 | §22.3 |
+| **[主流编排平台](#_22-4-主流编排平台全景)** | LangGraph/Agno/Google ADK/Flowise 等 | §22.4 |
+| **[知识库集成范式](#_22-5-与蒸馏知识库的集成范式)** | RAG-as-Tool vs Memory-as-Store 两种模型 | §22.5 |
+| **[生产部署要点](#_22-6-生产部署与可观测性)** | 幂等性/成本控制/链路追踪 | §22.6 |
 
 ---
 
@@ -101,11 +115,11 @@ async def search_knowledge_base(ctx: RunContext, query: str, top_k: int = 5) -> 
     
     query_vector = model.encode(query, prompt_name="query").tolist()
     
-    results = client.search(
+    results = client.query_points(
         collection_name="knowledge_base",
-        query_vector=query_vector,
+        query=query_vector,
         limit=top_k,
-    )
+    ).points
     
     return [
         SearchResult(
@@ -418,7 +432,11 @@ async def search_knowledge(
     model = SentenceTransformer("Qwen/Qwen3-Embedding-0.6B")
     
     vector = model.encode(query, prompt_name="query").tolist()
-    results = client.search(collection_name=collection, query_vector=vector, limit=top_k)
+    results = client.query_points(
+        collection_name=collection,
+        query=vector,
+        limit=top_k,
+    ).points
     
     return [
         {
@@ -898,7 +916,11 @@ def search_kb(query: str, collection: str = "default", top_k: int = 5) -> str:
         top_k: 返回结果数（建议3-5）
     """
     vector = embed_model.encode(query, prompt_name="query").tolist()
-    results = qdrant.search(collection_name=collection, query_vector=vector, limit=top_k)
+    results = qdrant.query_points(
+        collection_name=collection,
+        query=vector,
+        limit=top_k,
+    ).points
     
     if not results:
         return "知识库中未找到相关内容。"
@@ -1116,12 +1138,14 @@ def with_cost_guard(func):
 
 > **方法论链接**：
 > - **前置**：[第二十一章：多模态数据采集](/knowledge/21-data-collection)（数据从哪来）
-> - **核心**：[第六章：Agent + MCP 协议](/knowledge/06-agent-call)（Agent 如何调用知识库）
+> - **核心**：[第七章：Agent + MCP 协议](/knowledge/06-agent-call)（Agent 如何调用知识库）
 > - **运维**：[第二十章：生产运维 Runbook](/knowledge/20-ops-runbook)（上线后的维护）
 
 ---
 
-## 27 反直觉洞察：2026 Agent 设计的认知颠覆
+<a id="_27-反直觉洞察-2026-agent-设计的认知颠覆"></a>
+
+## 22.7 反直觉洞察：2026 Agent 设计的认知颠覆
 
 > 这一节从实际 GitHub 数据（2026-07 调研）和生产踩坑中提炼，颠覆你对 Agent 系统的常见误解。
 
@@ -1255,7 +1279,7 @@ for r in results:
 
 **MAS 的真实使用门槛（高于你的直觉）：**
 
-```python
+```python verify=syntax
 # 评估是否需要 MAS 的决策函数
 def should_use_mas(task: dict) -> tuple[bool, str]:
     """
@@ -1689,3 +1713,11 @@ print(result.best_output)
 # - 并行竞争：每个 Agent 独立发挥最佳，再由评分者客观选优
 # - 类似于 "N 个独立模型集成" vs "N 个模型讨论"
 ```
+
+## 来源与复核
+
+- **本轮接口核对（截至 2026-08-01）**：[LangGraph Graph API](https://docs.langchain.com/oss/python/langgraph/graph-api) 与 [Qdrant Local Quickstart](https://qdrant.tech/documentation/quickstart/)；仍需锁定依赖版本并执行最小图状态机烟测。
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

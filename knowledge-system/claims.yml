@@ -1,0 +1,498 @@
+schemaVersion: "2.0"
+
+pilotDocumentIds:
+  - KS-SECURITY-COMPLIANCE
+  - KS-COST-MODEL
+  - KS-EVALUATION
+
+ownerRoles:
+  - roleId: ROLE-SEC-CONTENT
+    documentId: KS-SECURITY-COMPLIANCE
+    function: content-owner
+    label: 安全合规内容负责人
+    responsibilities: 维护安全章节的控制表述、适用边界、失效条件和正文锚点。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-SEC-EVIDENCE
+    documentId: KS-SECURITY-COMPLIANCE
+    function: evidence-reviewer
+    label: 安全、法务与隐私证据复核人
+    responsibilities: 复核安全来源、辖区语境、数据授权和证据等级，阻止越级解释。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-SEC-TEST
+    documentId: KS-SECURITY-COMPLIANCE
+    function: test-owner
+    label: 安全控制测试负责人
+    responsibilities: 维护安全 fixture、失败关闭用例和未来隔离环境演练回执。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-SEC-APPROVER
+    documentId: KS-SECURITY-COMPLIANCE
+    function: final-approver
+    label: 安全与合规最终批准人
+    responsibilities: 在来源、测试和适用性复核完成后决定是否接受安全控制基线。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-COST-CONTENT
+    documentId: KS-COST-MODEL
+    function: content-owner
+    label: 成本模型内容负责人
+    responsibilities: 维护成本公式、输入口径、供应商假设、失效条件和正文锚点。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-COST-EVIDENCE
+    documentId: KS-COST-MODEL
+    function: evidence-reviewer
+    label: FinOps 证据复核人
+    responsibilities: 复核价格来源、币种区域、计费日期、账单口径和证据等级。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-COST-TEST
+    documentId: KS-COST-MODEL
+    function: test-owner
+    label: 成本模型测试负责人
+    responsibilities: 维护成本 fixture、边界输入、失败关闭用例和账单差异测试。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-COST-APPROVER
+    documentId: KS-COST-MODEL
+    function: final-approver
+    label: 财务与预算最终批准人
+    responsibilities: 在价格、负载与差异复核完成后决定是否接受项目预算基线。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-EVAL-CONTENT
+    documentId: KS-EVALUATION
+    function: content-owner
+    label: 质量评估内容负责人
+    responsibilities: 维护评估方法、数据边界、阈值语义、失效条件和正文锚点。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-EVAL-EVIDENCE
+    documentId: KS-EVALUATION
+    function: evidence-reviewer
+    label: 评估证据复核人
+    responsibilities: 复核数据集版本、负例覆盖、阈值依据、回归差异和证据等级。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-EVAL-TEST
+    documentId: KS-EVALUATION
+    function: test-owner
+    label: 评估回归测试负责人
+    responsibilities: 维护 mock provider、固定 fixture、解析失败和退化阻断测试。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+  - roleId: ROLE-EVAL-APPROVER
+    documentId: KS-EVALUATION
+    function: final-approver
+    label: 质量门禁最终批准人
+    responsibilities: 在业务阈值和回归回执完成后决定章节是否达到验收门槛。
+    assignmentState: role-mapped
+    assignee: null
+    acceptedAt: null
+    acceptanceEvidenceRef: null
+
+sources:
+  - sourceId: SRC-NIST-AI-RMF
+    title: NIST AI Risk Management Framework
+    kind: official-web
+    authority: first-party
+    url: https://www.nist.gov/itl/ai-risk-management-framework
+    reviewedAt: "2026-08-01"
+    notes: NIST describes AI RMF as voluntary and states that AI RMF 1.0 is being revised.
+
+  - sourceId: SRC-EU-AI-ACT-FAQ
+    title: European Commission - Navigating the AI Act
+    kind: official-web
+    authority: first-party
+    url: https://digital-strategy.ec.europa.eu/en/faqs/navigating-ai-act
+    reviewedAt: "2026-08-01"
+    notes: First-party scope and role FAQ; it is not a substitute for jurisdiction-specific legal advice.
+
+  - sourceId: SRC-OPENAI-MODEL-COMPARE
+    title: OpenAI API model comparison
+    kind: official-web
+    authority: first-party
+    url: https://developers.openai.com/api/docs/models/compare
+    reviewedAt: "2026-08-01"
+    notes: The comparison exposes model-specific input, cached input and output price dimensions; no numeric price is copied into this registry.
+
+  - sourceId: SRC-MKD-CONTENT-AUDIT
+    title: MKD Guide content audit
+    kind: repository
+    authority: project
+    path: content-audit.md
+    reviewedAt: "2026-08-01"
+    notes: Repository-scoped audit of current content state and missing evidence; it is not production evidence.
+
+  - sourceId: SRC-MKD-VTRCE
+    title: MKD Guide VTRCE validation framework
+    kind: repository
+    authority: project
+    path: docs/knowledge/appendix-validation.md
+    reviewedAt: "2026-08-01"
+    notes: Project validation contract defining evidence and release-gate expectations.
+
+evidence:
+  - evidenceId: EVD-COST-FIXTURE
+    title: Deterministic cost-model fixture
+    kind: fixture
+    path: fixtures/cost-model.mjs
+    grade: L2-fixture-or-dry-run
+    command: null
+    assertion: Computes a dated, regional and currency-preserving monthly estimate from explicit token and fixed-cost inputs.
+
+  - evidenceId: EVD-COST-TEST
+    title: Cost-model Node tests
+    kind: test
+    path: tests/content/cost-model.test.mjs
+    grade: L2-fixture-or-dry-run
+    command: node --test tests/content/cost-model.test.mjs
+    assertion: Verifies the USD 135 fixture result and rejects cached input greater than total input.
+
+  - evidenceId: EVD-CONTENT-AUDIT-2026-08-01
+    title: G0/G1 repository content audit
+    kind: read-only-audit
+    path: content-audit.md
+    grade: L1-public-or-runtime
+    command: null
+    assertion: Records that the evaluation page lacks a fixed evaluation set, negative cases, thresholds and a regression receipt.
+
+  - evidenceId: EVD-VTRCE-CONTRACT
+    title: VTRCE source contract
+    kind: read-only-audit
+    path: docs/knowledge/appendix-validation.md
+    grade: L1-public-or-runtime
+    command: null
+    assertion: Defines the local acceptance contract but does not prove that any chapter has passed it.
+
+  - evidenceId: EVD-SEC-GOVERNANCE-FIXTURE
+    title: Fail-closed security governance fixture
+    kind: fixture
+    path: fixtures/security-governance.mjs
+    grade: L2-fixture-or-dry-run
+    command: null
+    assertion: Rejects production-labelled drill samples and keeps the documented retention values explicitly illustrative.
+
+  - evidenceId: EVD-SEC-GOVERNANCE-TEST
+    title: Security governance Node tests
+    kind: test
+    path: tests/content/security-governance.test.mjs
+    grade: L2-fixture-or-dry-run
+    command: node --test tests/content/security-governance.test.mjs
+    assertion: Covers isolated non-production drill admission, production-data rejection, authorization requirements and retention promotion failure.
+
+  - evidenceId: EVD-EVAL-REGRESSION-FIXTURE
+    title: Deterministic mock-provider evaluation fixture
+    kind: fixture
+    path: fixtures/evaluation-regression.mjs
+    grade: L2-fixture-or-dry-run
+    command: null
+    assertion: Produces machine-comparable local receipts for grounded answers, evidence refusal, parse failure and candidate regression.
+
+  - evidenceId: EVD-EVAL-REGRESSION-TEST
+    title: Evaluation regression Node tests
+    kind: test
+    path: tests/content/evaluation-regression.test.mjs
+    grade: L2-fixture-or-dry-run
+    command: node --test tests/content/evaluation-regression.test.mjs
+    assertion: Verifies the baseline receipt and fails closed when a candidate loses required evidence, with zero external calls.
+
+claims:
+  - claimId: CLM-SEC-001
+    documentId: KS-SECURITY-COMPLIANCE
+    anchor: claim-clm-sec-001
+    locatorText: NIST 官方页面明确提示 AI RMF 1.0 正在修订
+    statement: 截至 2026-08-01，NIST 将 AI RMF 描述为自愿使用的框架，并提示 AI RMF 1.0 正在修订。
+    claimType: external-fact
+    risk: high
+    volatility: medium
+    verification: source-reviewed
+    evidenceGrade: L1-public-or-runtime
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-SEC-CONTENT
+      evidenceReviewer: ROLE-SEC-EVIDENCE
+      testOwner: ROLE-SEC-TEST
+      finalApprover: ROLE-SEC-APPROVER
+    applicability: 用于工程风险管理参考，不是法律合规结论。
+    limitations: 一手网页复核只能证明公开表述；不能证明组织已实施框架，也不能替代适用法律。
+    sourceRefs: [SRC-NIST-AI-RMF]
+    evidenceRefs: []
+    nextAction: 由安全负责人选定采用版本、记录控制映射，并保存审批回执。
+
+  - claimId: CLM-SEC-002
+    documentId: KS-SECURITY-COMPLIANCE
+    anchor: claim-clm-sec-002
+    locatorText: EU AI Act 可能适用于在欧盟境内外
+    statement: EU AI Act 的适用范围可能覆盖欧盟境内外向欧盟市场投放或在欧盟使用 AI 系统的主体，具体义务取决于角色和预期用途。
+    claimType: legal-context
+    risk: critical
+    volatility: high
+    verification: source-reviewed
+    evidenceGrade: L1-public-or-runtime
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-SEC-CONTENT
+      evidenceReviewer: ROLE-SEC-EVIDENCE
+      testOwner: ROLE-SEC-TEST
+      finalApprover: ROLE-SEC-APPROVER
+    applicability: 仅用于触发法务与隐私审查，不用于自动作出辖区或风险分类结论。
+    limitations: 官方 FAQ 不是针对本项目的法律意见；角色、豁免、行业规则和实施时间仍需逐案确认。
+    sourceRefs: [SRC-EU-AI-ACT-FAQ]
+    evidenceRefs: []
+    nextAction: 由法务或隐私负责人签署角色、辖区、预期用途和风险分类记录。
+
+  - claimId: CLM-SEC-003
+    documentId: KS-SECURITY-COMPLIANCE
+    anchor: claim-clm-sec-003
+    locatorText: 本地安全演练 fixture 会拒绝任何标记为 production 的样本
+    statement: 仓库内安全演练 fixture 会拒绝标记为 production 的样本，并要求使用隔离环境、受支持的非生产数据分类和销毁回执模式。
+    claimType: normative-control
+    risk: critical
+    volatility: medium
+    verification: fixture-verified
+    evidenceGrade: L2-fixture-or-dry-run
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-SEC-CONTENT
+      evidenceReviewer: ROLE-SEC-EVIDENCE
+      testOwner: ROLE-SEC-TEST
+      finalApprover: ROLE-SEC-APPROVER
+    applicability: 适用于本指南建议的安全演练流程。
+    limitations: 该 fixture 只验证本地失败关闭逻辑；没有接触真实数据，也没有产生已批准威胁模型、真实演练或销毁回执。
+    sourceRefs: []
+    evidenceRefs: [EVD-SEC-GOVERNANCE-FIXTURE, EVD-SEC-GOVERNANCE-TEST]
+    nextAction: 由具名安全与数据责任人认领角色后，在隔离环境使用获授权样本执行一次真实演练并留存回执。
+
+  - claimId: CLM-SEC-004
+    documentId: KS-SECURITY-COMPLIANCE
+    anchor: claim-clm-sec-004
+    locatorText: 本地控制 fixture 将 180/365 天、48 小时和 30 天固定标记为 illustrative
+    statement: 仓库内安全治理 fixture 将 180/365 天、48 小时和 30 天标记为 illustrative，并在缺少辖区、数据类别、合同依据、批准引用和复核日期时拒绝形成 production-baseline。
+    claimType: normative-control
+    risk: critical
+    volatility: high
+    verification: fixture-verified
+    evidenceGrade: L2-fixture-or-dry-run
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-SEC-CONTENT
+      evidenceReviewer: ROLE-SEC-EVIDENCE
+      testOwner: ROLE-SEC-TEST
+      finalApprover: ROLE-SEC-APPROVER
+    applicability: 仅可作为设计讨论的起始参数。
+    limitations: Fixture 只能证明示例值不会被本地规则静默提升；它没有绑定真实辖区、合同义务、恢复目标或责任人批准。
+    sourceRefs: []
+    evidenceRefs: [EVD-SEC-GOVERNANCE-FIXTURE, EVD-SEC-GOVERNANCE-TEST]
+    nextAction: 建立真实辖区与数据类别控制表，由具名法务、安全和业务责任人批准每个期限并保存接受回执。
+
+  - claimId: CLM-COST-001
+    documentId: KS-COST-MODEL
+    anchor: claim-clm-cost-001
+    locatorText: 固定输入的月度总额为 USD 135
+    statement: 仓库成本 fixture 在登记的固定输入与价格假设下计算出的月度总额为 USD 135。
+    claimType: calculation
+    risk: high
+    volatility: low
+    verification: fixture-verified
+    evidenceGrade: L2-fixture-or-dry-run
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-COST-CONTENT
+      evidenceReviewer: ROLE-COST-EVIDENCE
+      testOwner: ROLE-COST-TEST
+      finalApprover: ROLE-COST-APPROVER
+    applicability: 仅适用于测试文件中的确定性输入，不是供应商报价或项目预算。
+    limitations: 结果不包含未登记的税费、折扣、流量形态、汇率或基础设施变化。
+    sourceRefs: []
+    evidenceRefs: [EVD-COST-FIXTURE, EVD-COST-TEST]
+    nextAction: 为目标项目录入当日官方价格与真实负载假设，并保存新的独立回执。
+
+  - claimId: CLM-COST-002
+    documentId: KS-COST-MODEL
+    anchor: claim-clm-cost-002
+    locatorText: 计算输入必须显式包含币种、区域和价格生效日期
+    statement: 成本 fixture 要求计算输入显式提供币种、区域和价格生效日期，并在输出中保留这些字段。
+    claimType: interface-contract
+    risk: high
+    volatility: low
+    verification: fixture-verified
+    evidenceGrade: L2-fixture-or-dry-run
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-COST-CONTENT
+      evidenceReviewer: ROLE-COST-EVIDENCE
+      testOwner: ROLE-COST-TEST
+      finalApprover: ROLE-COST-APPROVER
+    applicability: 适用于仓库内 estimateMonthlyCost 接口。
+    limitations: 字段存在不等于字段值已经由供应商或财务负责人复核。
+    sourceRefs: []
+    evidenceRefs: [EVD-COST-FIXTURE, EVD-COST-TEST]
+    nextAction: 增加目标供应商价格快照和财务口径审批，再生成项目预算。
+
+  - claimId: CLM-COST-003
+    documentId: KS-COST-MODEL
+    anchor: claim-clm-cost-003
+    locatorText: 缓存输入量大于总输入量时会失败关闭
+    statement: 成本 fixture 在缓存输入 token 大于总输入 token 时拒绝计算并失败关闭。
+    claimType: interface-contract
+    risk: high
+    volatility: low
+    verification: fixture-verified
+    evidenceGrade: L2-fixture-or-dry-run
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-COST-CONTENT
+      evidenceReviewer: ROLE-COST-EVIDENCE
+      testOwner: ROLE-COST-TEST
+      finalApprover: ROLE-COST-APPROVER
+    applicability: 适用于仓库内 estimateMonthlyCost 的缓存口径校验。
+    limitations: 该测试不覆盖供应商缓存资格、缓存命中统计真实性或生产账单对账。
+    sourceRefs: []
+    evidenceRefs: [EVD-COST-FIXTURE, EVD-COST-TEST]
+    nextAction: 对接真实账单前增加缓存命中来源、舍入规则和账单差异测试。
+
+  - claimId: CLM-COST-004
+    documentId: KS-COST-MODEL
+    anchor: claim-clm-cost-004
+    locatorText: 供应商价格是模型、计费维度与时间相关的易漂移输入
+    statement: API 价格是模型与时间相关的易漂移输入，且官方比较页分别呈现 input、cached input 和 output 计费维度，因此估算前必须刷新一手来源。
+    claimType: external-fact
+    risk: high
+    volatility: high
+    verification: source-reviewed
+    evidenceGrade: L1-public-or-runtime
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-COST-CONTENT
+      evidenceReviewer: ROLE-COST-EVIDENCE
+      testOwner: ROLE-COST-TEST
+      finalApprover: ROLE-COST-APPROVER
+    applicability: 该来源只支持 OpenAI API 的计费维度示例，不代表其他供应商或任何具体价格。
+    limitations: 登记表刻意不复制数字价格；税费、区域、折扣、批处理和合同价仍需独立核对。
+    sourceRefs: [SRC-OPENAI-MODEL-COMPARE]
+    evidenceRefs: []
+    nextAction: 在每次预算评审时保存目标模型、区域和日期对应的官方价格快照。
+
+  - claimId: CLM-EVAL-001
+    documentId: KS-EVALUATION
+    anchor: claim-clm-eval-001
+    locatorText: 验收至少需要版本化固定评估集、负例、阈值和可比较的回归回执
+    statement: MKD Guide 的章节验收至少需要版本化固定评估集、负例、明确阈值和可比较的回归回执。
+    claimType: methodology
+    risk: critical
+    volatility: low
+    verification: source-reviewed
+    evidenceGrade: L1-public-or-runtime
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-EVAL-CONTENT
+      evidenceReviewer: ROLE-EVAL-EVIDENCE
+      testOwner: ROLE-EVAL-TEST
+      finalApprover: ROLE-EVAL-APPROVER
+    applicability: 适用于本仓库的内容成熟度与发布门禁，不是通用行业标准声明。
+    limitations: 这是仓库治理契约；它定义需要什么证据，但不证明证据已经产生。
+    sourceRefs: [SRC-MKD-CONTENT-AUDIT, SRC-MKD-VTRCE]
+    evidenceRefs: [EVD-CONTENT-AUDIT-2026-08-01, EVD-VTRCE-CONTRACT]
+    nextAction: 把本地回归合同迁移到获授权的版本化业务评估集，并由业务责任人批准阈值与错误成本。
+
+  - claimId: CLM-EVAL-002
+    documentId: KS-EVALUATION
+    anchor: claim-clm-eval-002
+    locatorText: 本章新增了一个三用例、零外部调用的最小 mock provider fixture
+    statement: 截至 2026-08-01，本章虽有最小 mock provider fixture，但缺少获授权的版本化业务评估集、批准阈值、真实模型回执和最终接受回执，因此仍不是可验收状态。
+    claimType: current-state
+    risk: critical
+    volatility: high
+    verification: source-reviewed
+    evidenceGrade: L1-public-or-runtime
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-EVAL-CONTENT
+      evidenceReviewer: ROLE-EVAL-EVIDENCE
+      testOwner: ROLE-EVAL-TEST
+      finalApprover: ROLE-EVAL-APPROVER
+    applicability: 只描述当前仓库快照。
+    limitations: 本地三用例 fixture 只能证明回归合同可执行；后续数据、模型或批准状态变化时必须由门禁重新计算。
+    sourceRefs: [SRC-MKD-CONTENT-AUDIT]
+    evidenceRefs: [EVD-CONTENT-AUDIT-2026-08-01]
+    nextAction: 由具名责任人接受角色，补获授权业务数据集、批准阈值、真实模型回执与最终接受证据后再审计。
+
+  - claimId: CLM-EVAL-003
+    documentId: KS-EVALUATION
+    anchor: claim-clm-eval-003
+    locatorText: 本章出现的目标分数与判定阈值全部是示意值
+    statement: 本章出现的目标分数和判定阈值在绑定数据集、模型、版本与审批前全部属于示意值。
+    claimType: normative-control
+    risk: high
+    volatility: medium
+    verification: source-reviewed
+    evidenceGrade: L1-public-or-runtime
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-EVAL-CONTENT
+      evidenceReviewer: ROLE-EVAL-EVIDENCE
+      testOwner: ROLE-EVAL-TEST
+      finalApprover: ROLE-EVAL-APPROVER
+    applicability: 适用于本章所有未被独立证据登记的阈值。
+    limitations: 该标注防止误用，但没有验证任何阈值对真实业务错误成本是否合适。
+    sourceRefs: [SRC-MKD-CONTENT-AUDIT, SRC-MKD-VTRCE]
+    evidenceRefs: [EVD-CONTENT-AUDIT-2026-08-01]
+    nextAction: 用固定数据集做阈值敏感性分析并由业务责任人批准错误成本边界。
+
+  - claimId: CLM-EVAL-004
+    documentId: KS-EVALUATION
+    anchor: claim-clm-eval-004
+    locatorText: 最小 mock provider 评估 fixture 已覆盖成功、拒答、解析失败与退化阻断
+    statement: 仓库内最小 mock provider 评估 fixture 已覆盖有证据回答、证据不足拒答、解析失败和候选退化阻断，并生成机器可比较的本地结果对象。
+    claimType: current-state
+    risk: high
+    volatility: high
+    verification: fixture-verified
+    evidenceGrade: L2-fixture-or-dry-run
+    asOf: "2026-08-01"
+    ownership:
+      contentOwner: ROLE-EVAL-CONTENT
+      evidenceReviewer: ROLE-EVAL-EVIDENCE
+      testOwner: ROLE-EVAL-TEST
+      finalApprover: ROLE-EVAL-APPROVER
+    applicability: 适用于本章当前 Markdown 代码块。
+    limitations: 该 fixture 不安装或运行 RAGAS，不调用真实模型，也不证明本章其他代码片段、业务数据集或阈值已经验收。
+    sourceRefs: []
+    evidenceRefs: [EVD-EVAL-REGRESSION-FIXTURE, EVD-EVAL-REGRESSION-TEST]
+    nextAction: 具名责任人认领后，锁定 RAGAS 与模型版本，在获授权数据集上复放相同路径并保存独立回执。

@@ -1,8 +1,22 @@
 ---
-name: knowledge-tech-selection-2026-vol2
-description: 2026年知识库工程技术选型深度指南第二卷，覆盖PDF解析/网页采集/音视频处理/LLM推理引擎/RAG评估/图像理解/Skill蒸馏七大方向的GitHub仓库深度调研、性能基准、可运行代码和明确推荐。与第18章合并覆盖完整技术栈。
+name: "knowledge-tech-selection-2026-vol2"
+docId: "KS-TECH-SELECTION-II"
+displayNumber: "19"
+route: "/knowledge/19-tech-selection-vol2"
+learningOrder: 23
+title: "第十九章：技术选型深度指南 2026（第二卷）"
+description: "2026 年知识库工程技术选型指南第二卷，覆盖 PDF 解析、网页采集、音视频处理、推理引擎、RAG 评估、图像理解与 Skill 蒸馏。版本、基准和示意代码仍待统一重测。"
+chapter: "19"
+order: 23
+section: practice
+stage: design
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第十九章：技术选型深度指南 2026（第二卷）
 
 > **本章与第18章的分工**：第18章 = 存储与检索层（Embedding/向量库/GraphRAG/Reranker/MCP/Agent）；本章 = 数据采集层 + 推理层 + 评估层 + Skill工程层。
@@ -51,7 +65,7 @@ description: 2026年知识库工程技术选型深度指南第二卷，覆盖PDF
 `magic_pdf` 包名已废弃，现在是 `mineru` 包，基于 FastAPI 异步服务架构。旧代码 `from magic_pdf import ...` 全部失效。
 :::
 
-### MinerU v3.x 最小可运行代码
+### MinerU v3.x 最小接口示例
 
 ```python
 # pip install mineru[pipeline]   # CPU-only
@@ -80,7 +94,7 @@ from langchain_community.document_loaders import MinerULoader
 docs = MinerULoader(file_path="your_file.pdf", backend="hybrid-engine").load()
 ```
 
-### Docling 最小可运行代码
+### Docling 最小接口示例
 
 ```python
 # pip install docling  (Python 3.10+，CPU友好，日更活跃)
@@ -107,7 +121,7 @@ from langchain_community.document_loaders import DoclingLoader
 docs = DoclingLoader(file_path="your_file.pdf").load()
 ```
 
-### Marker v2 最小可运行代码
+### Marker v2 最小接口示例
 
 ```python
 # pip install marker-pdf  (GPL-3.0 ⚠️ 商业需注意)
@@ -601,3 +615,10 @@ Skill工程（本章）:
 :::tip → 上一章
 查看Embedding/向量库/GraphRAG/MCP/Agent选型 → [18-tech-selection-2026](18-tech-selection-2026.md)
 :::
+
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

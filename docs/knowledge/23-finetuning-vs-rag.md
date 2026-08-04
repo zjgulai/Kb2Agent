@@ -1,9 +1,27 @@
 ---
-name: knowledge-finetuning-vs-rag
-description: Fine-tuning vs RAG 决策深度指南，基于 arXiv 论文量化数据和 GitHub 实验对比，覆盖 RAFT 混合方案、六大反直觉洞察、可运行决策代码和生产案例。知识库工程的核心选型判断。
+name: "knowledge-finetuning-vs-rag"
+docId: "KS-FT-VS-RAG"
+displayNumber: "23"
+route: "/knowledge/23-finetuning-vs-rag"
+learningOrder: 16
+title: "第二十三章：Fine-tuning vs RAG 决策深度指南"
+description: "Fine-tuning vs RAG 决策深度指南，基于 arXiv 论文量化数据和 GitHub 实验对比，覆盖 RAFT 混合方案、六大反直觉洞察、可运行决策代码和生产案例。知识库工程的核心选型判断。"
+chapter: "23"
+order: 16
+section: advanced
+stage: design
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
+<a id="concept-ft-vs-rag"></a>
 
 # 第二十三章：Fine-tuning vs RAG 决策深度指南
+
+**Fine-tuning vs RAG 是在任务约束下比较检索、参数适配、规则与混合路线的决策问题**，而不是二选一的固定答案。
 
 > **本章定位**：解决工程师最高频的架构选型困惑——「该微调还是该搭 RAG？」。所有结论均有 arXiv 论文量化数据背书，不是经验之谈。
 >
@@ -15,12 +33,12 @@ description: Fine-tuning vs RAG 决策深度指南，基于 arXiv 论文量化�
 
 | 主题 | 核心内容 | 跳转 |
 |------|---------|------|
-| **[选型决策矩阵](#231-快速决策矩阵先看这里)** | 六场景 × 推荐方案 × 量化依据 | §23.1 |
-| **[为什么不能只靠 Fine-tuning](#232-为什么-fine-tuning-无法替代-rag)** | 新事实注入失败的机制 | §23.2 |
-| **[为什么不能只靠 RAG](#233-rag-的边界跨域泛化失效)** | 跨域推断失效 + 噪声干扰 | §23.3 |
-| **[RAFT：混合方案的最优解](#234-raft混合方案的最优解)** | Berkeley/Microsoft 方案 + 完整代码 | §23.4 |
-| **[成本 / 延迟全景对比](#235-成本与延迟全景)** | 训练成本、推理延迟、更新代价 | §23.5 |
-| **[反直觉洞察 ×6](#236-反直觉洞察2026-年实验颠覆的六个直觉)** | 论文数据驱动的六大颠覆 | §23.6 |
+| **[选型决策矩阵](#_23-1-快速决策矩阵-先看这里)** | 六场景 × 推荐方案 × 量化依据 | §23.1 |
+| **[为什么不能只靠 Fine-tuning](#_23-2-为什么-fine-tuning-无法替代-rag)** | 新事实注入失败的机制 | §23.2 |
+| **[为什么不能只靠 RAG](#_23-3-rag-的边界-跨域泛化失效)** | 跨域推断失效 + 噪声干扰 | §23.3 |
+| **[RAFT：混合方案的最优解](#_23-4-raft-混合方案的最优解)** | Berkeley/Microsoft 方案 + 完整代码 | §23.4 |
+| **[成本 / 延迟全景对比](#_23-5-成本与延迟全景)** | 训练成本、推理延迟、更新代价 | §23.5 |
+| **[反直觉洞察 ×6](#_23-6-反直觉洞察-2026-年实验颠覆的六个直觉)** | 论文数据驱动的六大颠覆 | §23.6 |
 
 ---
 
@@ -37,7 +55,7 @@ description: Fine-tuning vs RAG 决策深度指南，基于 arXiv 论文量化�
 | **知识高频更新**（天级 / 周级）| **RAG only** | 更新成本：重新索引 vs 重新训练（量级差异）|
 | **封闭文档 + 需引用原文 + 推理密集** | **RAFT** | CoT + quote 机制；置信度校准优于纯 FT |
 
-```python
+```python verify=syntax
 # 决策树代码版本（可直接在架构评审中使用）
 def choose_rag_or_ft(task: dict) -> str:
     """
@@ -443,11 +461,11 @@ class RAFTInference:
             query, prompt_name="query"
         ).tolist()
         
-        results = self.qdrant.search(
+        results = self.qdrant.query_points(
             collection_name=self.collection,
-            query_vector=query_vec,
+            query=query_vec,
             limit=self.top_k,
-        )
+        ).points
         return [r.payload.get("text", "") for r in results]
     
     def answer(self, question: str) -> dict:
@@ -717,9 +735,9 @@ def generate_paraphrases(fact: str, n: int = 10) -> list[str]:
     """为同一个事实生成 n 个不同表述"""
     client = OpenAI()
     
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{
+    response = client.responses.create(
+        model="gpt-5.6",
+        input=[{
             "role": "user",
             "content": f"""Generate {n} different ways to express this fact.
 Vary sentence structure, vocabulary, and perspective.
@@ -729,7 +747,7 @@ Fact: {fact}"""
         }],
     )
     
-    paraphrases = response.choices[0].message.content.strip().split("\n")
+    paraphrases = response.output_text.strip().split("\n")
     return [p.strip() for p in paraphrases if p.strip()]
 
 # 使用示例
@@ -774,19 +792,23 @@ class MinimalRAGBaseline:
     def ask(self, question: str, top_k: int = 5) -> dict:
         t0 = time.time()
         q_vec = self.encoder.encode(question, prompt_name="query").tolist()
-        hits = self.qdrant.search("docs", q_vec, limit=top_k)
+        hits = self.qdrant.query_points(
+            collection_name="docs",
+            query=q_vec,
+            limit=top_k,
+        ).points
         context = "\n\n".join(h.payload["text"] for h in hits)
         
-        response = self.llm.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
+        response = self.llm.responses.create(
+            model="gpt-5.6",
+            input=[
                 {"role": "system", "content": "Answer based on the context. Be concise."},
                 {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}"},
             ],
         )
         
         return {
-            "answer": response.choices[0].message.content,
+            "answer": response.output_text,
             "latency_ms": int((time.time() - t0) * 1000),
             "top_scores": [h.score for h in hits],
         }
@@ -928,3 +950,11 @@ RAFT 适用：
 > - arXiv:2401.08406 — 「RAG vs Fine-tuning: Pipelines, Tradeoffs, and a Case Study on Agriculture」，Microsoft，2024
 > - [Gorilla Project](https://github.com/ShishirPatil/gorilla)（⭐ 12,978）— RAFT 开源实现
 > - [Anyscale Blog: Fine-tuning is for Form, Not Facts](https://www.anyscale.com/blog/fine-tuning-is-for-form-not-facts)
+
+## 来源与复核
+
+- **本轮接口核对（截至 2026-08-01）**：[OpenAI Responses API quickstart](https://developers.openai.com/api/docs/quickstart) 与 [Qdrant Local Quickstart](https://qdrant.tech/documentation/quickstart/)；论文数值与 RAFT 训练结论尚未逐项复现实验。
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

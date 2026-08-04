@@ -1,11 +1,25 @@
 ---
-name: knowledge-data-collection
-description: 多模态数据采集方法论深度指南，覆盖爬虫/Agent/API三大范式，枚举2026年最新开源仓库，评估使用场景与局限性，含完整可运行代码。蒸馏工程的前置数据层。
+name: "knowledge-data-collection"
+docId: "KS-DATA-COLLECTION"
+displayNumber: "21"
+route: "/knowledge/21-data-collection"
+learningOrder: 3
+title: "第二十一章：多模态数据采集方法论"
+description: "多模态数据采集方法论，覆盖爬虫、Agent 与 API 三大范式，评估场景、局限与合规边界。仓库版本和代码默认待复核，不代表已获授权或已烟测。"
+chapter: "21"
+order: 3
+section: engineering
+stage: build
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第二十一章：多模态数据采集方法论
 
-> **本章定位**：在蒸馏之前，数据从哪里来？本章系统回答这个问题。涵盖文本/图像/音视频/结构化数据的全采集范式，提供三大范式分类框架、GitHub 仓库深度评估、场景决策树和完整可运行代码。
+> **本章定位**：在蒸馏之前，数据从哪里来？本章覆盖文本、图像、音视频和结构化数据的采集范式，提供分类框架、仓库评估、决策树与示意代码；真实执行前必须核对授权、ToS、robots、PII、限速与离线 fixture。
 >
 > **调研日期**：2026-07-30 | **方法论层级**：数据采集（蒸馏 Pipeline 第 0 步）
 
@@ -15,12 +29,12 @@ description: 多模态数据采集方法论深度指南，覆盖爬虫/Agent/API
 
 | 范式 | 核心工具 | 推荐场景 |
 |------|---------|---------|
-| **[范式一：传统爬虫](#211-传统爬虫范式)** | Playwright/Crawl4AI/Scrapy/Apify | 结构化批量抓取、规则清晰的静态/动态网页 |
-| **[范式二：Agent 驱动采集](#212-agent-驱动采集范式)** | agent-reach/browser-use/Stagehand | 需要判断、交互、多步操作的复杂采集任务 |
-| **[范式三：API 聚合](#213-api-聚合范式)** | TikHub/Apify Actor/Jina/Firecrawl | 有官方/第三方 API、需要合规数据的场景 |
-| **[音视频专项](#22-音视频多模态采集)** | yt-dlp/SenseVoice/Whisper | YouTube/B站/播客/会议录音转文字 |
-| **[图像与文档专项](#23-图像与文档采集)** | MinerU/Docling/ColPali | PDF/PPT/图表/截图的结构化提取 |
-| **[选型决策树](#24-采集范式选型决策树)** | — | 不知道用哪种？先看这里 |
+| **[范式一：传统爬虫](#_21-2-范式一-传统爬虫)** | Playwright/Crawl4AI/Scrapy/Apify | 结构化批量抓取、规则清晰的静态/动态网页 |
+| **[范式二：Agent 驱动采集](#_21-3-范式二-agent-驱动采集)** | agent-reach/browser-use/Stagehand | 需要判断、交互、多步操作的复杂采集任务 |
+| **[范式三：API 聚合](#_21-4-范式三-api-聚合)** | TikHub/Apify Actor/Jina/Firecrawl | 有官方/第三方 API、需要合规数据的场景 |
+| **[音视频专项](#_22-音视频多模态采集)** | yt-dlp/SenseVoice/Whisper | YouTube/B站/播客/会议录音转文字 |
+| **[图像与文档专项](#_23-图像与文档采集)** | MinerU/Docling/ColPali | PDF/PPT/图表/截图的结构化提取 |
+| **[选型决策树](#_24-采集范式选型决策树)** | — | 不知道用哪种？先看这里 |
 
 ---
 
@@ -207,7 +221,7 @@ asyncio.run(scrape_dynamic_page("https://example.com", ".main-content"))
 |------|-------|------|---------|--------|
 | [browser-use](https://github.com/browser-use/browser-use) | 65k+ | LLM 控制浏览器 | 自然语言指令→浏览器操作、多 LLM 支持 | 速度慢（秒/操作） |
 | [Stagehand](https://github.com/browserbase/stagehand) | 10k+ | AI 浏览器框架 | 精准 DOM 操作、TypeScript 原生 | JS 生态 |
-| [agent-reach](https://github.com/...) | 内部工具 | 多平台路由 | 小红书/推特/B站/Reddit 一键采集 | 需要平台授权配置 |
+| `agent-reach`（本地工具） | 本地 | 多平台路由 | 小红书/推特/B站/Reddit 一键采集 | 需要平台授权配置；无公开仓库链接 |
 | [Skyvern](https://github.com/Skyvern-AI/skyvern) | 13k+ | 视觉 Agent 自动化 | 截图+VLM 理解、表单填写、工作流 | 成本较高 |
 | [LaVague](https://github.com/lavague-ai/LaVague) | 5.5k+ | 自然语言 Web 自动化 | selenium 驱动、轻量 | 功能相对基础 |
 
@@ -533,7 +547,9 @@ print(f"找到 {len(videos)} 个视频")
 
 ---
 
-## 22 音视频多模态采集
+<a id="_22-音视频多模态采集"></a>
+
+## 21.5 音视频多模态采集
 
 ### 音视频采集工具矩阵
 
@@ -676,7 +692,9 @@ text = video_to_text("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 
 ---
 
-## 23 图像与文档采集
+<a id="_23-图像与文档采集"></a>
+
+## 21.6 图像与文档采集
 
 ### 文档解析工具矩阵
 
@@ -792,7 +810,9 @@ for name, path in formats.items():
 
 ---
 
-## 24 采集范式选型决策树
+<a id="_24-采集范式选型决策树"></a>
+
+## 21.7 采集范式选型决策树
 
 ```
 你的采集任务是？
@@ -831,11 +851,13 @@ for name, path in formats.items():
 
 ---
 
-## 25 数据质量保障与合规
+<a id="_25-数据质量保障与合规"></a>
+
+## 21.8 数据质量保障与合规
 
 ### 采集后的数据清洗管道
 
-```python
+```python verify=syntax
 import re
 from typing import Optional
 
@@ -919,7 +941,9 @@ COMPLIANCE_CHECKLIST = """
 
 ---
 
-## 26 反直觉洞察：2026 数据采集的范式转移
+<a id="_26-反直觉洞察-2026-数据采集的范式转移"></a>
+
+## 21.9 反直觉洞察：2026 数据采集的范式转移
 
 > **这一节是本章最重要的内容。** 上面所有工具的使用只是战术，这里讨论战略级的认知颠覆——即你在实践中最容易犯的系统性错误。
 
@@ -1474,3 +1498,10 @@ async def _fetch_url(url: str, timeout: int) -> str:
             resp.raise_for_status()
             return await resp.text()
 ```
+
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

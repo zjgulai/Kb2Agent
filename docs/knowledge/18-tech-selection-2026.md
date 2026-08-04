@@ -1,8 +1,22 @@
 ---
-name: knowledge-tech-selection-2026
-description: 2026年知识库工程技术选型深度指南，覆盖Embedding/向量数据库/GraphRAG/Reranker/MCP/Agent框架六大方向的GitHub仓库深度调研、性能基准、可运行代码和明确推荐。供Codex直接开发使用，避免重复造轮子。
+name: "knowledge-tech-selection-2026"
+docId: "KS-TECH-SELECTION-I"
+displayNumber: "18"
+route: "/knowledge/18-tech-selection-2026"
+learningOrder: 22
+title: "第十八章：技术选型深度指南 2026"
+description: "2026 年知识库工程技术选型指南，覆盖 Embedding、向量数据库、GraphRAG、Reranker、MCP 和 Agent 框架。版本、基准和示意代码仍需按一手来源与本地 fixture 复核。"
+chapter: "18"
+order: 22
+section: practice
+stage: design
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第十八章：技术选型深度指南 2026
 
 > **本章用途**：Codex 开发时的选型决策手册。所有推荐均基于 2025-2026 年最新 GitHub 仓库调研、MTEB/BEIR Benchmark 实测数据和生产案例。每个方向给出明确的「用什么、怎么用、代码直接复制」。
@@ -45,7 +59,7 @@ description: 2026年知识库工程技术选型深度指南，覆盖Embedding/�
 | jina-v3 | 570M | ~55–60 | 64.44 | 8K | ⚠️CC-BY-NC |
 | mE5-large-instruct | 560M | 58.08 ⬇️ | 64.25 | 514 tokens ⚠️ |
 
-### Qwen3-Embedding 最小可运行代码
+### Qwen3-Embedding 最小接口示例
 
 ```python
 # pip install "transformers>=4.51.0" "sentence-transformers>=2.7.0" torch
@@ -203,14 +217,14 @@ client.upsert("kb", points=[
     )
 ])
 
-results = client.search(
-    "kb",
-    query_vector=[0.1] * 1024,
+results = client.query_points(
+    collection_name="kb",
+    query=[0.1] * 1024,
     query_filter=models.Filter(
         must=[models.FieldCondition(key="category", match=models.MatchValue(value="AI"))]
     ),
     limit=5,
-)
+).points
 ```
 
 ### LanceDB 嵌入式使用（零服务进程）
@@ -290,7 +304,7 @@ results = conn.execute("""
 | [microsoft/graphrag](https://github.com/microsoft/graphrag) | ⭐35.0K | v3.1.1 (2026-07) | MIT License |
 | [getzep/graphiti](https://github.com/getzep/graphiti) | ⭐29.3K | v0.29.3 (2026-07) | 需要Neo4j |
 
-### LightRAG 最小可运行代码
+### LightRAG 最小接口示例
 
 ```python
 # pip install lightrag-hku
@@ -407,7 +421,7 @@ for e in edges:
 先用 BGE-v2-M3 快速压缩到30个候选（38ms），再用 Qwen3-Reranker-4B 精排（312ms），总延迟 ~180ms，质量超过单独使用 Cohere。
 :::
 
-### BGE-Reranker 最小可运行代码
+### BGE-Reranker 最小接口示例
 
 ```python
 # pip install FlagEmbedding
@@ -733,3 +747,11 @@ Agent: Pydantic-AI + 本地LLM
 :::tip → 上一章
 了解失败案例和边界 → [17-failure-cases](17-failure-cases.md)
 :::
+
+## 来源与复核
+
+- **本轮接口核对（截至 2026-08-01）**：[Qdrant Local Quickstart](https://qdrant.tech/documentation/quickstart/)；Python 检索调用已改为 `query_points(...).points`。
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

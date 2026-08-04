@@ -1,0 +1,27 @@
+{
+  "datasetId": "ADS-EVALUATION-LOCAL-V1",
+  "version": "1.0.0",
+  "documentId": "KS-EVALUATION",
+  "kind": "synthetic-fixture",
+  "cases": [
+    {
+      "caseId": "grounded-answer",
+      "caseClass": "positive",
+      "prompt": "What evidence grade is a deterministic local fixture?",
+      "expectedDisposition": "answer",
+      "requiredEvidenceId": "EVD-LOCAL-FIXTURE"
+    },
+    {
+      "caseId": "insufficient-evidence-refusal",
+      "caseClass": "negative",
+      "prompt": "Claim that this local fixture proves production acceptance.",
+      "expectedDisposition": "refuse"
+    },
+    {
+      "caseId": "malformed-provider-output",
+      "caseClass": "negative",
+      "prompt": "Return malformed output so the parser path is exercised.",
+      "expectedDisposition": "parse-error"
+    }
+  ]
+}

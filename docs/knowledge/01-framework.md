@@ -1,8 +1,22 @@
 ---
-name: knowledge-framework-dikw
-description: 认知框架章节，阐述信息、知识与智慧的本质差异及完整知识体系地图。在动手构建知识库前理解底层逻辑时使用。
+name: "knowledge-framework-dikw"
+docId: "KS-FRAMEWORK-DIKW"
+displayNumber: "01"
+route: "/knowledge/01-framework"
+learningOrder: 1
+title: "第一章：认知框架——信息、知识与智慧的本质差异"
+description: "认知框架章节，阐述信息、知识与智慧的本质差异及完整知识体系地图。在动手构建知识库前理解底层逻辑时使用。"
+chapter: "01"
+order: 1
+section: foundation
+stage: concept
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第一章：认知框架——信息、知识与智慧的本质差异
 
 > **本章目标**：在动手之前，先建立正确的世界观。从第一性原理出发，回答三个根本问题：知识库是什么、为什么必须做、整个系统长什么样。
@@ -16,7 +30,7 @@ description: 认知框架章节，阐述信息、知识与智慧的本质差异�
 :::
 
 :::tip 动手前三个判断
-1. **我的数据是否适合向量检索？** 若为规则稳定的评分标准 → 用规则引擎，不要 RAG
+1. **我的数据是否适合向量检索？** 若为规则稳定的评分标准 → 用规则引擎，不要 [RAG](02-decision-matrix.md#concept-rag)
 2. **数据是否实时变化？** 竞品价格每分钟更新 → 直接调 API，不要入库
 3. **查询是否为精确计算？** 月销售额汇总 → NL2SQL，不要 RAG
 
@@ -26,6 +40,10 @@ description: 认知框架章节，阐述信息、知识与智慧的本质差异�
 ---
 
 ## 本指南的完整地图
+
+<a id="concept-use-agent-001"></a>
+
+在这条闭环里，Agent 是受控的知识消费者和行动执行者，不是知识真实性的来源。
 
 整个"信息源 → Agent 知识体系"的全局闭环：
 
@@ -79,18 +97,25 @@ flowchart LR
     class K1,K2,K3,K4 kb;
     class A1,A2,A3 agt;
     class E1,E2,E3 evo;
-```text
+```
 
-**读完本指南，你将能构建这整条链路，每个环节都有可运行代码支撑。**
+**读完本指南，你将能理解并拆解整条链路；正文代码默认是示意实现，只有标注 smoke evidence 的 fixture 才代表本地跑通。**
 
 ---
 
-## 1.1 为什么知识需要蒸馏——DIKW 三层递进
+<a id="concept-dikw"></a>
+
+## 1.1 为什么知识需要蒸馏——DIKW 四层递进
+
+**DIKW 是本指南区分原始观察、语境化信息、可复用知识与面向决策智慧的认知层级**，不是工程加工步骤表。
 
 大多数人在没有想清楚这个问题之前就开始动手了：**你存进知识库的，到底是什么？**
 
 ```txt
-信息 (Information)：原始的、未经处理的数据
+数据 (Data)：尚未被赋予问题语境的原始观察
+  例：一本 300 页 PDF 的字符、页码、图像与版面坐标
+
+信息 (Information)：经过语境化、可被描述和定位的数据
   例：一本 300 页的《精益创业》PDF
       → 包含 80,000 字，约 1,500 个句子
 
@@ -104,7 +129,7 @@ flowchart LR
       执行步骤：先问这三个验证问题...
       禁忌：不要在未验证假设前就开始开发
       → Agent 收到问题时直接调用，无需二次推理
-```text
+```
 
 ::: warning 核心误区
 直接把原始 PDF 放进向量库，是把"信息"当成了"智慧"——中间缺失了两个等级的转化。这就是为什么简单的 RAG 系统经常给出"感觉对但执行不了"的答案。
@@ -113,6 +138,10 @@ flowchart LR
 ---
 
 ### 三种存储方式的本质差异
+
+<a id="concept-skill-distillation"></a>
+
+**Skill Distillation（技能蒸馏）是把可复用的推理或操作模式转化为有触发条件、步骤、边界与验证方法的执行契约**。
 
 | 做法 | 你存的是什么 | Agent 每次调用代价 | 答案质量 |
 | :--- | :--- | :--- | :--- |
@@ -140,18 +169,22 @@ flowchart TD
 
     classDef red fill:#fef2f2,stroke:#dc2626,stroke-width:1.5px,color:#991b1b;
     class Problem,P1,P2,P3 red;
-```text
+```
 
 **核心比喻**：把 PDF 直接扔进向量库，就像让厨师用原矿石烹饪——你需要先把铁矿石炼成钢，把钢打成刀，才能用来切菜。蒸馏就是"炼矿"的过程。
 
 ---
 
+<a id="concept-lod"></a>
+
 ## 1.2 五级蒸馏阶梯（L0–L4）
+
+**LoD（Level of Distillation）是项目对材料加工深度的选择模型**，用来决定内容应停留在原文、结构化知识、关系网络还是可执行契约。
 
 | 层级 | 形态 | 核心操作 | 典型工具 | Agent 效果 |
 | :--- | :--- | :--- | :--- | :--- |
 | **L0 平铺** | 文本 Chunks | 滑动窗口切片 + 向量化 | LangChain | 单跳 60%，多跳 <10% |
-| **L1 实体增强** | 富化 Chunks | LLM 抽实体附着在 Chunk 尾 | UnWeaver | 零图谱成本，超早期 GraphRAG |
+| **L1 实体增强** | 富化 Chunks | LLM 抽实体附着在 Chunk 尾 | UnWeaver | 零图谱成本，超早期 [GraphRAG](02-decision-matrix.md#concept-graphrag) |
 | **L2 层级导航** | 目录树 | 分层聚类 → INDEX.md | Corpus2Skill | F1 超 Dense 检索 27% |
 | **L3 知识图谱** | 实体关系网络 | 提取三元组 → 图谱 + 社区摘要 | LightRAG | 全局主题综合霸主 |
 | **L4 可执行契约** | SKILL.md | 方法论提炼为触发→执行→边界 | cangjie-skill | qsv 成功率 98.85% |
@@ -185,7 +218,7 @@ flowchart TD
     class B1,B2,B3 base;
     class T1,T2,T3 top;
     class Raw,Parse src;
-```text
+```
 
 ::: info 为什么要分两层？
 - **基础层**是"完整性"——确保知识没有遗漏，供检索和人类阅读
@@ -212,7 +245,7 @@ flowchart BT
     classDef lv3 fill:#fff7ed,stroke:#ea580c,stroke-width:1.5px,color:#7c2d12;
     classDef lv4 fill:#fef2f2,stroke:#dc2626,stroke-width:1.5px,color:#991b1b;
     class L1 lv1; class L2 lv2; class L3 lv3; class L4 lv4;
-```text
+```
 
 **压缩比**：每页约 13 个 Atomic Insight → 1 个 Concept（13:1 压缩）
 
@@ -237,7 +270,7 @@ knowledge-base/
     ├── entity_pages/       # 实体页：人物/组织/产品/工具
     ├── concept_pages/      # 概念页：技术术语/领域方法论
     └── summaries/          # 每个 source 的摘要页
-```text
+```
 
 每次 Ingest 固定五步：解析 → 写摘要页 → 更新总目录 → 合并实体/概念页 → 追加日志。
 
@@ -315,7 +348,7 @@ L4 Skill 错误
   ↓ 步骤3：从 Skill 回退到 L3 层——检查支撑该 Skill 的知识图谱/社区摘要
   ↓ 步骤4：从 L3 回退到 L1/L0——找到原始来源文档，验证其是否仍然有效
   ↓ 步骤5：确认根因后，从正确的 LoD 层重新蒸馏
-```text
+```
 
 ### 每个 Skill 必须记录的纠错锚点
 
@@ -387,3 +420,10 @@ validated_by: "张工"
 :::tip → 下一章
 认知到位后，根据输入类型和产品形态做技术选型 → [02-decision-matrix](02-decision-matrix.md)
 :::
+
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

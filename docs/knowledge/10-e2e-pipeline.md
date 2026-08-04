@@ -1,11 +1,28 @@
 ---
-name: knowledge-e2e-pipeline
-description: 完整可运行端到端Pipeline文档，提供从数据采集到Agent查询的全链路Python代码实现。当需要直接运行或参考完整代码时使用。
+name: "knowledge-e2e-pipeline"
+docId: "KS-E2E-PIPELINE"
+displayNumber: "12"
+route: "/knowledge/10-e2e-pipeline"
+learningOrder: 14
+title: "第十二章：端到端 Pipeline 与最小可运行样例"
+description: "端到端 Pipeline 方案文档，提供从数据采集到 Agent 查询的参考实现，并以确定性 mock fixture 验证最小闭环。"
+chapter: "12"
+order: 14
+section: advanced
+stage: build
+maturity: runnable
+verification: smoke-tested
+codeStatus: smoke-tested
+reviewedAt: 2026-08-01
+testedWith:
+  - "Node.js 22.22.0 deterministic mock provider"
+evidence:
+  - "fixtures/mock-pipeline.mjs"
+  - "tests/content/mock-pipeline.test.mjs"
 ---
+# 第十二章：端到端 Pipeline 与最小可运行样例
 
-# 第十二章：端到端完整 Pipeline（可直接运行）
-
-> **本章目标**：一个从零到能用的完整工程模板。复制这段代码，填入你的 API Key，就能跑起来。生产环境的所有关键配置都在这里。
+> **本章目标**：给出一个从输入归一到证据回传的工程参考，并用仓库内的确定性 mock fixture 验证最小闭环。正文 Python 与第三方集成仍是示意方案，不能仅通过填写 API Key 推定可运行，更不代表生产配置已经齐全。
 
 ---
 
@@ -29,7 +46,7 @@ kb-agent/
 ├── config.yaml            # 所有配置
 ├── requirements.txt
 └── main.py                # 入口文件
-```text
+```
 
 ---
 
@@ -60,7 +77,7 @@ pydantic>=2.0.0
 httpx>=0.27.0
 loguru>=0.7.0
 typer>=0.12.0
-```text
+```
 
 ---
 
@@ -70,11 +87,11 @@ typer>=0.12.0
 # ==================== 模型配置 ====================
 llm:
   # 蒸馏用（高频调用，用快速便宜的）
-  extract_model: "gpt-4o-mini"
+  extract_model: "gpt-5.6"
   # 推理用（需要强推理能力）
   reason_model: "claude-opus-4-7"
   # 验证用（独立于蒸馏，防止自评偏差）
-  validate_model: "gpt-4o"
+  validate_model: "gpt-5.6"
 
 embedding:
   model: "BAAI/bge-m3"
@@ -118,7 +135,7 @@ evolution:
   staleness_days: 90
   # darwin-skill 评估维度最低分
   skill_min_score: 70
-```text
+```
 
 ---
 
@@ -220,7 +237,7 @@ def _parse_audio(file_path: str) -> str:
 
 
 def _parse_image(image_path: str) -> str:
-    """图像内容理解（GPT-4o VLM）"""
+    """图像内容理解（Responses API 多模态输入）"""
     import base64
     from openai import OpenAI
 
@@ -228,20 +245,20 @@ def _parse_image(image_path: str) -> str:
     with open(image_path, "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
 
-    resp = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": [
-            {"type": "text", "text":
+    resp = client.responses.create(
+        model="gpt-5.6",
+        input=[{"role": "user", "content": [
+            {"type": "input_text", "text":
              "描述这张图中包含的信息：\n"
              "1. 如果是流程图/架构图：转为 Mermaid 代码\n"
              "2. 如果是数据图表：提取所有数值为 Markdown 表格\n"
              "3. 如果是截图/UI：描述组件和布局\n"
              "只描述信息，不描述风格。"},
-            {"type": "image_url",
-             "image_url": {"url": f"data:image/png;base64,{b64}"}}
+            {"type": "input_image",
+             "image_url": f"data:image/png;base64,{b64}"}
         ]}]
     )
-    return resp.choices[0].message.content
+    return resp.output_text
 
 
 def _parse_web(url: str) -> str:
@@ -277,9 +294,9 @@ class KnowledgeDistiller:
             return self._extract_pyramid(content, source_path)
 
     def _classify_content(self, content: str) -> str:
-        resp = self.llm.chat.completions.create(
+        resp = self.llm.responses.create(
             model=self.model,
-            messages=[{
+            input=[{
                 "role": "user",
                 "content": f"""判断以下文本的知识类型：
 文本（前500字）：{content[:500]}
@@ -292,9 +309,9 @@ class KnowledgeDistiller:
 
 只返回英文类型名称："""
             }],
-            max_tokens=20,
+            max_output_tokens=20,
         )
-        return resp.choices[0].message.content.strip()
+        return resp.output_text.strip()
 
     def _extract_pyramid(self, content: str, source_path: str) -> list[dict]:
         """四层金字塔提取"""
@@ -313,9 +330,9 @@ class KnowledgeDistiller:
         """提取原子事实"""
         import json
 
-        resp = self.llm.chat.completions.create(
+        resp = self.llm.responses.create(
             model=self.model,
-            messages=[{
+            input=[{
                 "role": "user",
                 "content": f"""从以下文本提取原子事实。
 规则：
@@ -328,10 +345,9 @@ class KnowledgeDistiller:
 输出 JSON 数组，每项格式：
 {{"fact": "...", "confidence": 0.0-1.0, "type": "L1_atomic"}}"""
             }],
-            response_format={"type": "json_object"},
         )
 
-        data = json.loads(resp.choices[0].message.content)
+        data = json.loads(resp.output_text)
         facts = data.get("facts", data.get("items", []))
 
         return [{
@@ -345,9 +361,9 @@ class KnowledgeDistiller:
         import json
 
         facts_text = "\n".join([f"- {a['fact']}" for a in atomics])
-        resp = self.llm.chat.completions.create(
+        resp = self.llm.responses.create(
             model=self.model,
-            messages=[{
+            input=[{
                 "role": "user",
                 "content": f"""将以下原子事实聚合为概念群：
 {facts_text}
@@ -356,9 +372,8 @@ class KnowledgeDistiller:
 输出 JSON：
 {{"concepts": [{{"name": "...", "summary": "...", "facts": [...]}}]}}"""
             }],
-            response_format={"type": "json_object"},
         )
-        data = json.loads(resp.choices[0].message.content)
+        data = json.loads(resp.output_text)
         return [{
             **c,
             "level": "L2",
@@ -367,9 +382,9 @@ class KnowledgeDistiller:
 
     def _generate_abstract(self, content: str, source_path: str) -> dict:
         """生成文档摘要"""
-        resp = self.llm.chat.completions.create(
+        resp = self.llm.responses.create(
             model=self.model,
-            messages=[{
+            input=[{
                 "role": "user",
                 "content": f"""为以下文档生成结构化摘要：
 {content[:5000]}
@@ -382,7 +397,7 @@ class KnowledgeDistiller:
             }]
         )
         return {
-            "abstract": resp.choices[0].message.content,
+            "abstract": resp.output_text,
             "source_path": source_path,
             "level": "L3",
             "type": "L3_abstract"
@@ -392,9 +407,9 @@ class KnowledgeDistiller:
         """提取 IF-THEN 规则（bdistill 模式）"""
         import json
 
-        resp = self.llm.chat.completions.create(
+        resp = self.llm.responses.create(
             model=self.model,
-            messages=[{
+            input=[{
                 "role": "user",
                 "content": f"""从以下文本中提取决策规则：
 {content[:3000]}
@@ -404,9 +419,8 @@ class KnowledgeDistiller:
 
 输出 JSON 数组：{{"rules": [...]}}"""
             }],
-            response_format={"type": "json_object"},
         )
-        data = json.loads(resp.choices[0].message.content)
+        data = json.loads(resp.output_text)
         return [{
             **r,
             "source_path": source_path,
@@ -463,27 +477,26 @@ class KnowledgeValidator:
         import json
 
         # 生成5种变体
-        resp = self.llm.chat.completions.create(
+        resp = self.llm.responses.create(
             model=self.validate_model,
-            messages=[{
+            input=[{
                 "role": "user",
                 "content": f"""将以下声明改写为5个不同措辞的问题（测试一致性用）：
 声明：{claim}
 输出 JSON：{{"questions": ["q1", "q2", "q3", "q4", "q5"]}}"""
             }],
-            response_format={"type": "json_object"},
         )
-        questions = json.loads(resp.choices[0].message.content).get("questions", [])
+        questions = json.loads(resp.output_text).get("questions", [])
 
         # 回答每个问题
         answers = []
         for q in questions[:5]:
-            a_resp = self.llm.chat.completions.create(
+            a_resp = self.llm.responses.create(
                 model=self.validate_model,
-                messages=[{"role": "user", "content": q}],
-                max_tokens=100,
+                input=[{"role": "user", "content": q}],
+                max_output_tokens=100,
             )
-            answers.append(a_resp.choices[0].message.content)
+            answers.append(a_resp.output_text)
 
         # 测量一致性（简化版：词汇重叠）
         if not answers:
@@ -531,7 +544,7 @@ async def ingest(source_path: str) -> dict:
             "acceptance_rate": len(validated_entries) / max(len(raw_entries), 1),
         }
     }
-```text
+```
 
 ---
 
@@ -660,7 +673,7 @@ created_at: {__import__('datetime').datetime.now().isoformat()}
                 )
                 skill_md.write_text(content)
                 logger.info(f"标记过期: {skill_md}")
-```text
+```
 
 ---
 
@@ -732,7 +745,7 @@ class KnowledgeRetriever:
                 })
 
         return {"type": "skill", "results": matched[:3]}
-```text
+```
 
 ---
 
@@ -808,7 +821,7 @@ def health():
 
 if __name__ == "__main__":
     app()
-```text
+```
 
 ---
 
@@ -831,12 +844,12 @@ python main.py query "精益创业的核心方法论是什么？"
 
 # 5. 健康度检查
 python main.py health
-```text
+```
 
 ---
 
 :::tip → 下一章
-Pipeline跑通后，建立知识库进化与自进化机制 → [11-kb-evolution](11-kb-evolution.md)
+Pipeline跑通后，建立知识库进化与自进化机制 → [11-kb-evolution](11-kb-evolution.md#concept-knowledge-evolution)
 :::
 
 ---
@@ -895,7 +908,7 @@ class SourceChangeDetector:
                 "action": "CONTINUE_WITH_WARNING: 新字段出现，记录到变更日志"
             }
         return {"status": "stable", "drift": False}
-```text
+```
 
 ### 多源冲突处理
 
@@ -943,7 +956,7 @@ class MultiSourceConflictResolver:
                 "timestamp": "now",
                 "priority": "HIGH"
             }, ensure_ascii=False) + "\n")
-```text
+```
 
 ### 抽取失败的优雅降级
 
@@ -979,7 +992,7 @@ def extract_with_fallback(content: str, primary_extractor, fallback_extractor=No
         "action": "原文已保存到人工审核队列",
         "never_silent": True   # 显式声明：这个失败不会被静默吞掉
     }
-```text
+```
 
 ### Pipeline 的异常分级告警
 
@@ -994,3 +1007,12 @@ ALERT_LEVELS = {
 :::info 核心原则：宁可停下来，不要静默通过
 Pipeline 遇到不确定性时，应该**明确告警并等待处理**，而不是用默认值填充。一个静默通过的错误，在知识库里会以最高复用效率扩散；一个及时告警的停滞，只影响当次处理。
 :::
+
+## 来源与复核
+
+- **本轮接口核对（截至 2026-08-01）**：[OpenAI Responses API quickstart](https://developers.openai.com/api/docs/quickstart)；仅完成调用形态迁移，尚未用真实供应商凭据执行。
+- **烟测范围（2026-08-01）**：`fixtures/mock-pipeline.mjs` 已覆盖输入归一、确定性检索、证据回传和无证据拒答；没有调用网络、供应商、数据库或生产环境。
+- **复核状态**：最小 mock Pipeline 已烟测；正文中的完整 Python 方案与第三方集成仍待逐段复核。
+- **代码状态**：仅上述 fixture 为烟测代码；其他片段继续按示意代码处理。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

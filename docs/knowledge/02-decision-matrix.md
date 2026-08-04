@@ -1,9 +1,37 @@
 ---
-name: knowledge-decision-matrix
-description: 产品形态决策矩阵文档，覆盖向量知识库、图谱、NL2SQL、MCP第5形态的选型判断标准。当需要决定用哪种知识产品形态时使用。
+name: "knowledge-decision-matrix"
+docId: "KS-DECISION-MATRIX"
+displayNumber: "02"
+route: "/knowledge/02-decision-matrix"
+learningOrder: 2
+title: "第二章：输入类型 × 输出形式决策矩阵"
+description: "产品形态决策矩阵文档，覆盖向量知识库、图谱、NL2SQL、MCP第5形态的选型判断标准。当需要决定用哪种知识产品形态时使用。"
+chapter: "02"
+order: 2
+section: foundation
+stage: design
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第二章：输入类型 × 输出形式决策矩阵
+
+:::info 三个容易混同的接口与检索概念
+<a id="concept-rag"></a>
+
+**RAG（检索增强生成）是在查询时检索证据并把所选证据提供给模型的回答模式**；它不等同于完整知识体系。
+
+<a id="concept-graphrag"></a>
+
+**GraphRAG 是在证据选择中引入显式实体、关系或社区摘要的检索路线**，适用于关系推理与跨文档聚合，而非所有查询的默认升级。
+
+<a id="concept-mcp"></a>
+
+**MCP（Model Context Protocol）是本指南把受治理知识能力暴露给 Agent 的工具接口边界**；它不替代鉴权、路由、超时或责任治理。
+:::
 
 > 从信息源到知识的路由决策。2026 年新增第 5 种产品形态：MCP 工具形态。
 
@@ -61,7 +89,7 @@ def search_products(query: str, top_k: int = 5) -> str:
 
 if __name__ == "__main__":
     mcp.run()
-```text
+```
 
 MCP 协议将知识库从"被调用的服务"升级为"通用工具基础设施"。
 :::
@@ -88,7 +116,7 @@ flowchart LR
     
     classDef protocol fill:#fff3e0,stroke:#ff9800,stroke-width:2px
     class E protocol
-```text
+```
 
 ---
 
@@ -118,7 +146,7 @@ flowchart LR
 Rules      原子笔记    Wiki 页面     Agent Skill    Fine-tune    知识图谱
 JSONL      Markdown    Markdown      SKILL.md        JSONL        Neo4j
 (bdistill) (Zettel.)   (LLM-Wiki)   (可执行)        (训练数据)   (关系库)
-```text
+```
 
 ---
 
@@ -161,7 +189,7 @@ JSONL      Markdown    Markdown      SKILL.md        JSONL        Neo4j
 │
 └── 需要人类阅读的结构化文档
     └── 输出：Markdown 文档（标准知识库文档）
-```text
+```
 
 ---
 
@@ -232,3 +260,10 @@ TRIAGE_PROMPT = """
 :::tip → 下一章
 选型明确后，按具体输入场景查找可运行的SOP → [03-scene-sops](03-scene-sops.md)
 :::
+
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。

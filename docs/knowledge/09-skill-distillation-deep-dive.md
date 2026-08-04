@@ -1,15 +1,33 @@
 ---
-name: knowledge-skill-distillation-deep
-description: Skill蒸馏九大仓库深度解构文档，对比cangjie/nuwa/darwin/R2S四条路线的原理、评分与适用场景。当选择Skill蒸馏方案时使用。
+name: "knowledge-skill-distillation-deep"
+docId: "KS-SKILL-DISTILLATION"
+displayNumber: "11"
+route: "/knowledge/09-skill-distillation-deep-dive"
+learningOrder: 13
+title: "第十一章：Skill 蒸馏 —— 九大仓库深度解构"
+description: "Skill蒸馏九大仓库深度解构文档，对比cangjie/nuwa/darwin/R2S四条路线的原理、评分与适用场景。当选择Skill蒸馏方案时使用。"
+chapter: "11"
+order: 13
+section: advanced
+stage: build
+maturity: solution
+verification: pending
+codeStatus: illustrative
+reviewedAt: null
+testedWith: []
+evidence: []
 ---
-
 # 第十一章：Skill 蒸馏 —— 九大仓库深度解构
+
+<a id="concept-use-skill-distillation-001"></a>
+
+本章把 Skill Distillation 落到可执行契约：产物必须同时说明触发条件、步骤、边界和验证方法。
 
 > **阅读前提**：本章基于对 9 个高星开源仓库的一手代码与文档逐行研究，带着**批判性思维（淘金式分析）**——提炼其方法论精华，同时指出每条路线的设计盲区。目标是给你一张真正可落地的技术决策地图。
 
 ---
 
-## 8.1 九个仓库的核心画像
+## 11.1 九个仓库的核心画像
 
 在我们开始对比之前，先建立每个仓库的精准定位。这 9 个仓库看起来"结果都是 Skill"，但它们的**信息源**、**蒸馏深度**、**核心主张**截然不同。
 
@@ -27,7 +45,7 @@ description: Skill蒸馏九大仓库深度解构文档，对比cangjie/nuwa/darw
 
 ---
 
-## 8.2 蒸馏路线全景图：四条技术路线
+## 11.2 蒸馏路线全景图：四条技术路线
 
 通过横向分析，这 9 个仓库的本质路线可以归纳为 **4 条**，它们在蒸馏目标、信息损失率、Agent 调用有效性上各有差异。
 
@@ -46,11 +64,11 @@ flowchart LR
         A4[已有 SKILL.md] --> B4[9维评估+棘轮机制] --> C4[更强的下一版 SKILL.md]
     end
     classDef default fill:#fafafa,stroke:#334155,stroke-width:1px;
-```text
+```
 
 ---
 
-## 8.3 路线一：方法论蒸馏（cangjie-skill / book2skill）
+## 11.3 路线一：方法论蒸馏（cangjie-skill / book2skill）
 
 ### 路线本质
 
@@ -77,7 +95,7 @@ cangjie-skill 的真正竞争壁垒在于它的蒸馏流水线设计极其严格
 阶段 4: 压力测试
          每个 skill 设计包含诱饵题的测试用例
          未通过 → 回炉 阶段 2
-```text
+```
 
 ### book2skill 的实战证明
 
@@ -99,7 +117,7 @@ book2skill 已经对《缠论》、《茶经》、《微信背后的产品观》
 
 ---
 
-## 8.4 路线二：人格克隆（nuwa-skill / ex-skill / yourself-skill）
+## 11.4 路线二：人格克隆（nuwa-skill / ex-skill / yourself-skill）
 
 ### 路线本质
 
@@ -111,7 +129,7 @@ book2skill 已经对《缠论》、《茶经》、《微信背后的产品观》
 nuwa-skill（女娲）：公众人物 → 思维操作系统（决策框架+心智模型）
 ex-skill（前任）：  私人聊天记录 → 语气复现+情感记忆（情绪价值导向）
 yourself-skill：    个人日记/记录 → 自我镜像（Part A:记忆 + Part B:人格）
-```text
+```
 
 ### nuwa-skill 的架构精髓
 
@@ -129,7 +147,7 @@ Phase 3: 双轨结构化
          行为轨（表达 DNA/语气边界）
 Phase 4: SKILL.md 封装
          + darwin-skill 内置评估驱动的持续进化
-```text
+```
 
 **核心理念**：当用户遇到 SaaS 获客成本高的问题，经过马斯克 Skill 处理后，得到的不是"马斯克的口吻"，而是**第一性原理的解构框架**——先算物理极限，再看实际路径与极限的倍数。
 
@@ -159,7 +177,7 @@ Phase 4: SKILL.md 封装
 
 ---
 
-## 8.5 路线三：工程操作蒸馏（microsoft/Resource2Skill）
+## 11.5 路线三：工程操作蒸馏（microsoft/Resource2Skill）
 
 ### 路线本质
 
@@ -173,7 +191,7 @@ Resource2Skill 的每个 Skill 条目（Entry）包含以下字段，这是整�
 {
   "name": "skill_name",
   "text_body": "何时触发 / 为何使用 / 如何配置",
-  "code_field": "可直接运行的代码模板（含完整 import）",
+  "code_field": "目标：经 smoke test 的代码模板（含完整 import）",
   "visual_examples": ["操作前/操作后截图路径"],
   "source_path": "原始教程的章节路径",
   "acceptance_predicate": {
@@ -183,7 +201,7 @@ Resource2Skill 的每个 Skill 条目（Entry）包含以下字段，这是整�
     "no_duplication": true
   }
 }
-```text
+```
 
 **关键设计**：`acceptance_predicate`（可接受谓词）是一个显式的质量门控，只有同时满足4个条件的 Skill 才能入库。
 
@@ -201,13 +219,13 @@ Resource2Skill 的每个 Skill 条目（Entry）包含以下字段，这是整�
 
 | 维度 | 评分 | 分析 |
 | :--- | :---: | :--- |
-| **Agent 调用有效性** | ★★★★★ | 在 7 个创作领域测试中比无 Skill Agent 高出 +11.9 分；Skill 中有实际可运行代码 |
+| **Agent 调用有效性** | 待复核 | 上游材料给出提升主张，但本仓库未提供原始评估集、运行日志或可复现回执；代码按示意处理 |
 | **蒸馏深度** | 知识图谱级+可执行 | 最高阶：结构化条目+代码+视觉+溯源链 |
 | **[!] 核心缺陷** | — | **高度依赖 GPU 与多模态模型**；多模态资源准备成本高；不适合纯文本知识库 |
 
 ---
 
-## 8.6 路线四：Skill 进化（darwin-skill）
+## 11.6 路线四：Skill 进化（darwin-skill）
 
 ### 路线本质
 
@@ -227,7 +245,7 @@ Resource2Skill 的每个 Skill 条目（Entry）包含以下字段，这是整�
    得分提升? → (OK) 保留（git commit）
    得分持平? → (X) 回滚（git revert）
    得分降低? → (X) 回滚 + 标注失败模式
-```text
+```
 
 **9个评估维度**（v2.0，对齐微软 SkillLens 论文）：
 1. 触发精确性
@@ -265,7 +283,7 @@ darwin-skill 明文禁止的 8 条反模式，是整个 Skill 生态中最有价
 
 ---
 
-## 8.7 FLHonker/Awesome-KD：学术视角的清醒剂
+## 11.7 FLHonker/Awesome-KD：学术视角的清醒剂
 
 这个仓库是 2014-2021 年神经网络知识蒸馏的学术论文全集（658篇+）。它与上面 8 个仓库属于完全不同的范畴——**模型压缩蒸馏**，而非**知识库蒸馏**。
 
@@ -281,7 +299,7 @@ darwin-skill 明文禁止的 8 条反模式，是整个 Skill 生态中最有价
 
 ---
 
-## 8.8 整合视角：四条路线的综合对比评分
+## 11.8 整合视角：四条路线的综合对比评分
 
 基于以上深度分析，我们从 5 个维度对四条路线进行综合评分：
 
@@ -295,7 +313,7 @@ darwin-skill 明文禁止的 8 条反模式，是整个 Skill 生态中最有价
 
 ---
 
-## 8.9 黄金整合方案：取其精华的终局工程链路
+## 11.9 黄金整合方案：取其精华的终局工程链路
 
 通过对这 9 个仓库的批判性解构，**真正的高质量 Skill 蒸馏**需要将四条路线的精华融合：
 
@@ -325,7 +343,7 @@ flowchart TD
     class Router,Validate decision;
     class Discard,Revert danger;
     class Library,Agent success;
-```text
+```
 
 ### 三条核心整合原则
 
@@ -350,7 +368,7 @@ Skill 不是文档，不能写完就不管。知识会随时间腐烂，Agent �
 
 ---
 
-## 8.10 写给决策者的最后一页
+## 11.10 写给决策者的最后一页
 
 如果你只能记住这一章的三件事：
 
@@ -363,12 +381,12 @@ Skill 不是文档，不能写完就不管。知识会随时间腐烂，Agent �
 ---
 
 :::tip → 下一章
-Skill蒸馏到位后，跑通完整可运行Pipeline → [10-e2e-pipeline](10-e2e-pipeline.md)
+Skill 蒸馏到位后，用本地 mock fixture 验证最小 Pipeline，再逐项替换真实集成 → [10-e2e-pipeline](10-e2e-pipeline.md)
 :::
 
 ---
 
-## 8.9 混编路线设计模式
+## 11.11 混编路线设计模式
 
 单独使用一条路线往往覆盖不了真实需求。以下是经过验证的四种混编模式，每种都有明确的适用条件和组合顺序。
 
@@ -387,7 +405,7 @@ Skill蒸馏到位后，跑通完整可运行Pipeline → [10-e2e-pipeline](10-e2
 注意事项：
 - 不要在收集足够反馈前就启动 darwin（样本太少会过拟合）
 - darwin 每次迭代必须和黄金样本做对比，防止漂移
-```text
+```
 
 ### 模式二：R2S → cangjie（工程操作补充方法论）
 
@@ -403,7 +421,7 @@ Skill蒸馏到位后，跑通完整可运行Pipeline → [10-e2e-pipeline](10-e2
 3. 人工合并两份产出，确保风格一致
 
 典型应用：数据库运维 SOP（R2S提炼操作步骤 + cangjie提炼故障判断逻辑）
-```text
+```
 
 ### 模式三：nuwa → cangjie（风格+方法论双轨）
 
@@ -422,7 +440,7 @@ Skill蒸馏到位后，跑通完整可运行Pipeline → [10-e2e-pipeline](10-e2
 - nuwa 的幻觉风险最高，方法论层必须有独立证据来源
 - 不要让风格层影响方法论的准确性
 - 必须标注："本Skill的内容基于公开资料，风格是模拟，非本人授权"
-```text
+```
 
 ### 模式四：单独使用 darwin（仅用于优化已有Skill）
 
@@ -448,3 +466,10 @@ Skill蒸馏到位后，跑通完整可运行Pipeline → [10-e2e-pipeline](10-e2
 2. **不要超过两条路线**：三条以上路线混编会让 Skill 的认知来源过于复杂，维护者无从判断某条规则来自哪里
 3. **不要在同一 Skill 里混用方法论层和人格层**：前者追求准确，后者追求拟人——两者目标冲突，会相互干扰
 :::
+
+## 来源与复核
+
+- **复核状态**：待复核。任何易漂移的版本、价格、法律或性能结论，采用前都必须回到一手来源再次确认。
+- **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
+- **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
+- **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
