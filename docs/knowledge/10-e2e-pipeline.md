@@ -19,6 +19,14 @@ testedWith:
 evidence:
   - "fixtures/mock-pipeline.mjs"
   - "tests/content/mock-pipeline.test.mjs"
+productArtifactRefs:
+  []
+relatedObjectIds:
+  []
+relatedTaskIds:
+  []
+referenceMaturity: "runnable"
+lastReviewedAt: "2026-08-17"
 ---
 # 第十二章：端到端 Pipeline 与最小可运行样例
 
@@ -1016,3 +1024,7 @@ Pipeline 遇到不确定性时，应该**明确告警并等待处理**，而不�
 - **代码状态**：仅上述 fixture 为烟测代码；其他片段继续按示意代码处理。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 不能由本章证明什么
+
+本章 Pipeline 是教学级串联，不等同于 Reference 编译流水线全量实现；以 /lab/ 的 Stage 状态为准。

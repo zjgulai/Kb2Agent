@@ -16,6 +16,14 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  []
+relatedObjectIds:
+  []
+relatedTaskIds:
+  []
+referenceMaturity: "solution"
+lastReviewedAt: "2026-08-17"
 ---
 <a id="concept-knowledge-evolution"></a>
 
@@ -504,6 +512,11 @@ class SkillEvolver:
 
 ### 冲突检测实现
 
+
+::: warning 示意代码
+下方「时态冲突自动覆盖」为 illustrative 示意：Reference 的 supersedes 晋级走 revision 链 + 人工 promotion 门禁，模型输出不自动覆盖 canonical 对象。
+:::
+
 ```python
 class ConflictDetector:
     """知识冲突检测与仲裁"""
@@ -594,6 +607,11 @@ class ConflictDetector:
 ---
 
 ## 11.5 自动化进化 CI/CD
+
+::: warning 示意代码
+本节「自动触发/自动写回/自动 commit」为 illustrative 示意代码：Reference Lab 采用 candidate-only + 人工晋级，禁止自动 canonical 写入与自动 commit；勿将本节模式当作产品能力。
+:::
+
 
 ### GitHub Actions 配置
 
@@ -972,3 +990,7 @@ scorer_versions:
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 不能由本章证明什么
+
+自进化示例（自动覆盖、自动 CI/CD）为 illustrative 示意代码：Reference 采用 candidate-only + 人工晋级，禁止自动 canonical 写入与自动 commit。

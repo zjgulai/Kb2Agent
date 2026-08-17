@@ -55,7 +55,7 @@
       "forbiddenClaims": [
         "注册表结构完整不等于验收通过；12 个角色仍为 0 accepted，3 个契约仍为 approval-blocked。"
       ],
-      "notes": "26 docId、13 概念 / 22 别名、12 claims、3 契约；等待 NEXT-4 与 roles.json 收敛。"
+      "notes": "26 docId、13 概念 / 22 别名、12 claims、3 契约；NEXT-4 已收敛：roles.json（4/4 accepted）为 canonical 治理源，本注册表仅服务 Guide 章节身份与旧契约历史。"
     },
     {
       "id": "CAP-GUIDE-QA",

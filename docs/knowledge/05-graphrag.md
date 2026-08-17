@@ -16,6 +16,15 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  - "reference/ontology/relations.json"
+  - "reference/ontology/terms.json"
+relatedObjectIds:
+  - "PKG-AMZ-ADS-M1B"
+relatedTaskIds:
+  - "TASK-AMZ-ADS-DIAGNOSIS-V1"
+referenceMaturity: "runnable"
+lastReviewedAt: "2026-08-17"
 ---
 # 第六章：GraphRAG 知识图谱构建
 
@@ -556,3 +565,13 @@ def should_use_graph(query: str, graph_health: dict) -> bool:
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 在 Reference Lab 中如何验证
+
+- typed relation closure 以 `reference/ontology/relations.json` 为权威端点清单；关系语义与失败关闭规则一一对应（如 contradicts 不得自动平均或覆盖）。
+- 在 [/reference/map](/reference/map) 查看 L0-L6 对象与关系展示；retrieval diff 与引用质量由 golden 任务与 `reference:contracts` 负例校验。
+- GraphRAG 退化与失败机理按本章反模式清单继续验证；首版以 SQLite typed edges + 预计算向量运行，不引入专用图数据库。
+
+## 不能由本章证明什么
+
+概念图不等于业务关系图：本体的语义覆盖以 `reference/ontology/terms.json` 为准，不冒充完整业务 ontology。

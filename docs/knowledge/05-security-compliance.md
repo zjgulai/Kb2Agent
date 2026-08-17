@@ -22,6 +22,15 @@ claimRefs:
   - CLM-SEC-003
   - CLM-SEC-004
 acceptanceRef: ACC-SECURITY-001
+productArtifactRefs:
+  - "reference/ontology/permissions.json"
+  - "reference/policies/g7/provider-readiness-policy-v1.json"
+relatedObjectIds:
+  - "PKG-AMZ-ADS-M1B"
+relatedTaskIds:
+  - "TASK-AMZ-ADS-DIAGNOSIS-V1"
+referenceMaturity: "runnable"
+lastReviewedAt: "2026-08-17"
 ---
 # 第五章：数据安全与合规架构 —— 构建知识库前必读
 
@@ -857,3 +866,13 @@ echo "毒化事故记录到 incidents/$(date +%Y%m%d)-poisoning.md"
 - **代码状态**：混合边界。`fixtures/security-governance.mjs` 及其测试为 L2 本地 fixture；本章其他代码仍是示意代码。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：由具名角色接受责任后，绑定真实辖区与授权样本，在隔离环境完成演练和销毁回执。
+
+## 在 Reference Lab 中如何验证
+
+- `reference/ontology/permissions.json` 与 E2 权限级别对照：八个白名单工具 `sideEffect=false`，不存在 update_bid / add_negative_keyword / write_canonical_knowledge 等写工具。
+- 公网输入合同在 [/lab/](/lab/) 固定参数面板可核对：无文件上传、无自由文本、JSON 大小上限、request ID 与限频策略。
+- 未授权工具调用与路径逃逸负例在 `reference/fixtures/negative` 与 20 条 golden 任务的 3 条未授权用例中 fail-closed。
+
+## 不能由本章证明什么
+
+本章不能证明任何生产环境的合规审计已经通过；SSRF、预算熔断、日志保留与 ICP 备案的线上验证均需独立授权与回执。

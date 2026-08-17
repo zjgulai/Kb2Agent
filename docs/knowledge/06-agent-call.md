@@ -16,6 +16,15 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  - "docs/architecture/g6-a1-replay-first-e2-agent-design.md"
+  - "reference/golden/amazon-ads-diagnosis-v1.json"
+relatedObjectIds:
+  - "PKG-AMZ-ADS-M1B"
+relatedTaskIds:
+  - "TASK-AMZ-ADS-DIAGNOSIS-V1"
+referenceMaturity: "runnable"
+lastReviewedAt: "2026-08-17"
 ---
 # 第七章：知识库被 Agent 调用 —— 从 RAG 到 MCP
 
@@ -566,3 +575,13 @@ Agent 调用架构到位后，深入进阶选型——如何在 LoD 阶梯上选
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 在 Reference Lab 中如何验证
+
+- 单 Agent 状态机与八个确定性工具以 [/architecture/g6-a1-replay-first-e2-agent-design](/architecture/g6-a1-replay-first-e2-agent-design) 为准：工具路径、逐工具回执与终态 fail-closed 可审查。
+- 在 [/agent-lab/](/agent-lab/) 回放 20 个场景（8 正常 / 4 缺输入 / 3 冲突 / 3 未授权 / 2 故障），全部为构建阶段真实生成的本地 JSON bundle。
+- MCP 定位遵循「先稳定内部 Tool Schema 与 HTTP API，再添加 stdio adapter」；MCP 不替代知识对象、权限、检索与评测设计。
+
+## 不能由本章证明什么
+
+Agent Lab 是 Replay-first 静态体验，不代表 production/live Agent；MCP adapter 尚未实现，不作为 UI 运行必需依赖。

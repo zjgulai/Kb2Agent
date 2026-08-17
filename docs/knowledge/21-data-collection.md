@@ -16,6 +16,15 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  - "reference/corpus/amazon-ads-v1/manifest.json"
+  - "reference/schemas/source.schema.json"
+relatedObjectIds:
+  - "PKG-AMZ-ADS-M1B"
+relatedTaskIds:
+  - "TASK-AMZ-ADS-DIAGNOSIS-V1"
+referenceMaturity: "runnable"
+lastReviewedAt: "2026-08-17"
 ---
 # 第二十一章：多模态数据采集方法论
 
@@ -1505,3 +1514,13 @@ async def _fetch_url(url: str, timeout: int) -> str:
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 在 Reference Lab 中如何验证
+
+- 对照 `reference/corpus/amazon-ads-v1/manifest.json` 检查六类固定样本（PDF/PPTX/DOCX/XLSX/过期/冲突）的登记、许可与 hash 契约；过期与冲突负例必须触发 `degraded` 或 `human-review-required`。
+- 用 `reference/schemas/source.schema.json` 校验 SourceArtifact / SourceRevision / StructuralElement 的 locator 必填约束：无 locator 不得晋级 Evidence。
+- 在 [/lab/](/lab/) 的 CorpusManifest 与固定参数面板核对公网语料边界：无上传、无自由文本、仅白名单枚举参数。
+
+## 不能由本章证明什么
+
+本章的采集流程描述不等于已对任何私有语料完成许可清点；公网站点只接受固定白名单语料，本地 ingest 的 URL 安全门禁仍需单独验证。

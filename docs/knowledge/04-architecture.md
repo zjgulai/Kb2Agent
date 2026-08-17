@@ -16,6 +16,16 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  - "docs/architecture/m1-a-product-contract.md"
+  - "reference/schemas/task-package.schema.json"
+  - "reference/ontology/relations.json"
+relatedObjectIds:
+  - "PKG-AMZ-ADS-M1B"
+relatedTaskIds:
+  - "TASK-AMZ-ADS-DIAGNOSIS-V1"
+referenceMaturity: "runnable"
+lastReviewedAt: "2026-08-17"
 ---
 # 第四章：全链路技术架构（+MCP封装层）
 
@@ -773,3 +783,13 @@ if __name__ == "__main__":
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 在 Reference Lab 中如何验证
+
+- 在 [/architecture/m1-a-product-contract](/architecture/m1-a-product-contract) 对照 Guide / Reference 双产品边界与成熟度分账；任一产品线的通过不得抬升另一产品线。
+- Compiler Stage 0-10 与 [/lab/](/lab/) 的 PipelineStepper 对应；`reference/ontology/relations.json` 提供 typed relations（derived_from / supports / contradicts / requires 等）端点约束。
+- Agent 状态机（RECEIVED → INPUT_CHECKED → … → RECEIPT_ISSUED）在 [/agent-lab/](/agent-lab/) 的确定性回放中可复现，失败状态 fail-closed。
+
+## 不能由本章证明什么
+
+架构图与状态机描述不等于 Reference runtime 的全量实现承诺；live run 与生产 smoke 的证据等级（L3/L4）独立于本章。
