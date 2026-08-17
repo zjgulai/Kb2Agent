@@ -129,9 +129,10 @@ test('search handles empty, keyboard, navigation and local-only preference state
       .filter((key) => /analytics|telemetry|sidebar|mkd:/i.test(key))
   ).toEqual([])
 
+  const localOrigin = new URL(page.url()).origin
   const externalRequests = requests.filter(({ url }) => {
     const parsed = new URL(url)
-    return parsed.origin !== 'http://127.0.0.1:4174'
+    return parsed.origin !== localOrigin
   })
   expect(externalRequests).toEqual([])
   expect(requests.filter(({ method }) => method !== 'GET')).toEqual([])

@@ -1,0 +1,13 @@
+{
+  "mode": "dry-run",
+  "apply": false,
+  "canonicalWrites": 0,
+  "decision": "pending-review",
+  "externalCalls": 0,
+  "sideEffects": 0,
+  "target": "canonical-knowledge-base",
+  "candidatePackageId": "PKG-AMZ-ADS-M1B",
+  "candidateSnapshotHash": "sha256:cfa7d24c4116807a3a885ee0f860bf33720de494c50e934a5e23f6fb5a6b4240",
+  "candidateObjectCount": 138,
+  "candidateRelationCount": 7
+}

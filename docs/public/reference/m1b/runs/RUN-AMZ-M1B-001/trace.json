@@ -1,0 +1,87 @@
+{
+  "traceId": "TRACE-AMZ-M1B-001",
+  "runId": "RUN-AMZ-M1B-001",
+  "mode": "replay",
+  "status": "completed",
+  "externalCalls": 0,
+  "sideEffects": 0,
+  "events": [
+    {
+      "eventId": "EVENT-001-SNAPSHOT",
+      "stage": "source",
+      "kind": "retrieve",
+      "startedAt": "2026-08-09T00:00:00Z",
+      "durationMs": 1,
+      "status": "completed",
+      "inputRefs": [
+        "SNAPSHOT-AMZ-ADS-M1B"
+      ],
+      "outputRefs": [
+        "EVID-AMZ-ACOS-DELTA",
+        "PLAYBOOK-AMZ-ACOS-CHECK",
+        "EVID-AMZ-ACOS-DEFINITION"
+      ]
+    },
+    {
+      "eventId": "EVENT-001-CLOSURE",
+      "stage": "agent",
+      "kind": "retrieve",
+      "startedAt": "2026-08-09T00:00:01Z",
+      "durationMs": 1,
+      "status": "completed",
+      "inputRefs": [
+        "TASK-AMZ-ADS-DIAGNOSIS-V1"
+      ],
+      "outputRefs": [
+        "METRIC-AMZ-ACOS",
+        "DECISION-AMZ-ACOS-DIAGNOSIS"
+      ]
+    },
+    {
+      "eventId": "EVENT-001-GUARD",
+      "stage": "agent",
+      "kind": "guardrail",
+      "startedAt": "2026-08-09T00:00:02Z",
+      "durationMs": 1,
+      "status": "completed",
+      "inputRefs": [
+        "EVID-AMZ-ACOS-DELTA",
+        "EVID-AMZ-ACOS-DEFINITION",
+        "EVID-AMZ-EVIDENCE-GATE"
+      ],
+      "outputRefs": [
+        "ACTION-AMZ-M1B-001"
+      ]
+    },
+    {
+      "eventId": "EVENT-001-DRAFT",
+      "stage": "agent",
+      "kind": "draft",
+      "startedAt": "2026-08-09T00:00:03Z",
+      "durationMs": 1,
+      "status": "completed",
+      "inputRefs": [
+        "EVID-AMZ-ACOS-DELTA",
+        "EVID-AMZ-ACOS-DEFINITION",
+        "EVID-AMZ-EVIDENCE-GATE"
+      ],
+      "outputRefs": [
+        "ACTION-AMZ-M1B-001"
+      ]
+    },
+    {
+      "eventId": "EVENT-001-RECEIPT",
+      "stage": "receipt",
+      "kind": "receipt",
+      "startedAt": "2026-08-09T00:00:04Z",
+      "durationMs": 1,
+      "status": "completed",
+      "inputRefs": [
+        "ACTION-AMZ-M1B-001"
+      ],
+      "outputRefs": [
+        "RECEIPT-AMZ-M1B-001"
+      ]
+    }
+  ]
+}

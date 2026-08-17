@@ -1,0 +1,210 @@
+{
+  "manifestId": "CORPUS-AMZ-ADS-V1",
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-09T00:00:00Z",
+  "corpusClass": "project-authored-synthetic",
+  "normalFormatCount": 6,
+  "negativeFixtureCount": 4,
+  "externalCalls": 0,
+  "sideEffects": 0,
+  "sources": [
+    {
+      "path": "reference/corpus/amazon-ads-v1/normal/portfolio-performance.synthetic.xlsx",
+      "title": "Synthetic Amazon Ads portfolio performance workbook",
+      "format": "xlsx",
+      "corpusClass": "normal",
+      "language": "en-US",
+      "expected": {
+        "minElements": 3,
+        "locatorIncludes": [
+          "sheet=Source Data",
+          "sheet=Analysis",
+          "sheet=Definitions"
+        ]
+      },
+      "asOf": "2026-08-01",
+      "bytes": 8073,
+      "sha256": "sha256:3d835d862fb6bb3d84b21fd660fba56fbf288ab2625a752bccfff4dcacca8f6e",
+      "authorship": "MKD project",
+      "license": "project-authored-synthetic",
+      "redistribution": true,
+      "publicDisplay": true,
+      "privacy": "no customer, account, credential, or platform export data"
+    },
+    {
+      "path": "reference/corpus/amazon-ads-v1/normal/metric-definition.synthetic.pdf",
+      "title": "Synthetic ACOS metric definition",
+      "format": "pdf",
+      "corpusClass": "normal",
+      "language": "en-US",
+      "expected": {
+        "minElements": 2,
+        "locatorIncludes": [
+          "page=1",
+          "page=2"
+        ]
+      },
+      "asOf": "2026-08-01",
+      "bytes": 4166,
+      "sha256": "sha256:5f84c3e44693da8485f2f6bc2d6a87894f7503f8faf91e149bfaa3264445c09d",
+      "authorship": "MKD project",
+      "license": "project-authored-synthetic",
+      "redistribution": true,
+      "publicDisplay": true,
+      "privacy": "no customer, account, credential, or platform export data"
+    },
+    {
+      "path": "reference/corpus/amazon-ads-v1/normal/diagnostic-brief.synthetic.pptx",
+      "title": "Synthetic Amazon Ads diagnostic brief",
+      "format": "pptx",
+      "corpusClass": "normal",
+      "language": "en-US",
+      "expected": {
+        "minElements": 9,
+        "locatorIncludes": [
+          "slide=1",
+          "slide=2",
+          "slide=3"
+        ]
+      },
+      "asOf": "2026-08-01",
+      "bytes": 18697,
+      "sha256": "sha256:e843c3f240f95a2af2b7ef485ee1eee0910d97629c77223b09a4ba374f6800c0",
+      "authorship": "MKD project",
+      "license": "project-authored-synthetic",
+      "redistribution": true,
+      "publicDisplay": true,
+      "privacy": "no customer, account, credential, or platform export data"
+    },
+    {
+      "path": "reference/corpus/amazon-ads-v1/normal/operating-playbook.synthetic.docx",
+      "title": "Synthetic Amazon Ads operating playbook",
+      "format": "docx",
+      "corpusClass": "normal",
+      "language": "en-US",
+      "expected": {
+        "minElements": 12,
+        "locatorIncludes": [
+          "heading=Stop conditions",
+          "table=1"
+        ]
+      },
+      "asOf": "2026-08-01",
+      "bytes": 39506,
+      "sha256": "sha256:f80ccd86381f98d6eaed72183acdc17a59e627332aff85cfebfee1027ed99595",
+      "authorship": "MKD project",
+      "license": "project-authored-synthetic",
+      "redistribution": true,
+      "publicDisplay": true,
+      "privacy": "no customer, account, credential, or platform export data"
+    },
+    {
+      "path": "reference/corpus/amazon-ads-v1/normal/diagnosis-notes.synthetic.md",
+      "title": "Synthetic diagnosis notes",
+      "format": "markdown",
+      "corpusClass": "normal",
+      "language": "en-US",
+      "expected": {
+        "minElements": 5,
+        "locatorIncludes": [
+          "heading=Observed change",
+          "heading=Competing hypotheses"
+        ]
+      },
+      "asOf": "2026-08-01",
+      "bytes": 916,
+      "sha256": "sha256:a082c5c36fd7b43496d545ad6932fc01a151ff3e89d53b7a06d79d28de2ecdf1",
+      "authorship": "MKD project",
+      "license": "project-authored-synthetic",
+      "redistribution": true,
+      "publicDisplay": true,
+      "privacy": "no customer, account, credential, or platform export data"
+    },
+    {
+      "path": "reference/corpus/amazon-ads-v1/normal/account-context.synthetic.json",
+      "title": "Synthetic account context",
+      "format": "json",
+      "corpusClass": "normal",
+      "language": "en-US",
+      "expected": {
+        "minElements": 5,
+        "locatorIncludes": [
+          "jsonpath=$.dataClass",
+          "jsonpath=$.attributionWindow"
+        ]
+      },
+      "asOf": "2026-08-01",
+      "bytes": 444,
+      "sha256": "sha256:5b739e0290a0c17866374d63b5bbe0dc95c941c645556cd4e7a756ab3db131a6",
+      "authorship": "MKD project",
+      "license": "project-authored-synthetic",
+      "redistribution": true,
+      "publicDisplay": true,
+      "privacy": "no customer, account, credential, or platform export data"
+    },
+    {
+      "path": "reference/corpus/amazon-ads-v1/negative/scanned-empty.synthetic.pdf",
+      "title": "Synthetic scanned-like empty PDF",
+      "format": "pdf",
+      "corpusClass": "negative",
+      "language": "en-US",
+      "expectedError": "TEXT_MISSING",
+      "asOf": "2026-08-01",
+      "bytes": 1334,
+      "sha256": "sha256:91758b65cefb975d3d5cb9fda56f99d0d43d6c9e9c77430eded01b98685cadf4",
+      "authorship": "MKD project",
+      "license": "project-authored-synthetic",
+      "redistribution": true,
+      "publicDisplay": true,
+      "privacy": "no customer, account, credential, or platform export data"
+    },
+    {
+      "path": "reference/corpus/amazon-ads-v1/negative/outdated-context.synthetic.json",
+      "title": "Synthetic stale account context",
+      "format": "json",
+      "corpusClass": "negative",
+      "language": "en-US",
+      "expectedError": "FRESHNESS_BLOCKED",
+      "asOf": "2025-01-01",
+      "bytes": 216,
+      "sha256": "sha256:7864ebf67f78f42eac5a92c3945662f5f798d3e92596feea285231c8d39fdf95",
+      "authorship": "MKD project",
+      "license": "project-authored-synthetic",
+      "redistribution": true,
+      "publicDisplay": true,
+      "privacy": "no customer, account, credential, or platform export data"
+    },
+    {
+      "path": "reference/corpus/amazon-ads-v1/negative/conflicting-guidance.synthetic.md",
+      "title": "Synthetic conflicting guidance",
+      "format": "markdown",
+      "corpusClass": "negative",
+      "language": "en-US",
+      "expectedError": "CONTRADICTION_BLOCKED",
+      "asOf": "2026-08-01",
+      "bytes": 361,
+      "sha256": "sha256:d8d100427b8843575f20d884a98faec5051e9cbbdf4b4f78d9a9b9dfc6247796",
+      "authorship": "MKD project",
+      "license": "project-authored-synthetic",
+      "redistribution": true,
+      "publicDisplay": true,
+      "privacy": "no customer, account, credential, or platform export data"
+    },
+    {
+      "path": "reference/corpus/amazon-ads-v1/negative/missing-metrics.synthetic.json",
+      "title": "Synthetic missing metric inputs",
+      "format": "json",
+      "corpusClass": "negative",
+      "language": "en-US",
+      "expectedError": "REQUIRED_INPUT_MISSING",
+      "asOf": "2026-08-01",
+      "bytes": 251,
+      "sha256": "sha256:a2d053e4cbd8a28274f80397671c7ff109d00693aa4a6928eed2f33ca004a40c",
+      "authorship": "MKD project",
+      "license": "project-authored-synthetic",
+      "redistribution": true,
+      "publicDisplay": true,
+      "privacy": "no customer, account, credential, or platform export data"
+    }
+  ]
+}

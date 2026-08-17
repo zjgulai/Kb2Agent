@@ -1,0 +1,91 @@
+{
+  "receiptId": "EXTRACTION-RECEIPT-AMZ-ADS-M1B",
+  "generatedAt": "2026-08-09T00:00:00Z",
+  "formatCount": 6,
+  "sourceCount": 6,
+  "structuralElementCount": 88,
+  "locatorsHash": "sha256:4e53cb0c32af042dbf5b889e8f915687a9adc1b491ba92668422963b974987fa",
+  "sources": [
+    {
+      "sourceId": "SRC-PORTFOLIO-PERFORMANCE-SYNTHETIC",
+      "revisionId": "SRCREV-PORTFOLIO-PERFORMANCE-SYNTHETIC-V1",
+      "file": "reference/corpus/amazon-ads-v1/normal/portfolio-performance.synthetic.xlsx",
+      "format": "xlsx",
+      "bytes": 8073,
+      "sha256": "sha256:3d835d862fb6bb3d84b21fd660fba56fbf288ab2625a752bccfff4dcacca8f6e",
+      "elementCount": 3,
+      "locatorsHash": "sha256:5342a6c13b2f7617c836916c3ba1455ea53a233d6bb37abe6de7093688a91bf5",
+      "status": "passed",
+      "externalCalls": 0,
+      "sideEffects": 0
+    },
+    {
+      "sourceId": "SRC-METRIC-DEFINITION-SYNTHETIC",
+      "revisionId": "SRCREV-METRIC-DEFINITION-SYNTHETIC-V1",
+      "file": "reference/corpus/amazon-ads-v1/normal/metric-definition.synthetic.pdf",
+      "format": "pdf",
+      "bytes": 4166,
+      "sha256": "sha256:5f84c3e44693da8485f2f6bc2d6a87894f7503f8faf91e149bfaa3264445c09d",
+      "elementCount": 2,
+      "locatorsHash": "sha256:d394cca87a667e2d44b9ed282617c1c3d9d92a606b17063a74435d612b17370b",
+      "status": "passed",
+      "externalCalls": 0,
+      "sideEffects": 0
+    },
+    {
+      "sourceId": "SRC-DIAGNOSTIC-BRIEF-SYNTHETIC",
+      "revisionId": "SRCREV-DIAGNOSTIC-BRIEF-SYNTHETIC-V1",
+      "file": "reference/corpus/amazon-ads-v1/normal/diagnostic-brief.synthetic.pptx",
+      "format": "pptx",
+      "bytes": 18697,
+      "sha256": "sha256:e843c3f240f95a2af2b7ef485ee1eee0910d97629c77223b09a4ba374f6800c0",
+      "elementCount": 18,
+      "locatorsHash": "sha256:18f31322cd84221df61bc1f67abe4a73301cceb58719c5b87687a8bbe2c0e3fd",
+      "status": "passed",
+      "externalCalls": 0,
+      "sideEffects": 0
+    },
+    {
+      "sourceId": "SRC-OPERATING-PLAYBOOK-SYNTHETIC",
+      "revisionId": "SRCREV-OPERATING-PLAYBOOK-SYNTHETIC-V1",
+      "file": "reference/corpus/amazon-ads-v1/normal/operating-playbook.synthetic.docx",
+      "format": "docx",
+      "bytes": 39506,
+      "sha256": "sha256:f80ccd86381f98d6eaed72183acdc17a59e627332aff85cfebfee1027ed99595",
+      "elementCount": 44,
+      "locatorsHash": "sha256:1410de5dc3d29e6accdcd23e040293208cb93f170ff74aa3cb20ed961f588bfd",
+      "status": "passed",
+      "externalCalls": 0,
+      "sideEffects": 0
+    },
+    {
+      "sourceId": "SRC-DIAGNOSIS-NOTES-SYNTHETIC",
+      "revisionId": "SRCREV-DIAGNOSIS-NOTES-SYNTHETIC-V1",
+      "file": "reference/corpus/amazon-ads-v1/normal/diagnosis-notes.synthetic.md",
+      "format": "markdown",
+      "bytes": 916,
+      "sha256": "sha256:a082c5c36fd7b43496d545ad6932fc01a151ff3e89d53b7a06d79d28de2ecdf1",
+      "elementCount": 10,
+      "locatorsHash": "sha256:6ed22aff61d21c9dbe4910af4929add201d655c20c0db82bfda345175c7444a3",
+      "status": "passed",
+      "externalCalls": 0,
+      "sideEffects": 0
+    },
+    {
+      "sourceId": "SRC-ACCOUNT-CONTEXT-SYNTHETIC",
+      "revisionId": "SRCREV-ACCOUNT-CONTEXT-SYNTHETIC-V1",
+      "file": "reference/corpus/amazon-ads-v1/normal/account-context.synthetic.json",
+      "format": "json",
+      "bytes": 444,
+      "sha256": "sha256:5b739e0290a0c17866374d63b5bbe0dc95c941c645556cd4e7a756ab3db131a6",
+      "elementCount": 11,
+      "locatorsHash": "sha256:fb1420621ebce1af22224ef95acdd925fc80e17db8ab6198bacee23380cfd091",
+      "status": "passed",
+      "externalCalls": 0,
+      "sideEffects": 0
+    }
+  ],
+  "externalCalls": 0,
+  "sideEffects": 0,
+  "status": "passed"
+}

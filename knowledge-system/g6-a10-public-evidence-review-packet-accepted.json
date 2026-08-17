@@ -1,0 +1,145 @@
+{
+  "$schema": "schemas/g6-a10-r1-accepted-review-packet.schema.json",
+  "schemaVersion": 1,
+  "packetId": "G6-A10-PUBLIC-EVIDENCE-REVIEW-ACCEPTED",
+  "gateId": "G6-A10-R1",
+  "preparedAt": "2026-08-12T04:03:59Z",
+  "acceptedAt": "2026-08-12T05:32:43Z",
+  "timestampProvenance": {
+    "mode": "system-recorded-on-user-confirmation",
+    "recordedAt": "2026-08-12T05:32:43Z",
+    "humanProvidedSignedAt": null,
+    "meaning": "system processing time for the user's complete four-reviewer confirmation; not four separately handwritten timestamps"
+  },
+  "subject": {
+    "releaseId": "mkd-m1c-438e6ae583fc952d",
+    "siteDigest": "sha256:438e6ae583fc952d813908b53a6c886ef127dad56d1a73eb017151f1f38bfadf",
+    "publicReceipt": {
+      "path": "reference/receipts/g6-a9-r1-public-p9-delayed-stability-receipt.json",
+      "sha256": "7f0fb9eec51f18385a69046a254749ffee071aecfcd8678a96b9dd8c9c3000d3",
+      "bytes": 31562
+    },
+    "artifactManifest": {
+      "root": "output/playwright/mkd-distill-g6a9-r1",
+      "fileCount": 12,
+      "totalBytes": 3718564,
+      "sha256": "2f7a5bec0ff5f7fb159748f55da5b163d374341eda8c1260800fd03502df8c75"
+    },
+    "evidencePack": {
+      "path": "reference/receipts/g6-a10-public-evidence-review-evidence-pack.json",
+      "sha256": "947ffceac8e07f3e55d01c05a3104950b503ee0aaaccd3d4f8da504a548def08",
+      "bytes": 8652
+    }
+  },
+  "state": "accepted",
+  "independenceRequired": true,
+  "reviewers": [
+    {
+      "roleId": "ROLE-PRODUCT-CONTENT",
+      "assignee": "pray",
+      "scope": "验收 438e 公网产品叙事、五视口阅读体验、Agent Lab 连续路径与证据边界表达。",
+      "requiredChecks": [
+        "确认首页、知识模块与 Agent Lab 在 390、768、960、1280、1440 五个视口的阅读与交互路径清晰，无关键内容或触控阻断。",
+        "确认 Replay-first、synthetic、L2/L3、needs-review/refused 等标签不会暗示真实模型调用、外部写入或业务完成态。",
+        "结合 CLI 截图、自动化结果与公开页面事实，确认品牌、中文内容、呼吸感和模块衔接达到本轮公开静态验收要求。"
+      ],
+      "assignmentState": "completed",
+      "decision": "accepted",
+      "signedAt": "2026-08-12T05:32:43Z",
+      "timestampProvenance": {
+        "mode": "system-recorded-on-user-confirmation",
+        "recordedAt": "2026-08-12T05:32:43Z",
+        "humanProvidedSignedAt": null,
+        "meaning": "system processing time for the user's complete four-reviewer confirmation; not four separately handwritten timestamps"
+      },
+      "recordRef": {
+        "path": "release/m1c/reviews/g6-a10-public-evidence/current/ROLE-PRODUCT-CONTENT.json",
+        "sha256": "24601a02917e14d65507f60a8a346a033327b1d88580a8e5d029c83907257c02",
+        "bytes": 2108
+      }
+    },
+    {
+      "roleId": "ROLE-AMAZON-ADS-DOMAIN",
+      "assignee": "ll",
+      "scope": "验收 Amazon Ads 场景内容、Replay 可追溯性、领域口径与 synthetic/真实账户边界。",
+      "requiredChecks": [
+        "确认 Amazon Ads 术语、公式、输入输出、证据与下载在公开 Replay 中保持中文领域口径一致且可追溯。",
+        "确认 synthetic fixture 与离线 Replay 不能被误解为真实广告账户、真实 provider 或真实业务效果证据。",
+        "确认 unknown、停止条件、人工审批与无外部动作边界在场景、执行脊柱、决策和回执之间衔接明确。"
+      ],
+      "assignmentState": "completed",
+      "decision": "accepted",
+      "signedAt": "2026-08-12T05:32:43Z",
+      "timestampProvenance": {
+        "mode": "system-recorded-on-user-confirmation",
+        "recordedAt": "2026-08-12T05:32:43Z",
+        "humanProvidedSignedAt": null,
+        "meaning": "system processing time for the user's complete four-reviewer confirmation; not four separately handwritten timestamps"
+      },
+      "recordRef": {
+        "path": "release/m1c/reviews/g6-a10-public-evidence/current/ROLE-AMAZON-ADS-DOMAIN.json",
+        "sha256": "ec26fe4cfdd134b11a1cb291f2f527dcb63e6b054bded2965a34f97a015d2484",
+        "bytes": 2056
+      }
+    },
+    {
+      "roleId": "ROLE-ENGINEERING-TEST",
+      "assignee": "zy",
+      "scope": "验收浏览器、无障碍、Web Vitals、Lighthouse、12 文件清单与短延迟稳定性证据。",
+      "requiredChecks": [
+        "确认 G6-A9-R1 为 10/10 通过且 failed、flaky、skipped 均为 0，并覆盖五视口、Replay、Reference、搜索、复制、Mermaid、Axe 与 Web Vitals。",
+        "确认首页和 Lab 各三次 Lighthouse 均完整，两个页面中位数均为 performance 0.98、accessibility 1.00、best-practices 1.00。",
+        "确认 12 文件、3,718,564 bytes 的清单逐文件 hash 可重算，且 60 秒延迟前后公网与远端只读状态均通过且未发生 mutation。"
+      ],
+      "assignmentState": "completed",
+      "decision": "accepted",
+      "signedAt": "2026-08-12T05:32:43Z",
+      "timestampProvenance": {
+        "mode": "system-recorded-on-user-confirmation",
+        "recordedAt": "2026-08-12T05:32:43Z",
+        "humanProvidedSignedAt": null,
+        "meaning": "system processing time for the user's complete four-reviewer confirmation; not four separately handwritten timestamps"
+      },
+      "recordRef": {
+        "path": "release/m1c/reviews/g6-a10-public-evidence/current/ROLE-ENGINEERING-TEST.json",
+        "sha256": "e396c3a3b06d6650e3c114f2cf8a0966e46e17498d02a79ce84a09befbe9e7be",
+        "bytes": 2124
+      }
+    },
+    {
+      "roleId": "ROLE-SECURITY-RELEASE",
+      "assignee": "ly",
+      "scope": "验收 TLS、安全头、相对跳转、端口隔离、旧站保留、运行态稳定与授权边界。",
+      "requiredChecks": [
+        "确认目标域 TLS、438e release identity、相对 Location、单值安全头以及 404/405 和 18922 隔离合同均由冻结证据支持。",
+        "确认 edge 身份、七个容器健康状态、renewal timer 与旧 MKD 站点在延迟前后保持不变，且本轮没有远端 mutation、reload 或 restart。",
+        "确认四角色接受若未来完成，也仅关闭该公开静态证据评审，不授权 production/live Agent、provider call、外部写入、远端变更、commit 或 push。"
+      ],
+      "assignmentState": "completed",
+      "decision": "accepted",
+      "signedAt": "2026-08-12T05:32:43Z",
+      "timestampProvenance": {
+        "mode": "system-recorded-on-user-confirmation",
+        "recordedAt": "2026-08-12T05:32:43Z",
+        "humanProvidedSignedAt": null,
+        "meaning": "system processing time for the user's complete four-reviewer confirmation; not four separately handwritten timestamps"
+      },
+      "recordRef": {
+        "path": "release/m1c/reviews/g6-a10-public-evidence/current/ROLE-SECURITY-RELEASE.json",
+        "sha256": "6be8e5c4a29130db7effc19fda1c8527231d2df67707adfeaa13ed5870e48c0c",
+        "bytes": 2150
+      }
+    }
+  ],
+  "authorizationBoundary": {
+    "fourRolePublicAcceptanceCompleted": true,
+    "publicOrRemoteReadAuthorized": false,
+    "remoteMutationAuthorized": false,
+    "dockerAuthorized": false,
+    "productionAgentAuthorized": false,
+    "providerCallsAuthorized": false,
+    "externalWritesAuthorized": false,
+    "commitAuthorized": false,
+    "pushAuthorized": false
+  }
+}

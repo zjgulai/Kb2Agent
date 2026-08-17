@@ -1,0 +1,54 @@
+{
+  "policyId": "POLICY-G7-A1-PROVIDER-READINESS-V1",
+  "schemaVersion": 1,
+  "gateId": "G7-A1",
+  "mode": "local-preparation-only",
+  "evidenceGrade": "L2-fixture-or-dry-run",
+  "allowedDataClasses": ["synthetic"],
+  "inputBoundary": {
+    "maxUtf8Bytes": 4096,
+    "arbitraryFileInputAllowed": false,
+    "arbitraryUrlInputAllowed": false,
+    "secretLoadingAllowed": false
+  },
+  "redaction": {
+    "replacement": "[REDACTED]",
+    "sensitiveKeys": ["apiKey", "authorization", "cookie", "credential", "refreshToken", "secret", "token"],
+    "syntheticMarkers": ["<SYNTHETIC-ACCOUNT-ID>", "<SYNTHETIC-CREDENTIAL>", "<SYNTHETIC-EMAIL>"]
+  },
+  "preparationTargetAllowlist": [{
+    "transport": "fixture",
+    "providerId": "PROVIDER-FIXTURE-ONLY",
+    "modelId": "MODEL-FIXTURE-DETERMINISTIC"
+  }],
+  "liveEgress": {
+    "enabled": false,
+    "schemeAllowlist": [],
+    "hostAllowlist": [],
+    "providerAllowlist": [],
+    "modelAllowlist": []
+  },
+  "preparationBudget": {
+    "maxInputTokens": 1200,
+    "maxOutputTokens": 500,
+    "maxTotalTokens": 1700,
+    "maxTimeoutMs": 10000
+  },
+  "liveCallBudget": {
+    "maxCalls": 0,
+    "maxRetries": 0,
+    "maxCostUsdMicros": 0
+  },
+  "killSwitch": {
+    "state": "engaged",
+    "runtimeOverrideAllowed": false,
+    "releaseRequiresGate": "G7-A2"
+  },
+  "forbiddenEffects": [
+    "provider-call",
+    "external-platform-write",
+    "external-message-send",
+    "canonical-knowledge-write",
+    "production-agent-action"
+  ]
+}

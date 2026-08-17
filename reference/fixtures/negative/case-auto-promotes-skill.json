@@ -1,0 +1,12 @@
+{
+  "fixtureId": "NEG-CASE-SKILL-PROMOTION",
+  "base": "../positive/amazon-ads-reference-package.json",
+  "mutations": [
+    {
+      "operation": "append",
+      "path": "/relations",
+      "value": { "relationId": "REL-CASE-PRODUCES-SKILL", "relationType": "produces", "fromId": "CASE-AMZ-ACOS-SYNTHETIC", "toId": "SKILL-AMZ-ACOS-DRAFT", "fromType": "Case", "toType": "Skill", "status": "candidate" }
+    }
+  ],
+  "expectedCode": "CASE_SKILL_PROMOTION_FORBIDDEN"
+}

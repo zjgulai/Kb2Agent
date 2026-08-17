@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/knowledge-system/g6-a11-public-static-closeout.schema.json",
+  "type": "object",
+  "required": ["$schema", "schemaVersion", "closeoutId", "gateId", "closedAt", "status", "productClass", "subject", "evidenceProfile", "capabilityMatrix", "supportedClaims", "forbiddenClaims", "effectLedger", "authorizationBoundary", "roadmapRef"],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 3 },
+    "schemaVersion": { "const": 1 },
+    "closeoutId": { "const": "G6-A11-PUBLIC-STATIC-CLOSEOUT" },
+    "gateId": { "const": "G6-A11" },
+    "closedAt": { "type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "status": { "const": "complete-public-static-replay-agent-closeout" },
+    "productClass": { "const": "publicly-accepted-static-replay-first-agent-experience" },
+    "subject": { "$ref": "#/$defs/subject" },
+    "evidenceProfile": {
+      "type": "object",
+      "required": ["deterministicAgent", "isolatedRuntime", "publicStaticSwitch", "publicQuality", "humanReview"],
+      "properties": {
+        "deterministicAgent": { "const": "L2-fixture-or-dry-run" },
+        "isolatedRuntime": { "const": "L4-authorized-live-isolated-static-runtime-plus-L3-readback" },
+        "publicStaticSwitch": { "const": "L4-authorized-live-public-static-switch-plus-L3-readback" },
+        "publicQuality": { "const": "L3-production-read-only-browser-and-short-delayed-stability" },
+        "humanReview": { "const": "user-confirmed-four-role-acceptance-with-system-recorded-confirmation-time" }
+      },
+      "additionalProperties": false
+    },
+    "capabilityMatrix": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["capability", "state", "evidence", "boundary"],
+        "properties": {
+          "capability": { "type": "string", "minLength": 3 },
+          "state": { "enum": ["implemented", "accepted", "not-implemented", "not-established"] },
+          "evidence": { "type": "string", "minLength": 12 },
+          "boundary": { "type": "string", "minLength": 12 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "supportedClaims": { "type": "array", "minItems": 4, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true },
+    "forbiddenClaims": { "type": "array", "minItems": 5, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true },
+    "effectLedger": { "$ref": "#/$defs/zeroEffects" },
+    "authorizationBoundary": {
+      "type": "object",
+      "required": ["localCloseoutAuthorized", "g7Authorized", "providerCallsAuthorized", "publicOrRemoteReadAuthorized", "remoteMutationAuthorized", "dockerAuthorized", "productionAgentAuthorized", "externalWritesAuthorized", "commitAuthorized", "pushAuthorized"],
+      "properties": {
+        "localCloseoutAuthorized": { "const": true },
+        "g7Authorized": { "const": false },
+        "providerCallsAuthorized": { "const": false },
+        "publicOrRemoteReadAuthorized": { "const": false },
+        "remoteMutationAuthorized": { "const": false },
+        "dockerAuthorized": { "const": false },
+        "productionAgentAuthorized": { "const": false },
+        "externalWritesAuthorized": { "const": false },
+        "commitAuthorized": { "const": false },
+        "pushAuthorized": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "roadmapRef": { "$ref": "#/$defs/fileEvidence" }
+  },
+  "$defs": {
+    "subject": {
+      "type": "object",
+      "required": ["releaseId", "siteDigest", "fileCount", "totalBytes", "publicReceiptSha256", "publicEvidenceManifestSha256", "fourRoleAcceptanceReceiptSha256"],
+      "properties": {
+        "releaseId": { "const": "mkd-m1c-438e6ae583fc952d" },
+        "siteDigest": { "const": "sha256:438e6ae583fc952d813908b53a6c886ef127dad56d1a73eb017151f1f38bfadf" },
+        "fileCount": { "const": 263 },
+        "totalBytes": { "const": 12978696 },
+        "publicReceiptSha256": { "const": "7f0fb9eec51f18385a69046a254749ffee071aecfcd8678a96b9dd8c9c3000d3" },
+        "publicEvidenceManifestSha256": { "const": "2f7a5bec0ff5f7fb159748f55da5b163d374341eda8c1260800fd03502df8c75" },
+        "fourRoleAcceptanceReceiptSha256": { "const": "373c8166544dfd5b1d71aa54618395164d730c4b4d7fd2e4222538c44df2d54f" }
+      },
+      "additionalProperties": false
+    },
+    "zeroEffects": {
+      "type": "object",
+      "required": ["publicNetworkReads", "sshConnections", "uploads", "remoteMutations", "dockerActions", "edgeActions", "providerCalls", "productionAgentActions", "externalWrites", "gitCommits", "gitPushes"],
+      "properties": {
+        "publicNetworkReads": { "const": 0 }, "sshConnections": { "const": 0 }, "uploads": { "const": 0 }, "remoteMutations": { "const": 0 }, "dockerActions": { "const": 0 }, "edgeActions": { "const": 0 }, "providerCalls": { "const": 0 }, "productionAgentActions": { "const": 0 }, "externalWrites": { "const": 0 }, "gitCommits": { "const": 0 }, "gitPushes": { "const": 0 }
+      },
+      "additionalProperties": false
+    },
+    "fileEvidence": {
+      "type": "object",
+      "required": ["path", "sha256", "bytes"],
+      "properties": { "path": { "type": "string", "minLength": 3 }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "bytes": { "type": "integer", "minimum": 1 } },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

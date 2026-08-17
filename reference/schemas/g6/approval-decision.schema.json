@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/g6/approval-decision.schema.json",
+  "title": "MKD G6 ApprovalDecision",
+  "type": "object",
+  "required": ["decisionId", "schemaVersion", "runId", "state", "requiredRoles", "acceptedRoles", "reason", "signedAt"],
+  "properties": {
+    "decisionId": { "type": "string", "pattern": "^APPROVAL-G6-" },
+    "schemaVersion": { "const": 1 },
+    "runId": { "type": "string", "pattern": "^RUN-G6-" },
+    "state": { "enum": ["pending", "not-ready"] },
+    "requiredRoles": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^ROLE-" }, "uniqueItems": true },
+    "acceptedRoles": { "type": "array", "maxItems": 0 },
+    "reason": { "type": "string", "minLength": 12 },
+    "signedAt": { "type": "null" }
+  },
+  "additionalProperties": false
+}

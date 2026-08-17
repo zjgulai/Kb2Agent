@@ -1,0 +1,43 @@
+{
+  "$schema": "./schemas/product-claims.schema.json",
+  "schemaVersion": 1,
+  "reviewedAt": "2026-08-10",
+  "claims": [
+    {
+      "claimId": "PRODUCT-CLAIM-GUIDE-FOUNDATION",
+      "productLineId": "GUIDE",
+      "decision": "allowed-with-label",
+      "maxEvidenceGrade": "L1-public-or-runtime",
+      "supported": "MKD Guide 已具备 26 页文档身份、概念、Claim、验收契约和本地 QA 基础。",
+      "forbidden": "不得称为完整 Knowledge-to-Agent 产品或生产知识系统。",
+      "nextEvidence": "维持当前 QA，并以独立 Reference 注册表记录新增实现。"
+    },
+    {
+      "claimId": "PRODUCT-CLAIM-REFERENCE-M1A",
+      "productLineId": "REFERENCE",
+      "decision": "allowed-with-label",
+      "maxEvidenceGrade": "L2-fixture-or-dry-run",
+      "supported": "通过机器校验的 Schema、固定 fixture 与本地交互原型可称为可重复校验的 M1-A candidate。",
+      "forbidden": "不得把 fixture/UI replay 称为 compiler runtime、live Agent、accepted 或 production-ready。",
+      "nextEvidence": "由 Owner、Amazon Ads 领域复核人、工程测试与安全发布角色完成独立审阅；M1-B 另行授权。"
+    },
+    {
+      "claimId": "PRODUCT-CLAIM-AMAZON-ADS",
+      "productLineId": "REFERENCE",
+      "decision": "blocked",
+      "maxEvidenceGrade": "LO-S-synthetic",
+      "supported": "Amazon Ads 原型数据仅用于设计与 Schema fixture。",
+      "forbidden": "不得称为真实广告账户诊断效果、客户证据或业务验收。",
+      "nextEvidence": "P3 后建立许可清单、固定语料与领域 reviewer 回执。"
+    },
+    {
+      "claimId": "PRODUCT-CLAIM-LIVE-CLOUD",
+      "productLineId": "REFERENCE",
+      "decision": "allowed-with-label",
+      "maxEvidenceGrade": "L4-authorized-live",
+      "supported": "固定摘要的 M1-C 候选静态站点已在腾讯云以独立最小权限容器部署；HTTPS、安全边界、桌面与移动端交互、响应式、console/network 及延迟容器读回均通过。",
+      "forbidden": "不得把候选静态站点称为 production、live Agent、真实 Amazon Ads 业务验证、provider-backed 服务或 canonical write 能力。",
+      "nextEvidence": "P9-CONTENT-001/002 已在新本地候选中关闭，P7-R 四角色复审已 4/4 接受。下一证据必须是新的腾讯云只读预检，以及另行授权后的候选上传、切换与公网 P9；当前公网仍是旧候选，继续保持候选标签。"
+    }
+  ]
+}

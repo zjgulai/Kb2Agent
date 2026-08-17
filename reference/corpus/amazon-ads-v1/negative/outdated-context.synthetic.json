@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-AMZ-ACOS-OUTDATED",
+  "asOf": "2025-01-01",
+  "expiresAt": "2025-01-31",
+  "freshnessState": "expired",
+  "dataClass": "synthetic",
+  "expectedBlocker": "EVIDENCE_EXPIRED"
+}

@@ -1,0 +1,12 @@
+{
+  "fixtureId": "NEG-RELATION-ENDPOINT",
+  "base": "../positive/amazon-ads-reference-package.json",
+  "mutations": [
+    {
+      "operation": "append",
+      "path": "/relations",
+      "value": { "relationId": "REL-INVALID-EVID-METRIC", "relationType": "supports", "fromId": "EVID-AMZ-ACOS-DELTA", "toId": "METRIC-AMZ-ACOS", "fromType": "EvidenceFragment", "toType": "Metric", "status": "candidate" }
+    }
+  ],
+  "expectedCode": "RELATION_ENDPOINT_NOT_ALLOWED"
+}

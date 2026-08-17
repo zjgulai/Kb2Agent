@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/knowledge-system/g6-a3-review-packet.schema.json",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "packetId",
+    "gateId",
+    "preparedAt",
+    "subject",
+    "state",
+    "independenceRequired",
+    "reviewers",
+    "authorizationBoundary"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "packetId": { "type": "string", "pattern": "^G6-A3-[A-Z0-9-]+$" },
+    "gateId": { "const": "G6-A3" },
+    "preparedAt": { "type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "subject": {
+      "type": "object",
+      "required": ["candidateId", "candidateDigest", "sourceManifest", "remediationReview", "qaEvidence", "closeoutReceipt", "evidencePack"],
+      "properties": {
+        "candidateId": { "const": "g6-a2-r1-local-remediation" },
+        "candidateDigest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "sourceManifest": { "$ref": "#/$defs/fileEvidence" },
+        "remediationReview": { "$ref": "#/$defs/fileEvidence" },
+        "qaEvidence": { "$ref": "#/$defs/fileEvidence" },
+        "closeoutReceipt": { "$ref": "#/$defs/fileEvidence" },
+        "evidencePack": { "$ref": "#/$defs/fileEvidence" }
+      },
+      "additionalProperties": false
+    },
+    "state": { "enum": ["in-review", "accepted", "rejected"] },
+    "independenceRequired": { "const": true },
+    "reviewers": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["roleId", "assignee", "scope", "requiredChecks", "assignmentState", "decision", "signedAt", "recordRef"],
+        "properties": {
+          "roleId": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+          "assignee": { "type": "string", "minLength": 2 },
+          "scope": { "type": "string", "minLength": 12 },
+          "requiredChecks": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": { "type": "string", "minLength": 12 },
+            "uniqueItems": true
+          },
+          "assignmentState": { "enum": ["assigned", "completed"] },
+          "decision": { "enum": ["pending", "accepted", "rejected"] },
+          "signedAt": {
+            "anyOf": [
+              { "type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+              { "type": "null" }
+            ]
+          },
+          "recordRef": { "$ref": "#/$defs/fileEvidence" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "authorizationBoundary": {
+      "type": "object",
+      "required": ["localAcceptanceCompleted", "publicationAuthorized", "remoteActionsAuthorized", "providerCallsAuthorized", "productionAgentAuthorized", "commitAuthorized", "pushAuthorized"],
+      "properties": {
+        "localAcceptanceCompleted": { "type": "boolean" },
+        "publicationAuthorized": { "const": false },
+        "remoteActionsAuthorized": { "const": false },
+        "providerCallsAuthorized": { "const": false },
+        "productionAgentAuthorized": { "const": false },
+        "commitAuthorized": { "const": false },
+        "pushAuthorized": { "const": false }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "fileEvidence": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 3 },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

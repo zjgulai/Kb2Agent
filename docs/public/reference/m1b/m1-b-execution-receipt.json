@@ -1,0 +1,44 @@
+{
+  "receiptId": "M1-B-LOCAL-BUILD-RECEIPT",
+  "generatedAt": "2026-08-09T00:00:00Z",
+  "status": "passed",
+  "corpus": {
+    "formats": 6,
+    "normalSources": 6,
+    "negativeFixtures": 4,
+    "elements": 88
+  },
+  "compiler": {
+    "packageId": "PKG-AMZ-ADS-M1B",
+    "snapshotId": "SNAPSHOT-AMZ-ADS-M1B",
+    "snapshotHash": "sha256:cfa7d24c4116807a3a885ee0f860bf33720de494c50e934a5e23f6fb5a6b4240",
+    "objectCount": 138,
+    "relationCount": 7,
+    "canonicalApply": false,
+    "canonicalWrites": 0
+  },
+  "agent": {
+    "taskId": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+    "eLevel": "E2",
+    "tools": 8,
+    "goldenTotal": 20,
+    "goldenPassed": 20
+  },
+  "artifacts": {
+    "manifest": "sha256:93416afd98ee924f8a2383cffb6add81e66435c1200a5d407262bd7871bec8d5",
+    "extractionReceipt": "sha256:bdf6da9bc255406df30568af325ea3e99128b5014ad44fee547f9f5798b09237",
+    "referencePackage": "sha256:777b334a89253a8eb37c8975d51cb5141a8f33ac74b10d5649b6f2d679a17553",
+    "snapshot": "sha256:cfa7d24c4116807a3a885ee0f860bf33720de494c50e934a5e23f6fb5a6b4240",
+    "sqlite": "sha256:5d6d4bc44ba4b2066a15c237d4af03926000a14b2eb4d04d767aa3970022b0eb",
+    "evaluation": "sha256:acb4335ae575d446888ffd45a51e93aac94764a6404c0a9f23453d2445de42e4",
+    "replay": "sha256:95575d40898917fdb0640a96db3e1d1832031f6bee20afca56b14738fe527d3d"
+  },
+  "evidenceGrade": "L2-fixture-or-dry-run",
+  "providerCalls": 0,
+  "externalCalls": 0,
+  "sideEffects": 0,
+  "canonicalWrites": 0,
+  "deployed": false,
+  "gitCommitted": false,
+  "gitPushed": false
+}

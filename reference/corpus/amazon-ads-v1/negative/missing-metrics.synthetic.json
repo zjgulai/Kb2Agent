@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-AMZ-ACOS-MISSING-METRICS",
+  "comparisonWindow": "7d-vs-7d",
+  "spend": null,
+  "attributedSales": null,
+  "currency": "USD",
+  "dataClass": "synthetic",
+  "expectedBlocker": "REQUIRED_METRIC_INPUT_MISSING"
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "fixtureId": "FIXTURES-G7-A2-S3-DIRECT-ORIGIN-SHADOW-V1",
+  "gateId": "G7-A2-S3",
+  "mode": "offline-deterministic-no-network",
+  "cases": [
+    { "caseId": "ACCEPT-PROVIDER-COST", "kind": "response", "statusCode": 200, "contentType": "application/json", "body": { "model": "deepseek-v4-flash", "content": [{ "type": "text", "text": "ok" }], "stop_reason": "end_turn", "usage": { "input_tokens": 240, "output_tokens": 180, "cost_usd_micros": 1200 } }, "durationMs": 1200, "expectedReasonCode": "RESPONSE_ACCEPTED" },
+    { "caseId": "ACCEPT-LOCKED-CALCULATION", "kind": "response", "statusCode": 200, "contentType": "application/json; charset=utf-8", "body": { "model": "deepseek-v4-flash", "content": [{ "type": "text", "text": "ok" }], "stop_reason": "end_turn", "usage": { "input_tokens": 260, "output_tokens": 160 } }, "durationMs": 900, "calculatedCostUsdMicros": 1500, "expectedReasonCode": "RESPONSE_ACCEPTED" },
+    { "caseId": "FAIL-TIMEOUT", "kind": "transport", "failureKind": "timeout", "errorCode": "G7A2S3_TIMEOUT", "durationMs": 10000, "expectedReasonCode": "TIMEOUT" },
+    { "caseId": "FAIL-TLS", "kind": "transport", "failureKind": "tls", "errorCode": "ERR_TLS_CERT_ALTNAME_INVALID", "durationMs": 40, "expectedReasonCode": "TLS_FAILURE" },
+    { "caseId": "FAIL-DNS", "kind": "transport", "failureKind": "dns", "errorCode": "ENOTFOUND", "durationMs": 30, "expectedReasonCode": "DNS_FAILURE" },
+    { "caseId": "FAIL-NETWORK", "kind": "transport", "failureKind": "network", "errorCode": "ECONNRESET", "durationMs": 45, "expectedReasonCode": "NETWORK_ERROR" },
+    { "caseId": "FAIL-DURATION-BOUND", "kind": "response", "statusCode": 200, "contentType": "application/json", "body": {}, "durationMs": 10001, "expectedReasonCode": "TIMEOUT_BUDGET_EXCEEDED" },
+    { "caseId": "FAIL-RESPONSE-SIZE", "kind": "response", "statusCode": 200, "contentType": "application/json", "bodyMode": "oversize", "durationMs": 100, "expectedReasonCode": "RESPONSE_TOO_LARGE" },
+    { "caseId": "FAIL-REDIRECT", "kind": "response", "statusCode": 308, "contentType": "text/html", "body": {}, "durationMs": 30, "expectedReasonCode": "REDIRECT_FORBIDDEN" },
+    { "caseId": "FAIL-CONTENT-TYPE", "kind": "response", "statusCode": 200, "contentType": "text/plain", "body": "not-json", "durationMs": 30, "expectedReasonCode": "INVALID_CONTENT_TYPE" },
+    { "caseId": "FAIL-INVALID-JSON", "kind": "response", "statusCode": 200, "contentType": "application/json", "rawBody": "{bad", "durationMs": 30, "expectedReasonCode": "INVALID_JSON" },
+    { "caseId": "FAIL-AUTH", "kind": "response", "statusCode": 401, "contentType": "application/json", "body": { "error": { "type": "authentication_error", "message": "bad key" } }, "durationMs": 30, "expectedReasonCode": "AUTHENTICATION_REJECTED" },
+    { "caseId": "FAIL-RATE-LIMIT", "kind": "response", "statusCode": 429, "contentType": "application/json", "body": { "error": { "type": "rate_limit_error", "message": "slow down" } }, "durationMs": 30, "expectedReasonCode": "RATE_LIMITED" },
+    { "caseId": "FAIL-HTTP", "kind": "response", "statusCode": 500, "contentType": "application/json", "body": { "error": { "type": "server_error", "message": "unavailable" } }, "durationMs": 30, "expectedReasonCode": "HTTP_ERROR" },
+    { "caseId": "FAIL-SHAPE", "kind": "response", "statusCode": 200, "contentType": "application/json", "body": { "model": "deepseek-v4-flash", "content": [], "usage": {} }, "durationMs": 30, "expectedReasonCode": "INVALID_RESPONSE_SHAPE" },
+    { "caseId": "FAIL-MODEL", "kind": "response", "statusCode": 200, "contentType": "application/json", "body": { "model": "other-model", "content": [{ "type": "text", "text": "ok" }], "usage": { "input_tokens": 10, "output_tokens": 10, "cost_usd_micros": 1 } }, "durationMs": 30, "expectedReasonCode": "MODEL_ID_MISMATCH" },
+    { "caseId": "FAIL-INPUT-TOKENS", "kind": "response", "statusCode": 200, "contentType": "application/json", "body": { "model": "deepseek-v4-flash", "content": [{ "type": "text", "text": "ok" }], "usage": { "input_tokens": 1201, "output_tokens": 10, "cost_usd_micros": 1 } }, "durationMs": 30, "expectedReasonCode": "TOKEN_BUDGET_EXCEEDED" },
+    { "caseId": "FAIL-OUTPUT-TOKENS", "kind": "response", "statusCode": 200, "contentType": "application/json", "body": { "model": "deepseek-v4-flash", "content": [{ "type": "text", "text": "ok" }], "usage": { "input_tokens": 10, "output_tokens": 501, "cost_usd_micros": 1 } }, "durationMs": 30, "expectedReasonCode": "TOKEN_BUDGET_EXCEEDED" },
+    { "caseId": "FAIL-COST-UNVERIFIED", "kind": "response", "statusCode": 200, "contentType": "application/json", "body": { "model": "deepseek-v4-flash", "content": [{ "type": "text", "text": "ok" }], "usage": { "input_tokens": 10, "output_tokens": 10 } }, "durationMs": 30, "expectedReasonCode": "COST_UNVERIFIED" },
+    { "caseId": "FAIL-COST-BUDGET", "kind": "response", "statusCode": 200, "contentType": "application/json", "body": { "model": "deepseek-v4-flash", "content": [{ "type": "text", "text": "ok" }], "usage": { "input_tokens": 10, "output_tokens": 10, "cost_usd_micros": 250001 } }, "durationMs": 30, "expectedReasonCode": "COST_BUDGET_EXCEEDED" }
+  ]
+}

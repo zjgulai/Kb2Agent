@@ -72,11 +72,19 @@ async function main() {
     const localUrl = `http://${host}:${port}${base}`
     const response = await waitForUrl(child, localUrl)
     const html = await response.text()
-    if (!html.includes('MKD Guide')) throw new Error('preview homepage did not contain the expected site title')
+    if (!html.includes('MKD · Knowledge to Agent')) {
+      throw new Error('preview homepage did not contain the expected MKD product title')
+    }
 
     const pageResponse = await fetch(`${localUrl}knowledge/appendix-validation`)
     if (!pageResponse.ok || !(await pageResponse.text()).includes('concept-workbench')) {
       throw new Error('preview did not serve the built concept workbench page')
+    }
+    const receiptResponse = await fetch(`${localUrl}reference/m1b/m1-b-execution-receipt.json`)
+    if (!receiptResponse.ok) throw new Error('preview did not serve the M1-B execution receipt')
+    const receipt = await receiptResponse.json()
+    if (receipt.status !== 'passed' || receipt.externalCalls !== 0 || receipt.sideEffects !== 0) {
+      throw new Error('preview M1-B receipt did not preserve the zero-effect passing boundary')
     }
     const missingResponse = await fetch(`${localUrl}definitely-missing`)
     if (missingResponse.status !== 404) throw new Error(`preview missing route returned ${missingResponse.status}, expected 404`)

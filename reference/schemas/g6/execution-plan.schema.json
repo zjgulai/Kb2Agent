@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/g6/execution-plan.schema.json",
+  "title": "MKD G6 ExecutionPlan",
+  "type": "object",
+  "required": ["planId", "schemaVersion", "runId", "taskPackageId", "agentId", "mode", "steps", "createdAt"],
+  "properties": {
+    "planId": { "type": "string", "pattern": "^PLAN-" },
+    "schemaVersion": { "const": 1 },
+    "runId": { "type": "string", "pattern": "^RUN-G6-" },
+    "taskPackageId": { "const": "TASK-AMZ-ADS-DIAGNOSIS-V1" },
+    "agentId": { "const": "AGENT-MKD-E2-REPLAY" },
+    "mode": { "const": "replay" },
+    "steps": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["stepId", "order", "toolId", "purpose", "inputRefs", "guard"],
+        "properties": {
+          "stepId": { "type": "string", "pattern": "^STEP-" },
+          "order": { "type": "integer", "minimum": 1, "maximum": 8 },
+          "toolId": { "type": "string", "pattern": "^TOOL-[A-Z0-9-]+$" },
+          "purpose": { "type": "string", "minLength": 8 },
+          "inputRefs": { "type": "array", "items": { "type": "string", "minLength": 3 }, "uniqueItems": true },
+          "guard": { "enum": ["always", "schema-valid", "evidence-ready", "permission-allowed"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "createdAt": { "const": "2026-08-09T00:00:00Z" }
+  },
+  "additionalProperties": false
+}

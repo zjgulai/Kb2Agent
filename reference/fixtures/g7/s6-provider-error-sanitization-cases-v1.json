@@ -1,0 +1,232 @@
+{
+  "$schema": "../../schemas/g7/s6-r1-provider-error-sanitization-fixtures.schema.json",
+  "schemaVersion": 1,
+  "fixtureSetId": "FIXTURES-G7-A2-S6-R1-PROVIDER-ERROR-SANITIZATION-V1",
+  "gateId": "G7-A2-S6-R1",
+  "classification": "synthetic-local-security-fixtures-no-real-credential-material",
+  "cases": [
+    {
+      "caseId": "G7S6R1-SAN-01",
+      "input": {
+        "reasonCode": "AUTHENTICATION_REJECTED",
+        "errorClass": "authentication_error",
+        "errorMessage": "Authentication failed for api key: ****SYNTHETIC"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_AUTHENTICATION_REJECTED",
+        "credentialReferenceDetected": true
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-02",
+      "input": {
+        "reasonCode": "AUTHENTICATION_REJECTED",
+        "errorClass": "authentication_error",
+        "errorMessage": "x-api-key=SYNTHETIC-FIXTURE"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_AUTHENTICATION_REJECTED",
+        "credentialReferenceDetected": true
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-03",
+      "input": {
+        "reasonCode": "AUTHENTICATION_REJECTED",
+        "errorClass": "authentication_error",
+        "errorMessage": "Authorization: Bearer SYNTHETIC-FIXTURE"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_AUTHENTICATION_REJECTED",
+        "credentialReferenceDetected": true
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-04",
+      "input": {
+        "reasonCode": "AUTHENTICATION_REJECTED",
+        "errorClass": "authentication_error",
+        "errorMessage": "Bearer sk-SYNTHETIC-FIXTURE"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_AUTHENTICATION_REJECTED",
+        "credentialReferenceDetected": true
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-05",
+      "input": {
+        "reasonCode": "AUTHENTICATION_REJECTED",
+        "errorClass": "authentication_error",
+        "errorMessage": "{\"api_key\":\"SYNTHETIC-FIXTURE\"}"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_AUTHENTICATION_REJECTED",
+        "credentialReferenceDetected": true
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-06",
+      "input": {
+        "reasonCode": "AUTHENTICATION_REJECTED",
+        "errorClass": "authentication_error",
+        "errorMessage": "secret token: SYNTHETIC-FIXTURE"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_AUTHENTICATION_REJECTED",
+        "credentialReferenceDetected": true
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-07",
+      "input": {
+        "reasonCode": "AUTHENTICATION_REJECTED",
+        "errorClass": "authentication_error",
+        "errorMessage": "***SYNTHETIC-MASK"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_AUTHENTICATION_REJECTED",
+        "credentialReferenceDetected": true
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-08",
+      "input": {
+        "reasonCode": "RATE_LIMITED",
+        "errorClass": "rate_limit_error",
+        "errorMessage": "Rate limit exceeded"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_RATE_LIMITED",
+        "credentialReferenceDetected": false
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-09",
+      "input": {
+        "reasonCode": "TIMEOUT",
+        "errorClass": "TimeoutError",
+        "errorMessage": "Request timed out"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_TIMEOUT",
+        "credentialReferenceDetected": false
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-10",
+      "input": {
+        "reasonCode": "TLS_FAILURE",
+        "errorClass": "TlsError",
+        "errorMessage": "TLS validation failed"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_TLS_FAILURE",
+        "credentialReferenceDetected": false
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-11",
+      "input": {
+        "reasonCode": "DNS_FAILURE",
+        "errorClass": "DnsError",
+        "errorMessage": "Name lookup failed"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_DNS_FAILURE",
+        "credentialReferenceDetected": false
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-12",
+      "input": {
+        "reasonCode": "NETWORK_ERROR",
+        "errorClass": "NetworkError",
+        "errorMessage": "Connection reset"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_NETWORK_FAILURE",
+        "credentialReferenceDetected": false
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-13",
+      "input": {
+        "reasonCode": "HTTP_ERROR",
+        "errorClass": "HttpError",
+        "errorMessage": "Upstream HTTP failure"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_HTTP_FAILURE",
+        "credentialReferenceDetected": false
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-14",
+      "input": {
+        "reasonCode": "MODEL_ID_MISMATCH",
+        "errorClass": "ModelIdMismatch",
+        "errorMessage": "Returned model mismatch"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_RESPONSE_REJECTED",
+        "credentialReferenceDetected": false
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-15",
+      "input": {
+        "reasonCode": "COST_UNVERIFIED",
+        "errorClass": "CostUnverified",
+        "errorMessage": "Cost evidence absent"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_RESPONSE_REJECTED",
+        "credentialReferenceDetected": false
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-16",
+      "input": {
+        "reasonCode": null,
+        "errorClass": null,
+        "errorMessage": null
+      },
+      "expected": {
+        "safeCode": "PROVIDER_ERROR_REDACTED",
+        "credentialReferenceDetected": false
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-17",
+      "input": {
+        "reasonCode": "bad reason code",
+        "errorClass": "Unsafe Class Value",
+        "errorMessage": "Unclassified failure"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_ERROR_REDACTED",
+        "credentialReferenceDetected": false
+      }
+    },
+    {
+      "caseId": "G7S6R1-SAN-18",
+      "input": {
+        "reasonCode": "RESPONSE_TOO_LARGE",
+        "errorClass": "ResponseTooLarge",
+        "errorMessage": "Response exceeded bound"
+      },
+      "expected": {
+        "safeCode": "PROVIDER_RESPONSE_REJECTED",
+        "credentialReferenceDetected": false
+      }
+    }
+  ],
+  "authorizationBoundary": {
+    "syntheticOnly": true,
+    "credentialReads": 0,
+    "networkCalls": 0,
+    "providerCalls": 0,
+    "externalWrites": 0
+  }
+}

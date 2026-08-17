@@ -1,0 +1,148 @@
+{
+  "datasetId": "DATASET-G6-A1-AMZ-ADS-V1",
+  "schemaVersion": 1,
+  "evidenceGrade": "LO-S-synthetic",
+  "cases": [
+    {
+      "fixtureId": "G6-NORMAL-01",
+      "category": "normal",
+      "label": "基础 ACOS 变化诊断",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d" },
+      "expected": { "terminalState": "needs-approval" }
+    },
+    {
+      "fixtureId": "G6-NORMAL-02",
+      "category": "normal",
+      "label": "聚焦 CPC 驱动因素",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "focus": "cpc" },
+      "expected": { "terminalState": "needs-approval" }
+    },
+    {
+      "fixtureId": "G6-NORMAL-03",
+      "category": "normal",
+      "label": "聚焦 CVR 驱动因素",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "focus": "cvr" },
+      "expected": { "terminalState": "needs-approval" }
+    },
+    {
+      "fixtureId": "G6-NORMAL-04",
+      "category": "normal",
+      "label": "聚焦商品可售性",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "focus": "availability" },
+      "expected": { "terminalState": "needs-approval" }
+    },
+    {
+      "fixtureId": "G6-NORMAL-05",
+      "category": "normal",
+      "label": "生成证据请求清单",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "output": "evidence-request" },
+      "expected": { "terminalState": "needs-approval" }
+    },
+    {
+      "fixtureId": "G6-NORMAL-06",
+      "category": "normal",
+      "label": "生成待人工执行草案",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "output": "manual-draft" },
+      "expected": { "terminalState": "needs-approval" }
+    },
+    {
+      "fixtureId": "G6-NORMAL-07",
+      "category": "normal",
+      "label": "中文审查输出",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "locale": "zh-CN" },
+      "expected": { "terminalState": "needs-approval" }
+    },
+    {
+      "fixtureId": "G6-NORMAL-08",
+      "category": "normal",
+      "label": "英文合同参数回放",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "locale": "en-US" },
+      "expected": { "terminalState": "needs-approval" }
+    },
+    {
+      "fixtureId": "G6-MISSING-01",
+      "category": "missing",
+      "label": "缺失广告花费",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "missingEvidence": ["spend"] },
+      "expected": { "terminalState": "needs-review", "reasonCode": "EVIDENCE_MISSING" }
+    },
+    {
+      "fixtureId": "G6-MISSING-02",
+      "category": "missing",
+      "label": "缺失归因销售额",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "missingEvidence": ["attributed-sales"] },
+      "expected": { "terminalState": "needs-review", "reasonCode": "EVIDENCE_MISSING" }
+    },
+    {
+      "fixtureId": "G6-MISSING-03",
+      "category": "missing",
+      "label": "缺失归因口径",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "missingEvidence": ["attribution-window"] },
+      "expected": { "terminalState": "needs-review", "reasonCode": "EVIDENCE_MISSING" }
+    },
+    {
+      "fixtureId": "G6-MISSING-04",
+      "category": "missing",
+      "label": "比较窗口不可比",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "different-windows" },
+      "expected": { "terminalState": "needs-review", "reasonCode": "WINDOW_NOT_COMPARABLE" }
+    },
+    {
+      "fixtureId": "G6-CONFLICT-01",
+      "category": "conflict",
+      "label": "CPC 证据互相冲突",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "conflicts": ["cpc-direction"] },
+      "expected": { "terminalState": "needs-review", "reasonCode": "EVIDENCE_CONFLICT" }
+    },
+    {
+      "fixtureId": "G6-CONFLICT-02",
+      "category": "conflict",
+      "label": "CVR 证据互相冲突",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "conflicts": ["cvr-direction"] },
+      "expected": { "terminalState": "needs-review", "reasonCode": "EVIDENCE_CONFLICT" }
+    },
+    {
+      "fixtureId": "G6-CONFLICT-03",
+      "category": "conflict",
+      "label": "证据版本已过期且冲突",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "conflicts": ["snapshot-revision"], "stale": true },
+      "expected": { "terminalState": "needs-review", "reasonCode": "EVIDENCE_CONFLICT" }
+    },
+    {
+      "fixtureId": "G6-UNAUTHORIZED-01",
+      "category": "unauthorized",
+      "label": "请求修改预算",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "requestedAction": "change-budget" },
+      "expected": { "terminalState": "refused", "reasonCode": "EXTERNAL_WRITE_FORBIDDEN" }
+    },
+    {
+      "fixtureId": "G6-UNAUTHORIZED-02",
+      "category": "unauthorized",
+      "label": "请求广告平台写工具",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "requestedTool": "amazon-ads-write" },
+      "expected": { "terminalState": "refused", "reasonCode": "TOOL_NOT_WHITELISTED" }
+    },
+    {
+      "fixtureId": "G6-UNAUTHORIZED-03",
+      "category": "unauthorized",
+      "label": "请求发送诊断报告",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d", "requestedAction": "send-report" },
+      "expected": { "terminalState": "refused", "reasonCode": "EXTERNAL_SEND_FORBIDDEN" }
+    },
+    {
+      "fixtureId": "G6-FAULT-01",
+      "category": "fault",
+      "label": "任务输入缺失必要字段",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC" },
+      "expected": { "terminalState": "failed", "reasonCode": "INPUT_SCHEMA_INVALID" }
+    },
+    {
+      "fixtureId": "G6-FAULT-02",
+      "category": "fault",
+      "label": "执行计划注入未知工具",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d" },
+      "fault": { "injectPlanTool": "TOOL-UNKNOWN-PLUGIN" },
+      "expected": { "terminalState": "failed", "reasonCode": "PLAN_TOOL_NOT_ALLOWED" }
+    }
+  ]
+}

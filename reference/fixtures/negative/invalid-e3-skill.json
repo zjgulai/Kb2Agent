@@ -1,0 +1,8 @@
+{
+  "fixtureId": "NEG-E3-SKILL",
+  "base": "../positive/amazon-ads-reference-package.json",
+  "mutations": [
+    { "operation": "replace", "path": "/skills/0/eLevel", "value": "E3" }
+  ],
+  "expectedCode": "SCHEMA_INVALID"
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/knowledge-system/g6-a5-candidate-review-submission.schema.json",
+  "type": "object",
+  "required": ["schemaVersion", "gateId", "releaseId", "siteDigest", "archiveSha256", "submittedAt", "reviewers"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "gateId": { "const": "G6-A5" },
+    "releaseId": { "const": "mkd-m1c-438e6ae583fc952d" },
+    "siteDigest": { "const": "sha256:438e6ae583fc952d813908b53a6c886ef127dad56d1a73eb017151f1f38bfadf" },
+    "archiveSha256": { "const": "39c46be06d37507bbb5c1470d531c80988c6bc46d1d332425b51170ff840a892" },
+    "submittedAt": { "type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "reviewers": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["roleId", "assignee", "checkResults", "findings", "independenceAttestation", "decision", "signedAt"],
+        "properties": {
+          "roleId": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+          "assignee": { "type": "string", "minLength": 2 },
+          "checkResults": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["status", "note"],
+              "properties": {
+                "status": { "enum": ["passed", "failed"] },
+                "note": { "type": ["string", "null"] }
+              },
+              "additionalProperties": false
+            }
+          },
+          "findings": { "type": "array", "items": { "type": "string", "minLength": 3 } },
+          "independenceAttestation": { "const": true },
+          "decision": { "enum": ["accepted", "rejected"] },
+          "signedAt": { "type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "decision": { "const": "accepted" } }, "required": ["decision"] },
+            "then": { "properties": { "checkResults": { "items": { "properties": { "status": { "const": "passed" } } } } } }
+          },
+          {
+            "if": { "properties": { "decision": { "const": "rejected" } }, "required": ["decision"] },
+            "then": { "properties": { "checkResults": { "contains": { "properties": { "status": { "const": "failed" } }, "required": ["status"] } } } }
+          }
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,496 @@
+{
+  "$schema": "../../schemas/g7/s6-r2-attempt-2-fixtures.schema.json",
+  "schemaVersion": 1,
+  "fixtureSetId": "FIXTURES-G7-A2-S6-R2-ATTEMPT-2-ADMISSION-V1",
+  "gateId": "G7-A2-S6-R2",
+  "classification": "synthetic-local-owner-attestation-fixtures-no-real-credential-material",
+  "cases": [
+    {
+      "caseId": "G7S6R2-ATT-01",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "complete",
+        "reasonCode": "OWNER_ATTESTATION_COMPLETE_LOCAL_FACT_ONLY"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-02",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": null,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "pending",
+        "reasonCode": "OWNER_ATTESTATION_FACTS_PENDING"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-03",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": null,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "pending",
+        "reasonCode": "OWNER_ATTESTATION_FACTS_PENDING"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-04",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": null,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "pending",
+        "reasonCode": "OWNER_ATTESTATION_FACTS_PENDING"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-05",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": null,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "pending",
+        "reasonCode": "OWNER_ATTESTATION_FACTS_PENDING"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-06",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": null,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "pending",
+        "reasonCode": "OWNER_ATTESTATION_FACTS_PENDING"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-07",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": null,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "pending",
+        "reasonCode": "OWNER_ATTESTATION_FACTS_PENDING"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-08",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": null
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "pending",
+        "reasonCode": "OWNER_ATTESTATION_FACTS_PENDING"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-09",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": false,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "reasonCode": "OWNER_ATTESTATION_CHECK_FAILED"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-10",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": false,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "reasonCode": "OWNER_ATTESTATION_CHECK_FAILED"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-11",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": false
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "reasonCode": "OWNER_ATTESTATION_CHECK_FAILED"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-12",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": true,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "reasonCode": "SECRET_MATERIAL_PROVIDED"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-13",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": true,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "reasonCode": "SECRET_MATERIAL_PROVIDED"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-14",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": true
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "reasonCode": "SECRET_MATERIAL_PROVIDED"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-15",
+      "input": {
+        "owner": "synthetic-not-pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "attested",
+          "source": "credential-owner-confirmed-in-codex-task",
+          "decision": "accepted",
+          "signedAt": "2026-08-14T00:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "rejected",
+        "reasonCode": "OWNER_IDENTITY_MISMATCH"
+      }
+    },
+    {
+      "caseId": "G7S6R2-ATT-16",
+      "input": {
+        "owner": "pray",
+        "facts": {
+          "officialDeepSeekConsoleChecked": true,
+          "credentialActiveAtCheck": true,
+          "intendedAccountAndProjectConfirmed": true,
+          "apiAccessAndBalanceConfirmed": true,
+          "credentialRotatedAfterRestrictedReference": true,
+          "secureInjectionUpdatedOutOfBand": true,
+          "formattingCheckedWithoutDisclosure": true
+        },
+        "secretHandling": {
+          "credentialValueProvided": false,
+          "credentialLengthPrefixSuffixHashFingerprintProvided": false,
+          "secretBearingScreenshotOrArtifactProvided": false
+        },
+        "attestationDecision": {
+          "state": "pending",
+          "source": null,
+          "decision": "pending",
+          "signedAt": null
+        }
+      },
+      "expected": {
+        "status": "pending",
+        "reasonCode": "OWNER_ATTESTATION_DECISION_PENDING"
+      }
+    }
+  ],
+  "authorizationBoundary": {
+    "syntheticOnly": true,
+    "credentialReads": 0,
+    "networkCalls": 0,
+    "providerCalls": 0,
+    "externalWrites": 0
+  }
+}

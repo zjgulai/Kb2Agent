@@ -1,0 +1,232 @@
+{
+  "$schema": "./schemas/capability-map.schema.json",
+  "schemaVersion": 1,
+  "reviewedAt": "2026-08-17",
+  "scopeNote": "能力图谱的机器可读注册表：每项能力必须绑定证据引用与禁止声明；状态只能由门禁回执支撑，不得由页面完整或上线事实自动抬升。",
+  "evidenceCeiling": "L1 current read-only inspection plus repository-recorded L2 fixtures",
+  "capabilities": [
+    {
+      "id": "CAP-GUIDE-SITE",
+      "name": "26 章知识站与证据工作台",
+      "line": "GUIDE",
+      "status": "live",
+      "evidenceGrade": "L3",
+      "deployment": "github-pages",
+      "evidenceRefs": [
+        { "kind": "commit", "value": "49078895ed532147d2a81a398c763cd497aa4123" },
+        { "kind": "url", "value": "https://zjgulai.github.io/Kb2Agent/" }
+      ],
+      "ownerGate": null,
+      "forbiddenClaims": [
+        "Guide 页面完整不等于 Knowledge-to-Agent runtime 已实现。",
+        "GitHub Pages 当前版本尚未包含 Mermaid hydration 修复，不得宣称两站同版本。"
+      ],
+      "notes": "26 页面 / 352 代码块；暖白主题；证据工作台可见 0/4 已接受与审批受阻状态。"
+    },
+    {
+      "id": "CAP-GUIDE-SEARCH",
+      "name": "原生本地搜索与金标意图别名",
+      "line": "GUIDE",
+      "status": "live",
+      "evidenceGrade": "L3",
+      "deployment": "github-pages",
+      "evidenceRefs": [
+        { "kind": "commit", "value": "7943615d70609dcceb94b1098e4211a96f0ad924" },
+        { "kind": "path", "value": "tests/site/navigation-p2.spec.mjs" }
+      ],
+      "ownerGate": null,
+      "forbiddenClaims": [
+        "搜索结果排名不等于学习效果或任务成功证据，不得用 Hit@1 合同声明业务有效性。"
+      ],
+      "notes": "15 意图金标合同 Hit@1/Hit@3 全绿；搜索模块保持原生懒加载，无预取。"
+    },
+    {
+      "id": "CAP-GUIDE-REGISTRY",
+      "name": "知识治理注册表（documents/concepts/claims/acceptance）",
+      "line": "GUIDE",
+      "status": "draft",
+      "evidenceGrade": "L2",
+      "deployment": "none",
+      "evidenceRefs": [
+        { "kind": "path", "value": "knowledge-system/documents.yml" },
+        { "kind": "path", "value": "knowledge-system/acceptance.yml" }
+      ],
+      "ownerGate": null,
+      "forbiddenClaims": [
+        "注册表结构完整不等于验收通过；12 个角色仍为 0 accepted，3 个契约仍为 approval-blocked。"
+      ],
+      "notes": "26 docId、13 概念 / 22 别名、12 claims、3 契约；等待 NEXT-4 与 roles.json 收敛。"
+    },
+    {
+      "id": "CAP-GUIDE-QA",
+      "name": "docs:qa 门禁链与内容测试",
+      "line": "GUIDE",
+      "status": "replayable",
+      "evidenceGrade": "L2",
+      "deployment": "none",
+      "evidenceRefs": [
+        { "kind": "path", "value": "scripts/check-acceptance.mjs" },
+        { "kind": "path", "value": "package.json" }
+      ],
+      "ownerGate": null,
+      "forbiddenClaims": [
+        "本地 QA 通过不代表生产部署、法律合规、预算批准或真实模型效果。",
+        "GitHub Pages 工作流只消费 docs:build，完整 docs:qa 可被绕过（P0-10 未整改）。"
+      ],
+      "notes": "内容/构建/标题/预览隔离/性能/Lighthouse/Playwright 全链本地可复放。"
+    },
+    {
+      "id": "CAP-LAB-SCHEMA",
+      "name": "L0-L6 对象与关系本体",
+      "line": "REFERENCE",
+      "status": "accepted",
+      "evidenceGrade": "L2",
+      "deployment": "none",
+      "evidenceRefs": [
+        { "kind": "path", "value": "docs/architecture/m1-a-schema-catalog.md" },
+        { "kind": "path", "value": "reference/ontology/relations.json" }
+      ],
+      "ownerGate": null,
+      "forbiddenClaims": [
+        "Schema 可校验不代表知识对象已从真实语料晋级；候选与 canonical 边界仍受人工晋级门禁约束。"
+      ],
+      "notes": "typed relations、permissions 与 terms 已落盘；G6-A3-R1 四角色接受覆盖本地静态实现。"
+    },
+    {
+      "id": "CAP-LAB-GOLDEN",
+      "name": "20 条 golden cases 与确定性工具",
+      "line": "REFERENCE",
+      "status": "accepted",
+      "evidenceGrade": "L2",
+      "deployment": "none",
+      "evidenceRefs": [
+        { "kind": "path", "value": "reference/golden/amazon-ads-diagnosis-v1.json" },
+        { "kind": "path", "value": "knowledge-system/g6-a5-candidate-review-packet-accepted.json" }
+      ],
+      "ownerGate": null,
+      "forbiddenClaims": [
+        "Synthetic/adversarial 任务通过不代表真实业务有效性；真实去敏案例不可得时业务有效性保持 blocked。"
+      ],
+      "notes": "8 正常 / 4 缺输入 / 3 冲突 / 3 未授权 / 2 故障；8 个白名单工具 sideEffect=false。"
+    },
+    {
+      "id": "CAP-LAB-AGENTLAB",
+      "name": "Replay-first Agent Lab 公开页面",
+      "line": "REFERENCE",
+      "status": "live",
+      "evidenceGrade": "L3",
+      "deployment": "tencent-cloud",
+      "evidenceRefs": [
+        { "kind": "path", "value": "reference/receipts/g6-a9-r1-public-p9-delayed-stability-receipt.json" },
+        { "kind": "path", "value": "knowledge-system/g6-a10-public-evidence-review-packet-accepted.json" }
+      ],
+      "ownerGate": null,
+      "forbiddenClaims": [
+        "公开静态 Agent Lab 不代表 production/live Agent、真实 provider 调用或模型能力验证。"
+      ],
+      "notes": "20 场景可选、真实 bundle 回放；公网 P9 10/10、Lighthouse 98/100/100、四角色公开证据评审已接受。"
+    },
+    {
+      "id": "CAP-LAB-HYDRATION",
+      "name": "Mermaid SSR/client hydration 修复",
+      "line": "REFERENCE",
+      "status": "live",
+      "evidenceGrade": "L3",
+      "deployment": "tencent-cloud",
+      "evidenceRefs": [
+        { "kind": "path", "value": "reference/receipts/m1-c-g4r1-hydration-remediation-receipt.json" }
+      ],
+      "ownerGate": null,
+      "forbiddenClaims": [
+        "该修复仅上线腾讯云；GitHub Pages 旧版仍含 hydration mismatch，不得宣称全渠道已修复。"
+      ],
+      "notes": "G4-R1 本地修复 + 真实浏览器回归 + 两次确定性构建；组件边界保持不变。"
+    },
+    {
+      "id": "CAP-OPS-EDGE",
+      "name": "腾讯云 438e 公网静态 edge",
+      "line": "REFERENCE",
+      "status": "live",
+      "evidenceGrade": "L4",
+      "deployment": "tencent-cloud",
+      "evidenceRefs": [
+        { "kind": "path", "value": "reference/receipts/g6-a8-r1-edge-switch-receipt.json" },
+        { "kind": "path", "value": "deploy/mkd-distill-438e/deployment-target.json" },
+        { "kind": "url", "value": "https://kb.lute-tlz-dddd.top/Kb2Agent/" }
+      ],
+      "ownerGate": null,
+      "forbiddenClaims": [
+        "公网静态切换成功不代表业务有效性、live Agent 可用或四角色对 live Agent 的验收。"
+      ],
+      "notes": "88d4→438e same-inode 精确切换、TLS/certbot/timer、双容器双网络隔离；旧 runtime 保留可回滚。"
+    },
+    {
+      "id": "CAP-OPS-BACKUP",
+      "name": "备份与恢复演练",
+      "line": "REFERENCE",
+      "status": "accepted",
+      "evidenceGrade": "L4",
+      "deployment": "tencent-cloud",
+      "evidenceRefs": [
+        { "kind": "path", "value": "reference/receipts/mkd-distill-g4r3r3-rollback-readback.json" }
+      ],
+      "ownerGate": null,
+      "forbiddenClaims": [
+        "恢复演练回执是历史证据，不能替代每次发布前的最新恢复演练与备份验证。"
+      ],
+      "notes": "多次 blocked-and-rolled-back 门禁均完成 18/18 restoration 读回；backup 与旧 runtime 保留策略有效。"
+    },
+    {
+      "id": "CAP-PROVIDER-ADMISSION",
+      "name": "DeepSeek 官方 origin admission",
+      "line": "REFERENCE",
+      "status": "accepted",
+      "evidenceGrade": "L2",
+      "deployment": "none",
+      "evidenceRefs": [
+        { "kind": "path", "value": "reference/receipts/g7-a2-s2-r1-direct-origin-review-acceptance-receipt.json" },
+        { "kind": "path", "value": "docs/architecture/g7-a2-s2-r1-system-recorded-review-acceptance.md" }
+      ],
+      "ownerGate": "G7-A2-S6-R2-C-R1-A-R1",
+      "forbiddenClaims": [
+        "accepted-not-activated：不证明 credential/endpoint/model runtime 已验证，不授权任何 provider 调用。",
+        "系统记账时间不是 reviewer 手写签名时间，不得伪造时间来源。"
+      ],
+      "notes": "base https://api.deepseek.com/anthropic、exact model deepseek-v4-flash；预算 2 calls / USD 0.25 封顶。"
+    },
+    {
+      "id": "CAP-PROVIDER-LIVE-CALLS",
+      "name": "有界 live provider shadow 调用",
+      "line": "REFERENCE",
+      "status": "blocked",
+      "evidenceGrade": "L4",
+      "deployment": "none",
+      "evidenceRefs": [
+        { "kind": "path", "value": "reference/receipts/g7-a2-s6-r2-c-attempt-2-receipt.json" },
+        { "kind": "path", "value": "reference/receipts/g7-a2-s6-r2-c-r1-a-credential-shape-probe-receipt.json" }
+      ],
+      "ownerGate": "G7-A2-S6-R2-C-R1-A-R1",
+      "forbiddenClaims": [
+        "不得把认证失败归因为 provider 或模型无效；exact root cause 未证明，只能等待 owner attestation。"
+      ],
+      "notes": "L4 授权 attempt：1 次调用、0 passed、retries=0、cost=0；credential shape probe 等待 owner 确认 rebind/restart。"
+    },
+    {
+      "id": "CAP-PROVIDER-LIVE-AGENT",
+      "name": "Production / live Agent 灰度",
+      "line": "REFERENCE",
+      "status": "design-only",
+      "evidenceGrade": "L0",
+      "deployment": "none",
+      "evidenceRefs": [
+        { "kind": "path", "value": "docs/architecture/g7-a1-provider-readiness-design.md" }
+      ],
+      "ownerGate": "G8-series-not-authorized",
+      "forbiddenClaims": [
+        "live Agent 灰度必须重新走四角色独立验收，不得继承静态版 G6-A10-R1 的接受结论。",
+        "在限频、预算、kill switch 与公网 smoke 未关闭前不得公开 live run。"
+      ],
+      "notes": "G8 门禁系列仅存在设计草案：IP/session/global 三层限速 + 日预算 + 最小遥测。"
+    }
+  ]
+}

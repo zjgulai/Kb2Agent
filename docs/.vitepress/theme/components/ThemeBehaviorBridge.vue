@@ -4,7 +4,7 @@ import { nextTick, onMounted, onUnmounted, watch } from 'vue'
 
 const route = useRoute()
 
-const searchTriggerSelector = '.VPNavBarSearch button, .mkd-mobile-search, .evidence-search'
+const searchTriggerSelector = '.VPNavBarSearch button, .mkd-mobile-search, .evidence-search, .mkd-guide-search'
 
 let observer
 let sidebarResizeObserver

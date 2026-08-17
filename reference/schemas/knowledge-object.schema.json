@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/knowledge-object.schema.json",
+  "title": "MKD L2-L4 Knowledge Objects",
+  "oneOf": [
+    { "$ref": "#/$defs/concept" },
+    { "$ref": "#/$defs/metric" },
+    { "$ref": "#/$defs/mentalModel" },
+    { "$ref": "#/$defs/decisionModel" },
+    { "$ref": "#/$defs/heuristic" },
+    { "$ref": "#/$defs/case" },
+    { "$ref": "#/$defs/playbook" }
+  ],
+  "$defs": {
+    "concept": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["canonicalTerm", "aliases", "definition", "examples"], "properties": {
+          "objectType": { "const": "Concept" },
+          "canonicalTerm": { "type": "string", "minLength": 2 },
+          "aliases": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "definition": { "type": "string", "minLength": 12 },
+          "examples": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "metric": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["name", "formula", "inputs", "unit", "window", "failureModes"], "properties": {
+          "objectType": { "const": "Metric" },
+          "name": { "type": "string", "minLength": 2 },
+          "formula": { "type": "string", "minLength": 3 },
+          "inputs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "unit": { "type": "string", "minLength": 1 },
+          "window": { "type": "string", "minLength": 3 },
+          "failureModes": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "mentalModel": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["trigger", "inputs", "reasoning", "limits", "counterexample"], "properties": {
+          "objectType": { "const": "MentalModel" },
+          "trigger": { "type": "string", "minLength": 5 },
+          "inputs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "reasoning": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "limits": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "counterexample": { "type": "string", "minLength": 8 }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "decisionModel": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["inputs", "branches", "outputs", "unknownPolicy", "stopConditions", "reviewState"], "properties": {
+          "objectType": { "const": "DecisionModel" },
+          "inputs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "branches": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["when", "then"], "properties": { "when": { "type": "string" }, "then": { "type": "string" } }, "additionalProperties": false } },
+          "outputs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "unknownPolicy": { "type": "string", "minLength": 8 },
+          "stopConditions": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } },
+          "reviewState": { "enum": ["pending-domain-review", "domain-approved"] }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "heuristic": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["trigger", "recommendation", "confidence", "exceptions"], "properties": {
+          "objectType": { "const": "Heuristic" },
+          "trigger": { "type": "string", "minLength": 5 },
+          "recommendation": { "type": "string", "minLength": 8 },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "exceptions": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "case": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["title", "context", "facts", "decisions", "outcome", "evidenceRefs", "limitations", "dataClass"], "properties": {
+          "objectType": { "const": "Case" },
+          "title": { "type": "string", "minLength": 5 },
+          "context": { "type": "string", "minLength": 8 },
+          "facts": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "decisions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "outcome": { "type": "string", "minLength": 5 },
+          "evidenceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+          "limitations": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "dataClass": { "enum": ["synthetic", "deidentified-real", "authorized-real"] }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "playbook": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["title", "prerequisites", "steps", "checks", "rollback", "approval"], "properties": {
+          "objectType": { "const": "Playbook" },
+          "title": { "type": "string", "minLength": 5 },
+          "prerequisites": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "steps": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "checks": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "rollback": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "approval": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" } }
+        } }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

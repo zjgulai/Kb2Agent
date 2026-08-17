@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/release-snapshot.schema.json",
+  "title": "MKD Immutable ReleaseSnapshot",
+  "type": "object",
+  "required": ["snapshotId", "version", "objectIds", "relationIds", "canonicalization", "manifestHash", "createdAt", "immutable"],
+  "properties": {
+    "snapshotId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "objectIds": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+    "relationIds": { "type": "array", "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+    "canonicalization": { "const": "sorted-object-and-relation-ids-v1" },
+    "manifestHash": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/hash" },
+    "createdAt": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/dateTime" },
+    "immutable": { "const": true }
+  },
+  "additionalProperties": false
+}

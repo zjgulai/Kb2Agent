@@ -1,0 +1,8 @@
+{
+  "fixtureId": "NEG-SNAPSHOT-HASH",
+  "base": "../positive/amazon-ads-reference-package.json",
+  "mutations": [
+    { "operation": "replace", "path": "/snapshots/0/manifestHash", "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" }
+  ],
+  "expectedCode": "SNAPSHOT_HASH_MISMATCH"
+}

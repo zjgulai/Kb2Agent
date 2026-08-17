@@ -25,7 +25,6 @@ let triggerElement
 let renderVersion = 0
 
 const source = computed(() => {
-  if (typeof window === 'undefined') return ''
   const bytes = Uint8Array.from(atob(props.encoded), (character) => character.charCodeAt(0))
   return new TextDecoder().decode(bytes)
 })

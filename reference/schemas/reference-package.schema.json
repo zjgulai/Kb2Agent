@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/reference-package.schema.json",
+  "title": "MKD M1-A Reference Package",
+  "type": "object",
+  "required": ["packageId", "schemaVersion", "sources", "evidence", "knowledgeObjects", "skills", "tasks", "governance", "evaluations", "relations", "snapshots", "traces", "actionPackages", "receipts"],
+  "properties": {
+    "packageId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+    "schemaVersion": { "const": 1 },
+    "sources": { "type": "array", "minItems": 3, "items": { "$ref": "https://mkd.local/schemas/source.schema.json" } },
+    "evidence": { "type": "array", "minItems": 2, "items": { "$ref": "https://mkd.local/schemas/evidence.schema.json" } },
+    "knowledgeObjects": { "type": "array", "minItems": 5, "items": { "$ref": "https://mkd.local/schemas/knowledge-object.schema.json" } },
+    "skills": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/skill.schema.json" } },
+    "tasks": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/task-package.schema.json" } },
+    "governance": { "type": "array", "minItems": 4, "items": { "$ref": "https://mkd.local/schemas/governance.schema.json" } },
+    "evaluations": { "type": "array", "minItems": 2, "items": { "$ref": "https://mkd.local/schemas/evaluation.schema.json" } },
+    "relations": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/relation.schema.json" } },
+    "snapshots": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/release-snapshot.schema.json" } },
+    "traces": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/run-trace.schema.json" } },
+    "actionPackages": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/action-package.schema.json" } },
+    "receipts": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/knowledge-receipt.schema.json" } }
+  },
+  "additionalProperties": false
+}

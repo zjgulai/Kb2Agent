@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "registryId": "MKD-RELATION-REGISTRY-V1",
+  "relations": [
+    { "type": "derived_from", "from": ["SourceRevision", "StructuralElement", "EvidenceFragment", "Claim", "Concept", "Metric", "DecisionModel", "Case", "Playbook", "Skill", "TaskPackage"], "to": ["SourceArtifact", "SourceRevision", "StructuralElement", "EvidenceFragment", "Claim", "Concept", "Metric", "DecisionModel", "Case", "Playbook"] },
+    { "type": "supports", "from": ["EvidenceFragment", "Claim"], "to": ["Claim", "DecisionModel", "Case", "ActionPackage"] },
+    { "type": "contradicts", "from": ["EvidenceFragment", "Claim"], "to": ["EvidenceFragment", "Claim"] },
+    { "type": "defines", "from": ["Claim", "Concept"], "to": ["Concept", "Metric"] },
+    { "type": "requires", "from": ["DecisionModel", "Playbook", "Skill", "TaskPackage"], "to": ["EvidenceFragment", "Claim", "Concept", "Metric", "DecisionModel", "Playbook", "Skill"] },
+    { "type": "applies_to", "from": ["Claim", "Metric", "DecisionModel", "Heuristic", "Case", "Playbook", "Skill", "TaskPackage"], "to": ["Concept", "Case", "Policy"] },
+    { "type": "implements", "from": ["Playbook", "Skill", "TaskPackage"], "to": ["DecisionModel", "Playbook", "Skill"] },
+    { "type": "uses_metric", "from": ["DecisionModel", "Heuristic", "Case", "Playbook", "Skill", "TaskPackage"], "to": ["Metric"] },
+    { "type": "validated_by", "from": ["Claim", "Metric", "DecisionModel", "Heuristic", "Playbook", "Skill", "TaskPackage"], "to": ["EvaluationContract", "GoldenTask", "Acceptance"] },
+    { "type": "supersedes", "from": ["SourceRevision", "Claim", "Concept", "Metric", "DecisionModel", "Heuristic", "Case", "Playbook", "Skill", "TaskPackage"], "to": ["SourceRevision", "Claim", "Concept", "Metric", "DecisionModel", "Heuristic", "Case", "Playbook", "Skill", "TaskPackage"], "sameType": true, "acyclic": true },
+    { "type": "blocked_by", "from": ["Claim", "DecisionModel", "Case", "Playbook", "Skill", "TaskPackage", "ActionPackage"], "to": ["Policy", "FreshnessRule", "PermissionRule", "Observation"] },
+    { "type": "produces", "from": ["Skill", "TaskPackage", "RunTrace", "KnowledgeCandidate"], "to": ["ActionPackage", "KnowledgeReceipt", "Observation", "PromotionDecision"] }
+  ]
+}

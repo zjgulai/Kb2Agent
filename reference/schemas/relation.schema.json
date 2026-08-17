@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/relation.schema.json",
+  "title": "MKD Typed Relation",
+  "type": "object",
+  "required": ["relationId", "relationType", "fromId", "toId", "fromType", "toType", "status"],
+  "properties": {
+    "relationId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+    "relationType": { "enum": ["derived_from", "supports", "contradicts", "defines", "requires", "applies_to", "implements", "uses_metric", "validated_by", "supersedes", "blocked_by", "produces"] },
+    "fromId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+    "toId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+    "fromType": { "type": "string", "minLength": 3 },
+    "toType": { "type": "string", "minLength": 3 },
+    "status": { "enum": ["candidate", "approved", "superseded"] },
+    "applicability": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+  },
+  "additionalProperties": false
+}

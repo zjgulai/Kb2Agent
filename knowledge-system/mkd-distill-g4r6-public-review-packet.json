@@ -1,0 +1,97 @@
+{
+  "$schema": "./schemas/m1-c-review-acceptance.schema.json",
+  "schemaVersion": 1,
+  "packetId": "MKD-M1-C-REVIEW-G4-R6-PUBLIC-ACCEPTED",
+  "reviewedAt": "2026-08-11T08:05:33Z",
+  "subject": {
+    "snapshotId": "mkd-m1c-88d4578f49eda5e0",
+    "snapshotHash": "sha256:88d4578f49eda5e0fb0ec50811e06b19054bf26c515017decea4c60ce842dc8c",
+    "qaReceipt": {
+      "path": "reference/receipts/mkd-distill-g4r5-public-p9-receipt.json",
+      "sha256": "16042402cb55782a2b8fad31f16d411f019eff0e35243404aba5a3b093c181f8"
+    },
+    "crossAudit": {
+      "path": "reference/receipts/mkd-distill-g4r6-public-review-evidence-pack.json",
+      "sha256": "c8bd924f9008882d61f3652f09357b2d9c167f3b5a80e6562980f878322d1c3d"
+    },
+    "releaseManifest": {
+      "path": "reference/receipts/m1-c-candidate-manifest.json",
+      "sha256": "cf510545b115774a0c26f8f006804f06bff4fcc8e875fa97e7dcef65ed0ad9bc"
+    }
+  },
+  "state": "accepted",
+  "independenceRequired": true,
+  "reviewers": [
+    {
+      "roleId": "ROLE-PRODUCT-CONTENT",
+      "scope": "Review the public 88d4 product narrative, responsive reading experience, and evidence-boundary presentation.",
+      "requiredChecks": [
+        "Confirm the public 88d4 Chinese brand narrative and 26-module reading experience are coherent across mobile and desktop evidence.",
+        "Confirm public labels keep synthetic, replay, evidence, and live-action boundaries explicit without implying live Agent execution.",
+        "Confirm the CLI screenshot and five-viewport automated evidence are sufficient, and record any visual or content findings."
+      ],
+      "assignee": "pray",
+      "assignmentState": "completed",
+      "decision": "accepted",
+      "signedAt": "2026-08-11T08:05:33Z",
+      "evidenceRefs": [
+        "release/m1c/reviews/g4r6-public/ROLE-PRODUCT-CONTENT.json"
+      ]
+    },
+    {
+      "roleId": "ROLE-AMAZON-ADS-DOMAIN",
+      "scope": "Review the public Amazon Ads replay, canonical Chinese domain content, and synthetic evidence boundaries.",
+      "requiredChecks": [
+        "Confirm replay formulas, terms, downloads, and canonical Chinese domain output remain traceable and unchanged on the public site.",
+        "Confirm synthetic Amazon Ads evidence is clearly labeled and cannot be mistaken for real-account performance proof.",
+        "Confirm unknown, stop-condition, and no-external-action boundaries remain visible and operationally unambiguous."
+      ],
+      "assignee": "ll",
+      "assignmentState": "completed",
+      "decision": "accepted",
+      "signedAt": "2026-08-11T08:05:33Z",
+      "evidenceRefs": [
+        "release/m1c/reviews/g4r6-public/ROLE-AMAZON-ADS-DOMAIN.json"
+      ]
+    },
+    {
+      "roleId": "ROLE-ENGINEERING-TEST",
+      "scope": "Review the public browser, accessibility, Web Vitals, Lighthouse, artifact integrity, and stability evidence.",
+      "requiredChecks": [
+        "Confirm G4-R5 reports 10 of 10 expected tests with zero failed, flaky, or skipped cases, including prior hydration-failure routes.",
+        "Confirm all six Lighthouse runs are present and both target medians meet the locked performance, accessibility, and best-practices thresholds.",
+        "Confirm the 12-file evidence manifest and pre/post public and remote readbacks prove the observed release stayed stable without mutation."
+      ],
+      "assignee": "zy",
+      "assignmentState": "completed",
+      "decision": "accepted",
+      "signedAt": "2026-08-11T08:05:33Z",
+      "evidenceRefs": [
+        "release/m1c/reviews/g4r6-public/ROLE-ENGINEERING-TEST.json"
+      ]
+    },
+    {
+      "roleId": "ROLE-SECURITY-RELEASE",
+      "scope": "Review the public TLS, redirect, security-header, route-isolation, legacy-preservation, and authorization-boundary evidence.",
+      "requiredChecks": [
+        "Confirm TLS, release identity, relative redirects, single-value security headers, 404, 405, and port 18921 isolation remained correct.",
+        "Confirm the a2fe runtime, old MKD site, five-container health, and renewal timer remained preserved with no runtime changes.",
+        "Confirm this evidence can support only public static acceptance and cannot authorize production live Agent, provider calls, or final acceptance."
+      ],
+      "assignee": "ly",
+      "assignmentState": "completed",
+      "decision": "accepted",
+      "signedAt": "2026-08-11T08:05:33Z",
+      "evidenceRefs": [
+        "release/m1c/reviews/g4r6-public/ROLE-SECURITY-RELEASE.json"
+      ]
+    }
+  ],
+  "deploymentGate": {
+    "reviewAcceptancesRequired": 4,
+    "distinctAssigneesRequired": 4,
+    "candidateStaticDeployAllowed": true,
+    "productionDeployAllowed": false,
+    "reason": "Four current independent reviewers accepted the 88d4 public static evidence; G5 delayed stability and all production live capabilities remain separate."
+  }
+}

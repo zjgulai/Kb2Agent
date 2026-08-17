@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/knowledge-system/product-lines.schema.json",
+  "type": "object",
+  "required": ["schemaVersion", "reviewedAt", "scopeNote", "productLines"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "reviewedAt": { "type": "string" },
+    "scopeNote": { "type": "string", "minLength": 20 },
+    "productLines": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["productLineId", "name", "authority", "maturityModel", "currentState"],
+        "properties": {
+          "productLineId": { "enum": ["GUIDE", "REFERENCE"] },
+          "name": { "type": "string" },
+          "authority": { "type": "array", "minItems": 4, "items": { "type": "string" }, "uniqueItems": true },
+          "maturityModel": { "type": "array", "minItems": 4, "items": { "type": "string" }, "uniqueItems": true },
+          "currentState": { "type": "object", "required": ["grade", "supportedClaim", "forbiddenClaim"], "properties": {
+            "grade": { "type": "string" },
+            "state": { "type": "string" },
+            "counts": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+            "supportedClaim": { "type": "string", "minLength": 10 },
+            "forbiddenClaim": { "type": "string", "minLength": 10 }
+          }, "additionalProperties": false }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

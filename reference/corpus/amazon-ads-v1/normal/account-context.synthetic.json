@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "caseId": "CASE-AMZ-ACOS-SYNTHETIC",
+  "asOf": "2026-08-01",
+  "currency": "USD",
+  "marketplace": "US",
+  "attributionWindow": "fixed-synthetic-7d",
+  "portfolio": "Synthetic Portfolio A",
+  "dataClass": "synthetic",
+  "allowedActions": ["read", "calculate", "draft"],
+  "forbiddenActions": ["change-budget", "change-bid", "change-targeting", "send-message", "write-canonical-knowledge"],
+  "externalWrites": false
+}

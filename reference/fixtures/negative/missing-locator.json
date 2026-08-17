@@ -1,0 +1,8 @@
+{
+  "fixtureId": "NEG-MISSING-LOCATOR",
+  "base": "../positive/amazon-ads-reference-package.json",
+  "mutations": [
+    { "operation": "delete", "path": "/evidence/0/locator" }
+  ],
+  "expectedCode": "SCHEMA_INVALID"
+}

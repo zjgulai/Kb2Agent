@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/common.schema.json",
+  "title": "MKD Common Contracts",
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}$"
+    },
+    "dateTime": {
+      "type": "string",
+      "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "evidenceGrade": {
+      "enum": ["L0-unverified", "L1-public-or-runtime", "LO-S-synthetic", "L2-fixture-or-dry-run", "L3-production-read-only", "L4-authorized-live"]
+    },
+    "status": {
+      "enum": ["draft", "candidate", "approved", "superseded", "blocked"]
+    },
+    "eLevel": {
+      "enum": ["E0", "E1", "E2", "E3", "E4"]
+    },
+    "publicELevel": {
+      "enum": ["E0", "E1", "E2"]
+    },
+    "freshness": {
+      "type": "object",
+      "required": ["asOf", "reviewedAt", "expiresAt", "state"],
+      "properties": {
+        "asOf": { "$ref": "#/$defs/date" },
+        "reviewedAt": { "$ref": "#/$defs/date" },
+        "expiresAt": { "$ref": "#/$defs/date" },
+        "state": { "enum": ["current", "due", "expired", "not-applicable"] }
+      },
+      "additionalProperties": false
+    },
+    "risk": {
+      "type": "object",
+      "required": ["level", "reasons"],
+      "properties": {
+        "level": { "enum": ["low", "medium", "high", "critical"] },
+        "reasons": { "type": "array", "items": { "type": "string", "minLength": 3 }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "sourceLocator": {
+      "type": "object",
+      "required": ["sourceRevisionId", "structuralElementId", "locator", "contentHash"],
+      "properties": {
+        "sourceRevisionId": { "$ref": "#/$defs/identifier" },
+        "structuralElementId": { "$ref": "#/$defs/identifier" },
+        "locator": { "type": "string", "minLength": 3 },
+        "contentHash": { "$ref": "#/$defs/hash" }
+      },
+      "additionalProperties": false
+    },
+    "baseObject": {
+      "type": "object",
+      "required": ["id", "objectType", "revision", "status", "createdAt", "sourceRefs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "objectType": { "type": "string", "minLength": 3 },
+        "revision": { "type": "integer", "minimum": 1 },
+        "status": { "$ref": "#/$defs/status" },
+        "createdAt": { "$ref": "#/$defs/dateTime" },
+        "sourceRefs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/identifier" },
+          "uniqueItems": true
+        },
+        "supersedes": { "$ref": "#/$defs/identifier" },
+        "freshness": { "$ref": "#/$defs/freshness" },
+        "risk": { "$ref": "#/$defs/risk" }
+      }
+    }
+  }
+}

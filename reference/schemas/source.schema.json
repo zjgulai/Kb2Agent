@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/source.schema.json",
+  "title": "MKD L0 Source Objects",
+  "oneOf": [
+    { "$ref": "#/$defs/sourceArtifact" },
+    { "$ref": "#/$defs/sourceRevision" },
+    { "$ref": "#/$defs/structuralElement" }
+  ],
+  "$defs": {
+    "sourceArtifact": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        {
+          "type": "object",
+          "required": ["title", "format", "language", "contentHash", "license"],
+          "properties": {
+            "objectType": { "const": "SourceArtifact" },
+            "title": { "type": "string", "minLength": 3 },
+            "format": { "enum": ["pdf", "html", "markdown", "docx", "pptx", "xlsx", "csv", "json"] },
+            "language": { "enum": ["zh-CN", "en-US", "bilingual"] },
+            "contentHash": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/hash" },
+            "license": {
+              "type": "object",
+              "required": ["state", "redistribution"],
+              "properties": {
+                "state": { "enum": ["approved", "restricted", "unknown", "synthetic"] },
+                "redistribution": { "type": "boolean" },
+                "sourceUrl": { "type": "string", "pattern": "^https://" },
+                "note": { "type": "string", "minLength": 3 }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "sourceRevision": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        {
+          "type": "object",
+          "required": ["sourceArtifactId", "asOf", "contentHash"],
+          "properties": {
+            "objectType": { "const": "SourceRevision" },
+            "sourceArtifactId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+            "asOf": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/date" },
+            "contentHash": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/hash" }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "structuralElement": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        {
+          "type": "object",
+          "required": ["sourceRevisionId", "elementType", "locator", "contentHash", "text"],
+          "properties": {
+            "objectType": { "const": "StructuralElement" },
+            "sourceRevisionId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+            "elementType": { "enum": ["page", "heading", "paragraph", "table", "sheet", "cell-range", "slide", "figure"] },
+            "locator": { "type": "string", "minLength": 3 },
+            "contentHash": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/hash" },
+            "text": { "type": "string", "minLength": 1 }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

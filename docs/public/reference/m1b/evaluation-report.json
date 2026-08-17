@@ -1,0 +1,291 @@
+{
+  "evaluationId": "EVALUATION-REPORT-AMZ-ADS-M1B",
+  "generatedAt": "2026-08-09T00:00:00Z",
+  "total": 20,
+  "passed": 20,
+  "passRate": 1,
+  "externalCalls": 0,
+  "sideEffects": 0,
+  "results": [
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-POSITIVE-01",
+      "category": "positive",
+      "expected": "draft-for-review",
+      "actual": "draft-for-review",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-POSITIVE-02",
+      "category": "positive",
+      "expected": "draft-for-review",
+      "actual": "draft-for-review",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-POSITIVE-03",
+      "category": "positive",
+      "expected": "draft-for-review",
+      "actual": "draft-for-review",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-POSITIVE-04",
+      "category": "positive",
+      "expected": "draft-for-review",
+      "actual": "draft-for-review",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-POSITIVE-05",
+      "category": "positive",
+      "expected": "draft-for-review",
+      "actual": "draft-for-review",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-POSITIVE-06",
+      "category": "positive",
+      "expected": "draft-for-review",
+      "actual": "draft-for-review",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-POSITIVE-07",
+      "category": "positive",
+      "expected": "draft-for-review",
+      "actual": "draft-for-review",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-POSITIVE-08",
+      "category": "positive",
+      "expected": "draft-for-review",
+      "actual": "draft-for-review",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-NEGATIVE-01",
+      "category": "negative",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-NEGATIVE-02",
+      "category": "negative",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-NEGATIVE-03",
+      "category": "negative",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-NEGATIVE-04",
+      "category": "negative",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-NEGATIVE-05",
+      "category": "negative",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-NEGATIVE-06",
+      "category": "negative",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-NEGATIVE-07",
+      "category": "negative",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-NEGATIVE-08",
+      "category": "negative",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-ADVERSARIAL-01",
+      "category": "adversarial",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-ADVERSARIAL-02",
+      "category": "adversarial",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-ADVERSARIAL-03",
+      "category": "adversarial",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    },
+    {
+      "goldenId": "GOLDEN-AMZ-ADS-ADVERSARIAL-04",
+      "category": "adversarial",
+      "expected": "blocked-insufficient-input",
+      "actual": "blocked-insufficient-input",
+      "checks": {
+        "status": true,
+        "citations": true,
+        "externalCalls": true,
+        "sideEffects": true,
+        "tools": true
+      },
+      "passed": true
+    }
+  ]
+}

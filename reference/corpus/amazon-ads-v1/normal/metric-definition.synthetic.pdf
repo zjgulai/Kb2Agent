@@ -1,0 +1,150 @@
+%PDF-1.4
+%“Œ‹ž ReportLab Generated PDF document (opensource)
+1 0 obj
+<<
+/F1 2 0 R /F2 3 0 R
+>>
+endobj
+2 0 obj
+<<
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
+>>
+endobj
+3 0 obj
+<<
+/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
+>>
+endobj
+4 0 obj
+<<
+/Contents 9 0 R /MediaBox [ 0 0 612 792 ] /Parent 8 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+5 0 obj
+<<
+/Contents 10 0 R /MediaBox [ 0 0 612 792 ] /Parent 8 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+6 0 obj
+<<
+/PageMode /UseNone /Pages 8 0 R /Type /Catalog
+>>
+endobj
+7 0 obj
+<<
+/Author (MKD synthetic fixture) /CreationDate (D:20260809172634+08'00') /Creator (anonymous) /Keywords () /ModDate (D:20260809172634+08'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (M1-B structure-aware PDF fixture) /Title (Synthetic ACOS metric definition) /Trapped /False
+>>
+endobj
+8 0 obj
+<<
+/Count 2 /Kids [ 4 0 R 5 0 R ] /Type /Pages
+>>
+endobj
+9 0 obj
+<<
+/Length 1250
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+.972549 .960784 .933333 rg
+n 0 0 612 792 re f*
+.160784 .294118 .407843 rg
+BT /F2 10 Tf 12 TL ET
+BT 1 0 0 1 54 722 Tm (MKD \267 METRIC CONTRACT \267 AS OF 2026-08-01) Tj T* ET
+.12549 .145098 .168627 rg
+BT /F2 30 Tf 36 TL ET
+BT 1 0 0 1 54 660 Tm (Advertising Cost of Sales) Tj T* ET
+BT /F2 20 Tf 24 TL ET
+BT 1 0 0 1 54 620 Tm (ACOS = ad spend / attributed sales \327 100) Tj T* ET
+.337255 .380392 .415686 rg
+BT /F1 12 Tf 14.4 TL ET
+BT 1 0 0 1 66 548 Tm (Use spend and sales from the same currency, reporting window and attribution setting.) Tj T* ET
+BT 1 0 0 1 66 514 Tm (Block an exact value when attributed sales is zero or either input is missing.) Tj T* ET
+BT 1 0 0 1 66 480 Tm (This definition does not identify why ACOS changed and does not authorize an action.) Tj T* ET
+.647059 .294118 .207843 rg
+BT /F2 11 Tf 13.2 TL ET
+BT 1 0 0 1 54 410 Tm (EVIDENCE BOUNDARY) Tj T* ET
+.12549 .145098 .168627 rg
+BT /F1 12 Tf 14.4 TL ET
+BT 1 0 0 1 54 378 Tm (Project-authored synthetic values only. Not customer or platform evidence.) Tj T* ET
+.337255 .380392 .415686 rg
+BT /F1 8 Tf 9.6 TL ET
+BT 1 0 0 1 54 36 Tm (MKD synthetic reference corpus) Tj T* ET
+BT 1 0 0 1 473.512 36 Tm (Page 1 \267 LO-S synthetic) Tj T* ET
+ 
+endstream
+endobj
+10 0 obj
+<<
+/Length 1221
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+.972549 .960784 .933333 rg
+n 0 0 612 792 re f*
+.12549 .145098 .168627 rg
+BT /F2 25 Tf 30 TL ET
+BT 1 0 0 1 54 700 Tm (Interpretation and stop conditions) Tj T* ET
+BT /F2 13 Tf 15.6 TL ET
+.160784 .294118 .407843 rg
+BT 1 0 0 1 54 642 Tm (Known) Tj T* ET
+.12549 .145098 .168627 rg
+BT /F1 12 Tf 14.4 TL ET
+BT 1 0 0 1 54 612 Tm (The fixture ACOS changed from 28.4% to 36.9% across adjacent seven-day windows.) Tj T* ET
+BT /F2 13 Tf 15.6 TL ET
+.647059 .294118 .207843 rg
+BT 1 0 0 1 54 552 Tm (Unknown) Tj T* ET
+.12549 .145098 .168627 rg
+BT /F1 12 Tf 14.4 TL ET
+BT 1 0 0 1 54 522 Tm (Comparable CPC, CVR, price and availability evidence is absent.) Tj T* ET
+BT /F2 13 Tf 15.6 TL ET
+.160784 .294118 .407843 rg
+BT 1 0 0 1 54 462 Tm (Required response) Tj T* ET
+.12549 .145098 .168627 rg
+BT /F1 12 Tf 14.4 TL ET
+BT 1 0 0 1 54 432 Tm (Request evidence and keep every optimization as a manual draft.) Tj T* ET
+BT 1 0 0 1 54 398 Tm (Stop if windows or units differ, inputs are missing, or evidence conflicts.) Tj T* ET
+.337255 .380392 .415686 rg
+BT /F1 8 Tf 9.6 TL ET
+BT 1 0 0 1 54 36 Tm (MKD synthetic reference corpus) Tj T* ET
+BT 1 0 0 1 473.512 36 Tm (Page 2 \267 LO-S synthetic) Tj T* ET
+ 
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000061 00000 n 
+0000000102 00000 n 
+0000000209 00000 n 
+0000000321 00000 n 
+0000000514 00000 n 
+0000000708 00000 n 
+0000000776 00000 n 
+0000001094 00000 n 
+0000001159 00000 n 
+0000002460 00000 n 
+trailer
+<<
+/ID 
+[<e702bbeba273f7527f12dd65bc4b4fe6><e702bbeba273f7527f12dd65bc4b4fe6>]
+% ReportLab generated PDF document -- digest (opensource)
+
+/Info 7 0 R
+/Root 6 0 R
+/Size 11
+>>
+startxref
+3733
+%%EOF
