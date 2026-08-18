@@ -16,6 +16,14 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  []
+relatedObjectIds:
+  []
+relatedTaskIds:
+  []
+referenceMaturity: "solution"
+lastReviewedAt: "2026-08-17"
 ---
 # 第一章：认知框架——信息、知识与智慧的本质差异
 
@@ -427,3 +435,7 @@ validated_by: "张工"
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 不能由本章证明什么
+
+DIKW 框架是认知模型，不能替代对象级证据链；信息/知识/智慧分层不构成 Reference 对象晋级证明。

@@ -1,0 +1,36 @@
+{
+  "$schema": "./schemas/roles.schema.json",
+  "schemaVersion": 1,
+  "reviewedAt": "2026-08-10",
+  "acceptanceRule": "四个角色必须由互相独立的具名人员签署；角色映射不是接受。",
+  "roles": [
+    {
+      "roleId": "ROLE-PRODUCT-CONTENT",
+      "name": "产品与内容负责人",
+      "responsibilities": ["产品合同", "内容边界", "用户任务", "证据语言"],
+      "assignee": "pray",
+      "acceptanceState": "accepted"
+    },
+    {
+      "roleId": "ROLE-AMAZON-ADS-DOMAIN",
+      "name": "Amazon Ads 领域复核人",
+      "responsibilities": ["指标口径", "诊断逻辑", "停止条件", "合成/真实边界"],
+      "assignee": "ll",
+      "acceptanceState": "accepted"
+    },
+    {
+      "roleId": "ROLE-ENGINEERING-TEST",
+      "name": "工程与测试负责人",
+      "responsibilities": ["Schema", "fixture", "校验器", "回归与可复放"],
+      "assignee": "zy",
+      "acceptanceState": "accepted"
+    },
+    {
+      "roleId": "ROLE-SECURITY-RELEASE",
+      "name": "安全与发布负责人",
+      "responsibilities": ["权限", "隐私", "许可证", "发布与回滚"],
+      "assignee": "ly",
+      "acceptanceState": "accepted"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "packetId": "REVIEW-AMZ-ADS-M1B",
+  "state": "pending-domain-and-release-review",
+  "candidates": [
+    "CONCEPT-AMZ-ACOS",
+    "METRIC-AMZ-ACOS",
+    "DECISION-AMZ-ACOS-DIAGNOSIS",
+    "CASE-AMZ-ACOS-SYNTHETIC",
+    "PLAYBOOK-AMZ-ACOS-CHECK",
+    "SKILL-AMZ-ADS-DIAGNOSIS-V1"
+  ],
+  "evidenceRefs": [
+    "EVID-AMZ-ACOS-DELTA",
+    "EVID-AMZ-ACOS-DEFINITION",
+    "EVID-AMZ-EVIDENCE-GATE"
+  ],
+  "unresolved": [
+    "CPC and CVR values are absent",
+    "No domain reviewer acceptance",
+    "Synthetic evidence cannot justify an account change"
+  ],
+  "promotion": {
+    "mode": "dry-run",
+    "apply": false,
+    "canonicalWrites": 0,
+    "decision": "pending-review",
+    "externalCalls": 0,
+    "sideEffects": 0
+  }
+}

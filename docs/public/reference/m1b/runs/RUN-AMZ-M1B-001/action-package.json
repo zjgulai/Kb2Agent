@@ -1,0 +1,73 @@
+{
+  "actionPackageId": "ACTION-AMZ-M1B-001",
+  "taskPackageId": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+  "runId": "RUN-AMZ-M1B-001",
+  "summary": "The immutable synthetic snapshot confirms an ACOS increase while preserving causal uncertainty and forbidding account changes.",
+  "facts": [
+    {
+      "text": "Synthetic ACOS rises from 28.4% to 36.9% across comparable seven-day windows.",
+      "evidenceRefs": [
+        "EVID-AMZ-ACOS-DELTA"
+      ]
+    }
+  ],
+  "inferences": [
+    {
+      "text": "CPC, CVR, price, or availability may contribute, but the snapshot does not establish a cause.",
+      "evidenceRefs": [
+        "DECISION-AMZ-ACOS-DIAGNOSIS"
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "question": "Did CPC, CVR, price, or availability change?",
+      "impact": "No optimization path can be selected as a verified recommendation.",
+      "nextEvidence": "Provide comparable, authorized evidence and rerun the local review gate."
+    }
+  ],
+  "options": [
+    {
+      "optionId": "OPTION-AMZ-VERIFY-001",
+      "label": "核验驱动证据",
+      "action": "Compare CPC and CVR in identical windows and inspect price and retail availability.",
+      "tradeoff": "Defers optimization but prevents unsupported account changes.",
+      "externalWrite": false
+    }
+  ],
+  "recommendation": "Request the missing comparable evidence and retain every optimization step as a human-reviewed manual draft.",
+  "calculations": [
+    {
+      "metricRef": "METRIC-AMZ-ACOS",
+      "formula": "ad_spend / attributed_sales * 100",
+      "inputs": {
+        "previousSpend": 284,
+        "previousSales": 1000,
+        "latestSpend": 369,
+        "latestSales": 1000
+      },
+      "unit": "%",
+      "window": "7d vs 7d",
+      "result": "28.4% → 36.9% (+8.5pp)",
+      "resultState": "exact"
+    }
+  ],
+  "risks": [
+    "Synthetic values cannot justify an account change",
+    "Causal inputs are intentionally absent"
+  ],
+  "stopConditions": [
+    "Do not modify bids, budgets, targeting, or campaign state",
+    "Stop on stale, contradictory, missing, or permission-invalid input"
+  ],
+  "approvalRequirements": [
+    "ROLE-AMAZON-ADS-DOMAIN",
+    "ROLE-PRODUCT-CONTENT"
+  ],
+  "evidenceRefs": [
+    "EVID-AMZ-ACOS-DELTA",
+    "EVID-AMZ-ACOS-DEFINITION",
+    "EVID-AMZ-EVIDENCE-GATE"
+  ],
+  "status": "draft-for-review"
+}

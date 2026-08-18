@@ -1,0 +1,20 @@
+{
+  "fixtureId": "NEG-SUPERSEDES-CYCLE",
+  "base": "../positive/amazon-ads-reference-package.json",
+  "mutations": [
+    {
+      "operation": "appendMany",
+      "path": "/relations",
+      "value": [
+        { "relationId": "REL-CYCLE-A-B", "relationType": "supersedes", "fromId": "CASE-AMZ-ACOS-SYNTHETIC", "toId": "CASE-AMZ-ACOS-SYNTHETIC-V2", "fromType": "Case", "toType": "Case", "status": "candidate" },
+        { "relationId": "REL-CYCLE-B-A", "relationType": "supersedes", "fromId": "CASE-AMZ-ACOS-SYNTHETIC-V2", "toId": "CASE-AMZ-ACOS-SYNTHETIC", "fromType": "Case", "toType": "Case", "status": "candidate" }
+      ]
+    },
+    {
+      "operation": "append",
+      "path": "/knowledgeObjects",
+      "value": { "id": "CASE-AMZ-ACOS-SYNTHETIC-V2", "objectType": "Case", "revision": 2, "status": "candidate", "createdAt": "2026-08-09T00:00:00Z", "sourceRefs": ["EVID-AMZ-ACOS-DELTA"], "title": "Synthetic Amazon Ads ACOS increase v2", "context": "A second fixture revision used only for the cycle negative test.", "facts": ["Synthetic fixture"], "decisions": ["No action"], "outcome": "Negative test only", "evidenceRefs": ["EVID-AMZ-ACOS-DELTA"], "limitations": ["synthetic"], "dataClass": "synthetic" }
+    }
+  ],
+  "expectedCode": "SUPERSEDES_CYCLE"
+}

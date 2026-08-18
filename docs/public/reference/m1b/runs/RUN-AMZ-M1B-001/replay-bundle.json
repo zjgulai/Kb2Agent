@@ -1,0 +1,281 @@
+{
+  "input": {
+    "caseId": "CASE-AMZ-ACOS-SYNTHETIC",
+    "comparisonWindow": "7d-vs-7d"
+  },
+  "actionPackage": {
+    "actionPackageId": "ACTION-AMZ-M1B-001",
+    "taskPackageId": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+    "runId": "RUN-AMZ-M1B-001",
+    "summary": "The immutable synthetic snapshot confirms an ACOS increase while preserving causal uncertainty and forbidding account changes.",
+    "facts": [
+      {
+        "text": "Synthetic ACOS rises from 28.4% to 36.9% across comparable seven-day windows.",
+        "evidenceRefs": [
+          "EVID-AMZ-ACOS-DELTA"
+        ]
+      }
+    ],
+    "inferences": [
+      {
+        "text": "CPC, CVR, price, or availability may contribute, but the snapshot does not establish a cause.",
+        "evidenceRefs": [
+          "DECISION-AMZ-ACOS-DIAGNOSIS"
+        ]
+      }
+    ],
+    "unknowns": [
+      {
+        "question": "Did CPC, CVR, price, or availability change?",
+        "impact": "No optimization path can be selected as a verified recommendation.",
+        "nextEvidence": "Provide comparable, authorized evidence and rerun the local review gate."
+      }
+    ],
+    "options": [
+      {
+        "optionId": "OPTION-AMZ-VERIFY-001",
+        "label": "核验驱动证据",
+        "action": "Compare CPC and CVR in identical windows and inspect price and retail availability.",
+        "tradeoff": "Defers optimization but prevents unsupported account changes.",
+        "externalWrite": false
+      }
+    ],
+    "recommendation": "Request the missing comparable evidence and retain every optimization step as a human-reviewed manual draft.",
+    "calculations": [
+      {
+        "metricRef": "METRIC-AMZ-ACOS",
+        "formula": "ad_spend / attributed_sales * 100",
+        "inputs": {
+          "previousSpend": 284,
+          "previousSales": 1000,
+          "latestSpend": 369,
+          "latestSales": 1000
+        },
+        "unit": "%",
+        "window": "7d vs 7d",
+        "result": "28.4% → 36.9% (+8.5pp)",
+        "resultState": "exact"
+      }
+    ],
+    "risks": [
+      "Synthetic values cannot justify an account change",
+      "Causal inputs are intentionally absent"
+    ],
+    "stopConditions": [
+      "Do not modify bids, budgets, targeting, or campaign state",
+      "Stop on stale, contradictory, missing, or permission-invalid input"
+    ],
+    "approvalRequirements": [
+      "ROLE-AMAZON-ADS-DOMAIN",
+      "ROLE-PRODUCT-CONTENT"
+    ],
+    "evidenceRefs": [
+      "EVID-AMZ-ACOS-DELTA",
+      "EVID-AMZ-ACOS-DEFINITION",
+      "EVID-AMZ-EVIDENCE-GATE"
+    ],
+    "status": "draft-for-review"
+  },
+  "trace": {
+    "traceId": "TRACE-AMZ-M1B-001",
+    "runId": "RUN-AMZ-M1B-001",
+    "mode": "replay",
+    "status": "completed",
+    "externalCalls": 0,
+    "sideEffects": 0,
+    "events": [
+      {
+        "eventId": "EVENT-001-SNAPSHOT",
+        "stage": "source",
+        "kind": "retrieve",
+        "startedAt": "2026-08-09T00:00:00Z",
+        "durationMs": 1,
+        "status": "completed",
+        "inputRefs": [
+          "SNAPSHOT-AMZ-ADS-M1B"
+        ],
+        "outputRefs": [
+          "EVID-AMZ-ACOS-DELTA",
+          "PLAYBOOK-AMZ-ACOS-CHECK",
+          "EVID-AMZ-ACOS-DEFINITION"
+        ]
+      },
+      {
+        "eventId": "EVENT-001-CLOSURE",
+        "stage": "agent",
+        "kind": "retrieve",
+        "startedAt": "2026-08-09T00:00:01Z",
+        "durationMs": 1,
+        "status": "completed",
+        "inputRefs": [
+          "TASK-AMZ-ADS-DIAGNOSIS-V1"
+        ],
+        "outputRefs": [
+          "METRIC-AMZ-ACOS",
+          "DECISION-AMZ-ACOS-DIAGNOSIS"
+        ]
+      },
+      {
+        "eventId": "EVENT-001-GUARD",
+        "stage": "agent",
+        "kind": "guardrail",
+        "startedAt": "2026-08-09T00:00:02Z",
+        "durationMs": 1,
+        "status": "completed",
+        "inputRefs": [
+          "EVID-AMZ-ACOS-DELTA",
+          "EVID-AMZ-ACOS-DEFINITION",
+          "EVID-AMZ-EVIDENCE-GATE"
+        ],
+        "outputRefs": [
+          "ACTION-AMZ-M1B-001"
+        ]
+      },
+      {
+        "eventId": "EVENT-001-DRAFT",
+        "stage": "agent",
+        "kind": "draft",
+        "startedAt": "2026-08-09T00:00:03Z",
+        "durationMs": 1,
+        "status": "completed",
+        "inputRefs": [
+          "EVID-AMZ-ACOS-DELTA",
+          "EVID-AMZ-ACOS-DEFINITION",
+          "EVID-AMZ-EVIDENCE-GATE"
+        ],
+        "outputRefs": [
+          "ACTION-AMZ-M1B-001"
+        ]
+      },
+      {
+        "eventId": "EVENT-001-RECEIPT",
+        "stage": "receipt",
+        "kind": "receipt",
+        "startedAt": "2026-08-09T00:00:04Z",
+        "durationMs": 1,
+        "status": "completed",
+        "inputRefs": [
+          "ACTION-AMZ-M1B-001"
+        ],
+        "outputRefs": [
+          "RECEIPT-AMZ-M1B-001"
+        ]
+      }
+    ]
+  },
+  "receipt": {
+    "receiptId": "RECEIPT-AMZ-M1B-001",
+    "runId": "RUN-AMZ-M1B-001",
+    "mode": "replay",
+    "evidenceGrade": "LO-S-synthetic",
+    "snapshot": {
+      "id": "SNAPSHOT-AMZ-ADS-M1B",
+      "version": "0.2.0"
+    },
+    "taskPackage": {
+      "id": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+      "version": "1"
+    },
+    "skill": {
+      "id": "SKILL-AMZ-ADS-DIAGNOSIS-V1",
+      "version": "1"
+    },
+    "model": {
+      "id": "deterministic-rule-engine",
+      "version": "m1-b"
+    },
+    "prompt": {
+      "id": "no-provider-structured-replay",
+      "version": "1"
+    },
+    "tools": [
+      {
+        "id": "TOOL-READ-SNAPSHOT",
+        "version": "1"
+      },
+      {
+        "id": "TOOL-SEARCH-FTS",
+        "version": "1"
+      },
+      {
+        "id": "TOOL-LOAD-CLOSURE",
+        "version": "1"
+      },
+      {
+        "id": "TOOL-CALCULATE-METRIC",
+        "version": "1"
+      },
+      {
+        "id": "TOOL-CHECK-FRESHNESS",
+        "version": "1"
+      },
+      {
+        "id": "TOOL-CHECK-PERMISSION",
+        "version": "1"
+      },
+      {
+        "id": "TOOL-DRAFT-ACTION",
+        "version": "1"
+      },
+      {
+        "id": "TOOL-EMIT-RECEIPT",
+        "version": "1"
+      }
+    ],
+    "traceRef": "TRACE-AMZ-M1B-001",
+    "evaluationRefs": [
+      "EVAL-AMZ-ADS-DIAGNOSIS-V1"
+    ],
+    "artifactHashes": {
+      "actionPackage": "sha256:0db9aaff51214d50ce428b3675c448afcf509fbbfd1b168bbdf296a37637f9df",
+      "trace": "sha256:1d68e947ed9ebc4fe21e340df0431bbaac945486394892dd62fbe01e4a3460e6",
+      "input": "sha256:350bad18a9d0362314fd4629fe0729e923317b0d71dcd1b3ec735f2c0524afd0"
+    },
+    "externalCalls": 0,
+    "sideEffects": 0,
+    "issuedAt": "2026-08-09T00:00:00Z"
+  },
+  "toolRegistry": [
+    {
+      "id": "TOOL-READ-SNAPSHOT",
+      "mode": "read",
+      "sideEffect": false
+    },
+    {
+      "id": "TOOL-SEARCH-FTS",
+      "mode": "read",
+      "sideEffect": false
+    },
+    {
+      "id": "TOOL-LOAD-CLOSURE",
+      "mode": "read",
+      "sideEffect": false
+    },
+    {
+      "id": "TOOL-CALCULATE-METRIC",
+      "mode": "calculate",
+      "sideEffect": false
+    },
+    {
+      "id": "TOOL-CHECK-FRESHNESS",
+      "mode": "calculate",
+      "sideEffect": false
+    },
+    {
+      "id": "TOOL-CHECK-PERMISSION",
+      "mode": "calculate",
+      "sideEffect": false
+    },
+    {
+      "id": "TOOL-DRAFT-ACTION",
+      "mode": "draft",
+      "sideEffect": false
+    },
+    {
+      "id": "TOOL-EMIT-RECEIPT",
+      "mode": "draft",
+      "sideEffect": false
+    }
+  ],
+  "state": "completed"
+}

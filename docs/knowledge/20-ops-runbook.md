@@ -16,6 +16,15 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  - "docs/reference/ops.md"
+  - "reference/policies/g7/provider-readiness-policy-v1.json"
+relatedObjectIds:
+  - "PKG-AMZ-ADS-M1B"
+relatedTaskIds:
+  - "TASK-AMZ-ADS-DIAGNOSIS-V1"
+referenceMaturity: "runnable"
+lastReviewedAt: "2026-08-17"
 ---
 # 第二十章：生产运维 Runbook
 
@@ -1079,3 +1088,13 @@ python3 scripts/kb_health_check.py \
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 在 Reference Lab 中如何验证
+
+- 本地运行与发布边界以 [/reference/ops](/reference/ops) 为准：Compose 拓扑、health/ready、备份、回滚与 kill switch 均为受控门禁。
+- 部署/回滚/edge 切换属 L4 授权操作，其回执保存在内部 receipt 语料（不公开展示）；公开侧以证据等级标签为准，不以控制台状态代替公网 smoke。
+- 限速、日预算、并发与超时策略见 `reference/policies/g7/provider-readiness-policy-v1.json`；预算熔断与 kill switch 为硬配置。
+
+## 不能由本章证明什么
+
+本章不能证明腾讯云生产 smoke 已由读者独立复验；未备案（适用时）、未签名、未通过四角色验收或回滚不可用时不得公开发布。

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/g6/fixture-dataset.schema.json",
+  "title": "MKD G6 Fixture Dataset",
+  "type": "object",
+  "required": ["datasetId", "schemaVersion", "evidenceGrade", "cases"],
+  "properties": {
+    "datasetId": { "const": "DATASET-G6-A1-AMZ-ADS-V1" },
+    "schemaVersion": { "const": 1 },
+    "evidenceGrade": { "const": "LO-S-synthetic" },
+    "cases": {
+      "type": "array",
+      "minItems": 20,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": ["fixtureId", "category", "label", "input", "expected"],
+        "properties": {
+          "fixtureId": { "type": "string", "pattern": "^G6-" },
+          "category": { "enum": ["normal", "missing", "conflict", "unauthorized", "fault"] },
+          "label": { "type": "string", "minLength": 4 },
+          "input": { "type": "object" },
+          "fault": {
+            "type": "object",
+            "required": ["injectPlanTool"],
+            "properties": { "injectPlanTool": { "type": "string", "pattern": "^TOOL-" } },
+            "additionalProperties": false
+          },
+          "expected": {
+            "type": "object",
+            "required": ["terminalState"],
+            "properties": {
+              "terminalState": { "enum": ["needs-approval", "needs-review", "refused", "failed"] },
+              "reasonCode": { "type": "string", "pattern": "^[A-Z0-9_]+$" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -16,6 +16,14 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  []
+relatedObjectIds:
+  []
+relatedTaskIds:
+  []
+referenceMaturity: "solution"
+lastReviewedAt: "2026-08-17"
 ---
 # 第九章：推理模型时代的知识库重构
 
@@ -498,3 +506,7 @@ L3及以上场景，请忽略该阈值，优先按错误代价选型。
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 不能由本章证明什么
+
+推理模型范式结论随时间漂移，本章不构成对任何具体模型的性能或成本承诺。

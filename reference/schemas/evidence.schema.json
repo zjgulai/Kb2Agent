@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/evidence.schema.json",
+  "title": "MKD L1 Evidence Objects",
+  "oneOf": [
+    { "$ref": "#/$defs/evidenceFragment" },
+    { "$ref": "#/$defs/claim" }
+  ],
+  "$defs": {
+    "evidenceFragment": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        {
+          "type": "object",
+          "required": ["summary", "locator", "grade"],
+          "properties": {
+            "objectType": { "const": "EvidenceFragment" },
+            "summary": { "type": "string", "minLength": 8 },
+            "verbatimExcerpt": { "type": "string", "maxLength": 800 },
+            "locator": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/sourceLocator" },
+            "grade": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/evidenceGrade" }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "claim": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        {
+          "type": "object",
+          "required": ["statement", "supportRefs", "contradictionRefs", "applicability", "claimStatus"],
+          "properties": {
+            "objectType": { "const": "Claim" },
+            "statement": { "type": "string", "minLength": 8 },
+            "supportRefs": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+            "contradictionRefs": { "type": "array", "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+            "applicability": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } },
+            "claimStatus": { "enum": ["supported", "contested", "unknown", "expired"] }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

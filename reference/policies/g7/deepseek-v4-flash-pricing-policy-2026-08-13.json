@@ -1,0 +1,58 @@
+{
+  "$schema": "../../schemas/g7/deepseek-pricing-policy.schema.json",
+  "schemaVersion": 1,
+  "policyId": "POLICY-G7-A2-S4-DEEPSEEK-V4-FLASH-2026-08-13",
+  "gateId": "G7-A2-S4",
+  "sourceSnapshotId": "SNAPSHOT-G7-A2-S4-DEEPSEEK-OFFICIAL-PRICING-2026-08-13",
+  "sourceObservedAt": "2026-08-13T08:18:08Z",
+  "providerId": "deepseek-official-api",
+  "origin": "https://api.deepseek.com/anthropic",
+  "admittedModelId": "deepseek-v4-flash",
+  "documentedCurrentModelVersion": "DeepSeek-V4-Flash-0731",
+  "currency": "USD",
+  "rateUnit": "micro-usd-per-1m-tokens",
+  "rates": {
+    "cacheHitInput": 2800,
+    "cacheMissInput": 140000,
+    "output": 280000
+  },
+  "tokenDenominator": 1000000,
+  "cacheAccounting": {
+    "exactSplit": "require both cacheHitInputTokens and cacheMissInputTokens and require their sum to equal inputTokens",
+    "missingSplit": "conservative-all-input-cache-miss",
+    "partialOrMismatchedSplit": "fail-closed"
+  },
+  "rounding": {
+    "authorization": "ceil exact calculated cost to one micro-USD per call, then sum call ceilings",
+    "providerBillingClaim": "not-verified-and-not-claimed"
+  },
+  "admissionBudget": {
+    "maxCalls": 2,
+    "maxRetries": 0,
+    "maxTimeoutMsPerCall": 10000,
+    "maxInputTokensPerCall": 1200,
+    "maxOutputTokensPerCall": 500,
+    "maxTotalCostUsdMicros": 250000
+  },
+  "modelMapping": {
+    "calculatorAcceptedModelIds": ["deepseek-v4-flash"],
+    "documentaryOnlyMappings": [
+      { "inputFamily": "Claude Haiku", "documentedTarget": "deepseek-v4-flash", "admittedByThisPolicy": false },
+      { "inputFamily": "Claude Sonnet", "documentedTarget": "deepseek-v4-flash", "admittedByThisPolicy": false },
+      { "inputFamily": "Claude Opus", "documentedTarget": "deepseek-v4-pro", "admittedByThisPolicy": false }
+    ],
+    "rejectedModelIds": ["deepseek-v4-pro", "deepseek-chat", "deepseek-reasoner", "claude-haiku", "claude-sonnet", "claude-opus", "unsupported-auto-map"]
+  },
+  "freshnessPolicy": {
+    "pricingIsVolatile": true,
+    "revalidateOfficialPricingImmediatelyBeforeAnyLiveCall": true,
+    "independentReviewRequiredAfterRefresh": true,
+    "silentAutoRefreshAllowed": false
+  },
+  "preparationState": {
+    "pricingPolicyMaterialized": true,
+    "pricingPolicyIndependentlyReviewed": false,
+    "providerBillingVerified": false,
+    "liveExecutionReady": false
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "status": "candidate-only",
+  "mode": "map-without-migration",
+  "scopeNote": "M1-A 只冻结既有 Guide 注册表与 Reference 对象的语义映射，不重写原注册表，也不把 Guide 成熟度继承给 Reference。",
+  "adapters": [
+    {
+      "sourceRegistry": "knowledge-system/claims.yml",
+      "sourceKinds": ["sources", "evidence", "claims"],
+      "targetTypes": ["SourceArtifact", "SourceRevision", "EvidenceFragment", "Claim"],
+      "identityRule": "保留 sourceId/evidenceId/claimId，另行生成带命名空间的 Reference id；禁止静默覆盖。",
+      "requiredAdditions": ["source revision", "resolvable locator", "content hash", "license state"],
+      "maturityRule": "原 evidence grade 仅作为输入声明；必须经 Reference schema、交叉引用和 fixture 门禁重新验证。"
+    },
+    {
+      "sourceRegistry": "knowledge-system/concepts.yml",
+      "sourceKinds": ["concepts", "relations"],
+      "targetTypes": ["Concept", "Relation"],
+      "identityRule": "conceptId 保留为 legacyRef；Reference id 使用不可变命名空间 ID。",
+      "requiredAdditions": ["revision", "governance state", "typed relation endpoints"],
+      "maturityRule": "definedIn/usedIn 只证明 Guide 语义图存在，不证明 Reference runtime 可执行。"
+    },
+    {
+      "sourceRegistry": "knowledge-system/acceptance.yml",
+      "sourceKinds": ["contracts", "datasets", "thresholds", "receipts"],
+      "targetTypes": ["EvaluationContract", "KnowledgeReceipt", "GovernanceDecision"],
+      "identityRule": "acceptanceId/datasetId/baselineReceiptId 保留为 legacyRef；禁止把缺失 finalReceipt 合成 accepted。",
+      "requiredAdditions": ["evaluation object refs", "trace ref", "review decision", "release snapshot"],
+      "maturityRule": "repository-content acceptance 与 Reference runtime acceptance 分账；productionReady=false 必须保持。"
+    }
+  ],
+  "promotionGate": {
+    "bulkMigrationAllowed": false,
+    "automaticAcceptanceAllowed": false,
+    "requiredBeforeP3": [
+      "domain reviewer approves mapping",
+      "license inventory exists per source artifact",
+      "migration dry-run produces zero dangling references",
+      "Guide and Reference maturity ledgers remain independent"
+    ]
+  }
+}

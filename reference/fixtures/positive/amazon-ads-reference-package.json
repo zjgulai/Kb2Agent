@@ -1,0 +1,432 @@
+{
+  "packageId": "PKG-AMZ-ADS-M1A",
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "SRC-AMZ-ADS-REPORT",
+      "objectType": "SourceArtifact",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": [],
+      "title": "Amazon Ads synthetic portfolio report",
+      "format": "xlsx",
+      "language": "bilingual",
+      "contentHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "license": {
+        "state": "synthetic",
+        "redistribution": true,
+        "note": "M1-A design fixture; no customer or platform export data."
+      }
+    },
+    {
+      "id": "SRCREV-AMZ-ADS-REPORT-V1",
+      "objectType": "SourceRevision",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["SRC-AMZ-ADS-REPORT"],
+      "sourceArtifactId": "SRC-AMZ-ADS-REPORT",
+      "asOf": "2026-08-01",
+      "contentHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "id": "ELEM-AMZ-ADS-REPORT-PORTFOLIO",
+      "objectType": "StructuralElement",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["SRCREV-AMZ-ADS-REPORT-V1"],
+      "sourceRevisionId": "SRCREV-AMZ-ADS-REPORT-V1",
+      "elementType": "cell-range",
+      "locator": "sheet=Portfolio!A2:H9",
+      "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "text": "Synthetic 14-day spend, sales, clicks, orders and ACOS comparison."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "EVID-AMZ-ACOS-DELTA",
+      "objectType": "EvidenceFragment",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["ELEM-AMZ-ADS-REPORT-PORTFOLIO"],
+      "summary": "Synthetic fixture shows ACOS rising from 28.4% to 36.9% across adjacent seven-day windows.",
+      "locator": {
+        "sourceRevisionId": "SRCREV-AMZ-ADS-REPORT-V1",
+        "structuralElementId": "ELEM-AMZ-ADS-REPORT-PORTFOLIO",
+        "locator": "sheet=Portfolio!G2:H9",
+        "contentHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "grade": "LO-S-synthetic"
+    },
+    {
+      "id": "CLAIM-AMZ-ACOS-RISING",
+      "objectType": "Claim",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["EVID-AMZ-ACOS-DELTA"],
+      "statement": "The synthetic portfolio ACOS is higher in the latest seven-day window.",
+      "supportRefs": ["EVID-AMZ-ACOS-DELTA"],
+      "contradictionRefs": [],
+      "applicability": ["synthetic portfolio fixture", "two adjacent seven-day windows"],
+      "claimStatus": "supported"
+    }
+  ],
+  "knowledgeObjects": [
+    {
+      "id": "CONCEPT-AMZ-ACOS",
+      "objectType": "Concept",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["CLAIM-AMZ-ACOS-RISING"],
+      "canonicalTerm": "Advertising Cost of Sales",
+      "aliases": ["ACOS", "广告投入产出比"],
+      "definition": "Ad spend divided by attributed sales for the same attribution and reporting window.",
+      "examples": ["28.4% in the earlier synthetic seven-day window"]
+    },
+    {
+      "id": "METRIC-AMZ-ACOS",
+      "objectType": "Metric",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["CLAIM-AMZ-ACOS-RISING"],
+      "name": "ACOS",
+      "formula": "ad_spend / attributed_sales * 100",
+      "inputs": ["ad_spend", "attributed_sales"],
+      "unit": "%",
+      "window": "seven calendar days with identical attribution settings",
+      "failureModes": ["sales equals zero", "mixed attribution windows", "currency mismatch"]
+    },
+    {
+      "id": "DECISION-AMZ-ACOS-DIAGNOSIS",
+      "objectType": "DecisionModel",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["CLAIM-AMZ-ACOS-RISING"],
+      "inputs": ["ACOS delta", "CPC delta", "CVR delta", "attribution window", "retail availability"],
+      "branches": [
+        { "when": "ACOS rises and CPC rises while CVR is stable", "then": "inspect bid and traffic-cost drivers" },
+        { "when": "ACOS rises and CVR falls", "then": "inspect conversion and retail-readiness drivers" }
+      ],
+      "outputs": ["ranked hypotheses", "required checks", "manual action draft"],
+      "unknownPolicy": "Do not rank a hypothesis that depends on an unavailable input as a verified fact.",
+      "stopConditions": ["attribution windows differ", "required sales or spend input is absent"],
+      "reviewState": "pending-domain-review"
+    },
+    {
+      "id": "CASE-AMZ-ACOS-SYNTHETIC",
+      "objectType": "Case",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["EVID-AMZ-ACOS-DELTA"],
+      "title": "Synthetic Amazon Ads ACOS increase",
+      "context": "A fixed portfolio fixture compares two seven-day windows.",
+      "facts": ["ACOS rises from 28.4% to 36.9% in the fixture"],
+      "decisions": ["request CPC, CVR, attribution and retail-readiness checks before any optimization"],
+      "outcome": "Design-only draft; no advertising action was executed.",
+      "evidenceRefs": ["EVID-AMZ-ACOS-DELTA"],
+      "limitations": ["synthetic values", "no account history", "no domain approval"],
+      "dataClass": "synthetic"
+    },
+    {
+      "id": "PLAYBOOK-AMZ-ACOS-CHECK",
+      "objectType": "Playbook",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["DECISION-AMZ-ACOS-DIAGNOSIS"],
+      "title": "ACOS change evidence check",
+      "prerequisites": ["same attribution window", "spend and attributed sales available"],
+      "steps": ["calculate comparable ACOS", "compare CPC and CVR", "record unknown retail inputs"],
+      "checks": ["units and windows match", "every fact cites evidence"],
+      "rollback": ["discard draft if source revision changes", "return to unknown state when inputs are missing"],
+      "approval": ["ROLE-AMAZON-ADS-DOMAIN", "ROLE-PRODUCT-CONTENT"]
+    }
+  ],
+  "skills": [
+    {
+      "id": "SKILL-AMZ-ACOS-DRAFT",
+      "objectType": "Skill",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["PLAYBOOK-AMZ-ACOS-CHECK"],
+      "name": "Draft ACOS diagnostic action package",
+      "inputContract": { "schemaRef": "https://mkd.local/schemas/task-package.schema.json" },
+      "outputContract": { "schemaRef": "https://mkd.local/schemas/action-package.schema.json" },
+      "tools": [
+        { "toolId": "TOOL-READ-SNAPSHOT", "mode": "read", "sideEffect": false },
+        { "toolId": "TOOL-CALCULATE-METRIC", "mode": "calculate", "sideEffect": false },
+        { "toolId": "TOOL-DRAFT-ACTION", "mode": "draft", "sideEffect": false }
+      ],
+      "steps": ["load required closure", "validate metric inputs", "rank supported hypotheses", "draft manual checks"],
+      "eLevel": "E2",
+      "stopConditions": ["required metric inputs are missing", "evidence is expired or contradictory"],
+      "rollback": ["discard generated draft", "retain immutable replay receipt"],
+      "tests": ["GOLDEN-AMZ-ACOS-POSITIVE", "GOLDEN-AMZ-ACOS-MISSING-INPUT"],
+      "promotionDecisionRef": "PROMOTION-AMZ-ACOS-SKILL"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-AMZ-ACOS-DIAGNOSE",
+      "objectType": "TaskPackage",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["SKILL-AMZ-ACOS-DRAFT"],
+      "name": "Diagnose synthetic ACOS increase",
+      "taskContract": "Explain the supported change, separate unknowns, and produce a manual action draft with no external writes.",
+      "requiredClosure": {
+        "objectIds": ["CLAIM-AMZ-ACOS-RISING", "METRIC-AMZ-ACOS", "DECISION-AMZ-ACOS-DIAGNOSIS", "PLAYBOOK-AMZ-ACOS-CHECK"],
+        "allowedRelations": ["supports", "requires", "uses_metric", "implements", "validated_by"],
+        "maxDepth": 3,
+        "maxObjects": 24
+      },
+      "skillRef": "SKILL-AMZ-ACOS-DRAFT",
+      "outputSchemaRef": "https://mkd.local/schemas/action-package.schema.json",
+      "evaluationRefs": ["EVAL-AMZ-ACOS-M1A"],
+      "eLevel": "E2",
+      "publicInput": {
+        "freeText": false,
+        "fileUpload": false,
+        "urlInput": false,
+        "allowedParameters": ["caseId", "comparisonWindow"]
+      }
+    }
+  ],
+  "governance": [
+    {
+      "id": "POLICY-MKD-SYNTHETIC-LABEL",
+      "objectType": "Policy",
+      "revision": 1,
+      "status": "approved",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": [],
+      "title": "Synthetic evidence labeling",
+      "rules": ["Every synthetic value must remain labeled LO-S-synthetic", "Synthetic output cannot be customer evidence"],
+      "enforcement": "blocking"
+    },
+    {
+      "id": "PERMISSION-AMZ-ADS-E2",
+      "objectType": "PermissionRule",
+      "revision": 1,
+      "status": "approved",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": [],
+      "targetRefs": ["SKILL-AMZ-ACOS-DRAFT", "TASK-AMZ-ACOS-DIAGNOSE"],
+      "maxELevel": "E2",
+      "allowedToolModes": ["read", "calculate", "draft"],
+      "externalWrite": false
+    },
+    {
+      "id": "PROMOTION-AMZ-ACOS-SKILL",
+      "objectType": "PromotionDecision",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": ["CASE-AMZ-ACOS-SYNTHETIC"],
+      "candidateRef": "CASE-AMZ-ACOS-SYNTHETIC",
+      "targetType": "Skill",
+      "decision": "pending",
+      "reviewerRoleRefs": ["ROLE-AMAZON-ADS-DOMAIN", "ROLE-ENGINEERING-TEST"],
+      "reasons": ["M1-A fixture only; domain and test review are not accepted"]
+    },
+    {
+      "id": "OWNERSHIP-AMZ-ACOS-TASK",
+      "objectType": "Ownership",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": [],
+      "targetRef": "TASK-AMZ-ACOS-DIAGNOSE",
+      "roleRefs": ["ROLE-PRODUCT-CONTENT", "ROLE-AMAZON-ADS-DOMAIN", "ROLE-ENGINEERING-TEST", "ROLE-SECURITY-RELEASE"],
+      "acceptanceState": "roles-mapped"
+    },
+    {
+      "id": "ACCEPTANCE-AMZ-ACOS-M1A",
+      "objectType": "Acceptance",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": [],
+      "targetRef": "TASK-AMZ-ACOS-DIAGNOSE",
+      "roleRefs": ["ROLE-PRODUCT-CONTENT", "ROLE-AMAZON-ADS-DOMAIN", "ROLE-ENGINEERING-TEST", "ROLE-SECURITY-RELEASE"],
+      "thresholdRefs": ["EVAL-AMZ-ACOS-M1A"],
+      "state": "approval-blocked",
+      "productionReady": false
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "EVAL-AMZ-ACOS-M1A",
+      "objectType": "EvaluationContract",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": [],
+      "targetRef": "TASK-AMZ-ACOS-DIAGNOSE",
+      "datasetRef": "DATASET-AMZ-ADS-M1A",
+      "graders": ["schema", "citation", "permission", "human-domain"],
+      "thresholds": [
+        { "metric": "schema_pass_rate", "operator": "==", "value": 1, "approvalState": "illustrative" },
+        { "metric": "external_side_effects", "operator": "==", "value": 0, "approvalState": "approved" }
+      ],
+      "negativeRequirements": ["missing input must block exact recommendation", "no external write tool may appear"]
+    },
+    {
+      "id": "GOLDEN-AMZ-ACOS-POSITIVE",
+      "objectType": "GoldenTask",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": [],
+      "taskPackageRef": "TASK-AMZ-ACOS-DIAGNOSE",
+      "category": "positive",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "7d-vs-7d" },
+      "expected": { "status": "draft-for-review", "mustCite": true, "maxExternalCalls": 0, "maxSideEffects": 0 },
+      "dataClass": "synthetic"
+    },
+    {
+      "id": "GOLDEN-AMZ-ACOS-MISSING-INPUT",
+      "objectType": "GoldenTask",
+      "revision": 1,
+      "status": "candidate",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "sourceRefs": [],
+      "taskPackageRef": "TASK-AMZ-ACOS-DIAGNOSE",
+      "category": "negative",
+      "input": { "caseId": "CASE-AMZ-ACOS-SYNTHETIC", "comparisonWindow": "missing-attribution-window" },
+      "expected": { "status": "blocked-insufficient-input", "mustCite": true, "maxExternalCalls": 0, "maxSideEffects": 0 },
+      "dataClass": "synthetic"
+    }
+  ],
+  "relations": [
+    { "relationId": "REL-EVID-SUPPORTS-CLAIM", "relationType": "supports", "fromId": "EVID-AMZ-ACOS-DELTA", "toId": "CLAIM-AMZ-ACOS-RISING", "fromType": "EvidenceFragment", "toType": "Claim", "status": "candidate" },
+    { "relationId": "REL-CLAIM-DEFINES-METRIC", "relationType": "defines", "fromId": "CLAIM-AMZ-ACOS-RISING", "toId": "METRIC-AMZ-ACOS", "fromType": "Claim", "toType": "Metric", "status": "candidate" },
+    { "relationId": "REL-DECISION-USES-METRIC", "relationType": "uses_metric", "fromId": "DECISION-AMZ-ACOS-DIAGNOSIS", "toId": "METRIC-AMZ-ACOS", "fromType": "DecisionModel", "toType": "Metric", "status": "candidate" },
+    { "relationId": "REL-PLAYBOOK-IMPLEMENTS-DECISION", "relationType": "implements", "fromId": "PLAYBOOK-AMZ-ACOS-CHECK", "toId": "DECISION-AMZ-ACOS-DIAGNOSIS", "fromType": "Playbook", "toType": "DecisionModel", "status": "candidate" },
+    { "relationId": "REL-SKILL-IMPLEMENTS-PLAYBOOK", "relationType": "implements", "fromId": "SKILL-AMZ-ACOS-DRAFT", "toId": "PLAYBOOK-AMZ-ACOS-CHECK", "fromType": "Skill", "toType": "Playbook", "status": "candidate" },
+    { "relationId": "REL-TASK-IMPLEMENTS-SKILL", "relationType": "implements", "fromId": "TASK-AMZ-ACOS-DIAGNOSE", "toId": "SKILL-AMZ-ACOS-DRAFT", "fromType": "TaskPackage", "toType": "Skill", "status": "candidate" },
+    { "relationId": "REL-TASK-VALIDATED-EVAL", "relationType": "validated_by", "fromId": "TASK-AMZ-ACOS-DIAGNOSE", "toId": "EVAL-AMZ-ACOS-M1A", "fromType": "TaskPackage", "toType": "EvaluationContract", "status": "candidate" }
+  ],
+  "snapshots": [
+    {
+      "snapshotId": "SNAPSHOT-AMZ-ADS-M1A",
+      "version": "0.1.0",
+      "objectIds": [
+        "SRC-AMZ-ADS-REPORT",
+        "SRCREV-AMZ-ADS-REPORT-V1",
+        "ELEM-AMZ-ADS-REPORT-PORTFOLIO",
+        "EVID-AMZ-ACOS-DELTA",
+        "CLAIM-AMZ-ACOS-RISING",
+        "CONCEPT-AMZ-ACOS",
+        "METRIC-AMZ-ACOS",
+        "DECISION-AMZ-ACOS-DIAGNOSIS",
+        "CASE-AMZ-ACOS-SYNTHETIC",
+        "PLAYBOOK-AMZ-ACOS-CHECK",
+        "SKILL-AMZ-ACOS-DRAFT",
+        "TASK-AMZ-ACOS-DIAGNOSE",
+        "POLICY-MKD-SYNTHETIC-LABEL",
+        "PERMISSION-AMZ-ADS-E2",
+        "PROMOTION-AMZ-ACOS-SKILL",
+        "OWNERSHIP-AMZ-ACOS-TASK",
+        "ACCEPTANCE-AMZ-ACOS-M1A",
+        "EVAL-AMZ-ACOS-M1A",
+        "GOLDEN-AMZ-ACOS-POSITIVE",
+        "GOLDEN-AMZ-ACOS-MISSING-INPUT"
+      ],
+      "relationIds": [
+        "REL-EVID-SUPPORTS-CLAIM",
+        "REL-CLAIM-DEFINES-METRIC",
+        "REL-DECISION-USES-METRIC",
+        "REL-PLAYBOOK-IMPLEMENTS-DECISION",
+        "REL-SKILL-IMPLEMENTS-PLAYBOOK",
+        "REL-TASK-IMPLEMENTS-SKILL",
+        "REL-TASK-VALIDATED-EVAL"
+      ],
+      "canonicalization": "sorted-object-and-relation-ids-v1",
+      "manifestHash": "sha256:692f2403a260070c025cf6207914a5fc321010e372c2a7ef2c8f21dba9e2bdd5",
+      "createdAt": "2026-08-09T00:00:00Z",
+      "immutable": true
+    }
+  ],
+  "traces": [
+    {
+      "traceId": "TRACE-AMZ-REPLAY-001",
+      "runId": "RUN-AMZ-REPLAY-001",
+      "mode": "replay",
+      "events": [
+        { "eventId": "EVENT-AMZ-SOURCE", "stage": "source", "kind": "retrieve", "startedAt": "2026-08-09T00:00:00Z", "durationMs": 12, "status": "completed", "inputRefs": ["SNAPSHOT-AMZ-ADS-M1A"], "outputRefs": ["ELEM-AMZ-ADS-REPORT-PORTFOLIO"] },
+        { "eventId": "EVENT-AMZ-CALCULATE", "stage": "agent", "kind": "calculate", "startedAt": "2026-08-09T00:00:01Z", "durationMs": 8, "status": "completed", "inputRefs": ["METRIC-AMZ-ACOS"], "outputRefs": ["ACTION-AMZ-REPLAY-001"] },
+        { "eventId": "EVENT-AMZ-RECEIPT", "stage": "receipt", "kind": "receipt", "startedAt": "2026-08-09T00:00:02Z", "durationMs": 3, "status": "completed", "inputRefs": ["ACTION-AMZ-REPLAY-001"], "outputRefs": ["RECEIPT-AMZ-REPLAY-001"] }
+      ],
+      "status": "completed",
+      "externalCalls": 0,
+      "sideEffects": 0
+    }
+  ],
+  "actionPackages": [
+    {
+      "actionPackageId": "ACTION-AMZ-REPLAY-001",
+      "taskPackageId": "TASK-AMZ-ACOS-DIAGNOSE",
+      "runId": "RUN-AMZ-REPLAY-001",
+      "summary": "The synthetic fixture confirms an ACOS increase, but does not contain enough evidence to select a bid or conversion intervention.",
+      "facts": [
+        { "text": "Synthetic ACOS rises from 28.4% to 36.9% across comparable fixture windows.", "evidenceRefs": ["EVID-AMZ-ACOS-DELTA"] }
+      ],
+      "inferences": [
+        { "text": "CPC or CVR changes are plausible drivers and require separate checks.", "evidenceRefs": ["DECISION-AMZ-ACOS-DIAGNOSIS"] }
+      ],
+      "unknowns": [
+        { "question": "Did CPC or CVR change?", "impact": "The intervention path cannot be selected without these inputs.", "nextEvidence": "Provide same-window CPC and CVR fixture fields." }
+      ],
+      "options": [
+        { "optionId": "OPTION-AMZ-VERIFY-DRIVERS", "label": "先核验驱动因素", "action": "Compare CPC and CVR in identical windows and inspect retail readiness.", "tradeoff": "Delays any optimization but avoids unsupported changes.", "externalWrite": false }
+      ],
+      "recommendation": "Collect the missing comparable inputs and keep all optimization actions in draft state.",
+      "calculations": [
+        { "metricRef": "METRIC-AMZ-ACOS", "formula": "ad_spend / attributed_sales * 100", "inputs": { "earlier": "synthetic", "latest": "synthetic" }, "unit": "%", "window": "7d vs 7d", "result": "28.4% → 36.9%", "resultState": "exact" }
+      ],
+      "risks": ["Synthetic values cannot justify an account change", "Attribution and retail inputs are absent"],
+      "stopConditions": ["Do not modify bids or budgets", "Stop if reporting windows are not comparable"],
+      "approvalRequirements": ["ROLE-AMAZON-ADS-DOMAIN", "ROLE-PRODUCT-CONTENT"],
+      "evidenceRefs": ["EVID-AMZ-ACOS-DELTA", "CLAIM-AMZ-ACOS-RISING"],
+      "status": "draft-for-review"
+    }
+  ],
+  "receipts": [
+    {
+      "receiptId": "RECEIPT-AMZ-REPLAY-001",
+      "runId": "RUN-AMZ-REPLAY-001",
+      "mode": "replay",
+      "evidenceGrade": "LO-S-synthetic",
+      "snapshot": { "id": "SNAPSHOT-AMZ-ADS-M1A", "version": "0.1.0" },
+      "taskPackage": { "id": "TASK-AMZ-ACOS-DIAGNOSE", "version": "1" },
+      "skill": { "id": "SKILL-AMZ-ACOS-DRAFT", "version": "1" },
+      "model": { "id": "fixture-replay", "version": "m1-a" },
+      "prompt": { "id": "no-provider-static-replay", "version": "1" },
+      "tools": [
+        { "id": "TOOL-READ-SNAPSHOT", "version": "1" },
+        { "id": "TOOL-CALCULATE-METRIC", "version": "1" },
+        { "id": "TOOL-DRAFT-ACTION", "version": "1" }
+      ],
+      "traceRef": "TRACE-AMZ-REPLAY-001",
+      "evaluationRefs": ["EVAL-AMZ-ACOS-M1A"],
+      "artifactHashes": {
+        "actionPackage": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "trace": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "externalCalls": 0,
+      "sideEffects": 0,
+      "issuedAt": "2026-08-09T00:00:03Z"
+    }
+  ]
+}

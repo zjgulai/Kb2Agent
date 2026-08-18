@@ -16,6 +16,14 @@ codeStatus: none
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  []
+relatedObjectIds:
+  []
+relatedTaskIds:
+  []
+referenceMaturity: "principle"
+lastReviewedAt: "2026-08-17"
 ---
 # 第十七章：三个复合失败案例——知识库建设的系统性代价
 
@@ -241,3 +249,7 @@ Skill 上线后，初级顾问的工作效率确实提升了——但仅限于"�
 - **代码状态**：无代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 不能由本章证明什么
+
+失败案例是反模式教学，不能证明当前实现已避免同类失败；仍需 golden/负例任务持续验证。

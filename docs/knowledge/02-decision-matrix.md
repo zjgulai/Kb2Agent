@@ -16,6 +16,14 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  []
+relatedObjectIds:
+  []
+relatedTaskIds:
+  []
+referenceMaturity: "solution"
+lastReviewedAt: "2026-08-17"
 ---
 # 第二章：输入类型 × 输出形式决策矩阵
 
@@ -267,3 +275,7 @@ TRIAGE_PROMPT = """
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 不能由本章证明什么
+
+决策矩阵是选型启发式，不能替代对具体语料、许可与任务的编译验证；矩阵结论不自动授权任何实现。

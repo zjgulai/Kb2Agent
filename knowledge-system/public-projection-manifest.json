@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-17",
+  "projectionBranch": "codex/mkd-public-projection",
+  "baseCommit": "49078895ed532147d2a81a398c763cd497aa4123",
+  "sourceCommit": "5dabc8f",
+  "policy": "按 V1 计划 J1：公开 Schema、fixture、核心 Runner、黄金任务；私有语料、生产适配器、密钥、内部运营规则不公开。按 G7-A2-D1-R1：credential-bearing config 指纹为 internal-restricted，public projection=false。",
+  "inclusionRules": [
+    "docs/**（站点源码；已随 438e 公网站点公开，不构成新增暴露）",
+    "reference/{schemas(除 g7),corpus,fixtures,golden,ontology,policies,adapters}/**（J1 公开资产）",
+    "knowledge-system/{capability-map,schemas,roles,product-lines,product-claims,product-decisions,公开评审 packets}",
+    "tests：docs QA 内容测试 + 核心 Runner 测试 + 站点 Playwright（除部署/证据 spec）",
+    "package.json/package-lock.json/.github/workflows/deploy.yml/公开 playwright 配置",
+    "reference/runtime/{agent,cli,compiler,extract,g6-agent,g6-utils,utils}.mjs（核心 Runner/编译器运行时；g7 provider 适配器仍排除）",
+    "scripts/check-*.mjs（除 check-m1c-release-gate）+ 注册表/docs QA + build-m1b + build-g6-agent（核心编译器与 Runner）"
+  ],
+  "exclusionRules": [
+    {
+      "pattern": "reference/receipts/**",
+      "reason": "内部运营回执语料；公开投影经由 docs/public 与公开评审 packets 单独承载"
+    },
+    {
+      "pattern": "reference/{build,evidence,attestations,reviews,runtime}/**",
+      "reason": "内部证据/构建/attestation 工作集与 provider 适配器（J1 生产适配器不公开）"
+    },
+    {
+      "pattern": "reference/schemas/g7/**",
+      "reason": "provider shadow 运行合同，含内部端口/监听语义"
+    },
+    {
+      "pattern": "deploy/** release/** compose.m1b.yaml Dockerfile.m1b .dockerignore",
+      "reason": "生产部署资产（J1）"
+    },
+    {
+      "pattern": "knowledge-system/{review-history,acceptance,m1-b-baseline,m1-c-baseline,g6-a3-*,g6-a5-*,m1-c-*}",
+      "reason": "内部评审工作流与含本机路径的 baseline"
+    },
+    {
+      "pattern": "scripts/ 部署/SSH/provider 执行器（collect/run-g*/render/materialize/prepare-g*/accept-g*/close-*/correct-*/build-*-package 等）",
+      "reason": "内部运维与证据机器"
+    },
+    {
+      "pattern": "tests/ 部署与 provider 门禁测试（g6-a6/a7/a9、g7-*、mkd-distill-*、distill-public-p9、g6-a9-public-p9）",
+      "reason": "绑定内部执行器"
+    },
+    {
+      "pattern": "携带 credential-config 指纹 1d584915... 的任何文件",
+      "reason": "G7-A2-D1-R1 internal-restricted history，public projection=false"
+    }
+  ],
+  "verification": {
+    "restrictedConfigFingerprintHits": 0,
+    "credentialPatternHits": 0,
+    "internalReceiptsDeployReleaseDirsPresent": false,
+    "keptWithRationale": [
+      "docs/architecture/g7-a2-d1-local-channel-readonly-diagnosis.md 含本机 config 路径但仅路径无指纹，且该页已随 438e 公网站点公开",
+      "g6-a10 与 g4r6 公开评审 packets 含端口号句子，属四角色已接受的公开证据投影产物"
+    ],
+    "note": "scripts 引用被排除执行器的 package.json 条目保留为投影不完整镜像的已知差异，不作为运行承诺",
+    "publicDocsQaChain": "reference:build && agent:qa && docs:metrics && docs:identity && docs:concepts && docs:claims && docs:evidence && docs:acceptance && docs:audit && docs:semantic-links && docs:links && docs:snippets && test:content && docs:build && docs:headings && docs:preview-isolation && docs:performance && docs:lighthouse && test:site:hydration && test:site（公开分支以 reference:build+agent:qa 替代 reference:qa，因评审记录与 baseline 属内部资产）",
+    "pagesWorkflow": "npm ci + poppler-utils + playwright chromium + npm run docs:qa（P0-10 整改）"
+  },
+  "includedFileCount": 289,
+  "includedListSha256": "14e4b0fcd1666171c28d0a85dd1d2e90ddb7da4a09ebee7c7fde9e7f5c53b86f"
+}

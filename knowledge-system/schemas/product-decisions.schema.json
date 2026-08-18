@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/knowledge-system/product-decisions.schema.json",
+  "type": "object",
+  "required": ["schemaVersion", "product", "decisionSetId", "frozenAt", "status", "implementationAuthorization", "decisions"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "product": { "const": "MKD · Knowledge to Agent" },
+    "decisionSetId": { "type": "string", "minLength": 8 },
+    "frozenAt": { "type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}$" },
+    "status": { "const": "owner-confirmed-design-baseline" },
+    "implementationAuthorization": {
+      "type": "object",
+      "required": ["state", "authorizedAt", "phases", "allowed", "forbiddenWithoutNewAuthorization"],
+      "properties": {
+        "state": { "const": "authorized-candidate-cloud" },
+        "authorizedAt": { "type": "string" },
+        "phases": { "type": "array", "const": ["P0", "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9"] },
+        "allowed": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+        "forbiddenWithoutNewAuthorization": { "type": "array", "minItems": 6, "items": { "type": "string" }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "decisions": {
+      "type": "array",
+      "minItems": 27,
+      "items": {
+        "type": "object",
+        "required": ["id", "value"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "value": { "type": "string", "minLength": 3 },
+          "mapsToExecutionLevel": { "const": "E2" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

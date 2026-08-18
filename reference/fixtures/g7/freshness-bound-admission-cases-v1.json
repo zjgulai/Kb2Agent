@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schemas/g7/freshness-admission-fixtures.schema.json",
+  "schemaVersion": 1,
+  "fixtureId": "FIXTURES-G7-A2-S5-FRESHNESS-BOUND-ADMISSION-V1",
+  "gateId": "G7-A2-S5",
+  "cases": [
+    { "caseId": "S5-001-EXACT-REFRESH", "target": "refresh", "mutation": null, "expectedReasonCode": "FRESH_OFFICIAL_PRICING_MATCH" },
+    { "caseId": "S5-002-UNOFFICIAL-PUBLISHER", "target": "refresh", "mutation": { "path": "publisher", "value": "Other" }, "expectedReasonCode": "OFFICIAL_SOURCE_MISMATCH" },
+    { "caseId": "S5-003-UNOFFICIAL-URL", "target": "refresh", "mutation": { "path": "sources.0.url", "value": "https://example.com/pricing" }, "expectedReasonCode": "OFFICIAL_SOURCE_MISMATCH" },
+    { "caseId": "S5-004-STALE-RETRIEVAL", "target": "refresh", "mutation": { "path": "sources.0.retrievalStatus", "value": "search-index-only" }, "expectedReasonCode": "SAME_DAY_FRESHNESS_UNPROVEN" },
+    { "caseId": "S5-005-WRONG-DATE", "target": "refresh", "mutation": { "path": "observedAt", "value": "2026-08-12T23:59:59Z" }, "expectedReasonCode": "SAME_DAY_FRESHNESS_UNPROVEN" },
+    { "caseId": "S5-006-MODEL-DRIFT", "target": "refresh", "mutation": { "path": "canonicalPricing.modelId", "value": "deepseek-v4-pro" }, "expectedReasonCode": "CANONICAL_PRICING_DRIFT" },
+    { "caseId": "S5-007-VERSION-DRIFT", "target": "refresh", "mutation": { "path": "canonicalPricing.modelVersion", "value": "DeepSeek-V4-Flash-NEW" }, "expectedReasonCode": "CANONICAL_PRICING_DRIFT" },
+    { "caseId": "S5-008-ORIGIN-DRIFT", "target": "refresh", "mutation": { "path": "canonicalPricing.anthropicBaseUrl", "value": "https://example.com/anthropic" }, "expectedReasonCode": "CANONICAL_PRICING_DRIFT" },
+    { "caseId": "S5-009-HIT-PRICE-DRIFT", "target": "refresh", "mutation": { "path": "canonicalPricing.cacheHitInputMicroUsdPer1m", "value": 2801 }, "expectedReasonCode": "CANONICAL_PRICING_DRIFT" },
+    { "caseId": "S5-010-MISS-PRICE-DRIFT", "target": "refresh", "mutation": { "path": "canonicalPricing.cacheMissInputMicroUsdPer1m", "value": 140001 }, "expectedReasonCode": "CANONICAL_PRICING_DRIFT" },
+    { "caseId": "S5-011-OUTPUT-PRICE-DRIFT", "target": "refresh", "mutation": { "path": "canonicalPricing.outputMicroUsdPer1m", "value": 280001 }, "expectedReasonCode": "CANONICAL_PRICING_DRIFT" },
+    { "caseId": "S5-012-WARNING-REMOVED", "target": "refresh", "mutation": { "path": "canonicalPricing.volatilityWarningPresent", "value": false }, "expectedReasonCode": "CANONICAL_PRICING_DRIFT" },
+    { "caseId": "S5-013-EXACT-ADMISSION", "target": "admission", "mutation": null, "expectedReasonCode": "ADMISSION_PREPARED_NOT_LIVE_AUTHORIZED" },
+    { "caseId": "S5-014-SUBJECT-DRIFT", "target": "admission", "mutation": { "path": "subject.modelId", "value": "deepseek-v4-pro" }, "expectedReasonCode": "SUBJECT_DRIFT" },
+    { "caseId": "S5-015-CLEAN-CANARY-DRIFT", "target": "admission", "mutation": { "path": "inputs.0.sha256", "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }, "expectedReasonCode": "CANARY_IDENTITY_DRIFT" },
+    { "caseId": "S5-016-REDACTED-CANARY-DRIFT", "target": "admission", "mutation": { "path": "inputs.1.sha256", "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }, "expectedReasonCode": "CANARY_IDENTITY_DRIFT" },
+    { "caseId": "S5-017-CALLS-DRIFT", "target": "admission", "mutation": { "path": "limits.maxCalls", "value": 3 }, "expectedReasonCode": "LIMITS_DRIFT" },
+    { "caseId": "S5-018-RETRIES-DRIFT", "target": "admission", "mutation": { "path": "limits.maxRetries", "value": 1 }, "expectedReasonCode": "LIMITS_DRIFT" },
+    { "caseId": "S5-019-TIMEOUT-DRIFT", "target": "admission", "mutation": { "path": "limits.timeoutMsPerCall", "value": 10001 }, "expectedReasonCode": "LIMITS_DRIFT" },
+    { "caseId": "S5-020-INPUT-LIMIT-DRIFT", "target": "admission", "mutation": { "path": "limits.maxInputTokensPerCall", "value": 1201 }, "expectedReasonCode": "LIMITS_DRIFT" },
+    { "caseId": "S5-021-OUTPUT-LIMIT-DRIFT", "target": "admission", "mutation": { "path": "limits.maxOutputTokensPerCall", "value": 501 }, "expectedReasonCode": "LIMITS_DRIFT" },
+    { "caseId": "S5-022-COST-LIMIT-DRIFT", "target": "admission", "mutation": { "path": "limits.maxTotalCostUsdMicros", "value": 250001 }, "expectedReasonCode": "LIMITS_DRIFT" },
+    { "caseId": "S5-023-REFRESH-GUARD-DISABLED", "target": "admission", "mutation": { "path": "liveAttemptGuard.preCallSameRunOfficialPricingRefreshRequired", "value": false }, "expectedReasonCode": "FRESHNESS_GUARD_DRIFT" },
+    { "caseId": "S5-024-PROVIDER-AUTHORIZED", "target": "admission", "mutation": { "path": "authorizationBoundary.providerCallsAuthorized", "value": true }, "expectedReasonCode": "AUTHORIZATION_BOUNDARY_DRIFT" }
+  ]
+}

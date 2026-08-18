@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/knowledge-system/roles.schema.json",
+  "type": "object",
+  "required": ["schemaVersion", "reviewedAt", "acceptanceRule", "roles"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "reviewedAt": { "type": "string" },
+    "acceptanceRule": { "type": "string", "minLength": 12 },
+    "roles": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["roleId", "name", "responsibilities", "assignee", "acceptanceState"],
+        "properties": {
+          "roleId": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+          "name": { "type": "string", "minLength": 4 },
+          "responsibilities": { "type": "array", "minItems": 3, "items": { "type": "string" }, "uniqueItems": true },
+          "assignee": { "type": ["string", "null"] },
+          "acceptanceState": { "enum": ["unassigned", "assigned", "accepted"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

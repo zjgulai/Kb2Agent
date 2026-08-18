@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "registryId": "MKD-PERMISSION-REGISTRY-V1",
+  "levels": [
+    { "level": "E0", "description": "只读解释，无工具调用", "public": true },
+    { "level": "E1", "description": "只读检索", "public": true },
+    { "level": "E2", "description": "只读检索、受控计算、行动草案", "public": true },
+    { "level": "E3", "description": "可逆外部写入", "public": false },
+    { "level": "E4", "description": "高影响或不可逆外部动作", "public": false }
+  ],
+  "publicMaximum": "E2",
+  "publicToolModes": ["read", "calculate", "draft"],
+  "externalWrite": false,
+  "canonicalKnowledgeWrite": false
+}

@@ -22,6 +22,15 @@ claimRefs:
   - CLM-EVAL-003
   - CLM-EVAL-004
 acceptanceRef: ACC-EVALUATION-001
+productArtifactRefs:
+  - "reference/golden/amazon-ads-diagnosis-v1.json"
+  - "knowledge-system/roles.json"
+relatedObjectIds:
+  - "PKG-AMZ-ADS-M1B"
+relatedTaskIds:
+  - "TASK-AMZ-ADS-DIAGNOSIS-V1"
+referenceMaturity: "runnable"
+lastReviewedAt: "2026-08-17"
 ---
 # 第十四章：Agent 知识调用质量评估
 
@@ -777,3 +786,13 @@ def attribute_failure(failure_case: dict) -> str:
 - **代码状态**：混合边界。`fixtures/evaluation-regression.mjs` 及其测试为 L2 本地 fixture；RAGAS、真实模型与其余评估片段仍是示意代码。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：具名角色接受责任后，用获授权的版本化数据集、批准阈值和锁定模型复放同一回归合同。
+
+## 在 Reference Lab 中如何验证
+
+- 20 条 golden tasks 在 `reference/golden/amazon-ads-diagnosis-v1.json` 确定性通过；硬门禁失败的任务一律计为失败。
+- trace grading 与 baseline/live structured diff 合同见 [/reference/evidence](/reference/evidence) 的证据等级标签（L0-L4、LO-S）；live 漂移不覆盖 immutable baseline。
+- 四角色独立验收以 `knowledge-system/roles.json` 为准（当前 4/4 accepted 仅覆盖公开静态证据）；accepted 必须具名、独立、可验证。
+
+## 不能由本章证明什么
+
+synthetic/adversarial 通过不等于真实业务有效性；真实去敏案例不可得时业务有效性保持 blocked，不得因页面上线而升级声明。

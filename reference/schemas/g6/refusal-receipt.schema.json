@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/g6/refusal-receipt.schema.json",
+  "title": "MKD G6 RefusalReceipt",
+  "type": "object",
+  "required": ["refusalId", "schemaVersion", "runId", "ruleId", "reasonCode", "reason", "requestHash", "safeAlternative", "externalCalls", "sideEffects", "issuedAt"],
+  "properties": {
+    "refusalId": { "type": "string", "pattern": "^REFUSAL-G6-" },
+    "schemaVersion": { "const": 1 },
+    "runId": { "type": "string", "pattern": "^RUN-G6-" },
+    "ruleId": { "const": "RULE-G6-ZERO-EXTERNAL-EFFECTS" },
+    "reasonCode": { "enum": ["EXTERNAL_WRITE_FORBIDDEN", "EXTERNAL_SEND_FORBIDDEN", "TOOL_NOT_WHITELISTED"] },
+    "reason": { "type": "string", "minLength": 15 },
+    "requestHash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "safeAlternative": { "type": "string", "minLength": 15 },
+    "externalCalls": { "const": 0 },
+    "sideEffects": { "const": 0 },
+    "issuedAt": { "const": "2026-08-09T00:00:00Z" }
+  },
+  "additionalProperties": false
+}

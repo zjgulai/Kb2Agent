@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/governance.schema.json",
+  "title": "MKD Supporting Governance Objects",
+  "oneOf": [
+    { "$ref": "#/$defs/policy" },
+    { "$ref": "#/$defs/freshnessRule" },
+    { "$ref": "#/$defs/permissionRule" },
+    { "$ref": "#/$defs/ownership" },
+    { "$ref": "#/$defs/promotionDecision" },
+    { "$ref": "#/$defs/acceptance" },
+    { "$ref": "#/$defs/observation" },
+    { "$ref": "#/$defs/knowledgeCandidate" }
+  ],
+  "$defs": {
+    "policy": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["title", "rules", "enforcement"], "properties": {
+          "objectType": { "const": "Policy" },
+          "title": { "type": "string", "minLength": 5 },
+          "rules": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } },
+          "enforcement": { "enum": ["advisory", "blocking"] }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "freshnessRule": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["targetTypes", "maxAgeDays", "onExpiry"], "properties": {
+          "objectType": { "const": "FreshnessRule" },
+          "targetTypes": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+          "maxAgeDays": { "type": "integer", "minimum": 1 },
+          "onExpiry": { "enum": ["warn", "block-context", "block-task"] }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "permissionRule": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["targetRefs", "maxELevel", "allowedToolModes", "externalWrite"], "properties": {
+          "objectType": { "const": "PermissionRule" },
+          "targetRefs": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+          "maxELevel": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/publicELevel" },
+          "allowedToolModes": { "type": "array", "minItems": 1, "items": { "enum": ["read", "calculate", "draft"] }, "uniqueItems": true },
+          "externalWrite": { "const": false }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "ownership": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["targetRef", "roleRefs", "acceptanceState"], "properties": {
+          "objectType": { "const": "Ownership" },
+          "targetRef": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+          "roleRefs": { "type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" } },
+          "acceptanceState": { "enum": ["roles-mapped", "partially-accepted", "accepted"] }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "promotionDecision": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["candidateRef", "targetType", "decision", "reviewerRoleRefs", "reasons"], "properties": {
+          "objectType": { "const": "PromotionDecision" },
+          "candidateRef": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+          "targetType": { "enum": ["Claim", "Concept", "Metric", "DecisionModel", "Case", "Playbook", "Skill", "TaskPackage"] },
+          "decision": { "enum": ["pending", "approved", "rejected"] },
+          "reviewerRoleRefs": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+          "reasons": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "acceptance": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["targetRef", "roleRefs", "thresholdRefs", "state", "productionReady"], "properties": {
+          "objectType": { "const": "Acceptance" },
+          "targetRef": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+          "roleRefs": { "type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" } },
+          "thresholdRefs": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+          "state": { "enum": ["draft", "approval-blocked", "accepted"] },
+          "productionReady": { "const": false }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "observation": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["category", "targetRef", "severity", "freeText"], "properties": {
+          "objectType": { "const": "Observation" },
+          "category": { "enum": ["wrong-source", "stale", "missing-input", "unsafe-recommendation", "schema-error"] },
+          "targetRef": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+          "severity": { "enum": ["low", "medium", "high"] },
+          "freeText": { "const": false }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "knowledgeCandidate": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["observationRefs", "proposedType", "proposal", "canonicalWrite"], "properties": {
+          "objectType": { "const": "KnowledgeCandidate" },
+          "observationRefs": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+          "proposedType": { "enum": ["Claim", "Concept", "Metric", "DecisionModel", "Case", "Playbook", "Skill", "TaskPackage"] },
+          "proposal": { "type": "object", "minProperties": 1 },
+          "canonicalWrite": { "const": false }
+        } }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

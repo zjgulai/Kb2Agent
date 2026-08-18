@@ -16,6 +16,14 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  []
+relatedObjectIds:
+  []
+relatedTaskIds:
+  []
+referenceMaturity: "principle"
+lastReviewedAt: "2026-08-17"
 ---
 # 第零章：导论 —— 2026 年知识库全景与十个反直觉洞察
 
@@ -341,3 +349,7 @@ flowchart LR
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 不能由本章证明什么
+
+本章给出全景与十个反直觉洞察，不能证明任何单章能力已在 Reference Lab 落地；具体验证以 /reference/ 与 /lab/ 的成熟度标签为准。

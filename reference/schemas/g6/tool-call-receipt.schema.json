@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/g6/tool-call-receipt.schema.json",
+  "title": "MKD G6 ToolCallReceipt",
+  "type": "object",
+  "required": ["callId", "schemaVersion", "runId", "planStepId", "toolId", "status", "inputHash", "outputHash", "startedAt", "durationMs", "externalCalls", "sideEffects"],
+  "properties": {
+    "callId": { "type": "string", "pattern": "^CALL-" },
+    "schemaVersion": { "const": 1 },
+    "runId": { "type": "string", "pattern": "^RUN-G6-" },
+    "planStepId": { "type": "string", "pattern": "^STEP-" },
+    "toolId": { "type": "string", "pattern": "^TOOL-[A-Z0-9-]+$" },
+    "status": { "enum": ["completed", "skipped", "blocked", "failed"] },
+    "inputHash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "outputHash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "errorCode": { "type": "string", "pattern": "^[A-Z0-9_]+$" },
+    "startedAt": { "const": "2026-08-09T00:00:00Z" },
+    "durationMs": { "const": 1 },
+    "externalCalls": { "const": 0 },
+    "sideEffects": { "const": 0 }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "completed" } },
+        "required": ["status"]
+      },
+      "then": { "not": { "required": ["errorCode"] } }
+    },
+    {
+      "if": {
+        "properties": { "status": { "enum": ["skipped", "blocked", "failed"] } },
+        "required": ["status"]
+      },
+      "then": { "required": ["errorCode"] }
+    }
+  ]
+}

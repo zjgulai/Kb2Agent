@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/evaluation.schema.json",
+  "title": "MKD Evaluation Contracts",
+  "oneOf": [
+    { "$ref": "#/$defs/evaluationContract" },
+    { "$ref": "#/$defs/goldenTask" }
+  ],
+  "$defs": {
+    "evaluationContract": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["targetRef", "datasetRef", "graders", "thresholds", "negativeRequirements"], "properties": {
+          "objectType": { "const": "EvaluationContract" },
+          "targetRef": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+          "datasetRef": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+          "graders": { "type": "array", "minItems": 2, "items": { "enum": ["schema", "citation", "task-success", "permission", "human-domain"] }, "uniqueItems": true },
+          "thresholds": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["metric", "operator", "value", "approvalState"], "properties": {
+            "metric": { "type": "string", "minLength": 3 },
+            "operator": { "enum": [">=", "<=", "=="] },
+            "value": { "type": "number" },
+            "approvalState": { "enum": ["illustrative", "approved"] }
+          }, "additionalProperties": false } },
+          "negativeRequirements": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 4 } }
+        } }
+      ],
+      "unevaluatedProperties": false
+    },
+    "goldenTask": {
+      "allOf": [
+        { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+        { "type": "object", "required": ["taskPackageRef", "category", "input", "expected", "dataClass"], "properties": {
+          "objectType": { "const": "GoldenTask" },
+          "taskPackageRef": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+          "category": { "enum": ["positive", "negative", "adversarial"] },
+          "input": { "type": "object", "minProperties": 1 },
+          "expected": { "type": "object", "required": ["status", "mustCite", "maxExternalCalls", "maxSideEffects"], "properties": {
+            "status": { "enum": ["draft-for-review", "blocked-insufficient-input"] },
+            "mustCite": { "type": "boolean" },
+            "maxExternalCalls": { "const": 0 },
+            "maxSideEffects": { "const": 0 }
+          }, "additionalProperties": false },
+          "dataClass": { "const": "synthetic" }
+        } }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

@@ -1,0 +1,545 @@
+{
+  "$schema": "../../schemas/g7/s6-r2-b-fixtures.schema.json",
+  "schemaVersion": 1,
+  "fixtureSetId": "FIXTURES-G7-A2-S6-R2-B-ATTEMPT-2-CONTRACTS-V1",
+  "gateId": "G7-A2-S6-R2-B",
+  "classification": "synthetic-local-contract-fixtures-no-network-no-credential",
+  "cases": [
+    {
+      "caseId": "G7S6R2B-PRICING-01",
+      "kind": "pricing",
+      "input": {
+        "runStartedAt": "2026-08-14T08:00:00Z",
+        "evaluationAt": "2026-08-14T08:02:00Z",
+        "credentialReadAt": null,
+        "refresh": {
+          "observedAt": "2026-08-14T08:01:00Z",
+          "publisher": "DeepSeek",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "hostname": "api-docs.deepseek.com",
+          "redirects": 0,
+          "tlsAuthorized": true,
+          "modelId": "deepseek-v4-flash",
+          "regime": "peak",
+          "ratesMicroUsdPer1m": {
+            "cacheHitInput": 14000,
+            "cacheMissInput": 440000,
+            "output": 1320000
+          },
+          "sourceBodySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pricingWindowEndsAt": null
+        }
+      },
+      "expected": {
+        "status": "passed",
+        "reasonCode": "SAME_RUN_OFFICIAL_PRICING_REFRESH_PASSED",
+        "costCeilingWithinBudget": true,
+        "credentialReadAllowed": false,
+        "networkOrProviderCallAllowed": false,
+        "executorRunAllowed": false
+      }
+    },
+    {
+      "caseId": "G7S6R2B-PRICING-02",
+      "kind": "pricing",
+      "input": {
+        "runStartedAt": "2026-08-14T08:00:00Z",
+        "evaluationAt": "2026-08-14T08:02:00Z",
+        "credentialReadAt": null,
+        "refresh": {
+          "observedAt": "2026-08-14T07:59:59Z",
+          "publisher": "DeepSeek",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "hostname": "api-docs.deepseek.com",
+          "redirects": 0,
+          "tlsAuthorized": true,
+          "modelId": "deepseek-v4-flash",
+          "regime": "peak",
+          "ratesMicroUsdPer1m": {
+            "cacheHitInput": 14000,
+            "cacheMissInput": 440000,
+            "output": 1320000
+          },
+          "sourceBodySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pricingWindowEndsAt": null
+        }
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "PRICING_REFRESH_BEFORE_RUN"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-PRICING-03",
+      "kind": "pricing",
+      "input": {
+        "runStartedAt": "2026-08-14T08:00:00Z",
+        "evaluationAt": "2026-08-14T08:10:00Z",
+        "credentialReadAt": null,
+        "refresh": {
+          "observedAt": "2026-08-14T08:01:00Z",
+          "publisher": "DeepSeek",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "hostname": "api-docs.deepseek.com",
+          "redirects": 0,
+          "tlsAuthorized": true,
+          "modelId": "deepseek-v4-flash",
+          "regime": "peak",
+          "ratesMicroUsdPer1m": {
+            "cacheHitInput": 14000,
+            "cacheMissInput": 440000,
+            "output": 1320000
+          },
+          "sourceBodySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pricingWindowEndsAt": null
+        }
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "PRICING_REFRESH_STALE"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-PRICING-04",
+      "kind": "pricing",
+      "input": {
+        "runStartedAt": "2026-08-14T08:00:00Z",
+        "evaluationAt": "2026-08-14T08:02:00Z",
+        "credentialReadAt": null,
+        "refresh": {
+          "observedAt": "2026-08-14T08:01:00Z",
+          "publisher": "DeepSeek",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "hostname": "example.invalid",
+          "redirects": 0,
+          "tlsAuthorized": true,
+          "modelId": "deepseek-v4-flash",
+          "regime": "peak",
+          "ratesMicroUsdPer1m": {
+            "cacheHitInput": 14000,
+            "cacheMissInput": 440000,
+            "output": 1320000
+          },
+          "sourceBodySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pricingWindowEndsAt": null
+        }
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "PRICING_SOURCE_NOT_OFFICIAL"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-PRICING-05",
+      "kind": "pricing",
+      "input": {
+        "runStartedAt": "2026-08-14T08:00:00Z",
+        "evaluationAt": "2026-08-14T08:02:00Z",
+        "credentialReadAt": null,
+        "refresh": {
+          "observedAt": "2026-08-14T08:01:00Z",
+          "publisher": "DeepSeek",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "hostname": "api-docs.deepseek.com",
+          "redirects": 0,
+          "tlsAuthorized": true,
+          "modelId": "synthetic-wrong-model",
+          "regime": "peak",
+          "ratesMicroUsdPer1m": {
+            "cacheHitInput": 14000,
+            "cacheMissInput": 440000,
+            "output": 1320000
+          },
+          "sourceBodySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pricingWindowEndsAt": null
+        }
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "PRICING_MODEL_MISMATCH"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-PRICING-06",
+      "kind": "pricing",
+      "input": {
+        "runStartedAt": "2026-08-14T08:00:00Z",
+        "evaluationAt": "2026-08-14T08:02:00Z",
+        "credentialReadAt": null,
+        "refresh": {
+          "observedAt": "2026-08-14T08:01:00Z",
+          "publisher": "DeepSeek",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "hostname": "api-docs.deepseek.com",
+          "redirects": 0,
+          "tlsAuthorized": true,
+          "modelId": "deepseek-v4-flash",
+          "regime": "synthetic-unknown",
+          "ratesMicroUsdPer1m": {
+            "cacheHitInput": 14000,
+            "cacheMissInput": 440000,
+            "output": 1320000
+          },
+          "sourceBodySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pricingWindowEndsAt": null
+        }
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "PRICING_REGIME_INVALID"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-PRICING-07",
+      "kind": "pricing",
+      "input": {
+        "runStartedAt": "2026-08-14T08:00:00Z",
+        "evaluationAt": "2026-08-14T08:02:00Z",
+        "credentialReadAt": null,
+        "refresh": {
+          "observedAt": "2026-08-14T08:01:00Z",
+          "publisher": "DeepSeek",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "hostname": "api-docs.deepseek.com",
+          "redirects": 0,
+          "tlsAuthorized": true,
+          "modelId": "deepseek-v4-flash",
+          "regime": "peak",
+          "ratesMicroUsdPer1m": {
+            "cacheHitInput": 14000,
+            "cacheMissInput": 440000,
+            "output": 1320000
+          },
+          "sourceBodySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pricingWindowEndsAt": "2026-08-14T08:01:30Z"
+        }
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "PRICING_WINDOW_EXPIRED"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-PRICING-08",
+      "kind": "pricing",
+      "input": {
+        "runStartedAt": "2026-08-14T08:00:00Z",
+        "evaluationAt": "2026-08-14T08:02:00Z",
+        "credentialReadAt": null,
+        "refresh": {
+          "observedAt": "2026-08-14T08:01:00Z",
+          "publisher": "DeepSeek",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "hostname": "api-docs.deepseek.com",
+          "redirects": 0,
+          "tlsAuthorized": true,
+          "modelId": "deepseek-v4-flash",
+          "regime": "peak",
+          "ratesMicroUsdPer1m": {
+            "cacheHitInput": 100000000,
+            "cacheMissInput": 100000000,
+            "output": 100000000
+          },
+          "sourceBodySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pricingWindowEndsAt": null
+        }
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "COST_CEILING_EXCEEDS_BUDGET",
+        "costCeilingWithinBudget": false
+      }
+    },
+    {
+      "caseId": "G7S6R2B-PRICING-09",
+      "kind": "pricing",
+      "input": {
+        "runStartedAt": "2026-08-14T08:00:00Z",
+        "evaluationAt": "2026-08-14T08:02:00Z",
+        "credentialReadAt": "2026-08-14T08:00:30Z",
+        "refresh": {
+          "observedAt": "2026-08-14T08:01:00Z",
+          "publisher": "DeepSeek",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing/",
+          "hostname": "api-docs.deepseek.com",
+          "redirects": 0,
+          "tlsAuthorized": true,
+          "modelId": "deepseek-v4-flash",
+          "regime": "peak",
+          "ratesMicroUsdPer1m": {
+            "cacheHitInput": 14000,
+            "cacheMissInput": 440000,
+            "output": 1320000
+          },
+          "sourceBodySha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "pricingWindowEndsAt": null
+        }
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "PRICING_REFRESH_NOT_BEFORE_CREDENTIAL_READ"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-ERROR-01",
+      "kind": "safe-error",
+      "input": {
+        "reasonCode": "AUTHENTICATION_REJECTED",
+        "errorClass": "authentication_error",
+        "errorMessage": "Bearer sk-SYNTHETIC-FIXTURE"
+      },
+      "expected": {
+        "safeCode": "G7_PROVIDER_AUTHENTICATION_FAILED",
+        "credentialReferenceDetected": true,
+        "rawErrorMessageStored": false,
+        "rawErrorClassStored": false,
+        "credentialValueStored": false,
+        "credentialHashOrFingerprintStored": false,
+        "publicProjectionSafe": true
+      }
+    },
+    {
+      "caseId": "G7S6R2B-ERROR-02",
+      "kind": "safe-error",
+      "input": {
+        "reasonCode": "RATE_LIMITED",
+        "errorClass": "rate_limit",
+        "errorMessage": "synthetic fixture"
+      },
+      "expected": {
+        "safeCode": "G7_PROVIDER_RATE_LIMITED",
+        "credentialReferenceDetected": false,
+        "rawErrorMessageStored": false,
+        "rawErrorClassStored": false,
+        "credentialValueStored": false,
+        "credentialHashOrFingerprintStored": false,
+        "publicProjectionSafe": true
+      }
+    },
+    {
+      "caseId": "G7S6R2B-ERROR-03",
+      "kind": "safe-error",
+      "input": {
+        "reasonCode": "TIMEOUT",
+        "errorClass": "timeout",
+        "errorMessage": "synthetic fixture"
+      },
+      "expected": {
+        "safeCode": "G7_PROVIDER_TIMEOUT",
+        "credentialReferenceDetected": false,
+        "rawErrorMessageStored": false,
+        "rawErrorClassStored": false,
+        "credentialValueStored": false,
+        "credentialHashOrFingerprintStored": false,
+        "publicProjectionSafe": true
+      }
+    },
+    {
+      "caseId": "G7S6R2B-ERROR-04",
+      "kind": "safe-error",
+      "input": {
+        "reasonCode": "TLS_FAILURE",
+        "errorClass": "tls",
+        "errorMessage": "synthetic fixture"
+      },
+      "expected": {
+        "safeCode": "G7_PROVIDER_TLS_FAILED",
+        "credentialReferenceDetected": false,
+        "rawErrorMessageStored": false,
+        "rawErrorClassStored": false,
+        "credentialValueStored": false,
+        "credentialHashOrFingerprintStored": false,
+        "publicProjectionSafe": true
+      }
+    },
+    {
+      "caseId": "G7S6R2B-ERROR-05",
+      "kind": "safe-error",
+      "input": {
+        "reasonCode": "MODEL_ID_MISMATCH",
+        "errorClass": "response",
+        "errorMessage": "synthetic fixture"
+      },
+      "expected": {
+        "safeCode": "G7_PROVIDER_RESPONSE_REJECTED",
+        "credentialReferenceDetected": false,
+        "rawErrorMessageStored": false,
+        "rawErrorClassStored": false,
+        "credentialValueStored": false,
+        "credentialHashOrFingerprintStored": false,
+        "publicProjectionSafe": true
+      }
+    },
+    {
+      "caseId": "G7S6R2B-ERROR-06",
+      "kind": "safe-error",
+      "input": {
+        "reasonCode": "SYNTHETIC_UNKNOWN",
+        "errorClass": "unknown",
+        "errorMessage": "synthetic fixture"
+      },
+      "expected": {
+        "safeCode": "G7_PROVIDER_FAILURE_REDACTED",
+        "credentialReferenceDetected": false,
+        "rawErrorMessageStored": false,
+        "rawErrorClassStored": false,
+        "credentialValueStored": false,
+        "credentialHashOrFingerprintStored": false,
+        "publicProjectionSafe": true
+      }
+    },
+    {
+      "caseId": "G7S6R2B-TRACE-01",
+      "kind": "event-trace",
+      "input": [
+        "RUN_STARTED",
+        "OFFICIAL_PRICING_REFRESHED",
+        "PRICING_CONTRACT_PASSED",
+        "CREDENTIAL_READ",
+        "CANARY_01_SENT",
+        "CANARY_01_RECEIVED",
+        "CANARY_02_SENT",
+        "CANARY_02_RECEIVED",
+        "RUN_CLOSED"
+      ],
+      "expected": {
+        "status": "passed",
+        "reasonCode": "ATTEMPT_2_EVENT_TRACE_VALID",
+        "calls": 2,
+        "retries": 0
+      }
+    },
+    {
+      "caseId": "G7S6R2B-TRACE-02",
+      "kind": "event-trace",
+      "input": [
+        "RUN_STARTED",
+        "CREDENTIAL_READ",
+        "OFFICIAL_PRICING_REFRESHED",
+        "RUN_CLOSED"
+      ],
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "PRICING_MUST_PASS_BEFORE_CREDENTIAL_READ"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-TRACE-03",
+      "kind": "event-trace",
+      "input": [
+        "RUN_STARTED",
+        "OFFICIAL_PRICING_REFRESHED",
+        "PRICING_CONTRACT_PASSED",
+        "CREDENTIAL_READ",
+        "CANARY_01_SENT",
+        "CANARY_01_RECEIVED",
+        "CANARY_02_SENT",
+        "CANARY_02_RECEIVED",
+        "RETRY",
+        "RUN_CLOSED"
+      ],
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "RETRIES_FORBIDDEN"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-TRACE-04",
+      "kind": "event-trace",
+      "input": [
+        "RUN_STARTED",
+        "OFFICIAL_PRICING_REFRESHED",
+        "PRICING_CONTRACT_PASSED",
+        "CREDENTIAL_READ",
+        "CANARY_01_SENT",
+        "CANARY_01_RECEIVED",
+        "CANARY_02_SENT",
+        "CANARY_02_RECEIVED",
+        "CANARY_03_SENT",
+        "RUN_CLOSED"
+      ],
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "CALL_LIMIT_EXCEEDED"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-REQUEST-01",
+      "kind": "execution-request",
+      "input": {
+        "executeRequested": false,
+        "executorReviewAccepted": false,
+        "executionAuthorizationAccepted": false,
+        "sameRunPricingRefreshPassed": false
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "DEFAULT_NO_EXECUTE"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-REQUEST-02",
+      "kind": "execution-request",
+      "input": {
+        "executeRequested": true,
+        "executorReviewAccepted": false,
+        "executionAuthorizationAccepted": false,
+        "sameRunPricingRefreshPassed": false
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "EXECUTOR_INDEPENDENT_REVIEW_PENDING"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-REQUEST-03",
+      "kind": "execution-request",
+      "input": {
+        "executeRequested": true,
+        "executorReviewAccepted": true,
+        "executionAuthorizationAccepted": false,
+        "sameRunPricingRefreshPassed": false
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "EXECUTION_AUTHORIZATION_MISSING"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-REQUEST-04",
+      "kind": "execution-request",
+      "input": {
+        "executeRequested": true,
+        "executorReviewAccepted": true,
+        "executionAuthorizationAccepted": true,
+        "sameRunPricingRefreshPassed": false
+      },
+      "expected": {
+        "status": "blocked",
+        "reasonCode": "SAME_RUN_PRICING_REFRESH_NOT_PERFORMED"
+      }
+    },
+    {
+      "caseId": "G7S6R2B-REQUEST-05",
+      "kind": "execution-request",
+      "input": {
+        "executeRequested": true,
+        "executorReviewAccepted": true,
+        "executionAuthorizationAccepted": true,
+        "sameRunPricingRefreshPassed": true
+      },
+      "expected": {
+        "status": "admitted-by-contract-not-executed",
+        "reasonCode": "EXECUTION_REQUEST_ADMITTED_BY_CONTRACT"
+      }
+    }
+  ],
+  "authorizationBoundary": {
+    "syntheticOnly": true,
+    "executorRuns": 0,
+    "credentialReads": 0,
+    "networkCalls": 0,
+    "providerCalls": 0,
+    "externalWrites": 0
+  }
+}

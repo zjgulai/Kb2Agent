@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/g6/action-package.schema.json",
+  "title": "MKD G6 ActionPackage v2",
+  "type": "object",
+  "required": ["actionPackageId", "schemaVersion", "taskPackageId", "runId", "terminalState", "summary", "facts", "inferences", "unknowns", "options", "recommendation", "calculations", "risks", "stopConditions", "approvalRequirements", "evidenceRefs"],
+  "properties": {
+    "actionPackageId": { "type": "string", "pattern": "^ACTION-G6-" },
+    "schemaVersion": { "const": 2 },
+    "taskPackageId": { "const": "TASK-AMZ-ADS-DIAGNOSIS-V1" },
+    "runId": { "type": "string", "pattern": "^RUN-G6-" },
+    "terminalState": { "enum": ["needs-approval", "needs-review"] },
+    "summary": { "type": "string", "minLength": 20 },
+    "facts": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/assertion" } },
+    "inferences": { "type": "array", "items": { "$ref": "#/$defs/assertion" } },
+    "unknowns": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/unknown" } },
+    "options": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/option" } },
+    "recommendation": { "type": "string", "minLength": 15 },
+    "calculations": { "type": "array", "items": { "$ref": "#/$defs/calculation" } },
+    "risks": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 8 } },
+    "stopConditions": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 8 } },
+    "approvalRequirements": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^ROLE-" }, "uniqueItems": true },
+    "evidenceRefs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 8 }, "uniqueItems": true }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": { "terminalState": { "const": "needs-approval" } },
+        "required": ["terminalState"]
+      },
+      "then": {
+        "properties": {
+          "calculations": {
+            "minItems": 1,
+            "items": {
+              "properties": { "resultState": { "const": "exact" } },
+              "required": ["result"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "terminalState": { "const": "needs-review" } },
+        "required": ["terminalState"]
+      },
+      "then": {
+        "properties": {
+          "facts": {
+            "items": {
+              "properties": {
+                "text": { "not": { "pattern": "(?:[0-9]+(?:\\.[0-9]+)?%)|(?:28\\.4|36\\.9|8\\.5)" } }
+              }
+            }
+          },
+          "calculations": {
+            "minItems": 1,
+            "items": {
+              "properties": { "resultState": { "const": "blocked" } },
+              "not": { "required": ["result"] }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "assertion": {
+      "type": "object",
+      "required": ["text", "evidenceRefs"],
+      "properties": {
+        "text": { "type": "string", "minLength": 8 },
+        "evidenceRefs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 8 }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "unknown": {
+      "type": "object",
+      "required": ["question", "impact", "nextEvidence"],
+      "properties": {
+        "question": { "type": "string", "minLength": 8 },
+        "impact": { "type": "string", "minLength": 8 },
+        "nextEvidence": { "type": "string", "minLength": 8 }
+      },
+      "additionalProperties": false
+    },
+    "option": {
+      "type": "object",
+      "required": ["optionId", "label", "action", "tradeoff", "externalWrite"],
+      "properties": {
+        "optionId": { "type": "string", "pattern": "^OPTION-" },
+        "label": { "type": "string", "minLength": 2 },
+        "action": { "type": "string", "minLength": 8 },
+        "tradeoff": { "type": "string", "minLength": 8 },
+        "externalWrite": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "calculation": {
+      "type": "object",
+      "required": ["metricRef", "formula", "inputs", "unit", "window", "resultState"],
+      "properties": {
+        "metricRef": { "const": "METRIC-AMZ-ACOS" },
+        "formula": { "const": "ad_spend / attributed_sales * 100" },
+        "inputs": { "type": "object", "minProperties": 1 },
+        "unit": { "const": "%" },
+        "window": { "type": "string", "minLength": 3 },
+        "result": { "type": "string", "minLength": 3 },
+        "resultState": { "enum": ["exact", "blocked"] }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "resultState": { "const": "exact" } },
+            "required": ["resultState"]
+          },
+          "then": {
+            "required": ["result"],
+            "properties": {
+              "inputs": {
+                "type": "object",
+                "required": ["previousSpend", "previousSales", "latestSpend", "latestSales"],
+                "properties": {
+                  "previousSpend": { "type": "number", "minimum": 0 },
+                  "previousSales": { "type": "number", "exclusiveMinimum": 0 },
+                  "latestSpend": { "type": "number", "minimum": 0 },
+                  "latestSales": { "type": "number", "exclusiveMinimum": 0 }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "resultState": { "const": "blocked" } },
+            "required": ["resultState"]
+          },
+          "then": {
+            "not": { "required": ["result"] },
+            "properties": {
+              "inputs": {
+                "type": "object",
+                "required": ["availableEvidence"],
+                "properties": { "availableEvidence": { "const": false } },
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

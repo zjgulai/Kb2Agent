@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/skill.schema.json",
+  "title": "MKD L5 Skill",
+  "allOf": [
+    { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/baseObject" },
+    {
+      "type": "object",
+      "required": ["name", "inputContract", "outputContract", "tools", "steps", "eLevel", "stopConditions", "rollback", "tests", "promotionDecisionRef"],
+      "properties": {
+        "objectType": { "const": "Skill" },
+        "name": { "type": "string", "minLength": 4 },
+        "inputContract": { "type": "object", "required": ["schemaRef"], "properties": { "schemaRef": { "type": "string", "minLength": 5 } }, "additionalProperties": false },
+        "outputContract": { "type": "object", "required": ["schemaRef"], "properties": { "schemaRef": { "type": "string", "minLength": 5 } }, "additionalProperties": false },
+        "tools": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/tool" } },
+        "steps": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 4 } },
+        "eLevel": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/publicELevel" },
+        "stopConditions": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } },
+        "rollback": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } },
+        "tests": { "type": "array", "minItems": 2, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+        "promotionDecisionRef": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }
+      }
+    }
+  ],
+  "unevaluatedProperties": false,
+  "$defs": {
+    "tool": {
+      "type": "object",
+      "required": ["toolId", "mode", "sideEffect"],
+      "properties": {
+        "toolId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+        "mode": { "enum": ["read", "calculate", "draft"] },
+        "sideEffect": { "const": false }
+      },
+      "additionalProperties": false
+    }
+  }
+}

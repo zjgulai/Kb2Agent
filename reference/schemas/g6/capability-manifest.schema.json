@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/g6/capability-manifest.schema.json",
+  "title": "MKD G6 CapabilityManifest",
+  "type": "object",
+  "required": ["manifestId", "schemaVersion", "agentId", "agentVersion", "mode", "evidenceGrade", "snapshotRef", "tools", "budgets", "prohibitedCapabilities", "providerCallsAllowed", "externalWritesAllowed", "canonicalWritesAllowed"],
+  "properties": {
+    "manifestId": { "type": "string", "minLength": 8 },
+    "schemaVersion": { "const": 1 },
+    "agentId": { "const": "AGENT-MKD-E2-REPLAY" },
+    "agentVersion": { "const": "g6-a1-v1" },
+    "mode": { "const": "replay" },
+    "evidenceGrade": { "const": "LO-S-synthetic" },
+    "snapshotRef": { "const": "SNAPSHOT-AMZ-ADS-M1B" },
+    "tools": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["toolId", "version", "mode", "sideEffect", "inputContract", "outputContract", "onFailure"],
+        "properties": {
+          "toolId": { "type": "string", "pattern": "^TOOL-[A-Z0-9-]+$" },
+          "version": { "const": "1" },
+          "mode": { "enum": ["read", "calculate", "draft"] },
+          "sideEffect": { "const": false },
+          "inputContract": { "type": "string", "minLength": 5 },
+          "outputContract": { "type": "string", "minLength": 5 },
+          "onFailure": { "const": "fail-closed" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "required": ["maxToolCalls", "maxExternalCalls", "maxSideEffects", "maxCanonicalWrites", "maxPlatformWrites"],
+      "properties": {
+        "maxToolCalls": { "const": 8 },
+        "maxExternalCalls": { "const": 0 },
+        "maxSideEffects": { "const": 0 },
+        "maxCanonicalWrites": { "const": 0 },
+        "maxPlatformWrites": { "const": 0 }
+      },
+      "additionalProperties": false
+    },
+    "prohibitedCapabilities": {
+      "type": "array",
+      "minItems": 5,
+      "items": { "type": "string", "minLength": 4 },
+      "uniqueItems": true
+    },
+    "providerCallsAllowed": { "const": false },
+    "externalWritesAllowed": { "const": false },
+    "canonicalWritesAllowed": { "const": false }
+  },
+  "additionalProperties": false
+}

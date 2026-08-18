@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "registryId": "MKD-TERMS-V1",
+  "terms": [
+    { "id": "TERM-SOURCE-ARTIFACT", "zh": "来源资产", "en": "SourceArtifact", "layer": "L0" },
+    { "id": "TERM-EVIDENCE-FRAGMENT", "zh": "证据片段", "en": "EvidenceFragment", "layer": "L1" },
+    { "id": "TERM-DECISION-MODEL", "zh": "决策模型", "en": "DecisionModel", "layer": "L3" },
+    { "id": "TERM-SKILL", "zh": "技能契约", "en": "Skill", "layer": "L5" },
+    { "id": "TERM-TASK-PACKAGE", "zh": "任务包", "en": "TaskPackage", "layer": "L6" },
+    { "id": "TERM-ACTION-PACKAGE", "zh": "决策行动包", "en": "ActionPackage", "layer": "output" },
+    { "id": "TERM-KNOWLEDGE-RECEIPT", "zh": "知识回执", "en": "KnowledgeReceipt", "layer": "output" }
+  ]
+}

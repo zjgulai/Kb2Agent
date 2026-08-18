@@ -16,6 +16,14 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  []
+relatedObjectIds:
+  []
+relatedTaskIds:
+  []
+referenceMaturity: "solution"
+lastReviewedAt: "2026-08-17"
 ---
 # 第十六章：VOC 洞察系统方法示例 —— 母婴电器合成案例
 
@@ -379,3 +387,7 @@ $5K AI 方案 vs $50K 传统市调——这个成本对比忽略了一个维度�
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 不能由本章证明什么
+
+VOC 案例为特定领域复盘，不能泛化为通用业务有效性；案例不等于可复用 Skill。

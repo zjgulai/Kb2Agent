@@ -201,6 +201,7 @@ test('active chapter is positioned in both the tablet drawer and desktop rail', 
 test('responsive shell sweep has no overflow or unbounded geometry discontinuity', async ({ page }) => {
   await page.setViewportSize({ width: 768, height: 900 })
   await page.goto(articlePath)
+  await expect(page.locator('.VPLocalNav .menu')).toBeVisible()
 
   const widths = [...new Set([
     ...Array.from({ length: 53 }, (_, index) => 768 + index * 16),

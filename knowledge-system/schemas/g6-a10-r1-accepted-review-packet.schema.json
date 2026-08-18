@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/knowledge-system/g6-a10-r1-accepted-review-packet.schema.json",
+  "type": "object",
+  "required": ["$schema", "schemaVersion", "packetId", "gateId", "preparedAt", "acceptedAt", "timestampProvenance", "subject", "state", "independenceRequired", "reviewers", "authorizationBoundary"],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 3 },
+    "schemaVersion": { "const": 1 },
+    "packetId": { "const": "G6-A10-PUBLIC-EVIDENCE-REVIEW-ACCEPTED" },
+    "gateId": { "const": "G6-A10-R1" },
+    "preparedAt": { "type": "string" },
+    "acceptedAt": { "type": "string" },
+    "timestampProvenance": { "$ref": "#/$defs/timestampProvenance" },
+    "subject": {
+      "type": "object",
+      "required": ["releaseId", "siteDigest", "publicReceipt", "artifactManifest", "evidencePack"],
+      "properties": {
+        "releaseId": { "const": "mkd-m1c-438e6ae583fc952d" },
+        "siteDigest": { "const": "sha256:438e6ae583fc952d813908b53a6c886ef127dad56d1a73eb017151f1f38bfadf" },
+        "publicReceipt": { "$ref": "#/$defs/fileEvidence" },
+        "artifactManifest": {
+          "type": "object",
+          "required": ["root", "fileCount", "totalBytes", "sha256"],
+          "properties": {
+            "root": { "const": "output/playwright/mkd-distill-g6a9-r1" },
+            "fileCount": { "const": 12 },
+            "totalBytes": { "const": 3718564 },
+            "sha256": { "const": "2f7a5bec0ff5f7fb159748f55da5b163d374341eda8c1260800fd03502df8c75" }
+          },
+          "additionalProperties": false
+        },
+        "evidencePack": { "$ref": "#/$defs/fileEvidence" }
+      },
+      "additionalProperties": false
+    },
+    "state": { "const": "accepted" },
+    "independenceRequired": { "const": true },
+    "reviewers": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["roleId", "assignee", "scope", "requiredChecks", "assignmentState", "decision", "signedAt", "timestampProvenance", "recordRef"],
+        "properties": {
+          "roleId": { "type": "string" },
+          "assignee": { "type": "string" },
+          "scope": { "type": "string", "minLength": 12 },
+          "requiredChecks": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true },
+          "assignmentState": { "const": "completed" },
+          "decision": { "const": "accepted" },
+          "signedAt": { "type": "string" },
+          "timestampProvenance": { "$ref": "#/$defs/timestampProvenance" },
+          "recordRef": { "$ref": "#/$defs/fileEvidence" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "authorizationBoundary": {
+      "type": "object",
+      "required": ["fourRolePublicAcceptanceCompleted", "publicOrRemoteReadAuthorized", "remoteMutationAuthorized", "dockerAuthorized", "productionAgentAuthorized", "providerCallsAuthorized", "externalWritesAuthorized", "commitAuthorized", "pushAuthorized"],
+      "properties": {
+        "fourRolePublicAcceptanceCompleted": { "const": true },
+        "publicOrRemoteReadAuthorized": { "const": false },
+        "remoteMutationAuthorized": { "const": false },
+        "dockerAuthorized": { "const": false },
+        "productionAgentAuthorized": { "const": false },
+        "providerCallsAuthorized": { "const": false },
+        "externalWritesAuthorized": { "const": false },
+        "commitAuthorized": { "const": false },
+        "pushAuthorized": { "const": false }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "fileEvidence": {
+      "type": "object",
+      "required": ["path", "sha256", "bytes"],
+      "properties": { "path": { "type": "string", "minLength": 3 }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "bytes": { "type": "integer", "minimum": 0 } },
+      "additionalProperties": false
+    },
+    "timestampProvenance": {
+      "type": "object",
+      "required": ["mode", "recordedAt", "humanProvidedSignedAt", "meaning"],
+      "properties": {
+        "mode": { "const": "system-recorded-on-user-confirmation" },
+        "recordedAt": { "type": "string" },
+        "humanProvidedSignedAt": { "const": null },
+        "meaning": { "const": "system processing time for the user's complete four-reviewer confirmation; not four separately handwritten timestamps" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

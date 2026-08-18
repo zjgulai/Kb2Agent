@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/g6/agent-execution-receipt.schema.json",
+  "title": "MKD G6 AgentExecutionReceipt",
+  "type": "object",
+  "required": ["receiptId", "schemaVersion", "runId", "fixtureId", "mode", "evidenceGrade", "terminalState", "reasonCode", "snapshot", "taskPackage", "agent", "planRef", "toolCallRefs", "artifactHashes", "providerCalls", "externalCalls", "sideEffects", "canonicalWrites", "platformWrites", "issuedAt"],
+  "properties": {
+    "receiptId": { "type": "string", "pattern": "^EXEC-RECEIPT-G6-" },
+    "schemaVersion": { "const": 1 },
+    "runId": { "type": "string", "pattern": "^RUN-G6-" },
+    "fixtureId": { "type": "string", "pattern": "^G6-" },
+    "mode": { "const": "replay" },
+    "evidenceGrade": { "const": "LO-S-synthetic" },
+    "terminalState": { "enum": ["needs-approval", "needs-review", "refused", "failed"] },
+    "reasonCode": { "type": "string", "pattern": "^[A-Z0-9_]+$" },
+    "snapshot": {
+      "type": "object",
+      "required": ["id", "version", "manifestHash"],
+      "properties": {
+        "id": { "const": "SNAPSHOT-AMZ-ADS-M1B" },
+        "version": { "type": "string", "minLength": 1 },
+        "manifestHash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+      },
+      "additionalProperties": false
+    },
+    "taskPackage": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "const": "TASK-AMZ-ADS-DIAGNOSIS-V1" },
+        "version": { "const": "1" }
+      },
+      "additionalProperties": false
+    },
+    "agent": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "const": "AGENT-MKD-E2-REPLAY" },
+        "version": { "const": "g6-a1-v1" }
+      },
+      "additionalProperties": false
+    },
+    "planRef": { "type": "string", "pattern": "^PLAN-" },
+    "toolCallRefs": { "type": "array", "items": { "type": "string", "pattern": "^CALL-" }, "uniqueItems": true },
+    "approvalRef": { "type": "string", "pattern": "^APPROVAL-G6-" },
+    "refusalRef": { "type": "string", "pattern": "^REFUSAL-G6-" },
+    "artifactHashes": {
+      "type": "object",
+      "required": ["fixture", "input", "plan", "toolCalls"],
+      "properties": {
+        "fixture": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "input": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "plan": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "toolCalls": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "actionPackage": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "approvalDecision": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "refusalReceipt": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z0-9_]+$" },
+        "message": { "type": "string", "minLength": 8 }
+      },
+      "additionalProperties": false
+    },
+    "providerCalls": { "const": 0 },
+    "externalCalls": { "const": 0 },
+    "sideEffects": { "const": 0 },
+    "canonicalWrites": { "const": 0 },
+    "platformWrites": { "const": 0 },
+    "issuedAt": { "const": "2026-08-09T00:00:00Z" }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": { "terminalState": { "enum": ["needs-approval", "needs-review"] } },
+        "required": ["terminalState"]
+      },
+      "then": {
+        "required": ["approvalRef"],
+        "properties": {
+          "artifactHashes": { "required": ["actionPackage", "approvalDecision"] }
+        },
+        "not": {
+          "anyOf": [
+            { "required": ["refusalRef"] },
+            { "required": ["error"] },
+            { "properties": { "artifactHashes": { "required": ["refusalReceipt"] } } }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "terminalState": { "const": "refused" } },
+        "required": ["terminalState"]
+      },
+      "then": {
+        "required": ["refusalRef"],
+        "properties": {
+          "artifactHashes": { "required": ["refusalReceipt"] }
+        },
+        "not": {
+          "anyOf": [
+            { "required": ["approvalRef"] },
+            { "required": ["error"] },
+            { "properties": { "artifactHashes": { "required": ["actionPackage"] } } },
+            { "properties": { "artifactHashes": { "required": ["approvalDecision"] } } }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "terminalState": { "const": "failed" } },
+        "required": ["terminalState"]
+      },
+      "then": {
+        "required": ["error"],
+        "not": {
+          "anyOf": [
+            { "required": ["approvalRef"] },
+            { "required": ["refusalRef"] },
+            { "properties": { "artifactHashes": { "required": ["actionPackage"] } } },
+            { "properties": { "artifactHashes": { "required": ["approvalDecision"] } } },
+            { "properties": { "artifactHashes": { "required": ["refusalReceipt"] } } }
+          ]
+        }
+      }
+    }
+  ]
+}

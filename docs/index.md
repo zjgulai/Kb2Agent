@@ -1,7 +1,7 @@
 ---
 layout: home
-title: 证据工作台
-description: 从问题定义到可验收知识系统的证据透明目录
+title: MKD · Knowledge to Agent
+description: 从多格式资料到可审查行动包的知识编译 Reference Lab 与系统指南
 ---
 
-<EvidenceHome />
+<MkdProductHome />

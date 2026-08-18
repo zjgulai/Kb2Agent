@@ -1,0 +1,33 @@
+{
+  "$schema": "./schemas/product-lines.schema.json",
+  "schemaVersion": 1,
+  "reviewedAt": "2026-08-09",
+  "scopeNote": "Guide 与 Reference 的成熟度独立计算；任一产品线的通过不得抬升另一产品线。",
+  "productLines": [
+    {
+      "productLineId": "GUIDE",
+      "name": "MKD Guide",
+      "authority": ["documents", "concepts", "claims", "sources", "learning-paths"],
+      "maturityModel": ["principle", "solution", "runnable", "acceptance"],
+      "currentState": {
+        "grade": "L1-public-or-runtime",
+        "counts": { "principle": 2, "solution": 22, "runnable": 2, "acceptance": 0 },
+        "supportedClaim": "26 个页面具备稳定身份和本地知识治理门禁。",
+        "forbiddenClaim": "Guide 页面完整不等于 Knowledge-to-Agent runtime 已实现。"
+      }
+    },
+    {
+      "productLineId": "REFERENCE",
+      "name": "MKD Reference Lab",
+      "authority": ["schemas", "fixtures", "compiler", "runtime", "tasks", "traces", "evaluations", "receipts"],
+      "maturityModel": ["draft", "replayable", "live-candidate", "accepted"],
+      "currentState": {
+        "grade": "L2-fixture-or-dry-run",
+        "state": "replayable",
+        "counts": { "schemas": 18, "productRegistries": 4, "guideAdapters": 1, "packageObjects": 20, "typedRelations": 7, "negativeFixtures": 6, "browserTests": 35 },
+        "supportedClaim": "固定 Reference Package、负例与 Home/Lab/Result 界面流已在本地候选中可重复校验。",
+        "forbiddenClaim": "不得把固定 fixture 重放称为 compiler/runtime、真实 Agent、领域验收、公开发布或生产部署。"
+      }
+    }
+  ]
+}

@@ -16,6 +16,14 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  []
+relatedObjectIds:
+  []
+relatedTaskIds:
+  []
+referenceMaturity: "solution"
+lastReviewedAt: "2026-08-17"
 ---
 # 第八章：架构选型深度指南与进阶分层理论
 
@@ -342,3 +350,7 @@ stats = df.groupby(['category', 'market'])['revenue'].agg(['median', 'std'])
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 不能由本章证明什么
+
+架构选型 LoD 推理基于公开资料与工程经验，不能证明当前实例在对应层级达到声明成熟度。

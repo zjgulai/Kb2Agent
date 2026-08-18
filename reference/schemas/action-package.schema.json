@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/schemas/action-package.schema.json",
+  "title": "MKD Decision ActionPackage",
+  "type": "object",
+  "required": ["actionPackageId", "taskPackageId", "runId", "summary", "facts", "inferences", "unknowns", "options", "recommendation", "calculations", "risks", "stopConditions", "approvalRequirements", "evidenceRefs", "status"],
+  "properties": {
+    "actionPackageId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+    "taskPackageId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+    "runId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+    "summary": { "type": "string", "minLength": 12 },
+    "facts": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/assertion" } },
+    "inferences": { "type": "array", "items": { "$ref": "#/$defs/assertion" } },
+    "unknowns": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/unknown" } },
+    "options": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/option" } },
+    "recommendation": { "type": "string", "minLength": 10 },
+    "calculations": { "type": "array", "items": { "$ref": "#/$defs/calculation" } },
+    "risks": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } },
+    "stopConditions": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } },
+    "approvalRequirements": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+    "evidenceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true },
+    "status": { "enum": ["draft-for-review", "blocked-insufficient-input", "approved-for-manual-execution"] }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "assertion": {
+      "type": "object",
+      "required": ["text", "evidenceRefs"],
+      "properties": {
+        "text": { "type": "string", "minLength": 5 },
+        "evidenceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "unknown": {
+      "type": "object",
+      "required": ["question", "impact", "nextEvidence"],
+      "properties": {
+        "question": { "type": "string", "minLength": 5 },
+        "impact": { "type": "string", "minLength": 5 },
+        "nextEvidence": { "type": "string", "minLength": 5 }
+      },
+      "additionalProperties": false
+    },
+    "option": {
+      "type": "object",
+      "required": ["optionId", "label", "action", "tradeoff", "externalWrite"],
+      "properties": {
+        "optionId": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+        "label": { "type": "string", "minLength": 2 },
+        "action": { "type": "string", "minLength": 5 },
+        "tradeoff": { "type": "string", "minLength": 5 },
+        "externalWrite": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "calculation": {
+      "type": "object",
+      "required": ["metricRef", "formula", "inputs", "unit", "window", "resultState"],
+      "properties": {
+        "metricRef": { "$ref": "https://mkd.local/schemas/common.schema.json#/$defs/identifier" },
+        "formula": { "type": "string", "minLength": 3 },
+        "inputs": { "type": "object", "minProperties": 1 },
+        "unit": { "type": "string", "minLength": 1 },
+        "window": { "type": "string", "minLength": 3 },
+        "result": { "type": ["number", "string"] },
+        "resultState": { "enum": ["exact", "range", "formula-only", "blocked"] }
+      },
+      "additionalProperties": false
+    }
+  }
+}

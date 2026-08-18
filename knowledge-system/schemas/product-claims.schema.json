@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/knowledge-system/product-claims.schema.json",
+  "type": "object",
+  "required": ["schemaVersion", "reviewedAt", "claims"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "reviewedAt": { "type": "string" },
+    "claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["claimId", "productLineId", "decision", "maxEvidenceGrade", "supported", "forbidden", "nextEvidence"],
+        "properties": {
+          "claimId": { "type": "string", "pattern": "^PRODUCT-CLAIM-[A-Z0-9-]+$" },
+          "productLineId": { "enum": ["GUIDE", "REFERENCE"] },
+          "decision": { "enum": ["allowed", "allowed-with-label", "blocked"] },
+          "maxEvidenceGrade": { "enum": ["L0-unverified", "L1-public-or-runtime", "LO-S-synthetic", "L2-fixture-or-dry-run", "L3-production-read-only", "L4-authorized-live"] },
+          "supported": { "type": "string", "minLength": 10 },
+          "forbidden": { "type": "string", "minLength": 10 },
+          "nextEvidence": { "type": "string", "minLength": 10 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

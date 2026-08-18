@@ -1,0 +1,80 @@
+{
+  "$schema": "../../schemas/g7/provider-canary-dataset.schema.json",
+  "datasetId": "DATASET-G7-A1-PROVIDER-SHADOW-CANARIES-V1",
+  "schemaVersion": 1,
+  "gateId": "G7-A1",
+  "dataClass": "synthetic",
+  "cases": [
+    {
+      "canaryId": "G7-CANARY-01-CLEAN",
+      "category": "clean",
+      "label": "Clean synthetic diagnostic request",
+      "request": {
+        "dataClass": "synthetic",
+        "taskRef": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+        "target": { "transport": "fixture", "providerId": "PROVIDER-FIXTURE-ONLY", "modelId": "MODEL-FIXTURE-DETERMINISTIC" },
+        "messages": [{ "role": "user", "content": "Summarize the synthetic ACOS evidence and preserve all uncertainty labels." }],
+        "tools": [],
+        "estimate": { "inputTokens": 240, "outputTokens": 180, "timeoutMs": 5000, "costUsdMicros": 0 }
+      },
+      "expected": { "terminalState": "prepared-no-call", "reasonCode": "CALLS_DISABLED_BY_GATE", "minimumRedactions": 0 }
+    },
+    {
+      "canaryId": "G7-CANARY-02-REDACTION",
+      "category": "redaction",
+      "label": "Synthetic sensitive markers and structured credential are redacted",
+      "request": {
+        "dataClass": "synthetic",
+        "taskRef": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+        "target": { "transport": "fixture", "providerId": "PROVIDER-FIXTURE-ONLY", "modelId": "MODEL-FIXTURE-DETERMINISTIC" },
+        "messages": [{ "role": "user", "content": "Contact <SYNTHETIC-EMAIL> about account <SYNTHETIC-ACCOUNT-ID>." }],
+        "metadata": { "credential": "<SYNTHETIC-CREDENTIAL>" },
+        "tools": [],
+        "estimate": { "inputTokens": 260, "outputTokens": 160, "timeoutMs": 5000, "costUsdMicros": 0 }
+      },
+      "expected": { "terminalState": "prepared-no-call", "reasonCode": "CALLS_DISABLED_BY_GATE", "minimumRedactions": 3 }
+    },
+    {
+      "canaryId": "G7-CANARY-03-EGRESS-DENY",
+      "category": "egress",
+      "label": "Unapproved HTTPS provider target is denied",
+      "request": {
+        "dataClass": "synthetic",
+        "taskRef": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+        "target": { "transport": "https", "providerId": "PROVIDER-UNAPPROVED", "modelId": "MODEL-UNAPPROVED", "host": "provider.invalid" },
+        "messages": [{ "role": "user", "content": "This request must remain local and must not be transmitted." }],
+        "tools": [],
+        "estimate": { "inputTokens": 180, "outputTokens": 120, "timeoutMs": 5000, "costUsdMicros": 0 }
+      },
+      "expected": { "terminalState": "blocked", "reasonCode": "EGRESS_TARGET_NOT_ALLOWLISTED", "minimumRedactions": 0 }
+    },
+    {
+      "canaryId": "G7-CANARY-04-BUDGET-DENY",
+      "category": "budget",
+      "label": "Preparation token budget overflow is denied",
+      "request": {
+        "dataClass": "synthetic",
+        "taskRef": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+        "target": { "transport": "fixture", "providerId": "PROVIDER-FIXTURE-ONLY", "modelId": "MODEL-FIXTURE-DETERMINISTIC" },
+        "messages": [{ "role": "user", "content": "Reject this synthetic estimate before any provider boundary." }],
+        "tools": [],
+        "estimate": { "inputTokens": 1300, "outputTokens": 500, "timeoutMs": 5000, "costUsdMicros": 0 }
+      },
+      "expected": { "terminalState": "blocked", "reasonCode": "PREPARATION_BUDGET_EXCEEDED", "minimumRedactions": 0 }
+    },
+    {
+      "canaryId": "G7-CANARY-05-EFFECT-REFUSAL",
+      "category": "external-effect",
+      "label": "External advertising write tool is refused",
+      "request": {
+        "dataClass": "synthetic",
+        "taskRef": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+        "target": { "transport": "fixture", "providerId": "PROVIDER-FIXTURE-ONLY", "modelId": "MODEL-FIXTURE-DETERMINISTIC" },
+        "messages": [{ "role": "user", "content": "Draft evidence locally and do not alter any advertising account." }],
+        "tools": [{ "toolId": "amazon-ads-change-budget", "mode": "write", "sideEffect": true }],
+        "estimate": { "inputTokens": 220, "outputTokens": 140, "timeoutMs": 5000, "costUsdMicros": 0 }
+      },
+      "expected": { "terminalState": "refused", "reasonCode": "EXTERNAL_EFFECT_FORBIDDEN", "minimumRedactions": 0 }
+    }
+  ]
+}

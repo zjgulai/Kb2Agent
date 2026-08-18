@@ -1,17 +1,35 @@
 import { defineConfig } from 'vitepress'
 import { getSearchAliases } from './search-quality.mjs'
 
+function rootFaviconRedirect() {
+  return {
+    name: 'mkd-root-favicon-redirect',
+    configureServer(server) {
+      server.middlewares.use((request, response, next) => {
+        if (request.url !== '/favicon.ico') return next()
+        response.statusCode = 302
+        response.setHeader('Location', '/Kb2Agent/favicon.svg')
+        response.end()
+      })
+    }
+  }
+}
+
 export default defineConfig({
+  // VitePress local search mutates one shared MiniSearch index while pages build.
+  // Serialize page processing so identical sources produce identical release hashes.
+  buildConcurrency: 1,
   lang: 'zh-CN',
   base: '/Kb2Agent/',
-  title: 'MKD Guide',
-  titleTemplate: ':title · MKD Guide',
-  description: '多模态知识蒸馏到智能体调用完整指南',
+  title: 'MKD · Knowledge to Agent',
+  titleTemplate: ':title · MKD',
+  description: '把多格式资料编译成可审查、可复放、可追溯的智能体行动包',
   cleanUrls: true,
   lastUpdated: true,
   appearance: false,
 
   vite: {
+    plugins: [rootFaviconRedirect()],
     build: {
       // Search and Mermaid are lazy-only chunks; the explicit performance gate
       // below audits every HTML entry's initial graph against the 500 KB limit.
@@ -42,12 +60,25 @@ export default defineConfig({
 
   themeConfig: {
     logo: null,
-    siteTitle: 'MKD Guide',
+    siteTitle: 'MKD · Knowledge to Agent',
     sidebarMenuLabel: '知识库目录',
     returnToTopLabel: '返回顶部',
 
     nav: [
       { text: '首页', link: '/' },
+      { text: 'Agent Lab', link: '/agent-lab/' },
+      {
+        text: 'Reference',
+        items: [
+          { text: 'Lab · 运行回放', link: '/lab/' },
+          { text: 'Evidence · 证据桌', link: '/reference/evidence' },
+          { text: 'Map · 知识图谱', link: '/reference/map' },
+          { text: 'Cases · 门禁案例', link: '/reference/cases' },
+          { text: 'Build · 构建回执', link: '/reference/build' },
+          { text: 'Ops · 本地运行', link: '/reference/ops' }
+        ]
+      },
+      { text: 'Guide 验证', link: '/knowledge/appendix-validation' },
       {
         text: '基础篇',
         items: [
@@ -153,7 +184,8 @@ export default defineConfig({
     },
 
     footer: {
-      copyright: 'Copyright © 2026 Multimodal Knowledge Distillation Guide'
+      message: '生产实例 → <a href="https://kb.lute-tlz-dddd.top/Kb2Agent/" target="_blank" rel="noopener noreferrer">kb.lute-tlz-dddd.top</a>',
+      copyright: 'Copyright © 2026 MKD · Knowledge to Agent'
     },
 
     search: {

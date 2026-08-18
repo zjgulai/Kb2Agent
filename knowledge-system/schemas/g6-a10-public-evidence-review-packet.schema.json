@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/knowledge-system/g6-a10-public-evidence-review-packet.schema.json",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "packetId",
+    "gateId",
+    "preparedAt",
+    "subject",
+    "state",
+    "independenceRequired",
+    "reviewers",
+    "authorizationBoundary"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 3 },
+    "schemaVersion": { "const": 1 },
+    "packetId": { "const": "G6-A10-PUBLIC-EVIDENCE-REVIEW-ASSIGNED" },
+    "gateId": { "const": "G6-A10" },
+    "preparedAt": { "type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "subject": {
+      "type": "object",
+      "required": ["releaseId", "siteDigest", "publicReceipt", "artifactManifest", "evidencePack"],
+      "properties": {
+        "releaseId": { "const": "mkd-m1c-438e6ae583fc952d" },
+        "siteDigest": { "const": "sha256:438e6ae583fc952d813908b53a6c886ef127dad56d1a73eb017151f1f38bfadf" },
+        "publicReceipt": { "$ref": "#/$defs/fileEvidence" },
+        "artifactManifest": {
+          "type": "object",
+          "required": ["root", "fileCount", "totalBytes", "sha256"],
+          "properties": {
+            "root": { "const": "output/playwright/mkd-distill-g6a9-r1" },
+            "fileCount": { "const": 12 },
+            "totalBytes": { "const": 3718564 },
+            "sha256": { "const": "2f7a5bec0ff5f7fb159748f55da5b163d374341eda8c1260800fd03502df8c75" }
+          },
+          "additionalProperties": false
+        },
+        "evidencePack": { "$ref": "#/$defs/fileEvidence" }
+      },
+      "additionalProperties": false
+    },
+    "state": { "enum": ["in-review", "accepted", "rejected"] },
+    "independenceRequired": { "const": true },
+    "reviewers": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["roleId", "assignee", "scope", "requiredChecks", "assignmentState", "decision", "signedAt", "recordRef"],
+        "properties": {
+          "roleId": { "type": "string", "pattern": "^ROLE-[A-Z0-9-]+$" },
+          "assignee": { "type": "string", "minLength": 2 },
+          "scope": { "type": "string", "minLength": 12 },
+          "requiredChecks": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": { "type": "string", "minLength": 12 },
+            "uniqueItems": true
+          },
+          "assignmentState": { "enum": ["assigned", "completed"] },
+          "decision": { "enum": ["pending", "accepted", "rejected"] },
+          "signedAt": {
+            "anyOf": [
+              { "type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+              { "type": "null" }
+            ]
+          },
+          "recordRef": { "$ref": "#/$defs/fileEvidence" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "authorizationBoundary": {
+      "type": "object",
+      "required": [
+        "fourRolePublicAcceptanceCompleted",
+        "publicOrRemoteReadAuthorized",
+        "remoteMutationAuthorized",
+        "productionAgentAuthorized",
+        "providerCallsAuthorized",
+        "commitAuthorized",
+        "pushAuthorized"
+      ],
+      "properties": {
+        "fourRolePublicAcceptanceCompleted": { "type": "boolean" },
+        "publicOrRemoteReadAuthorized": { "const": false },
+        "remoteMutationAuthorized": { "const": false },
+        "productionAgentAuthorized": { "const": false },
+        "providerCallsAuthorized": { "const": false },
+        "commitAuthorized": { "const": false },
+        "pushAuthorized": { "const": false }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "state": { "const": "in-review" } }, "required": ["state"] },
+      "then": {
+        "properties": {
+          "reviewers": {
+            "items": {
+              "properties": {
+                "assignmentState": { "const": "assigned" },
+                "decision": { "const": "pending" },
+                "signedAt": { "const": null }
+              }
+            }
+          },
+          "authorizationBoundary": {
+            "properties": { "fourRolePublicAcceptanceCompleted": { "const": false } }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "fileEvidence": {
+      "type": "object",
+      "required": ["path", "sha256", "bytes"],
+      "properties": {
+        "path": { "type": "string", "minLength": 3 },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "bytes": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

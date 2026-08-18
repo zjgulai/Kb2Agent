@@ -25,6 +25,14 @@ claimRefs:
   - CLM-COST-003
   - CLM-COST-004
 acceptanceRef: ACC-COST-001
+productArtifactRefs:
+  []
+relatedObjectIds:
+  []
+relatedTaskIds:
+  []
+referenceMaturity: "runnable"
+lastReviewedAt: "2026-08-17"
 ---
 # 第十章：成本模型与预算管理
 
@@ -554,3 +562,7 @@ print(f"期望月度风险成本：¥{risk:,.0f}")  # ¥200,000
 - **代码状态**：仅上述 fixture 为烟测代码；其他片段继续按示意代码处理。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 不能由本章证明什么
+
+成本公式与 fixture 可复算，但不等同于生产账单；真实成本须以实收数据验证。

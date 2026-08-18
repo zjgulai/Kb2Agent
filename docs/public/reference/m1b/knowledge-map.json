@@ -1,0 +1,85 @@
+{
+  "mapId": "MAP-AMZ-ADS-M1B",
+  "snapshotId": "SNAPSHOT-AMZ-ADS-M1B",
+  "nodes": [
+    {
+      "id": "CONCEPT-AMZ-ACOS",
+      "type": "Concept",
+      "label": "Advertising Cost of Sales"
+    },
+    {
+      "id": "METRIC-AMZ-ACOS",
+      "type": "Metric",
+      "label": "ACOS"
+    },
+    {
+      "id": "DECISION-AMZ-ACOS-DIAGNOSIS",
+      "type": "DecisionModel",
+      "label": "DECISION-AMZ-ACOS-DIAGNOSIS"
+    },
+    {
+      "id": "CASE-AMZ-ACOS-SYNTHETIC",
+      "type": "Case",
+      "label": "Synthetic Amazon Ads ACOS increase"
+    },
+    {
+      "id": "PLAYBOOK-AMZ-ACOS-CHECK",
+      "type": "Playbook",
+      "label": "ACOS change evidence check"
+    },
+    {
+      "id": "SKILL-AMZ-ADS-DIAGNOSIS-V1",
+      "type": "Skill",
+      "label": "Deterministic Amazon Ads diagnosis replay"
+    },
+    {
+      "id": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+      "type": "TaskPackage",
+      "label": "Diagnose synthetic Amazon Ads performance change"
+    }
+  ],
+  "edges": [
+    {
+      "id": "REL-EVID-SUPPORTS-CLAIM",
+      "type": "supports",
+      "from": "EVID-AMZ-ACOS-DELTA",
+      "to": "CLAIM-AMZ-ACOS-RISING"
+    },
+    {
+      "id": "REL-CLAIM-DEFINES-METRIC",
+      "type": "defines",
+      "from": "CLAIM-AMZ-ACOS-RISING",
+      "to": "METRIC-AMZ-ACOS"
+    },
+    {
+      "id": "REL-DECISION-USES-METRIC",
+      "type": "uses_metric",
+      "from": "DECISION-AMZ-ACOS-DIAGNOSIS",
+      "to": "METRIC-AMZ-ACOS"
+    },
+    {
+      "id": "REL-PLAYBOOK-IMPLEMENTS-DECISION",
+      "type": "implements",
+      "from": "PLAYBOOK-AMZ-ACOS-CHECK",
+      "to": "DECISION-AMZ-ACOS-DIAGNOSIS"
+    },
+    {
+      "id": "REL-SKILL-IMPLEMENTS-PLAYBOOK",
+      "type": "implements",
+      "from": "SKILL-AMZ-ADS-DIAGNOSIS-V1",
+      "to": "PLAYBOOK-AMZ-ACOS-CHECK"
+    },
+    {
+      "id": "REL-TASK-M1B-IMPLEMENTS-SKILL",
+      "type": "implements",
+      "from": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+      "to": "SKILL-AMZ-ADS-DIAGNOSIS-V1"
+    },
+    {
+      "id": "REL-TASK-M1B-VALIDATED-EVAL",
+      "type": "validated_by",
+      "from": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+      "to": "EVAL-AMZ-ADS-DIAGNOSIS-V1"
+    }
+  ]
+}

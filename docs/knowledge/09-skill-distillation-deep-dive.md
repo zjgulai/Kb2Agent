@@ -16,6 +16,15 @@ codeStatus: illustrative
 reviewedAt: null
 testedWith: []
 evidence: []
+productArtifactRefs:
+  - "reference/schemas/skill.schema.json"
+  - "reference/schemas/task-package.schema.json"
+relatedObjectIds:
+  - "PKG-AMZ-ADS-M1B"
+relatedTaskIds:
+  - "TASK-AMZ-ADS-DIAGNOSIS-V1"
+referenceMaturity: "runnable"
+lastReviewedAt: "2026-08-17"
 ---
 # 第十一章：Skill 蒸馏 —— 九大仓库深度解构
 
@@ -473,3 +482,13 @@ Skill 蒸馏到位后，用本地 mock fixture 验证最小 Pipeline，再逐项
 - **代码状态**：示意代码。未被本地 smoke test 覆盖的片段不得解释为生产可运行。
 - **证据边界**：本页成熟度只描述内容形态，不代表部署、上线或生产验收已经完成。
 - **下一验收动作**：按仓库根目录 `content-audit.md` 中本模块的证据缺口补齐来源、fixture 与验收回执。
+
+## 在 Reference Lab 中如何验证
+
+- Skill 晋级硬门禁以 `reference/schemas/skill.schema.json` 为准：input/output Schema、tools、steps、E-level、tests、version 必填，正例/负例/安全诱饵/人工门禁齐全。
+- 候选 → 人工 review → promotion → canonical 的边界由负例 `NEG-CASE-SKILL-PROMOTION=CASE_SKILL_PROMOTION_FORBIDDEN` 与 `NEG-E3-SKILL=SCHEMA_INVALID` 在 `reference:contracts` 中 fail-closed。
+- Amazon Ads E2 Skill 实例与黄金任务绑定于 `reference/golden/amazon-ads-diagnosis-v1.json`；首案权限上限为 E2，Agent 不得自我批准 L3-L5 对象。
+
+## 不能由本章证明什么
+
+单一案例不得直接晋级为 SOP/Skill；E3+ 权限与真实领域验收尚未授权，synthetic 通过不构成业务有效性证明。

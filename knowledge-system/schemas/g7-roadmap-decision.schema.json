@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mkd.local/knowledge-system/g7-roadmap-decision.schema.json",
+  "type": "object",
+  "required": ["$schema", "schemaVersion", "decisionId", "gateId", "decidedAt", "status", "currentProductClass", "decisionBasis", "options", "recommendation", "globalStopConditions", "authorizationBoundary"],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 3 },
+    "schemaVersion": { "const": 1 },
+    "decisionId": { "const": "G7-ROADMAP-DECISION-AFTER-G6-CLOSEOUT" },
+    "gateId": { "const": "G6-A11" },
+    "decidedAt": { "type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "status": { "const": "recommended-not-authorized" },
+    "currentProductClass": { "const": "publicly-accepted-static-replay-first-agent-experience" },
+    "decisionBasis": { "type": "array", "minItems": 5, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true },
+    "options": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        { "$ref": "#/$defs/optionA" },
+        { "$ref": "#/$defs/optionB" }
+      ],
+      "items": false
+    },
+    "recommendation": {
+      "type": "object",
+      "required": ["optionId", "confidence", "rationale", "nextGate"],
+      "properties": {
+        "optionId": { "const": "G7-OPTION-A-EVIDENCE-FIRST-PROVIDER-SHADOW" },
+        "confidence": { "const": "high-sequencing-confidence-not-provider-readiness-evidence" },
+        "rationale": { "type": "array", "minItems": 3, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true },
+        "nextGate": {
+          "type": "object",
+          "required": ["id", "status", "scope", "providerCallsAuthorized"],
+          "properties": {
+            "id": { "const": "G7-A1" },
+            "status": { "const": "recommended-not-authorized" },
+            "scope": { "type": "string", "minLength": 20 },
+            "providerCallsAuthorized": { "const": false }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "globalStopConditions": { "type": "array", "minItems": 5, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true },
+    "authorizationBoundary": {
+      "type": "object",
+      "required": ["roadmapRecommendationRecorded", "g7Authorized", "providerCallsAuthorized", "secretsAuthorized", "remoteOrDockerAuthorized", "publicLiveAgentAuthorized", "externalWritesAuthorized", "commitAuthorized", "pushAuthorized"],
+      "properties": {
+        "roadmapRecommendationRecorded": { "const": true },
+        "g7Authorized": { "const": false },
+        "providerCallsAuthorized": { "const": false },
+        "secretsAuthorized": { "const": false },
+        "remoteOrDockerAuthorized": { "const": false },
+        "publicLiveAgentAuthorized": { "const": false },
+        "externalWritesAuthorized": { "const": false },
+        "commitAuthorized": { "const": false },
+        "pushAuthorized": { "const": false }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "stage": {
+      "type": "object",
+      "required": ["gate", "scope", "exitCriteria", "liveAuthority"],
+      "properties": {
+        "gate": { "type": "string", "pattern": "^G7-A[1-5]$" },
+        "scope": { "type": "string", "minLength": 12 },
+        "exitCriteria": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 8 }, "uniqueItems": true },
+        "liveAuthority": { "type": "string", "minLength": 8 }
+      },
+      "additionalProperties": false
+    },
+    "optionA": {
+      "type": "object",
+      "required": ["optionId", "name", "recommended", "outcome", "advantages", "tradeoffs", "stages"],
+      "properties": {
+        "optionId": { "const": "G7-OPTION-A-EVIDENCE-FIRST-PROVIDER-SHADOW" },
+        "name": { "const": "Evidence-first provider shadow" },
+        "recommended": { "const": true },
+        "outcome": { "type": "string", "minLength": 20 },
+        "advantages": { "type": "array", "minItems": 3, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true },
+        "tradeoffs": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true },
+        "stages": { "type": "array", "minItems": 5, "maxItems": 5, "items": { "$ref": "#/$defs/stage" } }
+      },
+      "additionalProperties": false
+    },
+    "optionB": {
+      "type": "object",
+      "required": ["optionId", "name", "recommended", "outcome", "advantages", "tradeoffs", "todos"],
+      "properties": {
+        "optionId": { "const": "G7-OPTION-B-KNOWLEDGE-DEPTH-FIRST" },
+        "name": { "const": "Knowledge-depth first" },
+        "recommended": { "const": false },
+        "outcome": { "type": "string", "minLength": 20 },
+        "advantages": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true },
+        "tradeoffs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true },
+        "todos": { "type": "array", "minItems": 5, "items": { "type": "string", "minLength": 12 }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

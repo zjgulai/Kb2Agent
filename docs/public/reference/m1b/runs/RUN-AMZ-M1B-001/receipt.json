@@ -1,0 +1,72 @@
+{
+  "receiptId": "RECEIPT-AMZ-M1B-001",
+  "runId": "RUN-AMZ-M1B-001",
+  "mode": "replay",
+  "evidenceGrade": "LO-S-synthetic",
+  "snapshot": {
+    "id": "SNAPSHOT-AMZ-ADS-M1B",
+    "version": "0.2.0"
+  },
+  "taskPackage": {
+    "id": "TASK-AMZ-ADS-DIAGNOSIS-V1",
+    "version": "1"
+  },
+  "skill": {
+    "id": "SKILL-AMZ-ADS-DIAGNOSIS-V1",
+    "version": "1"
+  },
+  "model": {
+    "id": "deterministic-rule-engine",
+    "version": "m1-b"
+  },
+  "prompt": {
+    "id": "no-provider-structured-replay",
+    "version": "1"
+  },
+  "tools": [
+    {
+      "id": "TOOL-READ-SNAPSHOT",
+      "version": "1"
+    },
+    {
+      "id": "TOOL-SEARCH-FTS",
+      "version": "1"
+    },
+    {
+      "id": "TOOL-LOAD-CLOSURE",
+      "version": "1"
+    },
+    {
+      "id": "TOOL-CALCULATE-METRIC",
+      "version": "1"
+    },
+    {
+      "id": "TOOL-CHECK-FRESHNESS",
+      "version": "1"
+    },
+    {
+      "id": "TOOL-CHECK-PERMISSION",
+      "version": "1"
+    },
+    {
+      "id": "TOOL-DRAFT-ACTION",
+      "version": "1"
+    },
+    {
+      "id": "TOOL-EMIT-RECEIPT",
+      "version": "1"
+    }
+  ],
+  "traceRef": "TRACE-AMZ-M1B-001",
+  "evaluationRefs": [
+    "EVAL-AMZ-ADS-DIAGNOSIS-V1"
+  ],
+  "artifactHashes": {
+    "actionPackage": "sha256:0db9aaff51214d50ce428b3675c448afcf509fbbfd1b168bbdf296a37637f9df",
+    "trace": "sha256:1d68e947ed9ebc4fe21e340df0431bbaac945486394892dd62fbe01e4a3460e6",
+    "input": "sha256:350bad18a9d0362314fd4629fe0729e923317b0d71dcd1b3ec735f2c0524afd0"
+  },
+  "externalCalls": 0,
+  "sideEffects": 0,
+  "issuedAt": "2026-08-09T00:00:00Z"
+}
