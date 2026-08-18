@@ -160,7 +160,7 @@
     "test:content": "node --test tests/content/*.test.mjs",
     "test:site": "playwright test",
     "test:site:hydration": "playwright test --config playwright.mermaid-hydration.config.mjs",
-    "docs:qa": "npm run reference:qa && npm run agent:build && npm run docs:metrics && npm run docs:identity && npm run docs:concepts && npm run docs:claims && npm run docs:evidence && npm run docs:acceptance && npm run docs:audit && npm run docs:semantic-links && npm run docs:links && npm run docs:snippets && npm run test:content && npm run docs:build && npm run docs:headings && npm run docs:preview-isolation && npm run docs:performance && npm run docs:lighthouse && npm run test:site:hydration && npm run test:site"
+    "docs:qa": "npm run reference:build && npm run agent:qa && npm run docs:metrics && npm run docs:identity && npm run docs:concepts && npm run docs:claims && npm run docs:evidence && npm run docs:acceptance && npm run docs:audit && npm run docs:semantic-links && npm run docs:links && npm run docs:snippets && npm run test:content && npm run docs:build && npm run docs:headings && npm run docs:preview-isolation && npm run docs:performance && npm run docs:lighthouse && npm run test:site:hydration && npm run test:site"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",

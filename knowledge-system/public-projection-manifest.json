@@ -9,9 +9,10 @@
     "docs/**（站点源码；已随 438e 公网站点公开，不构成新增暴露）",
     "reference/{schemas(除 g7),corpus,fixtures,golden,ontology,policies,adapters}/**（J1 公开资产）",
     "knowledge-system/{capability-map,schemas,roles,product-lines,product-claims,product-decisions,公开评审 packets}",
-    "scripts/check-*.mjs（除 check-m1c-release-gate）+ 注册表/docs QA + build-m1b + build-g6-agent（核心编译器与 Runner）",
     "tests：docs QA 内容测试 + 核心 Runner 测试 + 站点 Playwright（除部署/证据 spec）",
-    "package.json/package-lock.json/.github/workflows/deploy.yml/公开 playwright 配置"
+    "package.json/package-lock.json/.github/workflows/deploy.yml/公开 playwright 配置",
+    "reference/runtime/{agent,cli,compiler,extract,g6-agent,g6-utils,utils}.mjs（核心 Runner/编译器运行时；g7 provider 适配器仍排除）",
+    "scripts/check-*.mjs（除 check-m1c-release-gate）+ 注册表/docs QA + build-m1b + build-g6-agent（核心编译器与 Runner）"
   ],
   "exclusionRules": [
     {
@@ -55,7 +56,9 @@
       "docs/architecture/g7-a2-d1-local-channel-readonly-diagnosis.md 含本机 config 路径但仅路径无指纹，且该页已随 438e 公网站点公开",
       "g6-a10 与 g4r6 公开评审 packets 含端口号句子，属四角色已接受的公开证据投影产物"
     ],
-    "note": "scripts 引用被排除执行器的 package.json 条目保留为投影不完整镜像的已知差异，不作为运行承诺"
+    "note": "scripts 引用被排除执行器的 package.json 条目保留为投影不完整镜像的已知差异，不作为运行承诺",
+    "publicDocsQaChain": "reference:build && agent:qa && docs:metrics && docs:identity && docs:concepts && docs:claims && docs:evidence && docs:acceptance && docs:audit && docs:semantic-links && docs:links && docs:snippets && test:content && docs:build && docs:headings && docs:preview-isolation && docs:performance && docs:lighthouse && test:site:hydration && test:site（公开分支以 reference:build+agent:qa 替代 reference:qa，因评审记录与 baseline 属内部资产）",
+    "pagesWorkflow": "npm ci + poppler-utils + playwright chromium + npm run docs:qa（P0-10 整改）"
   },
   "includedFileCount": 289,
   "includedListSha256": "14e4b0fcd1666171c28d0a85dd1d2e90ddb7da4a09ebee7c7fde9e7f5c53b86f"

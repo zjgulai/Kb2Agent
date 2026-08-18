@@ -184,6 +184,7 @@ export default defineConfig({
     },
 
     footer: {
+      message: '生产实例 → <a href="https://kb.lute-tlz-dddd.top/Kb2Agent/" target="_blank" rel="noopener noreferrer">kb.lute-tlz-dddd.top</a>',
       copyright: 'Copyright © 2026 MKD · Knowledge to Agent'
     },
 
